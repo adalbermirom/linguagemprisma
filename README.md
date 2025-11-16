@@ -20,7 +20,7 @@ Prisma é um fork de lua5.2 modificado. Várias funções e características, qu
 
 | Item | Detalhes |
 | :--- | :--- |
-| **Versão Atual** | `1.0.108` |
+| **Versão Atual** | `1.0` |
 | **Status** | Estável  |
 | **Licença** | Consulte o arquivo `LICENSE.txt` para detalhes (MIT). |
 | **Contato** | linguagemprisma@gmail.com |
