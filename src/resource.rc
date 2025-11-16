@@ -1,0 +1,24 @@
+
+MAINICON ICON "prisma\\prisma.ico" 
+
+1 VERSIONINFO
+ FILEVERSION 1,0,9,9
+ PRODUCTVERSION 1,0,9,9
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "linguagemprisma.br4.biz\0"
+            VALUE "CompanyName", "Adalberto\0"
+            VALUE "FileDescription", "Interpretador da linguagem Prisma baseada em Lua\0"
+            VALUE "FileVersion", "1.0.99\0"
+            VALUE "LegalCopyright", "Copyright © 2015-2017 Adalberto A F.\0"
+            VALUE "OriginalFilename", "prisma.exe\0"
+            VALUE "ProductName", "Prisma linguagem de programação em pt_BR\0"
+            VALUE "ProductVersion", "1.0.99\0"
+            VALUE "PrivateBuild", "Build by Adalberto A F\0"
+        END
+    END
+END
+1 24 "theme.xml"

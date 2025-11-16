@@ -1,0 +1,88 @@
+/*
+
+                 CORREÇÕES NA FUNÇÃO es.pabra();
+                 
+                 
+                 A função estava incompleta, aceitava apenas o modo leitura,
+                 agora aceita os modos:   leitura e escrita;
+             
+       es.pabra('program', 'leitura'); //abre um programa e captura sua saída padrão.
+       es.pabra('program', 'escrita'); //abre um programa e imprime em sua entrada padrão.
+       
+       modos aceitos:
+       
+             leitura     :    lê o output do programa
+             l           :    o mesmo que o de cima
+             escrita     :    escreve no input do programa
+             e           :    o mesmo que o de cima.
+             
+              
+*/
+
+    local pa, perr, list_dir, mostre_versao, txt;
+    
+    //windows:
+    se sis.nome:procure('win') entao
+        poe'\n\n----------  SISTEMA WINDOWS --------------\n';
+        list_dir = 'dir .\\'; 
+        mostre_versao = 'ver';
+    senao //unix:
+        poe'\n\n----------  SISTEMA *NIX --------------\n';
+        list_dir = 'ls ./';
+        mostre_versao = 'uname -a';    
+    fim
+    
+    pa, perr = es.pabra( list_dir, 'l'); //poderia ser 'leitura' em vez de 'l';
+    se nao pa entao erro(perr); fim
+    
+    enquanto 1 inicio 
+         txt = pa:leia(); //lê tudo.
+         se nao txt entao quebre; fim
+         imprima(txt);
+    fim
+    
+    pa:feche(); //fecha 
+    
+   
+    pa, perr = es.pabra( mostre_versao, 'leitura'); //poderia ser 'l' em vez de 'leitura'
+    se nao pa entao erro(perr); fim
+    
+    poe'\n\n--------------- MOSTRE_VERSAO.............\n';
+    enquanto 1 inicio 
+         txt = pa:leia(); //lê tudo.
+         se nao txt entao quebre; fim
+         imprima(txt);
+    fim
+    
+    pa:feche(); //fecha 
+    
+    
+    //apenas no linux:
+    
+  se sis.nome:procure'linux' entao
+    
+    poe'\n\n--------------- ESCRITA.............\n';
+    
+    pa, perr = es.pabra( 'cat', 'e'); //poderia ser 'escrita' em vez de 'e'
+    se nao pa entao erro(perr); fim
+    poe'\n\n--------------- COMANDO CAT .............\n';
+    para i=1, 5 inicio 
+        pa:escreva('contador: ', i,'\n');
+    fim
+    
+    pa:feche();
+  fim
+  
+  
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

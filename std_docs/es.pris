@@ -1,0 +1,267 @@
+
+//arquivo somente com o propósito de documentação, portanto não há a implementação das funções aqui, apenas os nomes.
+
+/*@doc
+    \file es
+    \brief Biblioteca es em Prisma...
+*/
+
+/**
+\fn es.abra(caminho, modo)
+\resumo Abre um arquivo e retorna um manipulador de arquivo.
+\param {string} - Caminho do arquivo a ser aberto.
+\param {string} - Modo de abertura ("leitura", "escrita", "adicao", etc).
+
+\h3 Modos válidos:
+\lista
+   leitura
+   escrita
+   leiturabin
+   escritabin
+   leitura+
+   escrita+
+   leitura+bin
+   escrita+bin
+   adicao (ou adição)
+   adicaobin (ou adiçãobin)
+   adicao+bin (ou adição+bin)
+\lista--
+
+\h3 Modos também válidos mas curtos:
+\lista
+   l - leitura
+   e - escrita
+   lb - leiturabin
+   eb - escritabin
+   l+ - leitura+
+   e+ - escrita+
+   l+b - leitura+bin
+   e+b - escrita+bin
+   a - adição
+   ab - adicaobin (ou adiçãobin)
+   a+b - adicao+bin (ou adição+bin)
+\lista--
+
+\obs Os modos em inglês também são aceitos 'r', 'w', 'a', 'r+' etc.
+
+\retorno {arquivo} - Manipulador de arquivo ou nulo em caso de erro.
+\retorno {string} - String de erro se houver.
+\codigo
+local arq, err = es.abra("dados.txt", "leitura")
+se nao arq entao erro(err); fim
+\codigo--
+*/
+funcao es.abra(caminho, modo)
+
+/**
+\fn es.feche(arquivo)
+\resumo Fecha um manipulador de arquivo aberto.
+\param {arquivo} - Manipulador de arquivo retornado por es.abra().
+\retorno {booleano} - true se fechado com sucesso, nil e mensagem em caso de erro.
+\codigo
+arq:feche()
+\codigo--
+*/
+funcao es.feche(arquivo)
+
+/**
+\fn es.escreva(...)
+\resumo Escreve texto no arquivo de saída padrão (geralmente a tela).
+\param {string} - Um ou mais valores a serem escritos.
+\codigo
+es.escreva("Olá, mundo!\n")
+\codigo--
+*/
+funcao es.escreva(...)
+
+/**
+\fn es.leia(...)
+\resumo Lê dados da entrada padrão (geralmente o teclado) ou de um arquivo.
+\param {string} - Opção de leitura:
+\lista
+"*n" - lê um número
+"*l" - lê uma linha (sem o caractere de nova linha)
+"*L" - lê uma linha (com o caractere de nova linha)
+"*a" - lê o arquivo inteiro
+"*t" - lê o arquivo inteiro (sinônimo de "*a")
+\lista--
+\retorno {string|numero|nulo} - Dados lidos, ou nulo em caso de erro ou fim de arquivo.
+\codigo
+local num = es.leia("*n");
+imprima(tipo(num));
+\codigo--
+*/
+funcao es.leia(...)
+
+/**
+\fn es.linhas(caminho)
+\resumo Itera sobre cada linha de um arquivo.
+\param caminho {string} - Caminho do arquivo a ser lido.
+\retorno {iterador} - Função iteradora que retorna uma linha por vez.
+\codigo
+for linha in es.linhas("dados.txt") do
+  es.escreva(linha, "\n")
+end
+\codigo--
+*/
+funcao es.linhas(caminho)
+
+/**
+\fn es.esvazie(arquivo)
+\resumo Esvazia o buffer de saída do arquivo, forçando a gravação imediata.
+\param arquivo {arquivo} - Manipulador de arquivo aberto.
+\codigo
+    es.escreva("Digite seu algo: ")
+    es.esvazie()
+\codigo--
+*/
+funcao es.esvazie(arquivo)
+
+/**
+\fn es.saida(arquivo)
+\resumo Define ou retorna o arquivo de saída padrão.
+\param {arquivo|string} - Manipulador de arquivo ou nome do arquivo.
+\retorno {arquivo} - Arquivo de saída atual.
+\codigo
+ local padrao = es.saida();
+ padrao:escreva('ola\n'); // --> ola
+\codigo--
+*/
+funcao es.saida(arquivo)
+
+/**
+\fn es.entrada(arquivo)
+\resumo Define ou retorna o arquivo de entrada padrão.
+\param {arquivo|string} - Manipulador de arquivo ou nome do arquivo.
+\retorno {arquivo} - Arquivo de entrada atual.
+\codigo
+   local arq = es.entrada(); //pega a entrada pradrão
+   local txt = arq:leia(); //aguarda a entrada (ex.: teclado)
+   imprima(txt); //imprime o que foi digitado.
+\codigo--
+*/
+funcao es.entrada(arquivo)
+
+/**
+\fn es.tmparquivo()
+\resumo Cria e retorna um arquivo temporário.
+\retorno {arquivo} - Manipulador de arquivo temporário.
+\codigo
+local tmp = es.tmparquivo()
+tmp:escreva("dados temporários")
+\codigo--
+*/
+funcao es.tmparquivo()
+
+/**
+\fn es.tipo(obj)
+\resumo Retorna o tipo do objeto de arquivo.
+\param {qualquer} - Objeto a ser testado.
+\retorno {string} - "arquivo" se for um manipulador válido, ou nulo caso contrário.
+\codigo
+se es.tipo(arq) == "arquivo" entao
+  es.escreva("é um arquivo válido\n")
+fim
+\codigo--
+*/
+funcao es.tipo(obj)
+
+/**
+\fn es.pabra(comando, modo)
+\resumo Executa um comando do sistema e abre uma comunicação com ele.
+\param {string} - Comando a ser executado.
+\param {string} - Modo ("leitura" ou "escrita").
+\retorno {arquivo} - Manipulador de arquivo associado ao processo.
+\codigo
+local proc = es.pabra("ls", "leitura")
+for linha in proc:linhas() do
+  es.escreva(linha, "\n")
+end
+proc:feche()
+\codigo--
+*/
+funcao es.pabra(comando, modo)
+
+/**
+\fn arquivo:leia(opcao)
+\resumo Lê dados de um arquivo com base em uma opção.
+\param {string} - Opção de leitura:
+\lista
+"*n" - lê número
+"*l" - lê linha sem nova linha
+"*L" - lê linha com nova linha
+"*a" ou "*t" - lê todo o conteúdo
+\lista--
+\retorno {string|numero|nil} - Dados lidos ou nil se erro ou fim de arquivo.
+\codigo
+local conteudo = arq:leia("*a")
+\codigo--
+*/
+funcao arquivo:leia(opcao)
+
+/**
+\fn arquivo:escreva(...)
+\resumo Escreve texto ou dados no arquivo.
+\param {string|numero} - Um ou mais valores a escrever.
+\retorno {arquivo} - O próprio manipulador (permite encadeamento).
+\codigo
+arq:escreva("linha 1\n", "linha 2\n")
+\codigo--
+*/
+funcao arquivo:escreva(...)
+
+/**
+\fn arquivo:busque(offset, origem)
+\resumo Move o ponteiro de leitura/escrita no arquivo.
+\param {numero} - Posição (offset) a mover.
+\param {string} - Origem:
+\lista
+"def"   - início do arquivo (SEEK_SET)
+"atual" - posição atual (SEEK_CUR)
+"final" - fim do arquivo (SEEK_END)
+\lista--
+\retorno {numero|nil} - Nova posição ou nil em caso de erro.
+\codigo
+arq:busque(0, "final")  -- move para o fim do arquivo
+\codigo--
+*/
+funcao arquivo:busque(offset, origem)
+
+/**
+\fn arquivo:defvbuf(modo, tamanho)
+\resumo Define o modo de bufferização do arquivo.
+\param {string} - Tipo de buffer:
+\lista
+"nenhum"   - sem buffer (_IONBF)
+"completo" - buffer completo (_IOFBF)
+"linha"    - buffer por linha (_IOLBF)
+\lista--
+\param {numero} - Tamanho do buffer (opcional).
+\retorno {booleano} - true em caso de sucesso.
+\codigo
+arq:defvbuf("linha")
+\codigo--
+*/
+funcao arquivo:defvbuf(modo, tamanho)
+
+/**
+\fn arquivo:esvazie()
+\resumo Esvazia o buffer de saída do arquivo.
+\retorno {booleano} - true se bem-sucedido.
+\codigo
+arq:esvazie()
+\codigo--
+*/
+funcao arquivo:esvazie()
+
+/**
+\fn arquivo:linhas()
+\resumo Retorna um iterador para as linhas do arquivo aberto.
+\retorno {iterador} - Função iteradora que lê uma linha por vez.
+\codigo
+for linha in arq:linhas() do
+  es.escreva(linha, "\n")
+end
+\codigo--
+*/
+funcao arquivo:linhas()

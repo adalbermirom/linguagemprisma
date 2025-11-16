@@ -1,0 +1,301 @@
+
+//arquivo somente com o propósito de documentação, portanto não há a implementação das funções aqui, apenas os nomes.
+
+/*@doc
+    \file mat
+    \brief Biblioteca mat em Prisma...
+*/
+
+
+/*@doc
+\fn frexp
+\brief funcao mat.frexp()
+*/
+
+funcao mat.frexp()
+fim
+
+/*@doc
+\fn emRadianos
+\brief funcao mat.emRadianos()
+*/
+
+funcao mat.emRadianos()
+fim
+
+/*@doc
+\fn seno
+\brief funcao mat.seno()
+*/
+
+funcao mat.seno()
+fim
+
+/*@doc
+\fn absoluto
+\brief funcao mat.absoluto()
+*/
+
+funcao mat.absoluto()
+fim
+
+/*@doc
+\fn exp
+\brief funcao mat.exp()
+*/
+
+funcao mat.exp()
+fim
+
+/*@doc
+\fn log
+\brief funcao mat.log()
+*/
+
+funcao mat.log()
+fim
+
+/*@doc
+\fn ldexp
+\brief funcao mat.ldexp()
+*/
+
+funcao mat.ldexp()
+fim
+
+/*@doc
+\fn raizcubica
+\brief funcao mat.raizcubica()
+*/
+
+funcao mat.raizcubica()
+fim
+
+/*@doc
+\fn minimo
+\brief funcao mat.minimo()
+*/
+
+funcao mat.minimo()
+fim
+
+/*@doc
+\fn xrandonico
+\brief funcao mat.xrandonico()
+*/
+
+funcao mat.xrandonico()
+fim
+
+/*@doc
+\fn corte
+\brief funcao mat.corte()
+*/
+
+funcao mat.corte()
+fim
+
+/*@doc
+\fn cossenoh
+\brief funcao mat.cossenoh()
+*/
+
+funcao mat.cossenoh()
+fim
+
+/*@doc
+\fn elevado
+\brief funcao mat.elevado()
+*/
+
+funcao mat.elevado()
+fim
+
+/*@doc
+\fn cosseno
+\brief funcao mat.cosseno()
+*/
+
+funcao mat.cosseno()
+fim
+
+/*@doc
+\fn randonico
+\brief funcao mat.randonico()
+*/
+
+funcao mat.randonico()
+fim
+
+/*@doc
+\fn arcocosseno
+\brief funcao mat.arcocosseno()
+*/
+
+funcao mat.arcocosseno()
+fim
+
+/*@doc
+\fn arredonde
+\brief funcao mat.arredonde()
+*/
+
+funcao mat.arredonde()
+fim
+
+/*@doc
+\fn cmodulo
+\brief funcao mat.cmodulo()
+*/
+
+funcao mat.cmodulo()
+fim
+
+/*@doc
+\fn arcotangente2
+\brief funcao mat.arcotangente2()
+*/
+
+funcao mat.arcotangente2()
+fim
+
+/*@doc
+\fn aleatorio
+\brief funcao mat.aleatorio()
+*/
+
+funcao mat.aleatorio()
+fim
+
+/*@doc
+\fn maximo
+\brief funcao mat.maximo()
+*/
+
+funcao mat.maximo()
+fim
+
+/*@doc
+\fn arcoseno
+\brief funcao mat.arcoseno()
+*/
+
+funcao mat.arcoseno()
+fim
+
+/*@doc
+\var infinito
+\brief variável mat.infinito = inf
+*/
+mat.infinito = inf;
+
+/*@doc
+\var pi
+\brief variável mat.pi = 3,1415926535898
+*/
+mat.pi = 3,1415926535898;
+
+/*@doc
+\fn tangente
+\brief funcao mat.tangente()
+*/
+
+funcao mat.tangente()
+fim
+
+/*@doc
+\fn emGrau
+\brief funcao mat.emGrau()
+*/
+
+funcao mat.emGrau()
+fim
+
+/*@doc
+\fn senoh
+\brief funcao mat.senoh()
+*/
+
+funcao mat.senoh()
+fim
+
+/*@doc
+\fn hipot
+\brief funcao mat.hipot()
+*/
+
+funcao mat.hipot()
+fim
+
+/*@doc
+\fn tangenteh
+\brief funcao mat.tangenteh()
+*/
+
+funcao mat.tangenteh()
+fim
+
+/*@doc
+\fn arredondeabaixo
+\brief funcao mat.arredondeabaixo()
+*/
+
+funcao mat.arredondeabaixo()
+fim
+
+/*@doc
+\fn xaleatorio
+\brief funcao mat.xaleatorio()
+*/
+
+funcao mat.xaleatorio()
+fim
+
+/*@doc
+\fn raiz
+\brief funcao mat.raiz()
+*/
+
+funcao mat.raiz()
+fim
+
+/*@doc
+\fn separe
+\brief funcao mat.separe()
+*/
+
+funcao mat.separe()
+fim
+
+/*@doc
+\fn log10
+\brief funcao mat.log10()
+*/
+
+funcao mat.log10()
+fim
+
+/*@doc
+\fn raizquad
+\brief funcao mat.raizquad()
+*/
+
+funcao mat.raizquad()
+fim
+
+/*@doc
+\fn arredondeacima
+\brief funcao mat.arredondeacima()
+*/
+
+funcao mat.arredondeacima()
+fim
+
+/*@doc
+\fn arcotangente
+\brief funcao mat.arcotangente()
+*/
+
+funcao mat.arcotangente()
+fim
+

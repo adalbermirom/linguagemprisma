@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>es</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<nav id="id_000024"  class="floating-menu">
+<div class="menu-button" title="Ocultar painel lateral" onclick="show_menu_flutuante(this, 'id_000025', 'id_000024')">&#x2630;</div>
+<div class="com-rolagem" id="id_000025" hidden>
+<div class="caixa "><h2>Funções:</h2>
+<a href="#id_00001C">arquivo:busque</a>
+<a href="#id_00001E">arquivo:defvbuf</a>
+<a href="#id_00001A">arquivo:escreva</a>
+<a href="#id_000020">arquivo:esvazie</a>
+<a href="#id_000018">arquivo:leia</a>
+<a href="#id_000022">arquivo:linhas</a>
+<a href="#id_000002">es.abra</a>
+<a href="#id_000010">es.entrada</a>
+<a href="#id_000006">es.escreva</a>
+<a href="#id_00000C">es.esvazie</a>
+<a href="#id_000004">es.feche</a>
+<a href="#id_000008">es.leia</a>
+<a href="#id_00000A">es.linhas</a>
+<a href="#id_000016">es.pabra</a>
+<a href="#id_00000E">es.saida</a>
+<a href="#id_000014">es.tipo</a>
+<a href="#id_000012">es.tmparquivo</a>
+
+</div>
+</div>
+</nav>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> es</h1>
+<br>
+<div>
+Biblioteca es em Prisma...
+<a href="#id_000026"> mais...</a></div>
+<div class="caixa com-borda"><div><h2 >Funções:</h2>
+<ol>
+<li><a href="#id_00001C">arquivo:busque</a></li>
+<li><a href="#id_00001E">arquivo:defvbuf</a></li>
+<li><a href="#id_00001A">arquivo:escreva</a></li>
+<li><a href="#id_000020">arquivo:esvazie</a></li>
+<li><a href="#id_000018">arquivo:leia</a></li>
+<li><a href="#id_000022">arquivo:linhas</a></li>
+<li><a href="#id_000002">es.abra</a></li>
+<li><a href="#id_000010">es.entrada</a></li>
+<li><a href="#id_000006">es.escreva</a></li>
+<li><a href="#id_00000C">es.esvazie</a></li>
+<li><a href="#id_000004">es.feche</a></li>
+<li><a href="#id_000008">es.leia</a></li>
+<li><a href="#id_00000A">es.linhas</a></li>
+<li><a href="#id_000016">es.pabra</a></li>
+<li><a href="#id_00000E">es.saida</a></li>
+<li><a href="#id_000014">es.tipo</a></li>
+<li><a href="#id_000012">es.tmparquivo</a></li>
+</ol>
+</div>
+
+</div><br>
+
+<h2 id="id_000026">es</h2><div>
+Biblioteca es em Prisma...
+</div>
+
+
+<h1>Funções:</h1>
+<a id="id_000002" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao es.abra(caminho, modo)</h2><div class="corpo-doc">
+<p>Abre um arquivo e retorna um manipulador de arquivo.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > {string} - Caminho do arquivo a ser aberto.</span>
+</div>
+<div class="params-doc"><span > {string} - Modo de abertura (&quot;leitura&quot;, &quot;escrita&quot;, &quot;adicao&quot;, etc).</span>
+</div>
+
+<h3>Modos válidos:</h3>
+
+<ul>
+<li>   leitura</li>
+<li>   escrita</li>
+<li>   leiturabin</li>
+<li>   escritabin</li>
+<li>   leitura+</li>
+<li>   escrita+</li>
+<li>   leitura+bin</li>
+<li>   escrita+bin</li>
+<li>   adicao (ou adição)</li>
+<li>   adicaobin (ou adiçãobin)</li>
+<li>   adicao+bin (ou adição+bin)</li>
+</ul>
+
+
+<h3>Modos também válidos mas curtos:</h3>
+
+<ul>
+<li>   l - leitura</li>
+<li>   e - escrita</li>
+<li>   lb - leiturabin</li>
+<li>   eb - escritabin</li>
+<li>   l+ - leitura+</li>
+<li>   e+ - escrita+</li>
+<li>   l+b - leitura+bin</li>
+<li>   e+b - escrita+bin</li>
+<li>   a - adição</li>
+<li>   ab - adicaobin (ou adiçãobin)</li>
+<li>   a+b - adicao+bin (ou adição+bin)</li>
+</ul>
+
+
+<p><i><b>Obs.: </b>Os modos em inglês também são aceitos &#39;r&#39;, &#39;w&#39;, &#39;a&#39;, &#39;r+&#39; etc.</i></p>
+
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {arquivo} - Manipulador de arquivo ou nulo em caso de erro.</span>
+</div>
+<div class="returns-doc"><span >     {string} - String de erro se houver.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000003')">&#128203;</div>&nbsp;<i></i><pre id="id_000003" hidden>local arq, err = es.abra(&quot;dados.txt&quot;, &quot;leitura&quot;)
+se nao arq entao erro(err); fim
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> arq, err <span style="font-weight:bold;">=</span> <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">abra</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;dados.txt&quot;</span>, <span style="color:blue">&quot;leitura&quot;</span><span style="font-weight:bold;">)</span>
+<span style="font-weight:bold;color:#b50546">se</span> <span style="font-weight:bold;color:#b50546">nao</span> arq <span style="font-weight:bold;color:#b50546">entao</span> <span style="color:#b50546">erro</span><span style="font-weight:bold;">(</span>err<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000004" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao es.feche(arquivo)</h2><div class="corpo-doc">
+<p>Fecha um manipulador de arquivo aberto.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > {arquivo} - Manipulador de arquivo retornado por es.abra().</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {booleano} - true se fechado com sucesso, nil e mensagem em caso de erro.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000005')">&#128203;</div>&nbsp;<i></i><pre id="id_000005" hidden>arq:feche()
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+arq<span style="font-weight:bold;">:</span><span style="color:#b50546">feche</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000006" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao es.escreva(...)</h2><div class="corpo-doc">
+<p>Escreve texto no arquivo de saída padrão (geralmente a tela).</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > {string} - Um ou mais valores a serem escritos.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000007')">&#128203;</div>&nbsp;<i></i><pre id="id_000007" hidden>es.escreva(&quot;Olá, mundo!\n&quot;)
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">escreva</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Olá, mundo!\n&quot;</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000008" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao es.leia(...)</h2><div class="corpo-doc">
+<p>Lê dados da entrada padrão (geralmente o teclado) ou de um arquivo.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > {string} - Opção de leitura:</span>
+</div>
+<ul>
+<li>&quot;*n&quot; - lê um número</li>
+<li>&quot;*l&quot; - lê uma linha (sem o caractere de nova linha)</li>
+<li>&quot;*L&quot; - lê uma linha (com o caractere de nova linha)</li>
+<li>&quot;*a&quot; - lê o arquivo inteiro</li>
+<li>&quot;*t&quot; - lê o arquivo inteiro (sinônimo de &quot;*a&quot;)</li>
+</ul>
+
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {string|numero|nulo} - Dados lidos, ou nulo em caso de erro ou fim de arquivo.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000009')">&#128203;</div>&nbsp;<i></i><pre id="id_000009" hidden>local num = es.leia(&quot;*n&quot;);
+imprima(tipo(num));
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> num <span style="font-weight:bold;">=</span> <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">leia</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;*n&quot;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:#b50546">tipo</span><span style="font-weight:bold;">(</span>num<span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00000A" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao es.linhas(caminho)</h2><div class="corpo-doc">
+<p>Itera sobre cada linha de um arquivo.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > caminho {string} - Caminho do arquivo a ser lido.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {iterador} - Função iteradora que retorna uma linha por vez.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000B')">&#128203;</div>&nbsp;<i></i><pre id="id_00000B" hidden>for linha in es.linhas(&quot;dados.txt&quot;) do
+  es.escreva(linha, &quot;\n&quot;)
+end
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+for linha in <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">linhas</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;dados.txt&quot;</span><span style="font-weight:bold;">)</span> do
+  <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">escreva</span><span style="font-weight:bold;">(</span>linha, <span style="color:blue">&quot;\n&quot;</span><span style="font-weight:bold;">)</span>
+end
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00000C" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao es.esvazie(arquivo)</h2><div class="corpo-doc">
+<p>Esvazia o buffer de saída do arquivo, forçando a gravação imediata.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > arquivo {arquivo} - Manipulador de arquivo aberto.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000D')">&#128203;</div>&nbsp;<i></i><pre id="id_00000D" hidden>    es.escreva(&quot;Digite seu algo: &quot;)
+    es.esvazie()
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">escreva</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Digite seu algo: &quot;</span><span style="font-weight:bold;">)</span>
+    <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">esvazie</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00000E" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao es.saida(arquivo)</h2><div class="corpo-doc">
+<p>Define ou retorna o arquivo de saída padrão.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > {arquivo|string} - Manipulador de arquivo ou nome do arquivo.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {arquivo} - Arquivo de saída atual.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000F')">&#128203;</div>&nbsp;<i></i><pre id="id_00000F" hidden> local padrao = es.saida();
+ padrao:escreva(&#39;ola\n&#39;); // --&gt; ola
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+ <span style="font-weight:bold;color:#b50546">local</span> padrao <span style="font-weight:bold;">=</span> <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">saida</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+ padrao<span style="font-weight:bold;">:</span><span style="color:#b50546">escreva</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;ola\n&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">// --&gt; ola
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000010" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao es.entrada(arquivo)</h2><div class="corpo-doc">
+<p>Define ou retorna o arquivo de entrada padrão.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > {arquivo|string} - Manipulador de arquivo ou nome do arquivo.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {arquivo} - Arquivo de entrada atual.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000011')">&#128203;</div>&nbsp;<i></i><pre id="id_000011" hidden>   local arq = es.entrada(); //pega a entrada pradrão
+   local txt = arq:leia(); //aguarda a entrada (ex.: teclado)
+   imprima(txt); //imprime o que foi digitado.
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+   <span style="font-weight:bold;color:#b50546">local</span> arq <span style="font-weight:bold;">=</span> <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">entrada</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//pega a entrada pradrão
+</span>   <span style="font-weight:bold;color:#b50546">local</span> txt <span style="font-weight:bold;">=</span> arq<span style="font-weight:bold;">:</span><span style="color:#b50546">leia</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//aguarda a entrada (ex.: teclado)
+</span>   <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>txt<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//imprime o que foi digitado.
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000012" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao es.tmparquivo()</h2><div class="corpo-doc">
+<p>Cria e retorna um arquivo temporário.</p>
+
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {arquivo} - Manipulador de arquivo temporário.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000013')">&#128203;</div>&nbsp;<i></i><pre id="id_000013" hidden>local tmp = es.tmparquivo()
+tmp:escreva(&quot;dados temporários&quot;)
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> tmp <span style="font-weight:bold;">=</span> <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">tmparquivo</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>
+tmp<span style="font-weight:bold;">:</span><span style="color:#b50546">escreva</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;dados temporários&quot;</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000014" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao es.tipo(obj)</h2><div class="corpo-doc">
+<p>Retorna o tipo do objeto de arquivo.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > {qualquer} - Objeto a ser testado.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {string} - &quot;arquivo&quot; se for um manipulador válido, ou nulo caso contrário.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000015')">&#128203;</div>&nbsp;<i></i><pre id="id_000015" hidden>se es.tipo(arq) == &quot;arquivo&quot; entao
+  es.escreva(&quot;é um arquivo válido\n&quot;)
+fim
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">se</span> <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">tipo</span><span style="font-weight:bold;">(</span>arq<span style="font-weight:bold;">)</span> <span style="font-weight:bold;">=</span><span style="font-weight:bold;">=</span> <span style="color:blue">&quot;arquivo&quot;</span> <span style="font-weight:bold;color:#b50546">entao</span>
+  <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">escreva</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;é um arquivo válido\n&quot;</span><span style="font-weight:bold;">)</span>
+<span style="font-weight:bold;color:#b50546">fim</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000016" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao es.pabra(comando, modo)</h2><div class="corpo-doc">
+<p>Executa um comando do sistema e abre uma comunicação com ele.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > {string} - Comando a ser executado.</span>
+</div>
+<div class="params-doc"><span > {string} - Modo (&quot;leitura&quot; ou &quot;escrita&quot;).</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {arquivo} - Manipulador de arquivo associado ao processo.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000017')">&#128203;</div>&nbsp;<i></i><pre id="id_000017" hidden>local proc = es.pabra(&quot;ls&quot;, &quot;leitura&quot;)
+for linha in proc:linhas() do
+  es.escreva(linha, &quot;\n&quot;)
+end
+proc:feche()
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> proc <span style="font-weight:bold;">=</span> <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">pabra</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;ls&quot;</span>, <span style="color:blue">&quot;leitura&quot;</span><span style="font-weight:bold;">)</span>
+for linha in proc<span style="font-weight:bold;">:</span><span style="color:#b50546">linhas</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> do
+  <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">escreva</span><span style="font-weight:bold;">(</span>linha, <span style="color:blue">&quot;\n&quot;</span><span style="font-weight:bold;">)</span>
+end
+proc<span style="font-weight:bold;">:</span><span style="color:#b50546">feche</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000018" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao arquivo:leia(opcao)</h2><div class="corpo-doc">
+<p>Lê dados de um arquivo com base em uma opção.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > {string} - Opção de leitura:</span>
+</div>
+<ul>
+<li>&quot;*n&quot; - lê número</li>
+<li>&quot;*l&quot; - lê linha sem nova linha</li>
+<li>&quot;*L&quot; - lê linha com nova linha</li>
+<li>&quot;*a&quot; ou &quot;*t&quot; - lê todo o conteúdo</li>
+</ul>
+
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {string|numero|nil} - Dados lidos ou nil se erro ou fim de arquivo.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000019')">&#128203;</div>&nbsp;<i></i><pre id="id_000019" hidden>local conteudo = arq:leia(&quot;*a&quot;)
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> conteudo <span style="font-weight:bold;">=</span> arq<span style="font-weight:bold;">:</span><span style="color:#b50546">leia</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;*a&quot;</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00001A" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao arquivo:escreva(...)</h2><div class="corpo-doc">
+<p>Escreve texto ou dados no arquivo.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > {string|numero} - Um ou mais valores a escrever.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {arquivo} - O próprio manipulador (permite encadeamento).</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00001B')">&#128203;</div>&nbsp;<i></i><pre id="id_00001B" hidden>arq:escreva(&quot;linha 1\n&quot;, &quot;linha 2\n&quot;)
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+arq<span style="font-weight:bold;">:</span><span style="color:#b50546">escreva</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;linha 1\n&quot;</span>, <span style="color:blue">&quot;linha 2\n&quot;</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00001C" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao arquivo:busque(offset, origem)</h2><div class="corpo-doc">
+<p>Move o ponteiro de leitura/escrita no arquivo.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > {numero} - Posição (offset) a mover.</span>
+</div>
+<div class="params-doc"><span > {string} - Origem:</span>
+</div>
+<ul>
+<li>&quot;def&quot;   - início do arquivo (SEEK_SET)</li>
+<li>&quot;atual&quot; - posição atual (SEEK_CUR)</li>
+<li>&quot;final&quot; - fim do arquivo (SEEK_END)</li>
+</ul>
+
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {numero|nil} - Nova posição ou nil em caso de erro.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00001D')">&#128203;</div>&nbsp;<i></i><pre id="id_00001D" hidden>arq:busque(0, &quot;final&quot;)  -- move para o fim do arquivo
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+arq<span style="font-weight:bold;">:</span>busque<span style="font-weight:bold;">(</span><span style="color:red">0</span>, <span style="color:blue">&quot;final&quot;</span><span style="font-weight:bold;">)</span>  <span style="color:grey">-- move para o fim do arquivo
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00001E" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao arquivo:defvbuf(modo, tamanho)</h2><div class="corpo-doc">
+<p>Define o modo de bufferização do arquivo.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > {string} - Tipo de buffer:</span>
+</div>
+<ul>
+<li>&quot;nenhum&quot;   - sem buffer (_IONBF)</li>
+<li>&quot;completo&quot; - buffer completo (_IOFBF)</li>
+<li>&quot;linha&quot;    - buffer por linha (_IOLBF)</li>
+</ul>
+
+<div class="params-doc"><span > {numero} - Tamanho do buffer (opcional).</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {booleano} - true em caso de sucesso.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00001F')">&#128203;</div>&nbsp;<i></i><pre id="id_00001F" hidden>arq:defvbuf(&quot;linha&quot;)
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+arq<span style="font-weight:bold;">:</span>defvbuf<span style="font-weight:bold;">(</span><span style="color:blue">&quot;linha&quot;</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000020" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao arquivo:esvazie()</h2><div class="corpo-doc">
+<p>Esvazia o buffer de saída do arquivo.</p>
+
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {booleano} - true se bem-sucedido.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000021')">&#128203;</div>&nbsp;<i></i><pre id="id_000021" hidden>arq:esvazie()
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+arq<span style="font-weight:bold;">:</span><span style="color:#b50546">esvazie</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000022" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao arquivo:linhas()</h2><div class="corpo-doc">
+<p>Retorna um iterador para as linhas do arquivo aberto.</p>
+
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {iterador} - Função iteradora que lê uma linha por vez.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000023')">&#128203;</div>&nbsp;<i></i><pre id="id_000023" hidden>for linha in arq:linhas() do
+  es.escreva(linha, &quot;\n&quot;)
+end
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+for linha in arq<span style="font-weight:bold;">:</span><span style="color:#b50546">linhas</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> do
+  <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">escreva</span><span style="font-weight:bold;">(</span>linha, <span style="color:blue">&quot;\n&quot;</span><span style="font-weight:bold;">)</span>
+end
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

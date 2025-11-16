@@ -1,0 +1,216 @@
+#!/usr/bin/env prisma
+local s = "vamos testar dentro de string: //oasdfadsf";
+//agora sim este comentario deve ser convertido para /*C89*/
+local proximo, volte, prox_volte, grave, coment_c89;
+
+local dir = inclua'dir';
+
+local backup = '.' ..dir.BARRA..'backup';
+//imprima(backup);
+se nao dir.dir_existe(backup) entao
+    imprima('criando dir-->', dir.criedir(backup));
+fim
+
+se nao dir.dir_existe(backup..dir.BARRA..'osname') entao
+    imprima('criando dir:', dir.criedir(backup..dir.BARRA..'osname'));
+    imprima('criando dir:', dir.criedir(backup..dir.BARRA..'strlib'));
+fim
+
+funcao principal()
+    se args[1] == '.' entao
+        local t = dir.liste_todos('.');
+        para i, v em ipares(t) inicio
+            se v:corte(-2,-1) == '.h' ou v:corte(-2,-1) == '.c' e nao v:procure('bkp.c', 1, 1) entao
+                imprima( dir.copie_arquivo(v, backup..dir.BARRA..v) );
+                sis.renomeie( v, v..'.bkp.c');
+                coment_c89(v..'.bkp.c', v);
+                sis.remova(v..'.bkp.c');
+            fim
+        fim
+        
+        sis.saia(0);
+    fim
+    se nao args[2] entao
+        use();
+    fim
+    local filein = args[1];
+    local fileout = args[2];
+    coment_c89(filein, fileout);
+    
+    
+fim
+
+
+funcao use()
+    es.erro:escreva('Erro, espera-se argumentos.\n\n--> Use: '..args[0] .. ' file.c fileout.c');
+    sis.saia(1);
+fim
+
+
+proximo = funcao(este)
+    este.old_c = este.c;
+    local c = este.a:leia(1);
+    este.c = c;
+    retorne c;
+fim
+
+volte = funcao(este)
+    local atual_pos = este.a:busque('atual', -1);
+    este.c = este.old_c;
+    retorne atual_pos;
+fim
+
+
+prox_volte = funcao (este)
+    local c = este:proximo();
+    este:volte();
+    retorne c;
+fim
+
+
+grave = funcao(este, c)
+    local c = c ou este.c;
+    este.b:escreva(c);
+    //imprima('escrito:', c);
+fim
+
+
+funcao coment_c89(file, dest)
+    S(file, dest);
+    local tab = {};
+    local err;
+    tab.a, err = es.abra(file, 'leiturabin');
+    se nao tab.a entao erro(err); fim
+    tab.b, err = es.abra(dest, 'escritabin');
+    se nao tab.b entao erro(err); fim
+    
+    tab.proximo = proximo;
+    tab.volte = volte;
+    tab.grave = grave;
+    tab.prox_volte = prox_volte;
+    tab.lin = 1;
+
+    enquanto 1 inicio
+        local c = tab:proximo();
+        
+        -- Contagem de linha fora dos blocos de estado
+        se c == '\n' entao tab.lin = tab.lin + 1; fim
+        se nao c entao quebre; fim
+        
+        // ==========================================================
+        // 1. Comentário /* ... */
+        // ==========================================================
+        se c == '/' e tab:prox_volte() == '*' entao 
+            tab:grave(); tab:proximo(); tab:grave(); -- Grava /*
+            local tmp_linha = tab.lin;
+            enquanto 1 inicio
+                local c = tab:proximo();
+                
+                se c == '\n' entao tab.lin = tab.lin + 1; fim
+                
+                se nao c entao
+                    es.erro:escreva('Comentário longo não fechado na linha: ', tmp_linha, '\n');
+                    sis.saia(1);
+                fim
+                
+                tab:grave(c); -- grava o atual
+                
+                se c == '*' e tab:prox_volte() == '/' entao -- fim do comentario
+                    tab:proximo(); tab:grave(); -- Grava */
+                    quebre;
+                -- Lógica de aninhamento desnecessária removida para manter compatibilidade C89
+                fim
+            fim
+            
+        // ==========================================================
+        // 2. Comentário // ... (a ser modificado)
+        // ==========================================================
+        senaose c == '/' e tab:prox_volte() == '/' entao 
+            tab:grave(); -- grava o '/'
+            tab:proximo(); tab:grave('*'); -- grava '*' no lugar do segundo '/' (abre /*)
+            
+            enquanto 1 inicio
+                local tmp = tab:proximo();
+                
+                se nao tmp entao 
+                    tab:grave('*/'); -- Fecha no EOF
+                    quebre; 
+                fim
+                
+                se tmp == '\n' entao -- fim de linha:
+                    tab:grave('*/');
+                    tab:grave('\n'); 
+                    tab.lin = tab.lin + 1;
+                    quebre;
+                senaose tmp == '/' e tab:prox_volte() == '*' entao
+                    tab:grave('/ *');
+                senaose tmp == '*' e tab:prox_volte() == '/' entao
+                    // Desarma o '*/' aninhado (sua correção!)
+                    tab:grave('* /');
+                    tab:proximo(); -- vai para o '/';
+                senao
+                    tab:grave(tmp);
+                fim
+            fim
+            
+        // ==========================================================
+        // 3. String ou Char (Lógica de erro e escape corrigida)
+        // ==========================================================
+        senaose c == '"' ou c == '\'' entao 
+            tab:grave(c); 
+            local fecha = c;
+            local tmp_lin = tab.lin;
+            
+            enquanto 1 inicio
+                local c = tab:proximo();
+
+                -- Conta linha no loop
+                se c == '\n' entao tab.lin = tab.lin + 1; fim
+                
+                -- Se for EOF, sempre é erro de string não fechada
+                se nao c entao
+                    es.erro:escreva(string.formate('Erro, string/char não fechado (linha %s)\n', tmp_lin));
+                    sis.saia(1);
+                fim
+                
+                se c == '\\' entao -- Escape Sequence (lógica simplificada e robusta)
+                    tab:grave('\\');
+                    local proximo_c = tab:proximo();
+                    
+                    se nao proximo_c entao -- Proteção contra EOF após \
+                         es.erro:escreva(string.formate('Erro, EOF após \\ na linha %s\n', tab.lin));
+                         sis.saia(1);
+                    fim
+
+                    -- A barra escapa o newline (line splicing), contamos a linha aqui.
+                    se proximo_c == '\n' entao tab.lin = tab.lin + 1; fim
+
+                    tab:grave(proximo_c);
+
+                senaose c == fecha entao -- Fechamento
+                    tab:grave(c); 
+                    quebre;  
+                
+                senaose c == '\n' entao -- Newline Ilegal
+                    -- Chegar aqui significa que o \n não foi escapado, o que é um erro em C
+                    es.erro:escreva(string.formate('Erro C89, quebra de linha não escapada dentro de string/char (linha %s) (' .. filein .. ')\n', 
+                    tab.lin)); 
+                    sis.saia(1);
+                    
+                senao
+                    tab:grave(c); 
+                fim
+            fim
+            
+        // ==========================================================
+        // 4. Caractere Normal
+        // ==========================================================
+        senao
+            tab:grave(c);
+        fim
+    fim
+    
+    tab.a:feche();
+    tab.b:feche();
+    imprima(file .. ' -> ' .. dest);
+fim

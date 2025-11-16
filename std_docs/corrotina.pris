@@ -1,0 +1,57 @@
+
+//arquivo somente com o propósito de documentação, portanto não há a implementação das funções aqui, apenas os nomes.
+
+/*@doc
+    \file corrotina
+    \brief Biblioteca corrotina em Prisma...
+*/
+
+
+/*@doc
+\fn estado
+\brief funcao corrotina.estado()
+*/
+
+funcao corrotina.estado()
+fim
+
+/*@doc
+\fn exec
+\brief funcao corrotina.exec()
+*/
+
+funcao corrotina.exec()
+fim
+
+/*@doc
+\fn wrap
+\brief funcao corrotina.wrap()
+*/
+
+funcao corrotina.wrap()
+fim
+
+/*@doc
+\fn crie
+\brief funcao corrotina.crie()
+*/
+
+funcao corrotina.crie()
+fim
+
+/*@doc
+\fn executando
+\brief funcao corrotina.executando()
+*/
+
+funcao corrotina.executando()
+fim
+
+/*@doc
+\fn yield
+\brief funcao corrotina.yield()
+*/
+
+funcao corrotina.yield()
+fim
+

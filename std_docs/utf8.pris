@@ -1,0 +1,213 @@
+//arquivo somente com o propósito de documentação, portanto não há a implementação das funções aqui, apenas os nomes.
+
+/*@doc
+    \file utf8
+    \brief Biblioteca utf8 em Prisma...
+*/
+
+
+/*@doc
+\fn offset
+\brief funcao utf8.offset()
+*/
+
+funcao utf8.offset()
+fim
+
+/*@doc
+\fn insira
+\brief funcao utf8.insira()
+*/
+
+funcao utf8.insira()
+fim
+
+/*@doc
+\fn byte
+\brief funcao utf8.byte()
+*/
+
+funcao utf8.byte()
+fim
+
+/*@doc
+\fn maiuscula
+\brief funcao utf8.maiuscula()
+*/
+
+funcao utf8.maiuscula()
+fim
+
+/*@doc
+\fn cod
+\brief funcao utf8.cod()
+*/
+
+funcao utf8.cod()
+fim
+
+/*@doc
+\fn cods
+\brief funcao utf8.cods()
+*/
+
+funcao utf8.cods()
+fim
+
+/*@doc
+\fn tamanho
+\brief funcao utf8.tamanho()
+*/
+
+funcao utf8.tamanho()
+fim
+
+/*@doc
+\fn titulo
+\brief funcao utf8.titulo()
+*/
+
+funcao utf8.titulo()
+fim
+
+/*@doc
+\var charpattern
+\brief variável utf8.charpattern = "[-�-�][�-�]*"
+*/
+utf8.charpattern = "[-�-�][�-�]*";
+
+/*@doc
+\fn largindex
+\brief funcao utf8.largindex()
+*/
+
+funcao utf8.largindex()
+fim
+
+/*@doc
+\fn minuscula
+\brief funcao utf8.minuscula()
+*/
+
+funcao utf8.minuscula()
+fim
+
+/*@doc
+\fn separe
+\brief funcao utf8.separe()
+*/
+
+funcao utf8.separe()
+fim
+
+/*@doc
+\fn troque
+\brief funcao utf8.troque()
+*/
+
+funcao utf8.troque()
+fim
+
+/*@doc
+\fn capte
+\brief funcao utf8.capte()
+*/
+
+funcao utf8.capte()
+fim
+
+/*@doc
+\fn procure
+\brief funcao utf8.procure()
+*/
+
+funcao utf8.procure()
+fim
+
+/*@doc
+\fn ncasecmp
+\brief funcao utf8.ncasecmp()
+*/
+
+funcao utf8.ncasecmp()
+fim
+
+/*@doc
+\fn remova
+\brief funcao utf8.remova()
+*/
+
+funcao utf8.remova()
+fim
+
+/*@doc
+\fn larg
+\brief funcao utf8.larg()
+*/
+
+funcao utf8.larg()
+fim
+
+/*@doc
+\fn car
+\brief funcao utf8.car()
+*/
+
+funcao utf8.car()
+fim
+
+/*@doc
+\fn proximo
+\brief funcao utf8.proximo()
+*/
+
+funcao utf8.proximo()
+fim
+
+/*@doc
+\fn carpos
+\brief funcao utf8.carpos()
+*/
+
+funcao utf8.carpos()
+fim
+
+/*@doc
+\fn escape
+\brief funcao utf8.escape()
+*/
+
+funcao utf8.escape()
+fim
+
+/*@doc
+\fn pontocod
+\brief funcao utf8.pontocod()
+*/
+
+funcao utf8.pontocod()
+fim
+
+/*@doc
+\fn corte
+\brief funcao utf8.corte()
+*/
+
+funcao utf8.corte()
+fim
+
+/*@doc
+\fn fold
+\brief funcao utf8.fold()
+*/
+
+funcao utf8.fold()
+fim
+
+/*@doc
+\fn inverta
+\brief funcao utf8.inverta()
+*/
+
+funcao utf8.inverta()
+fim

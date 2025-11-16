@@ -1,0 +1,121 @@
+
+//arquivo somente com o propósito de documentação, portanto não há a implementação das funções aqui, apenas os nomes.
+
+/*@doc
+    \file tabela
+    \brief Biblioteca tabela em Prisma...
+*/
+
+
+/*@doc
+\fn empacote
+\brief funcao tabela.empacote()
+*/
+
+funcao tabela.empacote()
+fim
+
+/*@doc
+\fn insira
+\brief funcao tabela.insira()
+*/
+
+funcao tabela.insira()
+fim
+
+/*@doc
+\fn reduza
+\brief funcao tabela.reduza()
+*/
+
+funcao tabela.reduza()
+fim
+
+/*@doc
+\fn maxn
+\brief funcao tabela.maxn()
+*/
+
+funcao tabela.maxn()
+fim
+
+/*@doc
+\fn remova
+\brief funcao tabela.remova()
+*/
+
+funcao tabela.remova()
+fim
+
+/*@doc
+\fn concat
+\brief funcao tabela.concat()
+*/
+
+funcao tabela.concat()
+fim
+
+/*@doc
+\fn adicione
+\brief funcao tabela.adicione()
+*/
+
+funcao tabela.adicione()
+fim
+
+/*@doc
+\fn copie
+\brief funcao tabela.copie()
+*/
+
+funcao tabela.copie()
+fim
+
+/*@doc
+\fn filtre
+\brief funcao tabela.filtre()
+*/
+
+funcao tabela.filtre()
+fim
+
+/*@doc
+\fn junte
+\brief funcao tabela.junte()
+*/
+
+funcao tabela.junte()
+fim
+
+/*@doc
+\fn map
+\brief funcao tabela.map()
+*/
+
+funcao tabela.map()
+fim
+
+/*@doc
+\fn crie
+\brief funcao tabela.crie()
+*/
+
+funcao tabela.crie()
+fim
+
+/*@doc
+\fn ordene
+\brief funcao tabela.ordene()
+*/
+
+funcao tabela.ordene()
+fim
+
+/*@doc
+\fn desempacote
+\brief funcao tabela.desempacote()
+*/
+
+funcao tabela.desempacote()
+fim
+

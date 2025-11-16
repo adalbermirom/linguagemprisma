@@ -1,0 +1,53 @@
+//para não criar outra função, apenas aprimorei a sis.tamanho();
+
+//Agora ela é capaz de dizer o tamanho de certos dados em C pelo operador sizeof
+//esse valor depende do sistema operacional onde Prisma está compilada.
+
+imprima('sizeof int', sis.tamanho('%i')); //o tamanho de um int;
+imprima('sizeof int',sis.tamanho('%d')); //mesmo que o de cima;
+imprima('sizeof unsigned int', sis.tamanho('%u')); //unsigned int;
+imprima('sizeof long int', sis.tamanho('%ld')); //long
+imprima('sizeof long long int', sis.tamanho('%lld')); //long long int;
+imprima('sizeof long unsigned', sis.tamanho('%lu')); //unsigned long;
+imprima('sizeof long long unsigned', sis.tamanho('%llu')); //long long unsigned
+imprima('sizeof short ', sis.tamanho('%hi')); //signed short integer
+imprima('sizeof short unsigned', sis.tamanho('%hu')); //unsigned short int;
+imprima('sizeof floag', sis.tamanho('%f')); //float
+imprima('sizeof double', sis.tamanho('%lf')); //double;
+imprima('sizeof long double', sis.tamanho('%Lf')); //long double;
+imprima('sizeof pointer *', sis.tamanho('%p')); //sizeof de um ponteiro (void*)
+imprima('sizeof char', sis.tamanho('%c')); //sizeof de um caractere: 1;
+
+/* as opções %be e %le retorna verdadeiro ou falso conforme o sistema for big-endian ou little-endian */
+se sis.tamanho'%be' entao
+    imprima('sistema big-endian');
+senao
+    imprima('sistema little-endian');
+fim
+
+/*Melhoramento da função sis.nome_arquivo(file); Esta com erros de alocação de memória, problema corrigido.*/
+local a,b,c = sis.nome_arquivo'/path/file.txt';
+imprima(a,b,c);
+a,b,c = sis.nome_arquivo'/path/file';
+imprima('"/path/file"', a,b,c);
+a,b,c = sis.nome_arquivo'/path/';
+imprima('"/path/"', a,b,c);
+a,b,c = sis.nome_arquivo'file.txt';
+imprima('"file.txt"', a,b,c);
+a,b,c = sis.nome_arquivo'file';
+imprima('"file"', a,b,c);
+a,b,c = sis.nome_arquivo'.file';
+imprima('".file"', a,b,c);
+a,b,c = sis.nome_arquivo'file.';
+imprima('"file."', a,b,c);
+a,b,c = sis.nome_arquivo'.txt';
+imprima('".txt"', a,b,c);
+a,b,c = sis.nome_arquivo'/path/file.';
+imprima('"/path/file."', a,b,c);
+a,b,c = sis.nome_arquivo'';
+imprima('"string vazia"', a,b,c);
+a,b,c = sis.nome_arquivo'.';
+imprima('"."', a,b,c);
+a,b,c = sis.nome_arquivo'.......';
+imprima('"......."', a,b,c);
+

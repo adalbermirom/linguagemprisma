@@ -1,0 +1,410 @@
+/*@doc
+    \file baselib
+    \brief Biblioteca base em Prisma...
+*/
+
+
+/**
+\fn Classe
+\resumo Cria ou obtém uma classe.
+\param ... {variável} - parâmetros opcionais para inicialização da classe.
+\retorno {table} - a tabela representando a classe.
+\codigo
+local MinhaClasse = Classe("NomeDaClasse")
+\codigo--
+*/
+funcao Classe(...)
+
+/**
+\fn contador
+\resumo Cria um contador incremental.
+\param inicio {number} - valor inicial do contador.
+\retorno {function} - função que retorna o próximo valor do contador a cada chamada.
+\codigo
+local c = contador(0)
+imprima(c()) -- 1
+imprima(c()) -- 2
+\codigo--
+*/
+funcao contador(inicio)
+
+/**
+\fn escolha
+\resumo Estrutura switch/case; retorna valor correspondente à opção.
+\param valor {variável} - valor a ser comparado.
+\param tabela_opcoes {table} - tabela chave-valor com opções.
+\retorno {variável} - valor correspondente ao case encontrado.
+\codigo
+local res = escolha(2, { [1]="um", [2]="dois" })
+imprima(res) -- "dois"
+\codigo--
+*/
+funcao escolha(valor, tabela_opcoes)
+
+/**
+\fn tente
+\resumo Executa um teste e dispara erro se falso.
+\param condicao {boolean} - condição a ser testada.
+\param mensagem {string} - mensagem de erro caso a condição seja falsa.
+\retorno {variável} - retorna a condição se verdadeira.
+\codigo
+tente(1==1, "Deu errado") -- continua
+tente(1==2, "Erro!")      -- dispara erro
+\codigo--
+*/
+funcao tente(condicao, mensagem)
+
+/**
+\fn Th
+\resumo Checa se o valor é um thread; retorna o próprio valor ou dispara erro.
+\param th {variável} - valor a ser checado.
+\retorno {thread} - valor original se for thread.
+\codigo
+local t = Th(coroutine.create(funcao() fim))
+\codigo--
+*/
+funcao Th(th)
+
+/**
+\fn N
+\resumo Checa se o valor é um número; retorna o próprio valor ou dispara erro.
+\param n {variável} - valor a ser checado.
+\retorno {number} - valor original se for número.
+\codigo
+local x = N(10)
+local y = N("a") -- erro
+\codigo--
+*/
+funcao N(n)
+
+/**
+\fn S
+\resumo Checa se o valor é uma string; retorna o próprio valor ou dispara erro.
+\param s {variável} - valor a ser checado.
+\retorno {string} - valor original se for string.
+\codigo
+local texto = S("Olá")
+\codigo--
+*/
+funcao S(s)
+
+/**
+\fn F
+\resumo Checa se o valor é uma função; retorna o próprio valor ou dispara erro.
+\param f {variável} - valor a ser checado.
+\retorno {function} - valor original se for função.
+\codigo
+local func = F(funcao() fim)
+\codigo--
+*/
+funcao F(f)
+
+/**
+\fn T
+\resumo Checa se o valor é uma tabela; retorna o próprio valor ou dispara erro.
+\param t {variável} - valor a ser checado.
+\retorno {table} - valor original se for tabela.
+\codigo
+local tab = T({1,2,3})
+\codigo--
+*/
+funcao T(t)
+
+/**
+\fn B
+\resumo Checa se o valor é booleano; retorna o próprio valor ou dispara erro.
+\param b {variável} - valor a ser checado.
+\retorno {boolean} - valor original se for booleano.
+\codigo
+local ok = B(true)
+\codigo--
+*/
+funcao B(b)
+
+/**
+\fn U
+\resumo Checa se o valor é userdata; retorna o próprio valor ou dispara erro.
+\param u {variável} - valor a ser checado.
+\retorno {userdata} - valor original se for userdata.
+\codigo
+local ud = U(minha_userdata)
+\codigo--
+*/
+funcao U(u)
+
+/**
+\fn V
+\resumo Checa se o valor é do tipo esperado; dispara erro se inválido.
+\param valor {variável} - valor a ser checado.
+\param tipo_esperado {string} - tipo esperado do valor.
+\retorno {variável} - valor original se corresponder ao tipo.
+\codigo
+local x = V("texto", "string")
+local y = V(10, "string") -- erro
+\codigo--
+*/
+funcao V(valor, tipo_esperado)
+
+/**
+\fn coletelixo
+\resumo Executa a coleta de lixo manual.
+\param none {nil} - nenhum parâmetro necessário.
+\retorno {nil} - não retorna valor.
+\codigo
+coletelixo()
+\codigo--
+*/
+funcao coletelixo()
+
+/**
+\fn executearquivo
+\resumo Executa um arquivo Lua.
+\param arquivo {string} - caminho do arquivo Lua.
+\retorno {variável} - resultado da execução do arquivo.
+\codigo
+executearquivo("teste.lua")
+\codigo--
+*/
+funcao executearquivo(arquivo)
+
+/**
+\fn erro
+\resumo Dispara um erro Lua com mensagem opcional.
+\param mensagem {string} - mensagem de erro.
+\retorno {nil} - não retorna valor.
+\codigo
+erro("Algo deu errado")
+\codigo--
+*/
+funcao erro(mensagem)
+
+/**
+\fn obtmetatabela
+\resumo Retorna a metatabela de um objeto.
+\param obj {variável} - objeto a ter sua metatabela obtida.
+\retorno {table} - metatabela do objeto.
+\codigo
+local mt = obtmetatabela({1,2,3})
+\codigo--
+*/
+funcao obtmetatabela(obj)
+
+/**
+\fn ipares
+\resumo Retorna um iterador por índices de tabela (numericamente ordenado).
+\param t {table} - tabela a ser iterada.
+\retorno {function, table, number} - função iteradora, tabela e índice inicial.
+\codigo
+for i, v in ipares({10,20,30}) do
+    imprima(i, v)
+fim
+\codigo--
+*/
+funcao ipares(t)
+
+/**
+\fn carreguearquivo
+\resumo Carrega um arquivo Lua sem executar.
+\param arquivo {string} - caminho do arquivo.
+\retorno {function} - função que, quando chamada, executa o arquivo.
+\codigo
+local f = carreguearquivo("teste.lua")
+f() -- executa
+\codigo--
+*/
+funcao carreguearquivo(arquivo)
+
+/**
+\fn carregue
+\resumo Carrega código Lua de string ou função sem executar.
+\param src {string|function} - fonte do código.
+\param nome {string} - nome para identificação de erros.
+\retorno {function} - função que executa o código carregado.
+\codigo
+local f = carregue("imprima('Olá')")
+f()
+\codigo--
+*/
+funcao carregue(src, nome)
+
+/**
+\fn executestring
+\resumo Executa código Lua fornecido como string.
+\param src {string} - código Lua a ser executado.
+\retorno {variável} - resultado da execução.
+\codigo
+executestring("imprima('Olá mundo')")
+\codigo--
+*/
+funcao executestring(src)
+
+/**
+\fn proximo
+\resumo Retorna o próximo índice/valor de uma tabela; usado para iteradores.
+\param t {table} - tabela a iterar.
+\param indice {variável} - índice atual.
+\retorno {variável, variável} - próximo índice e valor.
+\codigo
+local i, v = proximo({10,20,30}, nil)
+\codigo--
+*/
+funcao proximo(t, indice)
+
+/**
+\fn pares
+\resumo Retorna um iterador genérico de tabela (pares chave-valor).
+\param t {table} - tabela a ser iterada.
+\retorno {function, table, nil} - função iteradora, tabela e nil inicial.
+\codigo
+for k, v in pares({a=1, b=2}) do
+    imprima(k, v)
+fim
+\codigo--
+*/
+funcao pares(t)
+
+/**
+\fn pchame
+\resumo Chamada protegida de função; captura erros sem interromper o programa.
+\param funcao {function} - função a ser chamada.
+\param ... {variável} - argumentos da função.
+\retorno {boolean, variável} - true e resultado se sucesso; false e mensagem se erro.
+\codigo
+local ok, res = pchame(funcao() erro("x") fim)
+\codigo--
+*/
+funcao pchame(funcao, ...)
+
+/**
+\fn poe
+\resumo Imprime string com nova linha no final.
+\param str {string} - string a imprimir.
+\retorno {nil} - não retorna valor.
+\codigo
+poe("Olá mundo")
+\codigo--
+*/
+funcao poe(str)
+
+/**
+\fn igual
+\resumo Compara valores sem evocar metamétodos; equivalente a raw equality.
+\param a {variável} - valor 1.
+\param b {variável} - valor 2.
+\retorno {boolean} - true se iguais, false caso contrário.
+\codigo
+igual(1,1) -- true
+igual(1,2) -- false
+\codigo--
+*/
+funcao igual(a,b)
+
+/**
+\fn tamanho
+\resumo Retorna o tamanho de string ou tabela (raw).
+\param t {table|string} - tabela ou string.
+\retorno {number} - tamanho.
+\codigo
+tamanho("abc") -- 3
+tamanho({1,2,3}) -- 3
+\codigo--
+*/
+funcao tamanho(t)
+
+/**
+\fn obt
+\resumo Acesso direto à tabela sem evocar metamétodos.
+\param t {table} - tabela.
+\param k {variável} - chave.
+\retorno {variável} - valor da tabela.
+\codigo
+local x = obt({a=10}, "a") -- 10
+\codigo--
+*/
+funcao obt(t,k)
+
+/**
+\fn def
+\resumo Define valor em tabela sem evocar metamétodos.
+\param t {table} - tabela.
+\param k {variável} - chave.
+\param v {variável} - valor.
+\retorno {nil} - não retorna valor.
+\codigo
+def({},"x",10)
+\codigo--
+*/
+funcao def(t,k,v)
+
+/**
+\fn selecione
+\resumo Seleciona argumentos variáveis a partir de posição ou retorna quantidade.
+\param n {number|string} - índice ou "#".
+\param ... {variável} - lista de argumentos.
+\retorno {variável} - valor selecionado ou quantidade.
+\codigo
+local n = selecione(2, "a","b","c") -- "b"
+local q = selecione("#", 1,2,3)      -- 3
+\codigo--
+*/
+funcao selecione(n,...)
+
+/**
+\fn defmetatabela
+\resumo Define a metatabela de um objeto.
+\param obj {variável} - objeto alvo.
+\param mt {table} - metatabela.
+\retorno {variável} - objeto com nova metatabela.
+\codigo
+defmetatabela({}, {__index = funcao() fim})
+\codigo--
+*/
+funcao defmetatabela(obj, mt)
+
+/**
+\fn convnumero
+\resumo Converte valor para número; retorna nil se não puder converter.
+\param v {variável} - valor a converter.
+\retorno {number|nil} - número convertido ou nil.
+\codigo
+convnumero("123") -- 123
+convnumero("abc") -- nil
+\codigo--
+*/
+funcao convnumero(v)
+
+/**
+\fn convstring
+\resumo Converte valor para string.
+\param v {variável} - valor a converter.
+\retorno {string} - string resultante.
+\codigo
+convstring(123) -- "123"
+\codigo--
+*/
+funcao convstring(v)
+
+/**
+\fn tipo
+\resumo Retorna o tipo do valor; respeita metamétodo __tipo.
+\param v {variável} - valor a verificar.
+\retorno {string} - tipo do valor.
+\codigo
+tipo(10)   -- "numero"
+tipo("x")  -- "string"
+\codigo--
+*/
+funcao tipo(v)
+
+/**
+\fn xpchame
+\resumo Chamada protegida com função de erro personalizada.
+\param funcao {function} - função a ser chamada.
+\param errofunc {function} - função de tratamento de erro.
+\param ... {variável} - argumentos da função.
+\retorno {boolean, variável} - true e resultado se sucesso; false e mensagem se erro.
+\codigo
+local ok, res = xpchame(funcao() erro("x") fim, funcao(msg) imprima(msg) fim)
+\codigo--
+*/
+funcao xpchame(funcao, errofunc, ...)

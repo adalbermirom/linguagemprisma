@@ -1,0 +1,81 @@
+/* 
+ * 
+ * Correções e alterações na biblioteca mat (matemática)
+ * 
+ *    ALTERAÇÕES: 
+ * 
+ *    ANTES  ------------>  DEPOIS
+ * 
+ *    mat.randonico()      mat.aleatorio()
+ *    mat.xrandonico()     mat.xaleatorio()
+ *    mat.arredonde()      mat.arredondeacima() //arredonda um número para cima. Ex.: 4.2 -> 5
+ *    mat.corte()          mat.arredondeabaixo() //arredonda um número para baixo. Ex: 5.9 -> 5
+ *    
+ *    
+ *    INCLUSÕES:
+ * 
+ *    mat.arredonde(n)  ----> arredonda um número para o valor inteiro mais próximo.  
+ *                           Ex.:   5.9 --> 6;    5.2 --> 5
+ *    mat.raizcubica(n)  ---> retorna a raiz cúbica de n    imprima(mat.raizcubica(1000) ); //-->10
+ *                             
+ *    
+*/
+
+
+local n;
+
+poe'---------------------------------------';
+poe'Observe o primeiro aleatório, é igual sempre';
+para i = 1, 9 inicio
+    n = N(mat.aleatorio(1,10) ); //aleatorio entre um e dez.
+    imprima(n);
+fim
+poe'---------------------------------------';
+poe(
+'Observe que segundo aleatorio é diferente a cada execução,',
+'\npois usamos xaleatorio:'
+)
+//usando xaleatorio() para criar uma semente.
+
+mat.xaleatorio(sis.tempo());//criando uma semente aleatória baseada no sis.tempo();
+para i = 1, 9 inicio
+    n = N(mat.aleatorio(1,10) ); //aleatorio entre um e dez.
+    imprima(n);
+fim
+
+poe'\n---------------------------------------';
+poe'---------------- mat.arredonde() -----------------';
+
+imprima('3.8:', mat.arredonde(3.8) )
+imprima('3.4', mat.arredonde(3.4) ); //a partir de 0.5 o número é arredondado para cima.
+
+poe'\n---------------------------------------';
+poe'---------------- mat.arredondeacima() -----------------';
+
+imprima('3.1:', mat.arredondeacima(3.1) )
+
+poe'\n---------------------------------------';
+poe'---------------- mat.arredondeabaixo() -----------------';
+
+imprima('3.8:', mat.arredondeabaixo(3.8) )
+
+
+poe'\n---------------------------------------';
+poe'---------------- mat.raizcubica(n) -----------------';
+
+imprima('mat.raizcubica(27):', mat.raizcubica(27) )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

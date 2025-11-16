@@ -1,0 +1,26 @@
+//função escolha(); adicionada em lbaselib.c Prisma-1.0.107
+//esta função imita o comportamento do comando switch() em C.
+//para não precisarmos ficar repetindo a variável testada em cada comando 'se' e 'senaose'
+//Use caso achar interessante:
+
+poe'Digite um número entre 1 e 10';
+local n = leia(); //lê o que é digitado pelo usuário
+//a função convnumero converte de string para número, desde que a string seja um número 
+//ex.: '2' '100'  '42', se for outro caractere ela falha e retorna nulo.
+n = Num(convnumero(n)); //a fução Num (ou N) verifica se é um número válido, caso não seja o programa é interrompido com mensagem de erro.
+
+local for = escolha(n); //usei a variável for em alusão a 'se for igual a ...' mas poderá usar qualquer outro nome (case, caso ..)
+
+se for(1,2,3,4,5) entao //multiplos testes é possível. Se n for igual a qualquer um dos números passados como argumento o retorno é verdadeiro.
+    poe'Seu número está entre 1 e 5';
+senaose for(6,7,8,9) entao
+    poe'Seu número está entre 6 e 9';
+senaose for(10) entao
+    poe'Seu número é 10';
+senao
+    poe'Número incorreto, fora do intervalo de 1 a 10';
+fim
+
+
+
+

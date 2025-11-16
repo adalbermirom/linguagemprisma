@@ -1,0 +1,62 @@
+/* prisma 1.0.107 traz uma grande novidade:
+ * 
+ * foram incluídos os operadores bitwise para facilitar a crianção de códigos
+ * que necessitam de manipulação de bits.
+ * 
+ * Os operadores são:
+ * 
+ * & - BIT AND ->    n = 3 & 5;
+ * | - BIT OR  ->    n = 3 | 5;
+ * ~ - BIT XOR ->    n = 3 ~ 5;
+ * << - BIT LEFT SHIFT   n = 7 << 1;
+ * >> - BIT RIGHT SHIFT  n = 7 >> 1;
+ * ~  - BIT UNÁRIO NOT   n = ~7
+ * 
+ * */
+
+//abaixo segue os testes com esses operadores (incluindo os metamétodos):
+
+poe'TESTE bitwise ops implementado em Prisma:\n'
+
+poe'\n----------------------';
+poe'Testando com constants:'
+imprima('band: 3 & 5', 3 & 5)  // bitwise and
+imprima('bor: 3|5', 3 | 5)  // bitwise or
+imprima('bxor: 3~5',3 ~ 5)  // bitwise xor
+imprima('bshr: 7>>1', 7 >> 1) // bitwise right shift
+imprima('bshl: 7<<1', 7 << 1) // bitwise left shift
+imprima('bnot: ~7', ~7)     // bitwise not
+
+
+poe'\n----------------------';
+poe'Testando com variáveis: a=3, b=5, c=7, d=1';
+local a,b,c,d = 3,5,7,1;
+
+imprima('band: a & b', a&b);
+imprima('bor: a | b', a|b);
+imprima('bxor: a~b', a~b);
+imprima('bshr: c>>d', c>>d);
+imprima('bshl: c<<d', c<<d);
+imprima('bnot: ~c', ~c);
+
+poe'\n--- meta tests -------';
+poe'Testando com metamétodos em tabelas:';
+local ta = {3};
+local tb = {5};
+local mt = {
+    __band = funcao(a,b) retorne a[1] & b[1]; fim;
+    __add = funcao(a,b) retorne a[1] + b[1]; fim;
+    __bshl = funcao(a,b) retorne a[1]<<b[1]; fim;
+    __bshr = funcao(a,b) retorne a[1]>>b[1]; fim;
+    __bxor = funcao(a,b) retorne a[1]~b[1]; fim;
+    __bnot = funcao(a) retorne ~a[1]; fim;
+}
+defmetatabela(ta,mt);
+defmetatabela(tb,mt);
+local tc = defmetatabela({7}, mt);
+local td = defmetatabela({1},mt);
+imprima('band: ta & tb', ta & tb);
+imprima('bshl: ta << tb', tc << td);
+imprima('bshr: ta >> tb', tc >> td);
+imprima('bxor: tc~td', tc~td);
+imprima('bnot: ~tc', ~tc);

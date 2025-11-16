@@ -1,0 +1,137 @@
+
+//arquivo somente com o propósito de documentação, portanto não há a implementação das funções aqui, apenas os nomes.
+
+/*@doc
+    \file debug
+    \brief Biblioteca debug em Prisma...
+*/
+
+
+/*@doc
+\fn gethook
+\brief funcao debug.gethook()
+*/
+
+funcao debug.gethook()
+fim
+
+/*@doc
+\fn debug
+\brief funcao debug.debug()
+*/
+
+funcao debug.debug()
+fim
+
+/*@doc
+\fn getregistry
+\brief funcao debug.getregistry()
+*/
+
+funcao debug.getregistry()
+fim
+
+/*@doc
+\fn upvaluejoin
+\brief funcao debug.upvaluejoin()
+*/
+
+funcao debug.upvaluejoin()
+fim
+
+/*@doc
+\fn getuservalue
+\brief funcao debug.getuservalue()
+*/
+
+funcao debug.getuservalue()
+fim
+
+/*@doc
+\fn getinfo
+\brief funcao debug.getinfo()
+*/
+
+funcao debug.getinfo()
+fim
+
+/*@doc
+\fn getmetatable
+\brief funcao debug.getmetatable()
+*/
+
+funcao debug.getmetatable()
+fim
+
+/*@doc
+\fn upvalueid
+\brief funcao debug.upvalueid()
+*/
+
+funcao debug.upvalueid()
+fim
+
+/*@doc
+\fn setuservalue
+\brief funcao debug.setuservalue()
+*/
+
+funcao debug.setuservalue()
+fim
+
+/*@doc
+\fn getlocal
+\brief funcao debug.getlocal()
+*/
+
+funcao debug.getlocal()
+fim
+
+/*@doc
+\fn setmetatable
+\brief funcao debug.setmetatable()
+*/
+
+funcao debug.setmetatable()
+fim
+
+/*@doc
+\fn setupvalue
+\brief funcao debug.setupvalue()
+*/
+
+funcao debug.setupvalue()
+fim
+
+/*@doc
+\fn getupvalue
+\brief funcao debug.getupvalue()
+*/
+
+funcao debug.getupvalue()
+fim
+
+/*@doc
+\fn setlocal
+\brief funcao debug.setlocal()
+*/
+
+funcao debug.setlocal()
+fim
+
+/*@doc
+\fn sethook
+\brief funcao debug.sethook()
+*/
+
+funcao debug.sethook()
+fim
+
+/*@doc
+\fn traceback
+\brief funcao debug.traceback()
+*/
+
+funcao debug.traceback()
+fim
+

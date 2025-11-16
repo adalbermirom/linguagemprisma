@@ -1,0 +1,328 @@
+--[[[
+ \file Prisma - linguagem de programação
+ \autor Adalberto 
+ \data dez/2023 
+ \logo prisma.png Prisma - linguagem de progração
+ 
+ \footer 
+ <img src="prisma.png" width="50"><br>
+ <b><i>linguageprisma@gmail.com</i> 2015-2023</b>&nbsp;<a href="https://linguagemprisma.br4.biz/blog">Prisma-lang</a>
+ \footer--
+ 
+ \inicio_parag
+      Prisma é uma linguagem de programação interpretada com comandos em português do Brasil. Ela pode ser muito útil para aprendizagem de iniciantes em cursos de programação, ou, mesmo para ser usada profissionalmente, visto que possui características das linguagens mais atuais,  como Python, Ruby, Perl, etc.
+ \fim_parag
+ 
+ \subtitulo Links úteis:
+ \link http://linguagemprisma.br4.biz Página inicial
+ &nbsp; 
+ \link http://linguagemprisma.br4.biz/blog Blog
+ &nbsp;
+ \link http://linguagemprisma.br4.biz/prisma_forum Fórum oficial
+ &nbsp;
+ \link http://linguagemprisma.br4.biz/blog/linguagemprisma-netdownload/ Baixar
+ &nbsp;
+ \link http://linguagemprisma.br4.biz/Notas_da_versao_nov_2023.html Notas de atualização Prisma
+ 
+ \inicio_parag
+       Prisma é uma modificação dos códigos fontes de Lua, uma linguagem criada no Brasil e de fama internacional. Portanto, ela herda muitas características boas, tais como: entre as linguagens de script a mais rápida, mais leve, fácil de embutir e estender na linguagem C, fácil de se aprender, pequena - gasta poucos recursos da máquina.
+ \fim_parag
+ 
+ \h3 Mais do que uma tradução
+ 
+ \inicio_parag
+     Prisma se tornou mais do que uma mera tradução dos fontes Lua. Há inúmeras funções e características implementadas que não existem em Lua5.2, principalmente nesta nova versão 1.0.107 como, por exemplo, acesso aos caracteres de uma string por meio de índice como se fosse uma tabela, e isso implementado diretamente na máquina virtual em C, tornando mais veloz as operações que precisam precorrer cada caractere de uma string. Outra novidade é a implementação dos operadores de bitwise diretamente na vm 5.2, visto que esta novidade está presente em Lua somente a partir da versão 5.3, e em vez de recomeçar uma nova versão baseada em Lua5.3 ou 5.4 pretendo continuar a implementação atual baseada em Lua5.2.
+ \fim_parag
+ 
+ \img 60 http://www.lua.org/images/logo.gif Lua - linguagem de progração Puc-RJ
+ \link http://www.lua.org/ Prisma utiliza os fontes de Lua 5.2 visite a página oficial de Lua <aqui>
+ \h4 Veja um exemplo de código Prisma:
+ \inicio_codigo ex1.prisma:
+ 
+     local x = 1; //declarando uma variável local e atribuindo seu valor.
+     enquanto x <= 10 inicio
+         imprimaf('%d ', x);
+         x = x + 1; //incrementa 1 em x;
+     fim
+                //saída --> 1 2 3 4 5 6 7 8 9 10
+ \fim_codigo
+
+\h3 Esta é uma página estática, mas você pode visitar o blog oficial:
+\veja http://linguagemprisma.br4.biz/blog 
+  
+]]
+
+
+/***************************************************************************
+\seção Baixar prisma
+\resumo Esta seção contém links para baixar Prisma.
+\h3 Página de download:
+\link http://linguagemprisma.br4.biz/#id_000008 Baixar Prisma ubuntu 22.04 (64bits)
+<br>
+\link http://linguagemprisma.br4.biz/#id_000009 Baixar Prisma Windows 10, 11 (64bits)
+
+\h3 Downloads antigos na página do blog:
+\link http://linguagemprisma.br4.biz/blog/linguagemprisma-netdownload/
+****************************************************************************/
+
+/*****************************************************************************
+\seção Exemplos de código
+\resumo Esta seção apresenta alguns exemplos de codificação Prisma.
+\h3 Exemplos:
+\h4 Função principal:
+\inicio_codigo ex2.prisma
+    local frase;
+    funcao principal(argv)
+        imprima(frase);
+        retorne 0;
+    fim
+    frase = 'Olá mundo em Prisma';
+
+\fim_codigo
+\obs A função principal é opcional, não é necessário utilizá-la, porém o seu uso pode deixar o programa mais organizado.
+\h4 Lendo o que é digitado (função leia()):
+\inicio_codigo ex3.prisma
+    local nome;
+    imprima('Digite seu nome:');
+    nome = leia();
+    imprima('Seu nome é', nome);
+\fim_codigo
+
+\h4 Estrutura de controle 'se':
+\inicio_codigo ex4.prisma
+    es.escreva('Adivinhe o número (digite de 1 a 10): ');
+    local x = leia();
+    x = convnumero(x);//converte de string para número.
+    se x == 7 entao
+        imprima('Parabéns! Acertou, o número é 7!');
+    senao
+        imprima('Infelizmente, você errou, tente outra vez!');
+    fim
+\fim_codigo
+
+\h4 Estrutura de repetição 'para':
+\inicio_codigo ex5.prisma
+   para i = 1, 10 inicio //conta de 1 até 10...
+       imprima(i);
+   fim   
+\fim_codigo
+
+\h4 Estrutura de repetição 'equanto':
+\inicio_codigo ex6.prisma
+    local i = 1;
+    enquanto i<= 10 inicio
+        imprima(i);
+        i = i + 1;
+    fim
+\fim_codigo
+
+\h4 Estrutura de repetição 'repita':
+\inicio_codigo ex7.prisma
+    local i = 1;
+    repita
+        imprima(i);
+        i = i + 1;
+    ate i>10; //repete até que i seja maior que 10;
+\fim_codigo
+
+\h4 Usando o comando 'quebre':
+\inicio_codigo ex8.prisma
+    para i = 1, 1000 inicio
+        se i > 10 entao quebre; fim //sai do laço de repetição se i for maior que 10
+        imprima(i);
+    fim
+\fim_codigo
+
+
+\h4 Tabelas (array, records):
+\inicio_codigo ex9.prisma
+    local dias_semana = {}; //declarando uma tabela vazia
+    dias_semana[1] = 'Seg'; //preenchendo os indices com valores, iniciando pelo 1;
+    dias_semana[2] = 'Ter';
+    dias_semana[3] = 'Qua';
+    dias_semana[4] = 'Qui';
+    dias_semana[5] = 'Sex';
+    dias_semana[6] = 'Sáb';
+    dias_semana[7] = 'Dom';
+    
+    //usando o comando 'para' 
+    para i = 1, 7 inicio
+        imprima(dias_semana[i]);
+    fim
+    
+    //podemos iniciar uma tabela com valores, e em várias linhas:
+    local continentes = {'América do Sul', 'América do Central', 
+                         'América do Norte', 'Europa','África', 
+                         'Oceania','Antártida'
+                        };
+    //usando o ipares() para percorrer cada índice da tabela
+    para i, v em ipares(continentes) inicio
+        imprima(v);
+    fim
+    
+    //tabela com campos (os índices são trocados por textos);
+    local ret = {};
+    ret['largura'] = 10;
+    ret.altura = 5; // Um açúcar sintático, o mesmo que ret['altura'] = 5;
+    ret.area = ret.altura * ret.largura;
+    //usando o pares() para percorrer os campos da tabela.
+    para chave, valor em pares(ret) inicio
+        imprima(chave, valor);
+    fim    
+    
+\fim_codigo
+
+
+\h4 Funções:
+\inicio_codigo ex10.prisma
+    funcao soma(a,b)
+        retorne a+b;
+    fim
+    local c = soma(3, 5);
+    imprima(c);
+    
+    //a função pode retornar mais de um valor:
+    funcao calc(a, b)
+        retorne a*b, a+b;
+    fim
+    local n, z = calc(2, 4);
+    imprima(n, z);
+\fim_codigo
+
+
+\h4 Para mais exemplos e tutoriais:
+\veja http://linguagemprisma.br4.biz/blog 
+
+
+****************************************************************************/
+
+--[[[***************************************************************************
+\seção O que é Prisma?
+\inicio_parag
+Prisma é uma linguagem de programação com palavras chave em português brasileiro. Criada para facilitar o aprendizado de programação e também para uso profissional, com recursos como banco de dados, interface gráfica, cgi e aplicativos web.
+A versão mais atual pode ser executada diretamente no navegador web usando o recurso webasm.
+Prisma surgiu para meu uso pessoal em projetos com diversos propósitos, facilitando o desenvolvimento de software de modo mais produtivo. Porém, achei por bem compartilhar com todos e sem custo nenhum. Originalmente, meu objetivo era criar uma linguagem do zero, no entanto, isto está além das minhas habilidades em programação, e assim cheguei a conclusão de que a melhor abordagem era modificar um projeto open source já estabelecido, Lua.
+\fim_parag
+
+\inicio_parag
+  Ela possui diversas características, tais como:
+\fim_parag
+
+\inicio_lista
+interpretada em byte codes;
+tipagem dinâmica;
+simplicidade de tipos;
+portabilidade, o programa feito em Prisma não terá dificuldades em rodar nos mais populares sistemas operacionais;
+execute o programa diretamente como um script ou compile usando o compilador prismac para esconder o código;
+muito rápida entre as linguagens de script;
+muito leve, não consome muitos recursos da máquina;
+possui poderosos recursos para manipulação de dados: as tabelas;
+multiparadigma incluindo orientação a objetos: classes;
+fácil de ser aprendida, estude e aprenda em poucos dias.
+fácil de ser estendida, pois é possível criar facilmente bibliotecas em puro Prisma e também em linguagens de baixo nível como C e C++;
+\fim_lista
+
+
+\h4 Qual o preço para usar Prisma?
+
+
+\inicio_parag
+Prisma é totalmente gratuita, livre para usar como bem entender, modificar os fontes, vender seus programas, sem que para isso precise pagar dinheiro algum, ou mostrar o código fonte junto ao binário.
+\fim_parag
+
+\h4 Licença
+\inicio_parag
+O interpretador possui a mesma licença de Lua na qual é baseada, a biblioteca IG possui a mesma do Gtk. Portanto Prisma é livre e gratuita, tanto o código fonte como os binários poderão ser distribuídos e modificados com fins pessoais, comerciais ou quaisquer outros.
+\fim_parag
+
+\h4 O que poderá ser feito com Prisma:
+
+\inicio
+Com a linguagem Prisma você pode criar desde simples scripts para automatizar tarefas comuns até programas de grande porte para fins comerciais. Usando Prisma + cgi web + MySQL ou SQlite3 tudo depende de sua criatividade. Claro que programas críticos com ênfase na rapidez e eficiência não são recomendados a fazer em Prisma, porém você pode criar essas rotinas em C como uma biblioteca e chamar as funções em Prisma, quase tudo em C pode ser estendido em Prisma.
+\fim
+\inicio
+Uma novidade é que compilei com sucesso o interpretador prisma em wasm, para rodar diretamente em qualquer navegador com suporte a webassembly. É possível mesclar as páginas html com programa prisma, ter acesso aos elementos html e qualquer função em javascript dentro de Prisma. Imagina o que é possível fazer com Prisma + js + html + nwjs. Veja um exemplo mínimo abaixo:
+\fim
+\bloco
+<!DOCTYPE html>
+<html>
+    <head>
+		<meta charset="UTF-8"/>	
+        <script type="text/javascript" src="js/webprisma.js"></script>       
+    </head>
+    <body>
+		<h1>Teste prismajs:</h1>	
+		<button id="bt1">Clique-me!</button>
+    </body>   
+</html> 
+
+<script type="text/prisma">	
+    local bt1 = js.global.document:getElementById("bt1");
+    
+    funcao bt1:onclick()
+        js:msg("ola! Botão clicado!");
+        imprima(sis.nome);
+    fim
+</script> 
+
+\bloco--
+
+
+
+\h3 Aproveite e teste-a.
+
+Att. Adalberto Amorim Felipe
+
+
+***************************************************************************]]
+
+--[[[***************************************************************************
+\seção Novidades Prisma 1.0.107
+\h3 Esta versão prisma traz algumas novidades interessantes:
+\inicio_lista
+Operadores bitwise:  << >> | & ~;
+Customização de tipos através do metamétodo __tipo;
+Funções para verificação de tipos em parâmetros de funções: N(); S(); F(); B(); T() entre outras;
+Acesso aos caracteres de string por índice;
+Correção das funções es.abra() e es.pabra(), mais especificamente o 2nd parâmetro.
+Alterações e inclusão de novas funções na biblioteca mat;
+Operador de condição ternário (adaptação);
+Várias correções e melhoramento de códigos, por exemplo, a função string.apare();
+Novas funções para a biblioteca base: escolha() e contador();
+Comandos acentuados(utf8): então, não, função, senão, senãose, até (os comandos sem acento ainda são válidos);
+Variáveis com acento (utf8), exemplos: local salário = 5000,00; função lê_comentários(); etc.
+O interpretador Prisma compilado em webasm, rodando no navegador e acessando componentes html e funções javascript direto de Prisma.
+\fim_lista
+\h3 Para mais detalhes sobre a atualização de Prisma 1.0.107 visite o link abaixo:
+\link http://linguagemprisma.br4.biz/Notas_da_versao_nov_2023.html Notas de atualização Prisma
+***************************************************************************]]
+
+
+
+--[[[***************************************************************************
+\seção Licença MIT
+<pre>
+* Permission is hereby granted, free of charge, to any person obtaining
+* a copy of this software and associated documentation files (the
+* "Software"), to deal in the Software without restriction, including
+* without limitation the rights to use, copy, modify, merge, publish,
+* distribute, sublicense, and/or sell copies of the Software, and to
+* permit persons to whom the Software is furnished to do so, subject to
+* the following conditions:
+*
+* The above copyright notice and this permission notice shall be
+* included in all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+</pre>
+
+***************************************************************************]]
+
+
+

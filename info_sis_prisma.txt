@@ -1,0 +1,15 @@
+Informações do sistema onde Prisma foi compilado:
+
+Linux
+6.8.0-86-generic
+#87-Ubuntu SMP PREEMPT_DYNAMIC Mon Sep 22 18:03:36 UTC 2025
+x86_64
+GNU/Linux
+
+-------------------------------
+
+Informações do compilador usado:
+
+gcc version 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) 
+Target: x86_64-linux-gnu
+Thread model: posix

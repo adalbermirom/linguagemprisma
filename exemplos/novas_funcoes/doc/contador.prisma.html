@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>contador (biblioteca base Prisma)</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<nav id="id_000005"  class="floating-menu">
+<div class="menu-button" title="Mostrar painel lateral" onclick="show_menu_flutuante(this, 'id_000006', 'id_000005')">&#x2630;</div>
+<div class="com-rolagem" id="id_000006" hidden >
+<div class="caixa com-borda"><h2>Funções:</h2>
+<a href="#id_000003">contador</a>
+
+</div>
+</div>
+</nav>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> contador (biblioteca base Prisma)</h1>
+<h3> Adalberto</h3>
+<h3> dez/2023</h3>
+<br>
+<div>
+Retorna uma função de fecho (closure) com um valor incrementado ou decrementado a cada chamada.
+<a href="#id_000007"> mais...</a></div>
+<div class="caixa com-borda"><div><h2 >Funções:</h2>
+<ol>
+<li><a href="#id_000003">contador</a></li>
+</ol>
+</div>
+
+</div><br>
+
+<h2 id="id_000007">contador (biblioteca base Prisma)</h2><div>
+Retorna uma função de fecho (closure) com um valor incrementado ou decrementado a cada chamada.
+</div>
+
+
+
+
+
+<h3>Exemplo:</h3>
+
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000002')">&#128203;</div>&nbsp;<i>ex1.prisma</i><pre id="id_000002" hidden>imprima(&#39;---------- Início padrão: 1, incr padrão: 1 -----&#39;);
+local cont = contador();//padrão inicia por 1, o incremento é 1;
+imprima(cont());
+imprima(cont());
+imprima(cont());
+
+</pre><div style=" padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;---------- Início padrão: 1, incr padrão: 1 -----&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> cont <span style="font-weight:bold;">=</span> <span style="color:#b50546">contador</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//padrão inicia por 1, o incremento é 1;
+</span><span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+</pre></div></div>
+
+</div>
+
+
+<h1>Funções:</h1>
+<a id="id_000003" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao contador(inic, incr)</h2><div class="corpo-doc">
+<p>Cria uma função contadora que incrementa ou decrementa seu valor inicial conforme for executada.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > inic(numero) - é o número inicial, caso seja omitido o valor padrão é 1;</span>
+</div>
+<div class="params-doc"><span > incr(numero) - incremento ou decremento é o número a ser somado a cada execução da função.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (funcao) - o retorno é uma função contadora, basta executá-la e o retorno será um novo valor incrementado.</span>
+</div>
+
+<p><i><b>Obs.: </b>Para usar um decremento, ou seja, um valor que subtrai, apenas use um número negativo: -1, -2, -5, -10 ... etc.</i></p>
+<h2>Veja os exemplos:</h2>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000004')">&#128203;</div>&nbsp;<i>ex2.prisma</i><pre id="id_000004" hidden>
+imprima(&#39;---------- Início padrão: 1, incr padrão: 1 -----&#39;);
+local cont = contador();//padrão inicia por 1, o incremento é 1;
+imprima(cont());
+imprima(cont());
+imprima(cont());
+
+imprima(&#39;----- Início: 2, incr padrão: 1 --------&#39;);
+local cont2 = contador(2);//inicia por 2, o incremento é 1;
+imprima(cont2());
+imprima(cont2());
+imprima(cont2());
+
+imprima(&#39;------ Início: 10, incr: 5 -------&#39;);
+local cont3 = contador(10, 5);
+imprima(cont3());
+imprima(cont3());
+imprima(cont3());
+
+imprima(&#39;-------- Início: 20, decr: -2 -------&#39;);
+local cont4 = contador(20, -2);
+imprima(cont4());
+imprima(cont4());
+imprima(cont4());
+
+imprima(&#39;-------- Ótimo para gerar ids --------&#39;);
+local contid = contador();
+funcao crie_id()
+    retorne string.formate(&#39;id_%04x&#39;, contid());
+fim
+imprima(&#39;&lt;button id=&quot;&#39;..crie_id()..&#39;&quot;&gt;Baixar&lt;/button&gt;&#39;);
+imprima(&#39;&lt;button id=&quot;&#39;..crie_id()..&#39;&quot;&gt;Enviar&lt;/button&gt;&#39;);
+imprima(&#39;&lt;button id=&quot;&#39;..crie_id()..&#39;&quot;&gt;Login&lt;/button&gt;&#39;);
+</pre><div style=" padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 14</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 15</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 16</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 17</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 18</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 19</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 20</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 21</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 22</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 23</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 24</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 25</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 26</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 27</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 28</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 29</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 30</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 31</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 32</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 33</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;---------- Início padrão: 1, incr padrão: 1 -----&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> cont <span style="font-weight:bold;">=</span> <span style="color:#b50546">contador</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//padrão inicia por 1, o incremento é 1;
+</span><span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;----- Início: 2, incr padrão: 1 --------&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> cont2 <span style="font-weight:bold;">=</span> <span style="color:#b50546">contador</span><span style="font-weight:bold;">(</span><span style="color:red">2</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//inicia por 2, o incremento é 1;
+</span><span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont2<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont2<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont2<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;------ Início: 10, incr: 5 -------&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> cont3 <span style="font-weight:bold;">=</span> <span style="color:#b50546">contador</span><span style="font-weight:bold;">(</span><span style="color:red">10</span>, <span style="color:red">5</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont3<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont3<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont3<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;-------- Início: 20, decr: -2 -------&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> cont4 <span style="font-weight:bold;">=</span> <span style="color:#b50546">contador</span><span style="font-weight:bold;">(</span><span style="color:red">20</span>, <span style="font-weight:bold;">-</span><span style="color:red">2</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont4<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont4<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont4<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;-------- Ótimo para gerar ids --------&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> contid <span style="font-weight:bold;">=</span> <span style="color:#b50546">contador</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">funcao</span> crie_id<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>
+    <span style="font-weight:bold;color:#b50546">retorne</span> <span style="color:#b50546">string</span><span style="font-weight:bold;">.</span><span style="color:#b50546">formate</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;id_%04x&#39;</span>, contid<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">fim</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;&lt;button id=&quot;&#39;</span><span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span>crie_id<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span><span style="color:blue">&#39;&quot;&gt;Baixar&lt;/button&gt;&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;&lt;button id=&quot;&#39;</span><span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span>crie_id<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span><span style="color:blue">&#39;&quot;&gt;Enviar&lt;/button&gt;&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;&lt;button id=&quot;&#39;</span><span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span>crie_id<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span><span style="color:blue">&#39;&quot;&gt;Login&lt;/button&gt;&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+</pre></div></div>
+
+</div>
+
+</div>
+</section>
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

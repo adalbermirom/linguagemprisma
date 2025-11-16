@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Operador de divisão inteira</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> Operador de divisão inteira</h1>
+<h3> Adalberto</h3>
+<h3> dez/2023</h3>
+
+
+
+ 
+<p>
+
+ Uma novidade em Prisma 1.0.107 é o operador de divisão inteira, muito útil em situações em que queremos
+ o resultado inteiro, sem o resto da divisão.
+
+</p>
+ 
+<h3>O operador de divisão inteira é composto:</h3>
+
+ Operador de divisão '/' mais o ponto '.' <br>Veja: &nbsp;<b>/.</b>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000002')">&#128203;</div>&nbsp;<i>ex1.prisma</i><pre id="id_000002" hidden>     imprima( 5 / 2 ); --&gt; 2.5
+     imprima( 5 /. 2); --&gt; 2
+</pre><div style=" padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+     <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> <span style="color:red">5</span> <span style="font-weight:bold;">/</span> <span style="color:red">2</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:grey">--&gt; 2.5
+</span>     <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> <span style="color:red">5</span> <span style="font-weight:bold;">/</span><span style="font-weight:bold;">.</span> <span style="color:red">2</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:grey">--&gt; 2
+</span></pre></div></div>
+
+</div>
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

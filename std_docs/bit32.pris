@@ -1,0 +1,105 @@
+
+//arquivo somente com o propósito de documentação, portanto não há a implementação das funções aqui, apenas os nomes.
+
+/*@doc
+    \file bit32
+    \brief Biblioteca bit32 em Prisma...
+*/
+
+
+/*@doc
+\fn bnao
+\brief funcao bit32.bnao()
+*/
+
+funcao bit32.bnao()
+fim
+
+/*@doc
+\fn bou
+\brief funcao bit32.bou()
+*/
+
+funcao bit32.bou()
+fim
+
+/*@doc
+\fn rshift
+\brief funcao bit32.rshift()
+*/
+
+funcao bit32.rshift()
+fim
+
+/*@doc
+\fn arshift
+\brief funcao bit32.arshift()
+*/
+
+funcao bit32.arshift()
+fim
+
+/*@doc
+\fn rrotate
+\brief funcao bit32.rrotate()
+*/
+
+funcao bit32.rrotate()
+fim
+
+/*@doc
+\fn lrotate
+\brief funcao bit32.lrotate()
+*/
+
+funcao bit32.lrotate()
+fim
+
+/*@doc
+\fn extract
+\brief funcao bit32.extract()
+*/
+
+funcao bit32.extract()
+fim
+
+/*@doc
+\fn lshift
+\brief funcao bit32.lshift()
+*/
+
+funcao bit32.lshift()
+fim
+
+/*@doc
+\fn be
+\brief funcao bit32.be()
+*/
+
+funcao bit32.be()
+fim
+
+/*@doc
+\fn bxou
+\brief funcao bit32.bxou()
+*/
+
+funcao bit32.bxou()
+fim
+
+/*@doc
+\fn bteste
+\brief funcao bit32.bteste()
+*/
+
+funcao bit32.bteste()
+fim
+
+/*@doc
+\fn replace
+\brief funcao bit32.replace()
+*/
+
+funcao bit32.replace()
+fim
+

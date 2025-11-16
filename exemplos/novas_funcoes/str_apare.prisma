@@ -1,0 +1,13 @@
+
+//Teste string.apare();
+
+local s = '   ola mundo!       ';
+imprima( '>' .. string.apare(s) .. '<' );
+
+s = '';//string vazia
+imprima('>' .. s:apare() .. '<'); //podemos usar o método apare na própria string.
+
+s = '              '; //string com somente espaços.
+imprima('>' .. s:apare() .. '<' );
+
+

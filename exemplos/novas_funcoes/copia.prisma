@@ -1,0 +1,15 @@
+//acrescentada a função para copiar arquivos na lib sis:
+
+local sis = sis;
+
+funcao principal()
+    
+    imprima(mat.arredonde(5.2));
+    imprima(mat.arredonde(5.4));
+    
+    local orig = args[0];//o prório programa.
+    local dest = 'copia.prisma';
+    local ok, err = sis.copie_arquivo(orig, dest);
+    
+    retorne 0;
+fim

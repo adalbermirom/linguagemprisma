@@ -1,0 +1,9 @@
+//teste prisma
+
+es.escreva('ola Mundo!\n');
+imprima(_VERSAO);
+imprima(_INFO);
+para i = 1, 10 início
+    imprima(i);
+fim
+leia();

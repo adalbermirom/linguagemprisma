@@ -1,0 +1,9 @@
+local ig = inclua'igbr'
+
+funcao principal() 
+ local jan = ig.janela('teste',200,200);
+ ig.conecte_permutado(jan,ig.destruido, sis.saia,0);
+ ig.componente_mostre_todos(jan);
+ ig.fimprograma();
+ retorne 0;
+fim

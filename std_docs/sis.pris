@@ -1,0 +1,151 @@
+
+//arquivo somente com o propósito de documentação, portanto não há a implementação das funções aqui, apenas os nomes.
+
+/*@doc
+    \file sis
+    \brief Biblioteca sis em Prisma...
+*/
+
+
+/*@doc
+\fn delvarambiente
+\brief funcao sis.delvarambiente()
+*/
+
+funcao sis.delvarambiente()
+fim
+
+/*@doc
+\fn data
+\brief funcao sis.data()
+*/
+
+funcao sis.data()
+fim
+
+/*@doc
+\fn nometmp
+\brief funcao sis.nometmp()
+*/
+
+funcao sis.nometmp()
+fim
+
+/*@doc
+\fn renomeie
+\brief funcao sis.renomeie()
+*/
+
+funcao sis.renomeie()
+fim
+
+/*@doc
+\fn diftempo
+\brief funcao sis.diftempo()
+*/
+
+funcao sis.diftempo()
+fim
+
+/*@doc
+\fn obtvarambiente
+\brief funcao sis.obtvarambiente()
+*/
+
+funcao sis.obtvarambiente()
+fim
+
+/*@doc
+\fn tempo
+\brief funcao sis.tempo()
+*/
+
+funcao sis.tempo()
+fim
+
+/*@doc
+\fn nome_arquivo
+\brief funcao sis.nome_arquivo()
+*/
+
+funcao sis.nome_arquivo()
+fim
+
+/*@doc
+\fn saia
+\brief funcao sis.saia()
+*/
+
+funcao sis.saia()
+fim
+
+/*@doc
+\fn durma
+\brief funcao sis.durma()
+*/
+
+funcao sis.durma()
+fim
+
+/*@doc
+\fn relogio
+\brief funcao sis.relogio()
+*/
+
+funcao sis.relogio()
+fim
+
+/*@doc
+\fn remova
+\brief funcao sis.remova()
+*/
+
+funcao sis.remova()
+fim
+
+/*@doc
+\fn caminho_absoluto
+\brief funcao sis.caminho_absoluto()
+*/
+
+funcao sis.caminho_absoluto()
+fim
+
+/*@doc
+\var nome
+\brief variável sis.nome = "linux"
+*/
+sis.nome = "linux";
+
+/*@doc
+\fn defvarambiente
+\brief funcao sis.defvarambiente()
+*/
+
+funcao sis.defvarambiente()
+fim
+
+/*@doc
+\fn tamanho
+\brief funcao sis.tamanho()
+*/
+
+funcao sis.tamanho()
+fim
+
+/*@doc
+\fn execute
+\brief funcao sis.execute()
+*/
+
+funcao sis.execute()
+fim
+
+/*@doc
+\fn deflocal
+\brief funcao sis.deflocal()
+*/
+
+funcao sis.deflocal()
+fim
+

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>mat</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<nav id="id_000027"  class="floating-menu">
+<div class="menu-button" title="Ocultar painel lateral" onclick="show_menu_flutuante(this, 'id_000028', 'id_000027')">&#x2630;</div>
+<div class="com-rolagem" id="id_000028" hidden>
+<div class="caixa "><h2>Funções:</h2>
+<a href="#id_000005">mat.absoluto</a>
+<a href="#id_000015">mat.aleatorio</a>
+<a href="#id_000011">mat.arcocosseno</a>
+<a href="#id_000017">mat.arcoseno</a>
+<a href="#id_000026">mat.arcotangente</a>
+<a href="#id_000014">mat.arcotangente2</a>
+<a href="#id_000012">mat.arredonde</a>
+<a href="#id_00001F">mat.arredondeabaixo</a>
+<a href="#id_000025">mat.arredondeacima</a>
+<a href="#id_000013">mat.cmodulo</a>
+<a href="#id_00000C">mat.corte</a>
+<a href="#id_00000F">mat.cosseno</a>
+<a href="#id_00000D">mat.cossenoh</a>
+<a href="#id_00000E">mat.elevado</a>
+<a href="#id_00001B">mat.emGrau</a>
+<a href="#id_000003">mat.emRadianos</a>
+<a href="#id_000006">mat.exp</a>
+<a href="#id_000002">mat.frexp</a>
+<a href="#id_00001D">mat.hipot</a>
+<a href="#id_000008">mat.ldexp</a>
+<a href="#id_000007">mat.log</a>
+<a href="#id_000023">mat.log10</a>
+<a href="#id_000016">mat.maximo</a>
+<a href="#id_00000A">mat.minimo</a>
+<a href="#id_000021">mat.raiz</a>
+<a href="#id_000009">mat.raizcubica</a>
+<a href="#id_000024">mat.raizquad</a>
+<a href="#id_000010">mat.randonico</a>
+<a href="#id_000004">mat.seno</a>
+<a href="#id_00001C">mat.senoh</a>
+<a href="#id_000022">mat.separe</a>
+<a href="#id_00001A">mat.tangente</a>
+<a href="#id_00001E">mat.tangenteh</a>
+<a href="#id_000020">mat.xaleatorio</a>
+<a href="#id_00000B">mat.xrandonico</a>
+
+</div>
+<div class="caixa "><h2>Variáveis:</h2>
+<a href="#id_000018">mat.infinito </a>
+<a href="#id_000019">mat.pi </a>
+</div>
+
+</div>
+</nav>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> mat</h1>
+<br>
+<div>
+Biblioteca mat em Prisma...
+<a href="#id_000029"> mais...</a></div>
+<div class="caixa com-borda"><div><h2 >Funções:</h2>
+<ol>
+<li><a href="#id_000005">mat.absoluto</a></li>
+<li><a href="#id_000015">mat.aleatorio</a></li>
+<li><a href="#id_000011">mat.arcocosseno</a></li>
+<li><a href="#id_000017">mat.arcoseno</a></li>
+<li><a href="#id_000026">mat.arcotangente</a></li>
+<li><a href="#id_000014">mat.arcotangente2</a></li>
+<li><a href="#id_000012">mat.arredonde</a></li>
+<li><a href="#id_00001F">mat.arredondeabaixo</a></li>
+<li><a href="#id_000025">mat.arredondeacima</a></li>
+<li><a href="#id_000013">mat.cmodulo</a></li>
+<li><a href="#id_00000C">mat.corte</a></li>
+<li><a href="#id_00000F">mat.cosseno</a></li>
+<li><a href="#id_00000D">mat.cossenoh</a></li>
+<li><a href="#id_00000E">mat.elevado</a></li>
+<li><a href="#id_00001B">mat.emGrau</a></li>
+<li><a href="#id_000003">mat.emRadianos</a></li>
+<li><a href="#id_000006">mat.exp</a></li>
+<li><a href="#id_000002">mat.frexp</a></li>
+<li><a href="#id_00001D">mat.hipot</a></li>
+<li><a href="#id_000008">mat.ldexp</a></li>
+<li><a href="#id_000007">mat.log</a></li>
+<li><a href="#id_000023">mat.log10</a></li>
+<li><a href="#id_000016">mat.maximo</a></li>
+<li><a href="#id_00000A">mat.minimo</a></li>
+<li><a href="#id_000021">mat.raiz</a></li>
+<li><a href="#id_000009">mat.raizcubica</a></li>
+<li><a href="#id_000024">mat.raizquad</a></li>
+<li><a href="#id_000010">mat.randonico</a></li>
+<li><a href="#id_000004">mat.seno</a></li>
+<li><a href="#id_00001C">mat.senoh</a></li>
+<li><a href="#id_000022">mat.separe</a></li>
+<li><a href="#id_00001A">mat.tangente</a></li>
+<li><a href="#id_00001E">mat.tangenteh</a></li>
+<li><a href="#id_000020">mat.xaleatorio</a></li>
+<li><a href="#id_00000B">mat.xrandonico</a></li>
+</ol>
+</div>
+
+<div><h2>Variáveis:</h2>
+<ol>
+<li><a href="#id_000018">mat.infinito </a></li>
+<li><a href="#id_000019">mat.pi </a></li>
+</ol>
+</div>
+
+</div><br>
+
+<h2 id="id_000029">mat</h2><div>
+Biblioteca mat em Prisma...
+</div>
+
+
+<h1>Funções:</h1>
+<a id="id_000002" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.frexp()</h2><div class="corpo-doc">
+<p>funcao mat.frexp()</p>
+
+</div>
+</section>
+<a id="id_000003" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.emRadianos()</h2><div class="corpo-doc">
+<p>funcao mat.emRadianos()</p>
+
+</div>
+</section>
+<a id="id_000004" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.seno()</h2><div class="corpo-doc">
+<p>funcao mat.seno()</p>
+
+</div>
+</section>
+<a id="id_000005" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.absoluto()</h2><div class="corpo-doc">
+<p>funcao mat.absoluto()</p>
+
+</div>
+</section>
+<a id="id_000006" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.exp()</h2><div class="corpo-doc">
+<p>funcao mat.exp()</p>
+
+</div>
+</section>
+<a id="id_000007" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.log()</h2><div class="corpo-doc">
+<p>funcao mat.log()</p>
+
+</div>
+</section>
+<a id="id_000008" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.ldexp()</h2><div class="corpo-doc">
+<p>funcao mat.ldexp()</p>
+
+</div>
+</section>
+<a id="id_000009" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.raizcubica()</h2><div class="corpo-doc">
+<p>funcao mat.raizcubica()</p>
+
+</div>
+</section>
+<a id="id_00000A" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.minimo()</h2><div class="corpo-doc">
+<p>funcao mat.minimo()</p>
+
+</div>
+</section>
+<a id="id_00000B" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.xrandonico()</h2><div class="corpo-doc">
+<p>funcao mat.xrandonico()</p>
+
+</div>
+</section>
+<a id="id_00000C" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.corte()</h2><div class="corpo-doc">
+<p>funcao mat.corte()</p>
+
+</div>
+</section>
+<a id="id_00000D" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.cossenoh()</h2><div class="corpo-doc">
+<p>funcao mat.cossenoh()</p>
+
+</div>
+</section>
+<a id="id_00000E" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.elevado()</h2><div class="corpo-doc">
+<p>funcao mat.elevado()</p>
+
+</div>
+</section>
+<a id="id_00000F" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.cosseno()</h2><div class="corpo-doc">
+<p>funcao mat.cosseno()</p>
+
+</div>
+</section>
+<a id="id_000010" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.randonico()</h2><div class="corpo-doc">
+<p>funcao mat.randonico()</p>
+
+</div>
+</section>
+<a id="id_000011" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.arcocosseno()</h2><div class="corpo-doc">
+<p>funcao mat.arcocosseno()</p>
+
+</div>
+</section>
+<a id="id_000012" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.arredonde()</h2><div class="corpo-doc">
+<p>funcao mat.arredonde()</p>
+
+</div>
+</section>
+<a id="id_000013" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.cmodulo()</h2><div class="corpo-doc">
+<p>funcao mat.cmodulo()</p>
+
+</div>
+</section>
+<a id="id_000014" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.arcotangente2()</h2><div class="corpo-doc">
+<p>funcao mat.arcotangente2()</p>
+
+</div>
+</section>
+<a id="id_000015" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.aleatorio()</h2><div class="corpo-doc">
+<p>funcao mat.aleatorio()</p>
+
+</div>
+</section>
+<a id="id_000016" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.maximo()</h2><div class="corpo-doc">
+<p>funcao mat.maximo()</p>
+
+</div>
+</section>
+<a id="id_000017" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.arcoseno()</h2><div class="corpo-doc">
+<p>funcao mat.arcoseno()</p>
+
+</div>
+</section>
+<a id="id_00001A" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.tangente()</h2><div class="corpo-doc">
+<p>funcao mat.tangente()</p>
+
+</div>
+</section>
+<a id="id_00001B" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.emGrau()</h2><div class="corpo-doc">
+<p>funcao mat.emGrau()</p>
+
+</div>
+</section>
+<a id="id_00001C" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.senoh()</h2><div class="corpo-doc">
+<p>funcao mat.senoh()</p>
+
+</div>
+</section>
+<a id="id_00001D" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.hipot()</h2><div class="corpo-doc">
+<p>funcao mat.hipot()</p>
+
+</div>
+</section>
+<a id="id_00001E" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.tangenteh()</h2><div class="corpo-doc">
+<p>funcao mat.tangenteh()</p>
+
+</div>
+</section>
+<a id="id_00001F" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.arredondeabaixo()</h2><div class="corpo-doc">
+<p>funcao mat.arredondeabaixo()</p>
+
+</div>
+</section>
+<a id="id_000020" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.xaleatorio()</h2><div class="corpo-doc">
+<p>funcao mat.xaleatorio()</p>
+
+</div>
+</section>
+<a id="id_000021" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.raiz()</h2><div class="corpo-doc">
+<p>funcao mat.raiz()</p>
+
+</div>
+</section>
+<a id="id_000022" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.separe()</h2><div class="corpo-doc">
+<p>funcao mat.separe()</p>
+
+</div>
+</section>
+<a id="id_000023" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.log10()</h2><div class="corpo-doc">
+<p>funcao mat.log10()</p>
+
+</div>
+</section>
+<a id="id_000024" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.raizquad()</h2><div class="corpo-doc">
+<p>funcao mat.raizquad()</p>
+
+</div>
+</section>
+<a id="id_000025" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.arredondeacima()</h2><div class="corpo-doc">
+<p>funcao mat.arredondeacima()</p>
+
+</div>
+</section>
+<a id="id_000026" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao mat.arcotangente()</h2><div class="corpo-doc">
+<p>funcao mat.arcotangente()</p>
+
+</div>
+</section>
+<h1>Variáveis</h1>
+<a id="id_000018" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">mat.infinito = inf;</h2><div class="corpo-doc">
+<p>variável mat.infinito = inf</p>
+
+</div>
+</section>
+<a id="id_000019" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">mat.pi = 3,1415926535898;</h2><div class="corpo-doc">
+<p>variável mat.pi = 3,1415926535898</p>
+
+</div>
+</section>
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

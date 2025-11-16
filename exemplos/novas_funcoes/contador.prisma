@@ -1,0 +1,108 @@
+/*@doc
+\file contador (biblioteca base Prisma)
+\author Adalberto
+\date dez/2023
+\brief Retorna uma função de fecho (closure) com um valor incrementado ou decrementado a cada chamada.
+
+\h3 Exemplo:
+
+\code ex1.prisma
+imprima('---------- Início padrão: 1, incr padrão: 1 -----');
+local cont = contador();//padrão inicia por 1, o incremento é 1;
+imprima(cont());
+imprima(cont());
+imprima(cont());
+
+\end_code
+
+
+*/
+
+/*@doc
+\função contador
+\resumo Cria uma função contadora que incrementa ou decrementa seu valor inicial conforme for executada.
+\param inic(numero) - é o número inicial, caso seja omitido o valor padrão é 1;
+\param incr(numero) - incremento ou decremento é o número a ser somado a cada execução da função.
+\retorno (funcao) - o retorno é uma função contadora, basta executá-la e o retorno será um novo valor incrementado.
+
+\obs Para usar um decremento, ou seja, um valor que subtrai, apenas use um número negativo: -1, -2, -5, -10 ... etc.
+\subtitulo Veja os exemplos:
+
+\codigo ex2.prisma
+
+imprima('---------- Início padrão: 1, incr padrão: 1 -----');
+local cont = contador();//padrão inicia por 1, o incremento é 1;
+imprima(cont());
+imprima(cont());
+imprima(cont());
+
+imprima('----- Início: 2, incr padrão: 1 --------');
+local cont2 = contador(2);//inicia por 2, o incremento é 1;
+imprima(cont2());
+imprima(cont2());
+imprima(cont2());
+
+imprima('------ Início: 10, incr: 5 -------');
+local cont3 = contador(10, 5);
+imprima(cont3());
+imprima(cont3());
+imprima(cont3());
+
+imprima('-------- Início: 20, decr: -2 -------');
+local cont4 = contador(20, -2);
+imprima(cont4());
+imprima(cont4());
+imprima(cont4());
+
+imprima('-------- Ótimo para gerar ids --------');
+local contid = contador();
+funcao crie_id()
+    retorne string.formate('id_%04x', contid());
+fim
+imprima('<button id="'..crie_id()..'">Baixar</button>');
+imprima('<button id="'..crie_id()..'">Enviar</button>');
+imprima('<button id="'..crie_id()..'">Login</button>');
+\fim_codigo
+
+*/
+contador_old = contador;
+funcao contador(inic, incr)
+fim
+contador = contador_old;
+
+imprima('---------- Início padrão: 1, incr padrão: 1 -----');
+local cont = contador();//padrão inicia por 1, o incremento é 1;
+imprima(cont());
+imprima(cont());
+imprima(cont());
+
+imprima('----- Início: 2, incr padrão: 1 --------');
+local cont2 = contador(2);//inicia por 2, o incremento é 1;
+imprima(cont2());
+imprima(cont2());
+imprima(cont2());
+
+imprima('------ Início: 10, incr: 5 -------');
+local cont3 = contador(10, 5);
+imprima(cont3());
+imprima(cont3());
+imprima(cont3());
+
+imprima('-------- Início: 20, decr: -2 -------');
+local cont4 = contador(20, -2);
+imprima(cont4());
+imprima(cont4());
+imprima(cont4());
+
+imprima('-------- Ótimo para gerar ids --------');
+local contid = contador();
+funcao crie_id()
+    retorne string.formate('id_%04x', contid());
+fim
+imprima('<button id="'..crie_id()..'">Baixar</button>');
+imprima('<button id="'..crie_id()..'">Enviar</button>');
+imprima('<button id="'..crie_id()..'">Login</button>');
+
+
+
+

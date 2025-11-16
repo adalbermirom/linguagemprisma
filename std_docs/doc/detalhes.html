@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Prisma - linguagem de programação</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<nav id="id_000013"  class="floating-menu">
+<div class="menu-button" title="Ocultar painel lateral" onclick="show_menu_flutuante(this, 'id_000014', 'id_000013')">&#x2630;</div>
+<div class="com-rolagem" id="id_000014" hidden>
+<div class="caixa com-borda"><h2>Seções:</h2>
+<a href="#id_000004">Baixar prisma</a>
+<a href="#id_000005">Exemplos de código</a>
+<a href="#id_000012">Licença MIT</a>
+<a href="#id_000011">Novidades Prisma 1.0.107</a>
+<a href="#id_00000F">O que é Prisma?</a>
+</div>
+
+</div>
+</nav>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<img src="prisma.png" alt="Prisma - linguagem de progração" width="150">
+<h1 id="id_000001"> Prisma - linguagem de programação</h1>
+<h3> Adalberto </h3>
+<h3> dez/2023 </h3>
+<div class="caixa com-borda"><div><h2>Seções:</h2>
+<ol>
+<li><a href="#id_000004">Baixar prisma</a></li>
+<li><a href="#id_000005">Exemplos de código</a></li>
+<li><a href="#id_000012">Licença MIT</a></li>
+<li><a href="#id_000011">Novidades Prisma 1.0.107</a></li>
+<li><a href="#id_00000F">O que é Prisma?</a></li>
+</ol>
+</div>
+
+</div><br>
+
+
+
+
+ 
+
+ 
+<p>
+
+      Prisma é uma linguagem de programação interpretada com comandos em português do Brasil. Ela pode ser muito útil para aprendizagem de iniciantes em cursos de programação, ou, mesmo para ser usada profissionalmente, visto que possui características das linguagens mais atuais,  como Python, Ruby, Perl, etc.
+
+</p>
+ 
+<h2>Links úteis:</h2>
+<a target="_blank" href = "http://linguagemprisma.br4.biz">Página inicial</a>
+ &nbsp; 
+<a target="_blank" href = "http://linguagemprisma.br4.biz/blog">Blog</a>
+ &nbsp;
+<a target="_blank" href = "http://linguagemprisma.br4.biz/prisma_forum">Fórum oficial</a>
+ &nbsp;
+<a target="_blank" href = "http://linguagemprisma.br4.biz/blog/linguagemprisma-netdownload/">Baixar</a>
+ &nbsp;
+<a target="_blank" href = "http://linguagemprisma.br4.biz/Notas_da_versao_nov_2023.html">Notas de atualização Prisma</a>
+ 
+<p>
+
+       Prisma é uma modificação dos códigos fontes de Lua, uma linguagem criada no Brasil e de fama internacional. Portanto, ela herda muitas características boas, tais como: entre as linguagens de script a mais rápida, mais leve, fácil de embutir e estender na linguagem C, fácil de se aprender, pequena - gasta poucos recursos da máquina.
+
+</p>
+ 
+<h3>Mais do que uma tradução</h3>
+
+ 
+<p>
+
+     Prisma se tornou mais do que uma mera tradução dos fontes Lua. Há inúmeras funções e características implementadas que não existem em Lua5.2, principalmente nesta nova versão 1.0.107 como, por exemplo, acesso aos caracteres de uma string por meio de índice como se fosse uma tabela, e isso implementado diretamente na máquina virtual em C, tornando mais veloz as operações que precisam precorrer cada caractere de uma string. Outra novidade é a implementação dos operadores de bitwise diretamente na vm 5.2, visto que esta novidade está presente em Lua somente a partir da versão 5.3, e em vez de recomeçar uma nova versão baseada em Lua5.3 ou 5.4 pretendo continuar a implementação atual baseada em Lua5.2.
+
+</p>
+ 
+<img class="com-borda" id="id_000002" src="http://www.lua.org/images/logo.gif" alt="Lua - linguagem de progração Puc-RJ" width="60">
+<script>
+    let img_pjs = document.getElementById('id_000002');
+    img_pjs.onclick = function(){
+        img_pjs.width = (img_pjs.width==60) ? 800 : 60;
+    }
+</script>
+
+<a target="_blank" href = "http://www.lua.org/">Prisma utiliza os fontes de Lua 5.2 visite a página oficial de Lua &lt;aqui&gt;</a>
+<h4>Veja um exemplo de código Prisma:</h4>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000003')">&#128203;</div>&nbsp;<i>ex1.prisma:</i><pre id="id_000003" hidden> 
+     local x = 1; //declarando uma variável local e atribuindo seu valor.
+     enquanto x &lt;= 10 inicio
+         imprimaf(&#39;%d &#39;, x);
+         x = x + 1; //incrementa 1 em x;
+     fim
+                //saída --&gt; 1 2 3 4 5 6 7 8 9 10
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+ 
+     <span style="font-weight:bold;color:#b50546">local</span> x <span style="font-weight:bold;">=</span> <span style="color:red">1</span><span style="font-weight:bold;">;</span> <span style="color:green">//declarando uma variável local e atribuindo seu valor.
+</span>     <span style="font-weight:bold;color:#b50546">enquanto</span> x <span style="font-weight:bold;">&lt;</span><span style="font-weight:bold;">=</span> <span style="color:red">10</span> <span style="font-weight:bold;color:#b50546">inicio</span>
+         <span style="color:#b50546">imprimaf</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;%d &#39;</span>, x<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+         x <span style="font-weight:bold;">=</span> x <span style="font-weight:bold;">+</span> <span style="color:red">1</span><span style="font-weight:bold;">;</span> <span style="color:green">//incrementa 1 em x;
+</span>     <span style="font-weight:bold;color:#b50546">fim</span>
+                <span style="color:green">//saída --&gt; 1 2 3 4 5 6 7 8 9 10
+</span></pre></div></div>
+
+</div>
+
+<h3>Esta é uma página estática, mas você pode visitar o blog oficial:</h3>
+
+<b>Veja: </b><a href="http://linguagemprisma.br4.biz/blog"> http://linguagemprisma.br4.biz/blog </a>
+
+  
+<h1>Seções:</h1>
+<a id="id_000004" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">Baixar prisma</h2><div class="corpo-doc">
+<p>Esta seção contém links para baixar Prisma.</p>
+
+<h3>Página de download:</h3>
+
+<a target="_blank" href = "http://linguagemprisma.br4.biz/#id_000008">Baixar Prisma ubuntu 22.04 (64bits)</a>
+<br>
+<a target="_blank" href = "http://linguagemprisma.br4.biz/#id_000009">Baixar Prisma Windows 10, 11 (64bits)</a>
+
+<h3>Downloads antigos na página do blog:</h3>
+
+<a target="_blank" href = "http://linguagemprisma.br4.biz/blog/linguagemprisma-netdownload/">http://linguagemprisma.br4.biz/blog/linguagemprisma-netdownload/</a>
+</div>
+</section>
+<a id="id_000005" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">Exemplos de código</h2><div class="corpo-doc">
+<p>Esta seção apresenta alguns exemplos de codificação Prisma.</p>
+
+<h3>Exemplos:</h3>
+
+<h4>Função principal:</h4>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000006')">&#128203;</div>&nbsp;<i>ex2.prisma</i><pre id="id_000006" hidden>    local frase;
+    funcao principal(argv)
+        imprima(frase);
+        retorne 0;
+    fim
+    frase = &#39;Olá mundo em Prisma&#39;;
+
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="font-weight:bold;color:#b50546">local</span> frase<span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">funcao</span> principal<span style="font-weight:bold;">(</span>argv<span style="font-weight:bold;">)</span>
+        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>frase<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+        <span style="font-weight:bold;color:#b50546">retorne</span> <span style="color:red">0</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">fim</span>
+    frase <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;Olá mundo em Prisma&#39;</span><span style="font-weight:bold;">;</span>
+
+</pre></div></div>
+
+</div>
+<p><i><b>Obs.: </b>A função principal é opcional, não é necessário utilizá-la, porém o seu uso pode deixar o programa mais organizado.</i></p>
+<h4>Lendo o que é digitado (função leia()):</h4>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000007')">&#128203;</div>&nbsp;<i>ex3.prisma</i><pre id="id_000007" hidden>    local nome;
+    imprima(&#39;Digite seu nome:&#39;);
+    nome = leia();
+    imprima(&#39;Seu nome é&#39;, nome);
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="font-weight:bold;color:#b50546">local</span> <span style="color:#b50546">nome</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Digite seu nome:&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">nome</span> <span style="font-weight:bold;">=</span> <span style="color:#b50546">leia</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Seu nome é&#39;</span>, <span style="color:#b50546">nome</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+</pre></div></div>
+
+</div>
+
+<h4>Estrutura de controle &#39;se&#39;:</h4>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000008')">&#128203;</div>&nbsp;<i>ex4.prisma</i><pre id="id_000008" hidden>    es.escreva(&#39;Adivinhe o número (digite de 1 a 10): &#39;);
+    local x = leia();
+    x = convnumero(x);//converte de string para número.
+    se x == 7 entao
+        imprima(&#39;Parabéns! Acertou, o número é 7!&#39;);
+    senao
+        imprima(&#39;Infelizmente, você errou, tente outra vez!&#39;);
+    fim
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">escreva</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Adivinhe o número (digite de 1 a 10): &#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">local</span> x <span style="font-weight:bold;">=</span> <span style="color:#b50546">leia</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    x <span style="font-weight:bold;">=</span> <span style="color:#b50546">convnumero</span><span style="font-weight:bold;">(</span>x<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//converte de string para número.
+</span>    <span style="font-weight:bold;color:#b50546">se</span> x <span style="font-weight:bold;">=</span><span style="font-weight:bold;">=</span> <span style="color:red">7</span> <span style="font-weight:bold;color:#b50546">entao</span>
+        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Parabéns! Acertou, o número é 7!&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">senao</span>
+        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Infelizmente, você errou, tente outra vez!&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">fim</span>
+</pre></div></div>
+
+</div>
+
+<h4>Estrutura de repetição &#39;para&#39;:</h4>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000009')">&#128203;</div>&nbsp;<i>ex5.prisma</i><pre id="id_000009" hidden>   para i = 1, 10 inicio //conta de 1 até 10...
+       imprima(i);
+   fim   
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+   <span style="font-weight:bold;color:#b50546">para</span> i <span style="font-weight:bold;">=</span> <span style="color:red">1</span>, <span style="color:red">10</span> <span style="font-weight:bold;color:#b50546">inicio</span> <span style="color:green">//conta de 1 até 10...
+</span>       <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>i<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+   <span style="font-weight:bold;color:#b50546">fim</span>   
+</pre></div></div>
+
+</div>
+
+<h4>Estrutura de repetição &#39;equanto&#39;:</h4>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000A')">&#128203;</div>&nbsp;<i>ex6.prisma</i><pre id="id_00000A" hidden>    local i = 1;
+    enquanto i&lt;= 10 inicio
+        imprima(i);
+        i = i + 1;
+    fim
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="font-weight:bold;color:#b50546">local</span> i <span style="font-weight:bold;">=</span> <span style="color:red">1</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">enquanto</span> i<span style="font-weight:bold;">&lt;</span><span style="font-weight:bold;">=</span> <span style="color:red">10</span> <span style="font-weight:bold;color:#b50546">inicio</span>
+        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>i<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+        i <span style="font-weight:bold;">=</span> i <span style="font-weight:bold;">+</span> <span style="color:red">1</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">fim</span>
+</pre></div></div>
+
+</div>
+
+<h4>Estrutura de repetição &#39;repita&#39;:</h4>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000B')">&#128203;</div>&nbsp;<i>ex7.prisma</i><pre id="id_00000B" hidden>    local i = 1;
+    repita
+        imprima(i);
+        i = i + 1;
+    ate i&gt;10; //repete até que i seja maior que 10;
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="font-weight:bold;color:#b50546">local</span> i <span style="font-weight:bold;">=</span> <span style="color:red">1</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">repita</span>
+        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>i<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+        i <span style="font-weight:bold;">=</span> i <span style="font-weight:bold;">+</span> <span style="color:red">1</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">ate</span> i<span style="font-weight:bold;">&gt;</span><span style="color:red">10</span><span style="font-weight:bold;">;</span> <span style="color:green">//repete até que i seja maior que 10;
+</span></pre></div></div>
+
+</div>
+
+<h4>Usando o comando &#39;quebre&#39;:</h4>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000C')">&#128203;</div>&nbsp;<i>ex8.prisma</i><pre id="id_00000C" hidden>    para i = 1, 1000 inicio
+        se i &gt; 10 entao quebre; fim //sai do laço de repetição se i for maior que 10
+        imprima(i);
+    fim
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="font-weight:bold;color:#b50546">para</span> i <span style="font-weight:bold;">=</span> <span style="color:red">1</span>, <span style="color:red">1000</span> <span style="font-weight:bold;color:#b50546">inicio</span>
+        <span style="font-weight:bold;color:#b50546">se</span> i <span style="font-weight:bold;">&gt;</span> <span style="color:red">10</span> <span style="font-weight:bold;color:#b50546">entao</span> <span style="font-weight:bold;color:#b50546">quebre</span><span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span> <span style="color:green">//sai do laço de repetição se i for maior que 10
+</span>        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>i<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">fim</span>
+</pre></div></div>
+
+</div>
+
+
+<h4>Tabelas (array, records):</h4>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000D')">&#128203;</div>&nbsp;<i>ex9.prisma</i><pre id="id_00000D" hidden>    local dias_semana = {}; //declarando uma tabela vazia
+    dias_semana[1] = &#39;Seg&#39;; //preenchendo os indices com valores, iniciando pelo 1;
+    dias_semana[2] = &#39;Ter&#39;;
+    dias_semana[3] = &#39;Qua&#39;;
+    dias_semana[4] = &#39;Qui&#39;;
+    dias_semana[5] = &#39;Sex&#39;;
+    dias_semana[6] = &#39;Sáb&#39;;
+    dias_semana[7] = &#39;Dom&#39;;
+    
+    //usando o comando &#39;para&#39; 
+    para i = 1, 7 inicio
+        imprima(dias_semana[i]);
+    fim
+    
+    //podemos iniciar uma tabela com valores, e em várias linhas:
+    local continentes = {&#39;América do Sul&#39;, &#39;América do Central&#39;, 
+                         &#39;América do Norte&#39;, &#39;Europa&#39;,&#39;África&#39;, 
+                         &#39;Oceania&#39;,&#39;Antártida&#39;
+                        };
+    //usando o ipares() para percorrer cada índice da tabela
+    para i, v em ipares(continentes) inicio
+        imprima(v);
+    fim
+    
+    //tabela com campos (os índices são trocados por textos);
+    local ret = {};
+    ret[&#39;largura&#39;] = 10;
+    ret.altura = 5; // Um açúcar sintático, o mesmo que ret[&#39;altura&#39;] = 5;
+    ret.area = ret.altura * ret.largura;
+    //usando o pares() para percorrer os campos da tabela.
+    para chave, valor em pares(ret) inicio
+        imprima(chave, valor);
+    fim    
+    
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 14</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 15</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 16</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 17</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 18</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 19</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 20</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 21</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 22</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 23</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 24</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 25</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 26</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 27</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 28</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 29</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 30</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 31</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 32</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 33</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 34</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="font-weight:bold;color:#b50546">local</span> dias_semana <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span> <span style="color:green">//declarando uma tabela vazia
+</span>    dias_semana<span style="font-weight:bold;">[</span><span style="color:red">1</span><span style="font-weight:bold;">]</span> <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;Seg&#39;</span><span style="font-weight:bold;">;</span> <span style="color:green">//preenchendo os indices com valores, iniciando pelo 1;
+</span>    dias_semana<span style="font-weight:bold;">[</span><span style="color:red">2</span><span style="font-weight:bold;">]</span> <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;Ter&#39;</span><span style="font-weight:bold;">;</span>
+    dias_semana<span style="font-weight:bold;">[</span><span style="color:red">3</span><span style="font-weight:bold;">]</span> <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;Qua&#39;</span><span style="font-weight:bold;">;</span>
+    dias_semana<span style="font-weight:bold;">[</span><span style="color:red">4</span><span style="font-weight:bold;">]</span> <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;Qui&#39;</span><span style="font-weight:bold;">;</span>
+    dias_semana<span style="font-weight:bold;">[</span><span style="color:red">5</span><span style="font-weight:bold;">]</span> <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;Sex&#39;</span><span style="font-weight:bold;">;</span>
+    dias_semana<span style="font-weight:bold;">[</span><span style="color:red">6</span><span style="font-weight:bold;">]</span> <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;Sáb&#39;</span><span style="font-weight:bold;">;</span>
+    dias_semana<span style="font-weight:bold;">[</span><span style="color:red">7</span><span style="font-weight:bold;">]</span> <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;Dom&#39;</span><span style="font-weight:bold;">;</span>
+    
+    <span style="color:green">//usando o comando &#39;para&#39; 
+</span>    <span style="font-weight:bold;color:#b50546">para</span> i <span style="font-weight:bold;">=</span> <span style="color:red">1</span>, <span style="color:red">7</span> <span style="font-weight:bold;color:#b50546">inicio</span>
+        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>dias_semana<span style="font-weight:bold;">[</span>i<span style="font-weight:bold;">]</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">fim</span>
+    
+    <span style="color:green">//podemos iniciar uma tabela com valores, e em várias linhas:
+</span>    <span style="font-weight:bold;color:#b50546">local</span> continentes <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span><span style="color:blue">&#39;América do Sul&#39;</span>, <span style="color:blue">&#39;América do Central&#39;</span>, 
+                         <span style="color:blue">&#39;América do Norte&#39;</span>, <span style="color:blue">&#39;Europa&#39;</span>,<span style="color:blue">&#39;África&#39;</span>, 
+                         <span style="color:blue">&#39;Oceania&#39;</span>,<span style="color:blue">&#39;Antártida&#39;</span>
+                        <span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+    <span style="color:green">//usando o ipares() para percorrer cada índice da tabela
+</span>    <span style="font-weight:bold;color:#b50546">para</span> i, v <span style="font-weight:bold;color:#b50546">em</span> <span style="color:#b50546">ipares</span><span style="font-weight:bold;">(</span>continentes<span style="font-weight:bold;">)</span> <span style="font-weight:bold;color:#b50546">inicio</span>
+        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>v<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">fim</span>
+    
+    <span style="color:green">//tabela com campos (os índices são trocados por textos);
+</span>    <span style="font-weight:bold;color:#b50546">local</span> ret <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+    ret<span style="font-weight:bold;">[</span><span style="color:blue">&#39;largura&#39;</span><span style="font-weight:bold;">]</span> <span style="font-weight:bold;">=</span> <span style="color:red">10</span><span style="font-weight:bold;">;</span>
+    ret<span style="font-weight:bold;">.</span>altura <span style="font-weight:bold;">=</span> <span style="color:red">5</span><span style="font-weight:bold;">;</span> <span style="color:green">// Um açúcar sintático, o mesmo que ret[&#39;altura&#39;] = 5;
+</span>    ret<span style="font-weight:bold;">.</span>area <span style="font-weight:bold;">=</span> ret<span style="font-weight:bold;">.</span>altura <span style="font-weight:bold;">*</span> ret<span style="font-weight:bold;">.</span>largura<span style="font-weight:bold;">;</span>
+    <span style="color:green">//usando o pares() para percorrer os campos da tabela.
+</span>    <span style="font-weight:bold;color:#b50546">para</span> chave, valor <span style="font-weight:bold;color:#b50546">em</span> <span style="color:#b50546">pares</span><span style="font-weight:bold;">(</span>ret<span style="font-weight:bold;">)</span> <span style="font-weight:bold;color:#b50546">inicio</span>
+        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>chave, valor<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">fim</span>    
+    
+</pre></div></div>
+
+</div>
+
+
+<h4>Funções:</h4>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000E')">&#128203;</div>&nbsp;<i>ex10.prisma</i><pre id="id_00000E" hidden>    funcao soma(a,b)
+        retorne a+b;
+    fim
+    local c = soma(3, 5);
+    imprima(c);
+    
+    //a função pode retornar mais de um valor:
+    funcao calc(a, b)
+        retorne a*b, a+b;
+    fim
+    local n, z = calc(2, 4);
+    imprima(n, z);
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="font-weight:bold;color:#b50546">funcao</span> soma<span style="font-weight:bold;">(</span>a,b<span style="font-weight:bold;">)</span>
+        <span style="font-weight:bold;color:#b50546">retorne</span> a<span style="font-weight:bold;">+</span>b<span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">fim</span>
+    <span style="font-weight:bold;color:#b50546">local</span> c <span style="font-weight:bold;">=</span> soma<span style="font-weight:bold;">(</span><span style="color:red">3</span>, <span style="color:red">5</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>c<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+    <span style="color:green">//a função pode retornar mais de um valor:
+</span>    <span style="font-weight:bold;color:#b50546">funcao</span> calc<span style="font-weight:bold;">(</span>a, b<span style="font-weight:bold;">)</span>
+        <span style="font-weight:bold;color:#b50546">retorne</span> a<span style="font-weight:bold;">*</span>b, a<span style="font-weight:bold;">+</span>b<span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">fim</span>
+    <span style="font-weight:bold;color:#b50546">local</span> n, z <span style="font-weight:bold;">=</span> calc<span style="font-weight:bold;">(</span><span style="color:red">2</span>, <span style="color:red">4</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>n, z<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+</pre></div></div>
+
+</div>
+
+
+<h4>Para mais exemplos e tutoriais:</h4>
+
+<b>Veja: </b><a href="http://linguagemprisma.br4.biz/blog"> http://linguagemprisma.br4.biz/blog </a>
+
+
+
+</div>
+</section>
+<a id="id_00000F" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">O que é Prisma?</h2><div class="corpo-doc">
+<p>
+
+Prisma é uma linguagem de programação com palavras chave em português brasileiro. Criada para facilitar o aprendizado de programação e também para uso profissional, com recursos como banco de dados, interface gráfica, cgi e aplicativos web.
+A versão mais atual pode ser executada diretamente no navegador web usando o recurso webasm.
+Prisma surgiu para meu uso pessoal em projetos com diversos propósitos, facilitando o desenvolvimento de software de modo mais produtivo. Porém, achei por bem compartilhar com todos e sem custo nenhum. Originalmente, meu objetivo era criar uma linguagem do zero, no entanto, isto está além das minhas habilidades em programação, e assim cheguei a conclusão de que a melhor abordagem era modificar um projeto open source já estabelecido, Lua.
+
+</p>
+
+<p>
+
+  Ela possui diversas características, tais como:
+
+</p>
+
+<ul>
+<li>interpretada em byte codes;</li>
+<li>tipagem dinâmica;</li>
+<li>simplicidade de tipos;</li>
+<li>portabilidade, o programa feito em Prisma não terá dificuldades em rodar nos mais populares sistemas operacionais;</li>
+<li>execute o programa diretamente como um script ou compile usando o compilador prismac para esconder o código;</li>
+<li>muito rápida entre as linguagens de script;</li>
+<li>muito leve, não consome muitos recursos da máquina;</li>
+<li>possui poderosos recursos para manipulação de dados: as tabelas;</li>
+<li>multiparadigma incluindo orientação a objetos: classes;</li>
+<li>fácil de ser aprendida, estude e aprenda em poucos dias.</li>
+<li>fácil de ser estendida, pois é possível criar facilmente bibliotecas em puro Prisma e também em linguagens de baixo nível como C e C++;</li>
+</ul>
+
+
+
+<h4>Qual o preço para usar Prisma?</h4>
+
+
+
+<p>
+
+Prisma é totalmente gratuita, livre para usar como bem entender, modificar os fontes, vender seus programas, sem que para isso precise pagar dinheiro algum, ou mostrar o código fonte junto ao binário.
+
+</p>
+
+<h4>Licença</h4>
+
+<p>
+
+O interpretador possui a mesma licença de Lua na qual é baseada, a biblioteca IG possui a mesma do Gtk. Portanto Prisma é livre e gratuita, tanto o código fonte como os binários poderão ser distribuídos e modificados com fins pessoais, comerciais ou quaisquer outros.
+
+</p>
+
+<h4>O que poderá ser feito com Prisma:</h4>
+
+
+<p>
+
+Com a linguagem Prisma você pode criar desde simples scripts para automatizar tarefas comuns até programas de grande porte para fins comerciais. Usando Prisma + cgi web + MySQL ou SQlite3 tudo depende de sua criatividade. Claro que programas críticos com ênfase na rapidez e eficiência não são recomendados a fazer em Prisma, porém você pode criar essas rotinas em C como uma biblioteca e chamar as funções em Prisma, quase tudo em C pode ser estendido em Prisma.
+
+</p>
+<p>
+
+Uma novidade é que compilei com sucesso o interpretador prisma em wasm, para rodar diretamente em qualquer navegador com suporte a webassembly. É possível mesclar as páginas html com programa prisma, ter acesso aos elementos html e qualquer função em javascript dentro de Prisma. Imagina o que é possível fazer com Prisma + js + html + nwjs. Veja um exemplo mínimo abaixo:
+
+</p>
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000010"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+		&lt;meta charset=&quot;UTF-8&quot;/&gt;	
+        &lt;script type=&quot;text/javascript&quot; src=&quot;js/webprisma.js&quot;&gt;&lt;/script&gt;       
+    &lt;/head&gt;
+    &lt;body&gt;
+		&lt;h1&gt;Teste prismajs:&lt;/h1&gt;	
+		&lt;button id=&quot;bt1&quot;&gt;Clique-me!&lt;/button&gt;
+    &lt;/body&gt;   
+&lt;/html&gt; 
+
+&lt;script type=&quot;text/prisma&quot;&gt;	
+    local bt1 = js.global.document:getElementById(&quot;bt1&quot;);
+    
+    funcao bt1:onclick()
+        js:msg(&quot;ola! Botão clicado!&quot;);
+        imprima(sis.nome);
+    fim
+&lt;/script&gt; 
+
+</code></pre>
+</div>
+
+
+
+<h3>Aproveite e teste-a.</h3>
+
+
+Att. Adalberto Amorim Felipe
+
+
+</div>
+</section>
+<a id="id_000011" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">Novidades Prisma 1.0.107</h2><div class="corpo-doc">
+<h3>Esta versão prisma traz algumas novidades interessantes:</h3>
+
+<ul>
+<li>Operadores bitwise:  &lt;&lt; &gt;&gt; | &amp; ~;</li>
+<li>Customização de tipos através do metamétodo __tipo;</li>
+<li>Funções para verificação de tipos em parâmetros de funções: N(); S(); F(); B(); T() entre outras;</li>
+<li>Acesso aos caracteres de string por índice;</li>
+<li>Correção das funções es.abra() e es.pabra(), mais especificamente o 2nd parâmetro.</li>
+<li>Alterações e inclusão de novas funções na biblioteca mat;</li>
+<li>Operador de condição ternário (adaptação);</li>
+<li>Várias correções e melhoramento de códigos, por exemplo, a função string.apare();</li>
+<li>Novas funções para a biblioteca base: escolha() e contador();</li>
+<li>Comandos acentuados(utf8): então, não, função, senão, senãose, até (os comandos sem acento ainda são válidos);</li>
+<li>Variáveis com acento (utf8), exemplos: local salário = 5000,00; função lê_comentários(); etc.</li>
+<li>O interpretador Prisma compilado em webasm, rodando no navegador e acessando componentes html e funções javascript direto de Prisma.</li>
+</ul>
+
+<h3>Para mais detalhes sobre a atualização de Prisma 1.0.107 visite o link abaixo:</h3>
+
+<a target="_blank" href = "http://linguagemprisma.br4.biz/Notas_da_versao_nov_2023.html">Notas de atualização Prisma</a>
+</div>
+</section>
+<a id="id_000012" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">Licença MIT</h2><div class="corpo-doc">
+<pre>
+* Permission is hereby granted, free of charge, to any person obtaining
+* a copy of this software and associated documentation files (the
+* "Software"), to deal in the Software without restriction, including
+* without limitation the rights to use, copy, modify, merge, publish,
+* distribute, sublicense, and/or sell copies of the Software, and to
+* permit persons to whom the Software is furnished to do so, subject to
+* the following conditions:
+*
+* The above copyright notice and this permission notice shall be
+* included in all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+</pre>
+
+</div>
+</section>
+<footer class="footer">
+
+ <img src="prisma.png" width="50"><br>
+ <b><i>linguageprisma@gmail.com</i> 2015-2023</b>&nbsp;<a href="https://linguagemprisma.br4.biz/blog">Prisma-lang</a>
+</footer>
+</body>
+</html>

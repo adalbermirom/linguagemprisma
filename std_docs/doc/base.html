@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>baselib</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<nav id="id_000046"  class="floating-menu">
+<div class="menu-button" title="Ocultar painel lateral" onclick="show_menu_flutuante(this, 'id_000047', 'id_000046')">&#x2630;</div>
+<div class="com-rolagem" id="id_000047" hidden>
+<div class="caixa "><h2>Funções:</h2>
+<a href="#id_000014">B</a>
+<a href="#id_000002">Classe</a>
+<a href="#id_000010">F</a>
+<a href="#id_00000C">N</a>
+<a href="#id_00000E">S</a>
+<a href="#id_000012">T</a>
+<a href="#id_00000A">Th</a>
+<a href="#id_000016">U</a>
+<a href="#id_000018">V</a>
+<a href="#id_000026">carregue</a>
+<a href="#id_000024">carreguearquivo</a>
+<a href="#id_00001A">coletelixo</a>
+<a href="#id_000004">contador</a>
+<a href="#id_00003E">convnumero</a>
+<a href="#id_000040">convstring</a>
+<a href="#id_000038">def</a>
+<a href="#id_00003C">defmetatabela</a>
+<a href="#id_00001E">erro</a>
+<a href="#id_000006">escolha</a>
+<a href="#id_00001C">executearquivo</a>
+<a href="#id_000028">executestring</a>
+<a href="#id_000032">igual</a>
+<a href="#id_000022">ipares</a>
+<a href="#id_000036">obt</a>
+<a href="#id_000020">obtmetatabela</a>
+<a href="#id_00002C">pares</a>
+<a href="#id_00002E">pchame</a>
+<a href="#id_000030">poe</a>
+<a href="#id_00002A">proximo</a>
+<a href="#id_00003A">selecione</a>
+<a href="#id_000034">tamanho</a>
+<a href="#id_000008">tente</a>
+<a href="#id_000042">tipo</a>
+<a href="#id_000044">xpchame</a>
+
+</div>
+</div>
+</nav>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> baselib</h1>
+<br>
+<div>
+Biblioteca base em Prisma...
+<a href="#id_000048"> mais...</a></div>
+<div class="caixa com-borda"><div><h2 >Funções:</h2>
+<ol>
+<li><a href="#id_000014">B</a></li>
+<li><a href="#id_000002">Classe</a></li>
+<li><a href="#id_000010">F</a></li>
+<li><a href="#id_00000C">N</a></li>
+<li><a href="#id_00000E">S</a></li>
+<li><a href="#id_000012">T</a></li>
+<li><a href="#id_00000A">Th</a></li>
+<li><a href="#id_000016">U</a></li>
+<li><a href="#id_000018">V</a></li>
+<li><a href="#id_000026">carregue</a></li>
+<li><a href="#id_000024">carreguearquivo</a></li>
+<li><a href="#id_00001A">coletelixo</a></li>
+<li><a href="#id_000004">contador</a></li>
+<li><a href="#id_00003E">convnumero</a></li>
+<li><a href="#id_000040">convstring</a></li>
+<li><a href="#id_000038">def</a></li>
+<li><a href="#id_00003C">defmetatabela</a></li>
+<li><a href="#id_00001E">erro</a></li>
+<li><a href="#id_000006">escolha</a></li>
+<li><a href="#id_00001C">executearquivo</a></li>
+<li><a href="#id_000028">executestring</a></li>
+<li><a href="#id_000032">igual</a></li>
+<li><a href="#id_000022">ipares</a></li>
+<li><a href="#id_000036">obt</a></li>
+<li><a href="#id_000020">obtmetatabela</a></li>
+<li><a href="#id_00002C">pares</a></li>
+<li><a href="#id_00002E">pchame</a></li>
+<li><a href="#id_000030">poe</a></li>
+<li><a href="#id_00002A">proximo</a></li>
+<li><a href="#id_00003A">selecione</a></li>
+<li><a href="#id_000034">tamanho</a></li>
+<li><a href="#id_000008">tente</a></li>
+<li><a href="#id_000042">tipo</a></li>
+<li><a href="#id_000044">xpchame</a></li>
+</ol>
+</div>
+
+</div><br>
+
+<h2 id="id_000048">baselib</h2><div>
+Biblioteca base em Prisma...
+</div>
+
+
+<h1>Funções:</h1>
+<a id="id_000002" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao Classe(...)</h2><div class="corpo-doc">
+<p>Cria ou obtém uma classe.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > ... {variável} - parâmetros opcionais para inicialização da classe.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {table} - a tabela representando a classe.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000003')">&#128203;</div>&nbsp;<i></i><pre id="id_000003" hidden>local MinhaClasse = Classe(&quot;NomeDaClasse&quot;)
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> MinhaClasse <span style="font-weight:bold;">=</span> <span style="color:#b50546">Classe</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;NomeDaClasse&quot;</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000004" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao contador(inicio)</h2><div class="corpo-doc">
+<p>Cria um contador incremental.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > inicio {number} - valor inicial do contador.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {function} - função que retorna o próximo valor do contador a cada chamada.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000005')">&#128203;</div>&nbsp;<i></i><pre id="id_000005" hidden>local c = contador(0)
+imprima(c()) -- 1
+imprima(c()) -- 2
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> c <span style="font-weight:bold;">=</span> <span style="color:#b50546">contador</span><span style="font-weight:bold;">(</span><span style="color:red">0</span><span style="font-weight:bold;">)</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>c<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span> <span style="color:grey">-- 1
+</span><span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>c<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span> <span style="color:grey">-- 2
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000006" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao escolha(valor, tabela_opcoes)</h2><div class="corpo-doc">
+<p>Estrutura switch/case; retorna valor correspondente à opção.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > valor {variável} - valor a ser comparado.</span>
+</div>
+<div class="params-doc"><span > tabela_opcoes {table} - tabela chave-valor com opções.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {variável} - valor correspondente ao case encontrado.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000007')">&#128203;</div>&nbsp;<i></i><pre id="id_000007" hidden>local res = escolha(2, { [1]=&quot;um&quot;, [2]=&quot;dois&quot; })
+imprima(res) -- &quot;dois&quot;
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> res <span style="font-weight:bold;">=</span> <span style="color:#b50546">escolha</span><span style="font-weight:bold;">(</span><span style="color:red">2</span>, <span style="font-weight:bold;">{</span> <span style="font-weight:bold;">[</span><span style="color:red">1</span><span style="font-weight:bold;">]</span><span style="font-weight:bold;">=</span><span style="color:blue">&quot;um&quot;</span>, <span style="font-weight:bold;">[</span><span style="color:red">2</span><span style="font-weight:bold;">]</span><span style="font-weight:bold;">=</span><span style="color:blue">&quot;dois&quot;</span> <span style="font-weight:bold;">}</span><span style="font-weight:bold;">)</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>res<span style="font-weight:bold;">)</span> <span style="color:grey">-- &quot;dois&quot;
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000008" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao tente(condicao, mensagem)</h2><div class="corpo-doc">
+<p>Executa um teste e dispara erro se falso.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > condicao {boolean} - condição a ser testada.</span>
+</div>
+<div class="params-doc"><span > mensagem {string} - mensagem de erro caso a condição seja falsa.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {variável} - retorna a condição se verdadeira.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000009')">&#128203;</div>&nbsp;<i></i><pre id="id_000009" hidden>tente(1==1, &quot;Deu errado&quot;) -- continua
+tente(1==2, &quot;Erro!&quot;)      -- dispara erro
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="color:#b50546">tente</span><span style="font-weight:bold;">(</span><span style="color:red">1</span><span style="font-weight:bold;">=</span><span style="font-weight:bold;">=</span><span style="color:red">1</span>, <span style="color:blue">&quot;Deu errado&quot;</span><span style="font-weight:bold;">)</span> <span style="color:grey">-- continua
+</span><span style="color:#b50546">tente</span><span style="font-weight:bold;">(</span><span style="color:red">1</span><span style="font-weight:bold;">=</span><span style="font-weight:bold;">=</span><span style="color:red">2</span>, <span style="color:blue">&quot;Erro!&quot;</span><span style="font-weight:bold;">)</span>      <span style="color:grey">-- dispara erro
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00000A" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao Th(th)</h2><div class="corpo-doc">
+<p>Checa se o valor é um thread; retorna o próprio valor ou dispara erro.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > th {variável} - valor a ser checado.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {thread} - valor original se for thread.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000B')">&#128203;</div>&nbsp;<i></i><pre id="id_00000B" hidden>local t = Th(coroutine.create(funcao() fim))
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> t <span style="font-weight:bold;">=</span> Th<span style="font-weight:bold;">(</span>coroutine<span style="font-weight:bold;">.</span>create<span style="font-weight:bold;">(</span><span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;color:#b50546">fim</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00000C" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao N(n)</h2><div class="corpo-doc">
+<p>Checa se o valor é um número; retorna o próprio valor ou dispara erro.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > n {variável} - valor a ser checado.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {number} - valor original se for número.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000D')">&#128203;</div>&nbsp;<i></i><pre id="id_00000D" hidden>local x = N(10)
+local y = N(&quot;a&quot;) -- erro
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> x <span style="font-weight:bold;">=</span> <span style="color:#b50546">N</span><span style="font-weight:bold;">(</span><span style="color:red">10</span><span style="font-weight:bold;">)</span>
+<span style="font-weight:bold;color:#b50546">local</span> y <span style="font-weight:bold;">=</span> <span style="color:#b50546">N</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;a&quot;</span><span style="font-weight:bold;">)</span> <span style="color:grey">-- erro
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00000E" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao S(s)</h2><div class="corpo-doc">
+<p>Checa se o valor é uma string; retorna o próprio valor ou dispara erro.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > s {variável} - valor a ser checado.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {string} - valor original se for string.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000F')">&#128203;</div>&nbsp;<i></i><pre id="id_00000F" hidden>local texto = S(&quot;Olá&quot;)
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> texto <span style="font-weight:bold;">=</span> <span style="color:#b50546">S</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Olá&quot;</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000010" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao F(f)</h2><div class="corpo-doc">
+<p>Checa se o valor é uma função; retorna o próprio valor ou dispara erro.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > f {variável} - valor a ser checado.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {function} - valor original se for função.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000011')">&#128203;</div>&nbsp;<i></i><pre id="id_000011" hidden>local func = F(funcao() fim)
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> func <span style="font-weight:bold;">=</span> <span style="color:#b50546">F</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;color:#b50546">fim</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000012" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao T(t)</h2><div class="corpo-doc">
+<p>Checa se o valor é uma tabela; retorna o próprio valor ou dispara erro.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > t {variável} - valor a ser checado.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {table} - valor original se for tabela.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000013')">&#128203;</div>&nbsp;<i></i><pre id="id_000013" hidden>local tab = T({1,2,3})
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> tab <span style="font-weight:bold;">=</span> <span style="color:#b50546">T</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">{</span><span style="color:red">1</span>,<span style="color:red">2</span>,<span style="color:red">3</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000014" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao B(b)</h2><div class="corpo-doc">
+<p>Checa se o valor é booleano; retorna o próprio valor ou dispara erro.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > b {variável} - valor a ser checado.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {boolean} - valor original se for booleano.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000015')">&#128203;</div>&nbsp;<i></i><pre id="id_000015" hidden>local ok = B(true)
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> ok <span style="font-weight:bold;">=</span> <span style="color:#b50546">B</span><span style="font-weight:bold;">(</span>true<span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000016" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao U(u)</h2><div class="corpo-doc">
+<p>Checa se o valor é userdata; retorna o próprio valor ou dispara erro.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > u {variável} - valor a ser checado.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {userdata} - valor original se for userdata.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000017')">&#128203;</div>&nbsp;<i></i><pre id="id_000017" hidden>local ud = U(minha_userdata)
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> ud <span style="font-weight:bold;">=</span> <span style="color:#b50546">U</span><span style="font-weight:bold;">(</span>minha_userdata<span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000018" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao V(valor, tipo_esperado)</h2><div class="corpo-doc">
+<p>Checa se o valor é do tipo esperado; dispara erro se inválido.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > valor {variável} - valor a ser checado.</span>
+</div>
+<div class="params-doc"><span > tipo_esperado {string} - tipo esperado do valor.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {variável} - valor original se corresponder ao tipo.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000019')">&#128203;</div>&nbsp;<i></i><pre id="id_000019" hidden>local x = V(&quot;texto&quot;, &quot;string&quot;)
+local y = V(10, &quot;string&quot;) -- erro
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> x <span style="font-weight:bold;">=</span> <span style="color:#b50546">V</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;texto&quot;</span>, <span style="color:blue">&quot;string&quot;</span><span style="font-weight:bold;">)</span>
+<span style="font-weight:bold;color:#b50546">local</span> y <span style="font-weight:bold;">=</span> <span style="color:#b50546">V</span><span style="font-weight:bold;">(</span><span style="color:red">10</span>, <span style="color:blue">&quot;string&quot;</span><span style="font-weight:bold;">)</span> <span style="color:grey">-- erro
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00001A" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao coletelixo()</h2><div class="corpo-doc">
+<p>Executa a coleta de lixo manual.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > none {nil} - nenhum parâmetro necessário.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {nil} - não retorna valor.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00001B')">&#128203;</div>&nbsp;<i></i><pre id="id_00001B" hidden>coletelixo()
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="color:#b50546">coletelixo</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00001C" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao executearquivo(arquivo)</h2><div class="corpo-doc">
+<p>Executa um arquivo Lua.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > arquivo {string} - caminho do arquivo Lua.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {variável} - resultado da execução do arquivo.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00001D')">&#128203;</div>&nbsp;<i></i><pre id="id_00001D" hidden>executearquivo(&quot;teste.lua&quot;)
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="color:#b50546">executearquivo</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;teste.lua&quot;</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00001E" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao erro(mensagem)</h2><div class="corpo-doc">
+<p>Dispara um erro Lua com mensagem opcional.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > mensagem {string} - mensagem de erro.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {nil} - não retorna valor.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00001F')">&#128203;</div>&nbsp;<i></i><pre id="id_00001F" hidden>erro(&quot;Algo deu errado&quot;)
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="color:#b50546">erro</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Algo deu errado&quot;</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000020" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao obtmetatabela(obj)</h2><div class="corpo-doc">
+<p>Retorna a metatabela de um objeto.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > obj {variável} - objeto a ter sua metatabela obtida.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {table} - metatabela do objeto.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000021')">&#128203;</div>&nbsp;<i></i><pre id="id_000021" hidden>local mt = obtmetatabela({1,2,3})
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> mt <span style="font-weight:bold;">=</span> <span style="color:#b50546">obtmetatabela</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">{</span><span style="color:red">1</span>,<span style="color:red">2</span>,<span style="color:red">3</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000022" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao ipares(t)</h2><div class="corpo-doc">
+<p>Retorna um iterador por índices de tabela (numericamente ordenado).</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > t {table} - tabela a ser iterada.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {function, table, number} - função iteradora, tabela e índice inicial.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000023')">&#128203;</div>&nbsp;<i></i><pre id="id_000023" hidden>for i, v in ipares({10,20,30}) do
+    imprima(i, v)
+fim
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+for i, v in <span style="color:#b50546">ipares</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">{</span><span style="color:red">10</span>,<span style="color:red">20</span>,<span style="color:red">30</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">)</span> do
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>i, v<span style="font-weight:bold;">)</span>
+<span style="font-weight:bold;color:#b50546">fim</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000024" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao carreguearquivo(arquivo)</h2><div class="corpo-doc">
+<p>Carrega um arquivo Lua sem executar.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > arquivo {string} - caminho do arquivo.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {function} - função que, quando chamada, executa o arquivo.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000025')">&#128203;</div>&nbsp;<i></i><pre id="id_000025" hidden>local f = carreguearquivo(&quot;teste.lua&quot;)
+f() -- executa
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> f <span style="font-weight:bold;">=</span> <span style="color:#b50546">carreguearquivo</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;teste.lua&quot;</span><span style="font-weight:bold;">)</span>
+f<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="color:grey">-- executa
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000026" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao carregue(src, nome)</h2><div class="corpo-doc">
+<p>Carrega código Lua de string ou função sem executar.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > src {string|function} - fonte do código.</span>
+</div>
+<div class="params-doc"><span > nome {string} - nome para identificação de erros.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {function} - função que executa o código carregado.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000027')">&#128203;</div>&nbsp;<i></i><pre id="id_000027" hidden>local f = carregue(&quot;imprima(&#39;Olá&#39;)&quot;)
+f()
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> f <span style="font-weight:bold;">=</span> <span style="color:#b50546">carregue</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;imprima(&#39;Olá&#39;)&quot;</span><span style="font-weight:bold;">)</span>
+f<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000028" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao executestring(src)</h2><div class="corpo-doc">
+<p>Executa código Lua fornecido como string.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > src {string} - código Lua a ser executado.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {variável} - resultado da execução.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000029')">&#128203;</div>&nbsp;<i></i><pre id="id_000029" hidden>executestring(&quot;imprima(&#39;Olá mundo&#39;)&quot;)
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="color:#b50546">executestring</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;imprima(&#39;Olá mundo&#39;)&quot;</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00002A" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao proximo(t, indice)</h2><div class="corpo-doc">
+<p>Retorna o próximo índice/valor de uma tabela; usado para iteradores.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > t {table} - tabela a iterar.</span>
+</div>
+<div class="params-doc"><span > indice {variável} - índice atual.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {variável, variável} - próximo índice e valor.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00002B')">&#128203;</div>&nbsp;<i></i><pre id="id_00002B" hidden>local i, v = proximo({10,20,30}, nil)
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> i, v <span style="font-weight:bold;">=</span> <span style="color:#b50546">proximo</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">{</span><span style="color:red">10</span>,<span style="color:red">20</span>,<span style="color:red">30</span><span style="font-weight:bold;">}</span>, nil<span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00002C" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao pares(t)</h2><div class="corpo-doc">
+<p>Retorna um iterador genérico de tabela (pares chave-valor).</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > t {table} - tabela a ser iterada.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {function, table, nil} - função iteradora, tabela e nil inicial.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00002D')">&#128203;</div>&nbsp;<i></i><pre id="id_00002D" hidden>for k, v in pares({a=1, b=2}) do
+    imprima(k, v)
+fim
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+for k, v in <span style="color:#b50546">pares</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">{</span>a<span style="font-weight:bold;">=</span><span style="color:red">1</span>, b<span style="font-weight:bold;">=</span><span style="color:red">2</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">)</span> do
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>k, v<span style="font-weight:bold;">)</span>
+<span style="font-weight:bold;color:#b50546">fim</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00002E" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao pchame(funcao, ...)</h2><div class="corpo-doc">
+<p>Chamada protegida de função; captura erros sem interromper o programa.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > funcao {function} - função a ser chamada.</span>
+</div>
+<div class="params-doc"><span > ... {variável} - argumentos da função.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {boolean, variável} - true e resultado se sucesso; false e mensagem se erro.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00002F')">&#128203;</div>&nbsp;<i></i><pre id="id_00002F" hidden>local ok, res = pchame(funcao() erro(&quot;x&quot;) fim)
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> ok, res <span style="font-weight:bold;">=</span> <span style="color:#b50546">pchame</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="color:#b50546">erro</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;x&quot;</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;color:#b50546">fim</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000030" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao poe(str)</h2><div class="corpo-doc">
+<p>Imprime string com nova linha no final.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > str {string} - string a imprimir.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {nil} - não retorna valor.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000031')">&#128203;</div>&nbsp;<i></i><pre id="id_000031" hidden>poe(&quot;Olá mundo&quot;)
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="color:#b50546">poe</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Olá mundo&quot;</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000032" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao igual(a,b)</h2><div class="corpo-doc">
+<p>Compara valores sem evocar metamétodos; equivalente a raw equality.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > a {variável} - valor 1.</span>
+</div>
+<div class="params-doc"><span > b {variável} - valor 2.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {boolean} - true se iguais, false caso contrário.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000033')">&#128203;</div>&nbsp;<i></i><pre id="id_000033" hidden>igual(1,1) -- true
+igual(1,2) -- false
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="color:#b50546">igual</span><span style="font-weight:bold;">(</span><span style="color:red">1</span>,<span style="color:red">1</span><span style="font-weight:bold;">)</span> <span style="color:grey">-- true
+</span><span style="color:#b50546">igual</span><span style="font-weight:bold;">(</span><span style="color:red">1</span>,<span style="color:red">2</span><span style="font-weight:bold;">)</span> <span style="color:grey">-- false
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000034" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao tamanho(t)</h2><div class="corpo-doc">
+<p>Retorna o tamanho de string ou tabela (raw).</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > t {table|string} - tabela ou string.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {number} - tamanho.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000035')">&#128203;</div>&nbsp;<i></i><pre id="id_000035" hidden>tamanho(&quot;abc&quot;) -- 3
+tamanho({1,2,3}) -- 3
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="color:#b50546">tamanho</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;abc&quot;</span><span style="font-weight:bold;">)</span> <span style="color:grey">-- 3
+</span><span style="color:#b50546">tamanho</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">{</span><span style="color:red">1</span>,<span style="color:red">2</span>,<span style="color:red">3</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">)</span> <span style="color:grey">-- 3
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000036" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao obt(t,k)</h2><div class="corpo-doc">
+<p>Acesso direto à tabela sem evocar metamétodos.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > t {table} - tabela.</span>
+</div>
+<div class="params-doc"><span > k {variável} - chave.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {variável} - valor da tabela.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000037')">&#128203;</div>&nbsp;<i></i><pre id="id_000037" hidden>local x = obt({a=10}, &quot;a&quot;) -- 10
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> x <span style="font-weight:bold;">=</span> <span style="color:#b50546">obt</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">{</span>a<span style="font-weight:bold;">=</span><span style="color:red">10</span><span style="font-weight:bold;">}</span>, <span style="color:blue">&quot;a&quot;</span><span style="font-weight:bold;">)</span> <span style="color:grey">-- 10
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000038" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao def(t,k,v)</h2><div class="corpo-doc">
+<p>Define valor em tabela sem evocar metamétodos.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > t {table} - tabela.</span>
+</div>
+<div class="params-doc"><span > k {variável} - chave.</span>
+</div>
+<div class="params-doc"><span > v {variável} - valor.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {nil} - não retorna valor.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000039')">&#128203;</div>&nbsp;<i></i><pre id="id_000039" hidden>def({},&quot;x&quot;,10)
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="color:#b50546">def</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">{</span><span style="font-weight:bold;">}</span>,<span style="color:blue">&quot;x&quot;</span>,<span style="color:red">10</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00003A" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao selecione(n,...)</h2><div class="corpo-doc">
+<p>Seleciona argumentos variáveis a partir de posição ou retorna quantidade.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > n {number|string} - índice ou &quot;#&quot;.</span>
+</div>
+<div class="params-doc"><span > ... {variável} - lista de argumentos.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {variável} - valor selecionado ou quantidade.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00003B')">&#128203;</div>&nbsp;<i></i><pre id="id_00003B" hidden>local n = selecione(2, &quot;a&quot;,&quot;b&quot;,&quot;c&quot;) -- &quot;b&quot;
+local q = selecione(&quot;#&quot;, 1,2,3)      -- 3
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> n <span style="font-weight:bold;">=</span> <span style="color:#b50546">selecione</span><span style="font-weight:bold;">(</span><span style="color:red">2</span>, <span style="color:blue">&quot;a&quot;</span>,<span style="color:blue">&quot;b&quot;</span>,<span style="color:blue">&quot;c&quot;</span><span style="font-weight:bold;">)</span> <span style="color:grey">-- &quot;b&quot;
+</span><span style="font-weight:bold;color:#b50546">local</span> q <span style="font-weight:bold;">=</span> <span style="color:#b50546">selecione</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;#&quot;</span>, <span style="color:red">1</span>,<span style="color:red">2</span>,<span style="color:red">3</span><span style="font-weight:bold;">)</span>      <span style="color:grey">-- 3
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00003C" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao defmetatabela(obj, mt)</h2><div class="corpo-doc">
+<p>Define a metatabela de um objeto.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > obj {variável} - objeto alvo.</span>
+</div>
+<div class="params-doc"><span > mt {table} - metatabela.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {variável} - objeto com nova metatabela.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00003D')">&#128203;</div>&nbsp;<i></i><pre id="id_00003D" hidden>defmetatabela({}, {__index = funcao() fim})
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="color:#b50546">defmetatabela</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">{</span><span style="font-weight:bold;">}</span>, <span style="font-weight:bold;">{</span>__index <span style="font-weight:bold;">=</span> <span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;color:#b50546">fim</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00003E" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao convnumero(v)</h2><div class="corpo-doc">
+<p>Converte valor para número; retorna nil se não puder converter.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > v {variável} - valor a converter.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {number|nil} - número convertido ou nil.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00003F')">&#128203;</div>&nbsp;<i></i><pre id="id_00003F" hidden>convnumero(&quot;123&quot;) -- 123
+convnumero(&quot;abc&quot;) -- nil
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="color:#b50546">convnumero</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;123&quot;</span><span style="font-weight:bold;">)</span> <span style="color:grey">-- 123
+</span><span style="color:#b50546">convnumero</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;abc&quot;</span><span style="font-weight:bold;">)</span> <span style="color:grey">-- nil
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000040" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao convstring(v)</h2><div class="corpo-doc">
+<p>Converte valor para string.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > v {variável} - valor a converter.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {string} - string resultante.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000041')">&#128203;</div>&nbsp;<i></i><pre id="id_000041" hidden>convstring(123) -- &quot;123&quot;
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="color:#b50546">convstring</span><span style="font-weight:bold;">(</span><span style="color:red">123</span><span style="font-weight:bold;">)</span> <span style="color:grey">-- &quot;123&quot;
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000042" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao tipo(v)</h2><div class="corpo-doc">
+<p>Retorna o tipo do valor; respeita metamétodo __tipo.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > v {variável} - valor a verificar.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {string} - tipo do valor.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000043')">&#128203;</div>&nbsp;<i></i><pre id="id_000043" hidden>tipo(10)   -- &quot;numero&quot;
+tipo(&quot;x&quot;)  -- &quot;string&quot;
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="color:#b50546">tipo</span><span style="font-weight:bold;">(</span><span style="color:red">10</span><span style="font-weight:bold;">)</span>   <span style="color:grey">-- &quot;numero&quot;
+</span><span style="color:#b50546">tipo</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;x&quot;</span><span style="font-weight:bold;">)</span>  <span style="color:grey">-- &quot;string&quot;
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000044" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao xpchame(funcao, errofunc, ...)</h2><div class="corpo-doc">
+<p>Chamada protegida com função de erro personalizada.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > funcao {function} - função a ser chamada.</span>
+</div>
+<div class="params-doc"><span > errofunc {function} - função de tratamento de erro.</span>
+</div>
+<div class="params-doc"><span > ... {variável} - argumentos da função.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {boolean, variável} - true e resultado se sucesso; false e mensagem se erro.</span>
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000045')">&#128203;</div>&nbsp;<i></i><pre id="id_000045" hidden>local ok, res = xpchame(funcao() erro(&quot;x&quot;) fim, funcao(msg) imprima(msg) fim)
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> ok, res <span style="font-weight:bold;">=</span> <span style="color:#b50546">xpchame</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="color:#b50546">erro</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;x&quot;</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;color:#b50546">fim</span>, <span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span>msg<span style="font-weight:bold;">)</span> <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>msg<span style="font-weight:bold;">)</span> <span style="font-weight:bold;color:#b50546">fim</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

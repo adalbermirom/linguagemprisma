@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>NOTA DE ATUALIZAÇÃO PRISMA 1.0.107</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> NOTA DE ATUALIZAÇÃO PRISMA 1.0.107</h1>
+
+
+
+<h2>1 - CORREÇÕES</h2>
+    
+<h3>1.1 Foi corrigida interceptação de erros, as mensagens de erro apresentam trace back (rastro de execução) normalmente.</h3>
+
+     
+<h3>1.2 Foi corrigido o acesso à tabela global _G (Estava com erro e inacessível em Prisma).</h3>
+
+         
+<h3>1.3 Foram melhorados os parâmetros de modo de abertura de arquivo na função es.abra(&#39;nome_arquivo&#39;, &#39;modo&#39;);</h3>
+
+<h3>onde modo pode ser:</h3>
+
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000002"><code>   Acresentados nomes curtos:
+     l     : leitura
+     lb    : leitura binária
+     l+    : leitura e escrita
+     l+b   : leitura e escrita binária
+     e     : escrita
+     eb    : escrita binária
+     e+    : escrita e leitura
+     e+b   : escrita e leitura binária
+     a     : adição sem apagar o conteúdo atual do arquivo.
+     a+    : leitura e adição de conteúdo sem apagar o conteúdo atual;
+     a+b   : leitura e adição binária (sem apagar)
+     
+   Modos anteriores permanecem:
+     leitura       : leitura
+     leiturabin    : leitura binária
+     leitura+bin   : leitura e escrita binária
+     escrita       : escrita
+     escritabin    : escrita binária
+     escrita+bin   : escrita e leitura binária
+     adicao        : adição de conteúdo sem apagar o conteúdo atual do arquivo.
+     adição        : mesmo que o de cima com acentos
+     adicaobin     : adição binária sem apagar o conteúdo
+     adiçãobin     : mesmo de cima com acentos
+     adicao+       : leitura e adição sem apagar o conteúdo
+     adição+       : mesmo que o de cima com acentos
+     adicao+bin    : leitura e adição binária sem apagar o conteúdo
+     adição+bin    : mesmo de cima com acentos.
+</code></pre>
+</div>
+     
+                   
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000003')">&#128203;</div>&nbsp;<i>ex1.prisma</i><pre id="id_000003" hidden> local a, err = es.abra(&#39;arq.txt&#39;, &#39;lb&#39;); //abre um arquivo em leitura binária
+ se tipo(a) == &#39;arquivo&#39; entao 
+    imprima(&#39;arquivo aberto com sucesso&#39;) 
+ senao  
+    erro(err)
+ fim
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+ <span style="font-weight:bold;color:#b50546">local</span> a, err <span style="font-weight:bold;">=</span> <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">abra</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;arq.txt&#39;</span>, <span style="color:blue">&#39;lb&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//abre um arquivo em leitura binária
+</span> <span style="font-weight:bold;color:#b50546">se</span> <span style="color:#b50546">tipo</span><span style="font-weight:bold;">(</span>a<span style="font-weight:bold;">)</span> <span style="font-weight:bold;">=</span><span style="font-weight:bold;">=</span> <span style="color:blue">&#39;arquivo&#39;</span> <span style="font-weight:bold;color:#b50546">entao</span> 
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;arquivo aberto com sucesso&#39;</span><span style="font-weight:bold;">)</span> 
+ <span style="font-weight:bold;color:#b50546">senao</span>  
+    <span style="color:#b50546">erro</span><span style="font-weight:bold;">(</span>err<span style="font-weight:bold;">)</span>
+ <span style="font-weight:bold;color:#b50546">fim</span>
+</pre></div></div>
+
+</div>
+                 
+<h3>Os modos originais do inglês são permitidos: r, w, a, rb, wb, ab, r+, w+, a+, r+b, w+b, a+b</h3>
+
+    
+<h3>1.4 Corrigido o parâmetro da função pabra(arq, modo); (estava implementado incorretamente)</h3>
+
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000004"><code>   modos aceitos:
+       leitura    :  direciona a  saída do programa aberto para a entrada do programa atual prisma
+       escrita    :  direciona a saída do programa atual prisma para a entrada do programa aberto
+       
+       Modos curtos aceitos:
+           l : leitura
+           e : escrita
+</code></pre>
+</div>
+
+<h3>1.5 Corrigida a função string.apare();</h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000005')">&#128203;</div>&nbsp;<i></i><pre id="id_000005" hidden>//Teste string.apare();
+
+local s = &#39;   ola mundo!       &#39;;
+imprima( &#39;&gt;&#39; .. string.apare(s) .. &#39;&lt;&#39; );
+
+s = &#39;&#39;;//string vazia
+imprima(&#39;&gt;&#39; .. s:apare() .. &#39;&lt;&#39;); //podemos usar o método apare na própria string.
+
+s = &#39;              &#39;; //string com somente espaços.
+imprima(&#39;&gt;&#39; .. s:apare() .. &#39;&lt;&#39; );
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="color:green">//Teste string.apare();
+</span>
+<span style="font-weight:bold;color:#b50546">local</span> s <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;   ola mundo!       &#39;</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> <span style="color:blue">&#39;&gt;&#39;</span> <span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> <span style="color:#b50546">string</span><span style="font-weight:bold;">.</span><span style="color:#b50546">apare</span><span style="font-weight:bold;">(</span>s<span style="font-weight:bold;">)</span> <span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> <span style="color:blue">&#39;&lt;&#39;</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+s <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;&#39;</span><span style="font-weight:bold;">;</span><span style="color:green">//string vazia
+</span><span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;&gt;&#39;</span> <span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> s<span style="font-weight:bold;">:</span><span style="color:#b50546">apare</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> <span style="color:blue">&#39;&lt;&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//podemos usar o método apare na própria string.
+</span>
+s <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;              &#39;</span><span style="font-weight:bold;">;</span> <span style="color:green">//string com somente espaços.
+</span><span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;&gt;&#39;</span> <span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> s<span style="font-weight:bold;">:</span><span style="color:#b50546">apare</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> <span style="color:blue">&#39;&lt;&#39;</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+</pre></div></div>
+
+</div>
+
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000006"><code>   Saída:
+   
+   &gt;ola mundo!&lt;
+   &gt;&lt;
+   &gt;&lt;
+
+</code></pre>
+</div>
+                 
+                 
+                 
+      
+<h2>2 - Foi acrescentada a indexação de strings </h2>
+<h3>E isso direto na VM para obter caractere a partir de um indice:   s = &#39;abc&#39;; imprima(s[1]) --&gt; &#39;a&#39;;</h3>
+
+<p>
+
+     Quando um indice é maior que o tamanho da string ou menor que 1, o retorno é uma string vazia, mesmo comportamento de string.corte();
+
+</p>
+<p>
+
+Porém não é possível mudar o valor apenas obtê-lo:
+
+</p>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000007')">&#128203;</div>&nbsp;<i></i><pre id="id_000007" hidden>   s[1] = &#39;A&#39;; --&gt; erro!
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+   s<span style="font-weight:bold;">[</span><span style="color:red">1</span><span style="font-weight:bold;">]</span> <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;A&#39;</span><span style="font-weight:bold;">;</span> <span style="color:grey">--&gt; erro!
+</span></pre></div></div>
+
+</div>
+<h2>3 - Novas funções na biblioteca de base para verificação de tipos:</h2>
+     
+<p><i><b>Obs.: </b>*Os [, ...] - indica que aceita mais parâmetros opcionais.</i></p>
+<ul>
+<li> S(&#39;txt&#39; [, ...]); //se nao for string gera erro e fecha a execução do programa   </li>
+<li> N(numero [, ...]); //o mesmo para número     </li>
+<li> T(tabela [, ...]); //se não for tabela &#39;erro&#39;     </li>
+<li> F(funcao [, ...]); //se não for funcao &#39;erro&#39;    </li>
+<li> B(booleano [, ...]); //se não for booleano &#39;erro&#39;       </li>
+<li> U(userdata [, ...]); //se não for userdata &#39;erro&#39;      </li>
+<li> Th(thread [, ...]); ////se não for thread &#39;erro&#39;</li>
+<li> V(&#39;tipo&#39;, valor  [, ...]); --&gt; exemplo:    Val(&#39;numero&#39;, 1, 2, 3, 10); //retorna 1, 2, 3, 10 pois o tipo está correto.</li>
+</ul>
+
+<p>
+      
+É possível usar a função V() com tipos definidos pelo usuário, a partir do metamétodo __tipo();
+
+</p>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000008')">&#128203;</div>&nbsp;<i>ex.prisma</i><pre id="id_000008" hidden>local ret = retangulo:novo();
+local ret2 = retangulo:novo();
+V(&#39;retangulo&#39;, ret, ret2);
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> ret <span style="font-weight:bold;">=</span> retangulo<span style="font-weight:bold;">:</span>novo<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> ret2 <span style="font-weight:bold;">=</span> retangulo<span style="font-weight:bold;">:</span>novo<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">V</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;retangulo&#39;</span>, ret, ret2<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+</pre></div></div>
+
+</div>
+<p><i><b>Obs.: </b>caso o programador tenha definido o metamétodo __tipo() para retornar &#39;retangulo&#39; dará certo, senão aparecerá uma mensagem de erro e o programa será finalizado.</i></p>
+         
+<h3>Estas funções de tipo retornam o próprio valor ou valores se o tipo for correto ex.:</h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000009')">&#128203;</div>&nbsp;<i></i><pre id="id_000009" hidden>funcao somar(a,b)
+  retorne N(a) + N(b); //caso a ou b não seja número, o programa é finalizado com erro.
+fim
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">funcao</span> somar<span style="font-weight:bold;">(</span>a,b<span style="font-weight:bold;">)</span>
+  <span style="font-weight:bold;color:#b50546">retorne</span> <span style="color:#b50546">N</span><span style="font-weight:bold;">(</span>a<span style="font-weight:bold;">)</span> <span style="font-weight:bold;">+</span> <span style="color:#b50546">N</span><span style="font-weight:bold;">(</span>b<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//caso a ou b não seja número, o programa é finalizado com erro.
+</span><span style="font-weight:bold;color:#b50546">fim</span>
+</pre></div></div>
+
+</div>
+         
+<h2>4 - Foi modificada a função tipo() </h2>
+<h3>Agora ela aceita um metamétodo __tipo para retornar um tipo definido pelo usuário</h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000A')">&#128203;</div>&nbsp;<i></i><pre id="id_00000A" hidden> local a,err = es.abra(&#39;file.txt&#39;, &#39;leitura&#39;); 
+ imprima(tipo(a)); //----&gt; arquivo
+ local meu_tipo = defmetatabela({}, { __tipo=funcao(este) retorne &#39;&lt;meu tipo&gt;&#39;; fim })
+ imprima(&#39;tipo:&#39;, tipo(meu_tipo));//----&gt; &lt;meu tipo&gt;
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+ <span style="font-weight:bold;color:#b50546">local</span> a,err <span style="font-weight:bold;">=</span> <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">abra</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;file.txt&#39;</span>, <span style="color:blue">&#39;leitura&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> 
+ <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:#b50546">tipo</span><span style="font-weight:bold;">(</span>a<span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//----&gt; arquivo
+</span> <span style="font-weight:bold;color:#b50546">local</span> meu_tipo <span style="font-weight:bold;">=</span> <span style="color:#b50546">defmetatabela</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">{</span><span style="font-weight:bold;">}</span>, <span style="font-weight:bold;">{</span> __tipo<span style="font-weight:bold;">=</span><span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;color:#b50546">este</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;color:#b50546">retorne</span> <span style="color:blue">&#39;&lt;meu tipo&gt;&#39;</span><span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span> <span style="font-weight:bold;">}</span><span style="font-weight:bold;">)</span>
+ <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;tipo:&#39;</span>, <span style="color:#b50546">tipo</span><span style="font-weight:bold;">(</span>meu_tipo<span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//----&gt; &lt;meu tipo&gt;
+</span></pre></div></div>
+
+</div>
+     
+
+<h2>5 - Funcao escolha();</h2>
+<h3>Semelhante ao switch de outras linguagens:</h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000B')">&#128203;</div>&nbsp;<i></i><pre id="id_00000B" hidden> local op = leia();
+  local for = escolha(op);
+  se for&#39;s&#39; entao //único parâmetro é uma string, os parênteses são opcionais..
+      imprima(&#39;saindo ...&#39;);
+      sis.saia(0);
+  senaose for&#39;n&#39; entao
+      imprima(&#39;Usuário decidiu não sair ..\n&#39;);
+  senao
+      imprima(&#39;opção inválida ..\n&#39;);
+  fim
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+ <span style="font-weight:bold;color:#b50546">local</span> op <span style="font-weight:bold;">=</span> <span style="color:#b50546">leia</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+  <span style="font-weight:bold;color:#b50546">local</span> for <span style="font-weight:bold;">=</span> <span style="color:#b50546">escolha</span><span style="font-weight:bold;">(</span>op<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+  <span style="font-weight:bold;color:#b50546">se</span> for<span style="color:blue">&#39;s&#39;</span> <span style="font-weight:bold;color:#b50546">entao</span> <span style="color:green">//único parâmetro é uma string, os parênteses são opcionais..
+</span>      <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;saindo ...&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+      <span style="color:#b50546">sis</span><span style="font-weight:bold;">.</span><span style="color:#b50546">saia</span><span style="font-weight:bold;">(</span><span style="color:red">0</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+  <span style="font-weight:bold;color:#b50546">senaose</span> for<span style="color:blue">&#39;n&#39;</span> <span style="font-weight:bold;color:#b50546">entao</span>
+      <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Usuário decidiu não sair ..\n&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+  <span style="font-weight:bold;color:#b50546">senao</span>
+      <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;opção inválida ..\n&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+  <span style="font-weight:bold;color:#b50546">fim</span>
+</pre></div></div>
+
+</div>
+<p>
+
+Essa função é boa para situações em que temos que comparar um mesmo item várias vezes com menos repetição, veja o mesmo código abaixo sem usar a funcao escolha()
+
+</p>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000C')">&#128203;</div>&nbsp;<i></i><pre id="id_00000C" hidden> local op = leia();
+ se op == &#39;s&#39; entao
+    imprima(&#39;saindo ...&#39;);
+    sis.saia(0);
+ senaose op == &#39;n&#39; entao
+     imprima(&#39;Usuário decidiu não sair ..\n&#39;);
+ senao
+     imprima(&#39;opção inválida ..\n&#39;);
+ fim
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+ <span style="font-weight:bold;color:#b50546">local</span> op <span style="font-weight:bold;">=</span> <span style="color:#b50546">leia</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+ <span style="font-weight:bold;color:#b50546">se</span> op <span style="font-weight:bold;">=</span><span style="font-weight:bold;">=</span> <span style="color:blue">&#39;s&#39;</span> <span style="font-weight:bold;color:#b50546">entao</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;saindo ...&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">sis</span><span style="font-weight:bold;">.</span><span style="color:#b50546">saia</span><span style="font-weight:bold;">(</span><span style="color:red">0</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+ <span style="font-weight:bold;color:#b50546">senaose</span> op <span style="font-weight:bold;">=</span><span style="font-weight:bold;">=</span> <span style="color:blue">&#39;n&#39;</span> <span style="font-weight:bold;color:#b50546">entao</span>
+     <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Usuário decidiu não sair ..\n&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+ <span style="font-weight:bold;color:#b50546">senao</span>
+     <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;opção inválida ..\n&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+ <span style="font-weight:bold;color:#b50546">fim</span>
+</pre></div></div>
+
+</div>
+<h3>A condição aceita qualquer valor e quantidade para ser comparado:</h3>
+
+<pre>
+      se for(1,2,3,4,5) entao //mesmo que: se op==1 ou op==2 ou op==3 ou op==4 ou op==5 entao
+          ...
+      fim
+</pre>
+      
+<h2>6 - Acrescentados os operadores de bits 32 diretamente na maquina virtual Prisma.</h2>
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_00000D"><code>   Nomes - operadores - exemplos
+   bor:     |         i = 3 | 5;
+   band:    &amp;         a = 3 &amp; 5;
+   bxor:    ~         b = 3 ~ 5;
+   lshift:  &lt;&lt;        c = 7 &lt;&lt; 1;
+   rshift:  &gt;&gt;        n = 7 &gt;&gt; 1;
+   un. not: ~         n = ~7;
+</code></pre>
+</div>
+<h3>Para cada operador há um metamétodo:</h3>
+
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_00000E"><code>         __bor, __band, __bxor, __bshl, __bshr, __bnot
+</code></pre>
+</div>
+              
+<h2>7 - Adicionado o operador de divisão inteira, quando não precisamos da parte decimal:</h2>
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_00000F"><code>         nome    -    operador    -    exemplo
+         idiv            /.           imprima( 5 /. 2) //--&gt; 2
+</code></pre>
+</div>
+<pre> metamétodo:  __idiv</pre>
+         
+<h2>8 - Adicionado o metamétodo __tipo() para ser executado pela função tipo();</h2>
+<h3>Exemplo:</h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000010')">&#128203;</div>&nbsp;<i></i><pre id="id_000010" hidden> local circ = {};
+ local mt = {};
+ mt.__tipo = funcao() retorne &#39;circulo&#39;; fim
+ 
+ defmetatabela( circ, mt);
+ imprima(tipo(circ) ); //--&gt; circulo
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+ <span style="font-weight:bold;color:#b50546">local</span> circ <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+ <span style="font-weight:bold;color:#b50546">local</span> mt <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+ mt<span style="font-weight:bold;">.</span>__tipo <span style="font-weight:bold;">=</span> <span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;color:#b50546">retorne</span> <span style="color:blue">&#39;circulo&#39;</span><span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span>
+ 
+ <span style="color:#b50546">defmetatabela</span><span style="font-weight:bold;">(</span> circ, mt<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+ <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:#b50546">tipo</span><span style="font-weight:bold;">(</span>circ<span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt; circulo
+</span></pre></div></div>
+
+</div>
+<h2>9 - Operador ternário</h2>
+     
+<h3>operador &#39;?&#39;</h3>
+
+<p>
+    
+Uso:   exp ? opcao1 ou opcao2
+
+</p>
+<h3>Exemplo:  </h3>
+
+     <pre> x = (n > 10) ? 1 ou n;</pre>
+     
+<p><i><b>Obs.: </b>Na verdade é um açúcar sintático para:   x = (n &gt; 10) e 1 ou n; </i></p>
+     
+<h2>10 - Permitido o uso de palavras chaves e variáveis com acentos:</h2>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000011')">&#128203;</div>&nbsp;<i>exemplo_acentos.prisma</i><pre id="id_000011" hidden>   local função máximo(...)
+       local tn = {...};
+       local atual=tn[1];
+       para i=1, #tn início
+      atual = (tn[i]&gt;atual) ? tn[i] ou atual;
+       fim
+       retorne atual;
+   fim       
+   imprima( máximo(1,2,3,4,8,0,2,1,12,3,4,10,2,1,0) );//--&gt; 12
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+   <span style="font-weight:bold;color:#b50546">local</span> <span style="font-weight:bold;color:#b50546">função</span> máximo<span style="font-weight:bold;">(</span><span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span><span style="font-weight:bold;">)</span>
+       <span style="font-weight:bold;color:#b50546">local</span> tn <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span><span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+       <span style="font-weight:bold;color:#b50546">local</span> atual<span style="font-weight:bold;">=</span>tn<span style="font-weight:bold;">[</span><span style="color:red">1</span><span style="font-weight:bold;">]</span><span style="font-weight:bold;">;</span>
+       <span style="font-weight:bold;color:#b50546">para</span> i<span style="font-weight:bold;">=</span><span style="color:red">1</span>, <span style="font-weight:bold;">#</span>tn <span style="font-weight:bold;color:#b50546">início</span>
+      atual <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">(</span>tn<span style="font-weight:bold;">[</span>i<span style="font-weight:bold;">]</span><span style="font-weight:bold;">&gt;</span>atual<span style="font-weight:bold;">)</span> <span style="font-weight:bold;">?</span> tn<span style="font-weight:bold;">[</span>i<span style="font-weight:bold;">]</span> <span style="font-weight:bold;color:#b50546">ou</span> atual<span style="font-weight:bold;">;</span>
+       <span style="font-weight:bold;color:#b50546">fim</span>
+       <span style="font-weight:bold;color:#b50546">retorne</span> atual<span style="font-weight:bold;">;</span>
+   <span style="font-weight:bold;color:#b50546">fim</span>       
+   <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> máximo<span style="font-weight:bold;">(</span><span style="color:red">1</span>,<span style="color:red">2</span>,<span style="color:red">3</span>,<span style="color:red">4</span>,<span style="color:red">8</span>,<span style="color:red">0</span>,<span style="color:red">2</span>,<span style="color:red">1</span>,<span style="color:red">12</span>,<span style="color:red">3</span>,<span style="color:red">4</span>,<span style="color:red">10</span>,<span style="color:red">2</span>,<span style="color:red">1</span>,<span style="color:red">0</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//--&gt; 12
+</span></pre></div></div>
+
+</div>
+ 
+<h3>As palavras sem acento ainda continuam compatíveis:</h3>
+
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000012"><code>     funcao ou função são válidos, mas &#39;funçao&#39; não é.
+     entao ou então, senao ou senão, senaose ou senãose, ate ou até, nao ou não, inicio ou início etc.
+</code></pre>
+</div>
+<p><i><b>Obs.: </b>As variáveis da biblioteca padrão em Prisma continuam sem acento:</i></p>
+<p>  Exemplo: poe (e não põe) - mas é facilmente possível adicionar acentos: local põe = poe; por isso, decidi não mudar
+     essa parte.
+</p>
+     
+<p><i><b>Obs.: </b>Os retornos de tipos também continuam sem acentos: tipo(1); retorna numero e não número.</i></p>
+     
+<p><i><b>Obs.: </b>A tabela corotina foi mudada para corrotina; em caso de necessidade atribua: corotina = corrotina;</i></p>
+         
+<h2>11 - Nova função da biblioteca base: contador(inic, incr);</h2>
+<h3>Cria uma função fecho(closure) e a retorna, esta função incrementa um valor a cada execução.</h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000013')">&#128203;</div>&nbsp;<i>Exemplo:</i><pre id="id_000013" hidden>  local cont = contador();
+  imprima(cont() ); //--&gt;1
+  imprima(cont() ); //--&gt;2
+  imprima(cont() ); //--&gt;3 e assim por diante.
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+  <span style="font-weight:bold;color:#b50546">local</span> cont <span style="font-weight:bold;">=</span> <span style="color:#b50546">contador</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+  <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt;1
+</span>  <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt;2
+</span>  <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt;3 e assim por diante.
+</span></pre></div></div>
+
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000014')">&#128203;</div>&nbsp;<i>podemos definir um valor inicial e um incremento:</i><pre id="id_000014" hidden>  local cont = contador(0, 2);
+  imprima( cont() ); //--&gt;0
+  imprima( cont() ); //--&gt;2
+  imprima( cont() ); //--&gt;4 e assim por diante;
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+  <span style="font-weight:bold;color:#b50546">local</span> cont <span style="font-weight:bold;">=</span> <span style="color:#b50546">contador</span><span style="font-weight:bold;">(</span><span style="color:red">0</span>, <span style="color:red">2</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+  <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> cont<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt;0
+</span>  <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> cont<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt;2
+</span>  <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> cont<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt;4 e assim por diante;
+</span></pre></div></div>
+
+</div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000015')">&#128203;</div>&nbsp;<i>*podemos definir um decremento, ou seja, um valor que diminui a cada execução:</i><pre id="id_000015" hidden>  local cont = contador(10,-1);
+  imprima( cont() ); //--&gt; 10
+  imprima( cont() ); //--&gt; 9
+  imprima( cont() ); //--&gt; 8 e assim por diante.
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+  <span style="font-weight:bold;color:#b50546">local</span> cont <span style="font-weight:bold;">=</span> <span style="color:#b50546">contador</span><span style="font-weight:bold;">(</span><span style="color:red">10</span>,<span style="font-weight:bold;">-</span><span style="color:red">1</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+  <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> cont<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt; 10
+</span>  <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> cont<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt; 9
+</span>  <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> cont<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt; 8 e assim por diante.
+</span></pre></div></div>
+
+</div>
+<p><i><b>Obs.: </b>observe que para o decremento apenas usamos um número negativo!</i></p>
+    
+<h2>12 - Alteração na função sis.tamanho(); da biblioteca sis (sistema operacional)</h2>
+    
+<h3>Esta função recebia o nome de um arquivo e retornava o seu tamanho em bytes.</h3>
+
+
+<p>
+
+Agora ela pode também retornar o tamanho de um valor número C em bytes,
+bastando usar o caractere de escape % mais o caractere correspondente ao tipo numérico 
+da linguagem C (dependente de plataforma):
+
+</p>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000016')">&#128203;</div>&nbsp;<i>exemplo:</i><pre id="id_000016" hidden>        
+ local n = sis.tamanho(&#39;%i&#39;);  //sizeof(int);
+ imprima(n);//--&gt; 4
+ imprima( sis.tamanho(&#39;%d&#39;); //sizeof(int); --&gt; 4 (%d ou %i são o mesmo valor);
+ imprima( sis.tamanho(&#39;%f&#39;); //sizeof(float); --&gt; 4
+ imprima( sis.tamanho(&#39;%lf&#39;); //sizeof(double); --&gt; 8
+ imprima( sis.tamanho(&#39;%Lf&#39;); //sizeof(long double); --&gt; 16
+ imprima( sis.tamanho(&#39;%lli&#39;); //sizeof(long long int); --&gt; 8
+ imprima( sis.tamanho(&#39;%llu&#39;); //sizeof(unsigned long long); --&gt; 8
+ imprima( sis.tamanho(&#39;%hi&#39;); //sizeof(short int); --&gt; 2
+ imprima( sis.tamanho(&#39;%hu&#39;); //sizeof(unsigned short); --&gt; 2
+ imprima( sis.tamanho(&#39;%p&#39;); //sizeof(void *); --&gt; 8
+ imprima( sis.tamanho(&#39;%c&#39;); //sizeof(char); --&gt; 1
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+        
+ <span style="font-weight:bold;color:#b50546">local</span> n <span style="font-weight:bold;">=</span> <span style="color:#b50546">sis</span><span style="font-weight:bold;">.</span><span style="color:#b50546">tamanho</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;%i&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>  <span style="color:green">//sizeof(int);
+</span> <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>n<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//--&gt; 4
+</span> <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> <span style="color:#b50546">sis</span><span style="font-weight:bold;">.</span><span style="color:#b50546">tamanho</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;%d&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//sizeof(int); --&gt; 4 (%d ou %i são o mesmo valor);
+</span> <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> <span style="color:#b50546">sis</span><span style="font-weight:bold;">.</span><span style="color:#b50546">tamanho</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;%f&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//sizeof(float); --&gt; 4
+</span> <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> <span style="color:#b50546">sis</span><span style="font-weight:bold;">.</span><span style="color:#b50546">tamanho</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;%lf&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//sizeof(double); --&gt; 8
+</span> <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> <span style="color:#b50546">sis</span><span style="font-weight:bold;">.</span><span style="color:#b50546">tamanho</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;%Lf&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//sizeof(long double); --&gt; 16
+</span> <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> <span style="color:#b50546">sis</span><span style="font-weight:bold;">.</span><span style="color:#b50546">tamanho</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;%lli&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//sizeof(long long int); --&gt; 8
+</span> <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> <span style="color:#b50546">sis</span><span style="font-weight:bold;">.</span><span style="color:#b50546">tamanho</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;%llu&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//sizeof(unsigned long long); --&gt; 8
+</span> <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> <span style="color:#b50546">sis</span><span style="font-weight:bold;">.</span><span style="color:#b50546">tamanho</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;%hi&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//sizeof(short int); --&gt; 2
+</span> <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> <span style="color:#b50546">sis</span><span style="font-weight:bold;">.</span><span style="color:#b50546">tamanho</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;%hu&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//sizeof(unsigned short); --&gt; 2
+</span> <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> <span style="color:#b50546">sis</span><span style="font-weight:bold;">.</span><span style="color:#b50546">tamanho</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;%p&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//sizeof(void *); --&gt; 8
+</span> <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> <span style="color:#b50546">sis</span><span style="font-weight:bold;">.</span><span style="color:#b50546">tamanho</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;%c&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//sizeof(char); --&gt; 1
+</span></pre></div></div>
+
+</div>
+
+<h3> Pode retornar também verdadeiro ou falso para sistema big-endian e little-endian</h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000017')">&#128203;</div>&nbsp;<i>endianess:</i><pre id="id_000017" hidden> imprima( sis.tamanho(&#39;%le&#39;)) //--&gt; verdadeiro se o sistema for little-endian do contrário falso.
+ imprima( sis.tamanho(&#39;%be&#39;)) //--&gt; verdadeiro se o sistema for big-endian do contrário falso.
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+ <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> <span style="color:#b50546">sis</span><span style="font-weight:bold;">.</span><span style="color:#b50546">tamanho</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;%le&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span> <span style="color:green">//--&gt; verdadeiro se o sistema for little-endian do contrário falso.
+</span> <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> <span style="color:#b50546">sis</span><span style="font-weight:bold;">.</span><span style="color:#b50546">tamanho</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;%be&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span> <span style="color:green">//--&gt; verdadeiro se o sistema for big-endian do contrário falso.
+</span></pre></div></div>
+
+</div>
+<p><i><b>Obs.: </b>geralmente o sistema é &#39;le&#39; little-endian. Isso tem a ver com a ordem dos bytes que formam um número, pesquise por endianess in C</i></p>
+
+  
+<h2> 13 - Correções e alterações na biblioteca mat (matemática)</h2>
+
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000018"><code> *    ALTERAÇÕES: 
+ * 
+ *    ANTES  ------------&gt;  DEPOIS
+ * 
+ *    mat.randonico()      mat.aleatorio()
+ *    mat.xrandonico()     mat.xaleatorio()
+ *    mat.arredonde()      mat.arredondeacima() //arredonda um número para cima. Ex.: 4.2 -&gt; 5
+ *    mat.corte()          mat.arredondeabaixo() //arredonda um número para baixo. Ex: 5.9 -&gt; 5
+ *    
+ *    
+ *    INCLUSÕES:
+ * 
+ *    mat.arredonde(n)  ----&gt; arredonda um número para o valor inteiro mais próximo.  
+ *                           Ex.:   5.9 --&gt; 6;    5.2 --&gt; 5
+ *    mat.raizcubica(n)  ---&gt; retorna a raiz cúbica de n    imprima(mat.raizcubica(1000) ); //--&gt;10
+</code></pre>
+</div>
+ 
+<h3>Veja os exemplos:</h3>
+
+ 
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000019')">&#128203;</div>&nbsp;<i>Exemplo mat.:</i><pre id="id_000019" hidden>local n;
+
+poe&#39;---------------------------------------&#39;;
+poe&#39;Observe o primeiro aleatório, é igual sempre&#39;;
+para i = 1, 9 inicio
+    n = N(mat.aleatorio(1,10) ); //aleatorio entre um e dez.
+    imprima(n);
+fim
+poe&#39;---------------------------------------&#39;;
+poe(
+&#39;Observe que segundo aleatorio é diferente a cada execução,&#39;,
+&#39;\npois usamos xaleatorio:&#39;
+)
+//usando xaleatorio() para criar uma semente.
+
+mat.xaleatorio(sis.tempo());//criando uma semente aleatória baseada no sis.tempo();
+para i = 1, 9 inicio
+    n = N(mat.aleatorio(1,10) ); //aleatorio entre um e dez.
+    imprima(n);
+fim
+
+poe&#39;\n---------------------------------------&#39;;
+poe&#39;---------------- mat.arredonde() -----------------&#39;;
+
+imprima(&#39;3.8:&#39;, mat.arredonde(3.8) )
+imprima(&#39;3.4&#39;, mat.arredonde(3.4) ); //a partir de 0.5 o número é arredondado para cima.
+
+poe&#39;\n---------------------------------------&#39;;
+poe&#39;---------------- mat.arredondeacima() -----------------&#39;;
+
+imprima(&#39;3.1:&#39;, mat.arredondeacima(3.1) )
+
+poe&#39;\n---------------------------------------&#39;;
+poe&#39;---------------- mat.arredondeabaixo() -----------------&#39;;
+
+imprima(&#39;3.8:&#39;, mat.arredondeabaixo(3.8) )
+
+
+poe&#39;\n---------------------------------------&#39;;
+poe&#39;---------------- mat.raizcubica(n) -----------------&#39;;
+
+imprima(&#39;mat.raizcubica(27):&#39;, mat.raizcubica(27) )
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 14</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 15</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 16</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 17</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 18</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 19</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 20</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 21</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 22</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 23</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 24</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 25</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 26</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 27</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 28</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 29</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 30</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 31</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 32</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 33</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 34</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 35</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 36</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 37</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 38</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 39</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 40</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 41</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 42</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> n<span style="font-weight:bold;">;</span>
+
+<span style="color:#b50546">poe</span><span style="color:blue">&#39;---------------------------------------&#39;</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">poe</span><span style="color:blue">&#39;Observe o primeiro aleatório, é igual sempre&#39;</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">para</span> i <span style="font-weight:bold;">=</span> <span style="color:red">1</span>, <span style="color:red">9</span> <span style="font-weight:bold;color:#b50546">inicio</span>
+    n <span style="font-weight:bold;">=</span> <span style="color:#b50546">N</span><span style="font-weight:bold;">(</span><span style="color:#b50546">mat</span><span style="font-weight:bold;">.</span><span style="color:#b50546">aleatorio</span><span style="font-weight:bold;">(</span><span style="color:red">1</span>,<span style="color:red">10</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//aleatorio entre um e dez.
+</span>    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>n<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">fim</span>
+<span style="color:#b50546">poe</span><span style="color:blue">&#39;---------------------------------------&#39;</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">poe</span><span style="font-weight:bold;">(</span>
+<span style="color:blue">&#39;Observe que segundo aleatorio é diferente a cada execução,&#39;</span>,
+<span style="color:blue">&#39;\npois usamos xaleatorio:&#39;</span>
+<span style="font-weight:bold;">)</span>
+<span style="color:green">//usando xaleatorio() para criar uma semente.
+</span>
+<span style="color:#b50546">mat</span><span style="font-weight:bold;">.</span><span style="color:#b50546">xaleatorio</span><span style="font-weight:bold;">(</span><span style="color:#b50546">sis</span><span style="font-weight:bold;">.</span><span style="color:#b50546">tempo</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//criando uma semente aleatória baseada no sis.tempo();
+</span><span style="font-weight:bold;color:#b50546">para</span> i <span style="font-weight:bold;">=</span> <span style="color:red">1</span>, <span style="color:red">9</span> <span style="font-weight:bold;color:#b50546">inicio</span>
+    n <span style="font-weight:bold;">=</span> <span style="color:#b50546">N</span><span style="font-weight:bold;">(</span><span style="color:#b50546">mat</span><span style="font-weight:bold;">.</span><span style="color:#b50546">aleatorio</span><span style="font-weight:bold;">(</span><span style="color:red">1</span>,<span style="color:red">10</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//aleatorio entre um e dez.
+</span>    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>n<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">fim</span>
+
+<span style="color:#b50546">poe</span><span style="color:blue">&#39;\n---------------------------------------&#39;</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">poe</span><span style="color:blue">&#39;---------------- mat.arredonde() -----------------&#39;</span><span style="font-weight:bold;">;</span>
+
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;3.8:&#39;</span>, <span style="color:#b50546">mat</span><span style="font-weight:bold;">.</span><span style="color:#b50546">arredonde</span><span style="font-weight:bold;">(</span><span style="color:red">3</span><span style="font-weight:bold;">.</span><span style="color:red">8</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;3.4&#39;</span>, <span style="color:#b50546">mat</span><span style="font-weight:bold;">.</span><span style="color:#b50546">arredonde</span><span style="font-weight:bold;">(</span><span style="color:red">3</span><span style="font-weight:bold;">.</span><span style="color:red">4</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//a partir de 0.5 o número é arredondado para cima.
+</span>
+<span style="color:#b50546">poe</span><span style="color:blue">&#39;\n---------------------------------------&#39;</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">poe</span><span style="color:blue">&#39;---------------- mat.arredondeacima() -----------------&#39;</span><span style="font-weight:bold;">;</span>
+
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;3.1:&#39;</span>, <span style="color:#b50546">mat</span><span style="font-weight:bold;">.</span><span style="color:#b50546">arredondeacima</span><span style="font-weight:bold;">(</span><span style="color:red">3</span><span style="font-weight:bold;">.</span><span style="color:red">1</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span>
+
+<span style="color:#b50546">poe</span><span style="color:blue">&#39;\n---------------------------------------&#39;</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">poe</span><span style="color:blue">&#39;---------------- mat.arredondeabaixo() -----------------&#39;</span><span style="font-weight:bold;">;</span>
+
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;3.8:&#39;</span>, <span style="color:#b50546">mat</span><span style="font-weight:bold;">.</span><span style="color:#b50546">arredondeabaixo</span><span style="font-weight:bold;">(</span><span style="color:red">3</span><span style="font-weight:bold;">.</span><span style="color:red">8</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span>
+
+
+<span style="color:#b50546">poe</span><span style="color:blue">&#39;\n---------------------------------------&#39;</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">poe</span><span style="color:blue">&#39;---------------- mat.raizcubica(n) -----------------&#39;</span><span style="font-weight:bold;">;</span>
+
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;mat.raizcubica(27):&#39;</span>, <span style="color:#b50546">mat</span><span style="font-weight:bold;">.</span><span style="color:#b50546">raizcubica</span><span style="font-weight:bold;">(</span><span style="color:red">27</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+
+
+<h2>14 - acréscimo da função sis.copie_arquivo(orig, dest);</h2>
+
+<h4>Copia um arquivo &#39;orig&#39; para destino &#39;dest&#39;</h4>
+
+<p><i><b>Obs.: </b>só copia um arquivo por vez, as pastas devem existir.</i></p>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00001A')">&#128203;</div>&nbsp;<i>ex_copia_arq.prisma</i><pre id="id_00001A" hidden>    
+funcao principal()
+    local ok, err = sis.copie_arquivo(&#39;teste.txt&#39;, &#39;teste_copia.txt&#39;);
+    se nao ok entao erro(err); fim
+    imprima(&#39;Arquivo copiado com sucesso!&#39;);
+fim
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    
+<span style="font-weight:bold;color:#b50546">funcao</span> principal<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>
+    <span style="font-weight:bold;color:#b50546">local</span> ok, err <span style="font-weight:bold;">=</span> <span style="color:#b50546">sis</span><span style="font-weight:bold;">.</span>copie_arquivo<span style="font-weight:bold;">(</span><span style="color:blue">&#39;teste.txt&#39;</span>, <span style="color:blue">&#39;teste_copia.txt&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">se</span> <span style="font-weight:bold;color:#b50546">nao</span> ok <span style="font-weight:bold;color:#b50546">entao</span> <span style="color:#b50546">erro</span><span style="font-weight:bold;">(</span>err<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Arquivo copiado com sucesso!&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">fim</span>
+</pre></div></div>
+
+</div>
+
+<h2>15 - Acréscimo da função es.descritor(arquivo_aberto);</h2>
+<h4>Pega o descritor numérico do arquivo aberto pela função es.abra();</h4>
+
+<p><i><b>Obs.: </b>é muito útil quando uma função de uma biblioteca precisa pegar o descritor e não arquivo.</i></p>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00001B')">&#128203;</div>&nbsp;<i>ex_descritor.prisma</i><pre id="id_00001B" hidden>  funcao principal()
+      local a, err = es.abra(&#39;arquivo.txt&#39;, &#39;leitura&#39;);
+      se nao a entao erro(err); fim
+      local desc = es.descritor(a);
+      imprima(desc); //--&gt; 3 ou 4 ou mais. Depende de quantos arquivos já estão abertos.
+      fwrite(desc, dados, #dados); //uma função fictícia de um possível binding que usa o file descriptor.
+  fim
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+  <span style="font-weight:bold;color:#b50546">funcao</span> principal<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>
+      <span style="font-weight:bold;color:#b50546">local</span> a, err <span style="font-weight:bold;">=</span> <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">abra</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;arquivo.txt&#39;</span>, <span style="color:blue">&#39;leitura&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+      <span style="font-weight:bold;color:#b50546">se</span> <span style="font-weight:bold;color:#b50546">nao</span> a <span style="font-weight:bold;color:#b50546">entao</span> <span style="color:#b50546">erro</span><span style="font-weight:bold;">(</span>err<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span>
+      <span style="font-weight:bold;color:#b50546">local</span> desc <span style="font-weight:bold;">=</span> <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span>descritor<span style="font-weight:bold;">(</span>a<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+      <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>desc<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt; 3 ou 4 ou mais. Depende de quantos arquivos já estão abertos.
+</span>      fwrite<span style="font-weight:bold;">(</span>desc, dados, <span style="font-weight:bold;">#</span>dados<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//uma função fictícia de um possível binding que usa o file descriptor.
+</span>  <span style="font-weight:bold;color:#b50546">fim</span>
+</pre></div></div>
+
+</div>
+
+
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

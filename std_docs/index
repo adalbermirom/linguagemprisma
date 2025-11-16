@@ -1,0 +1,376 @@
+--[[[
+\fonte Prisma - linguagem de programação
+\logo prisma.png
+\autor Adalberto
+\-- Esta linha é um cometário pois inicia com \-- (comentário doc de linha única).
+\-- os simbolos <%  abre um código de preprocessamento e o  %> fecha esse código.
+\-- tudo o que estiver dentro desses símbolos é executado como um programa prisma normal
+\-- e o 'retorno' fica no lugar do código de preprocessamento no arquivo final.
+\-- no caso abaixo o retorno é a data formatada, sempre que executar o minidoc será colocada a data atual.
+\data <%
+    local semana={'Dom','Seg','Ter','Qua','Qui','Sex','Sáb'};
+    local t = sis.data('*t');
+    local s = string.formate('%s - %02d/%02d/%04d', semana[t.diasemana], t.dia, t.mes, t.ano);
+    retorne s;%>
+ \versao <%retorne 'Versão: '.. _VERSAO%>
+
+<b>Acesse:</b>
+\link https://linguagemprisma.br4.biz/blog/ Blog oficial
+&nbsp;
+\link https://linguagemprisma.br4.biz/prisma_forum Fórum oficial
+&nbsp;
+<a href="#baixar">Baixar</a>
+&nbsp;
+<a href="#exemplos_codigos">Exemplos</a>
+&nbsp;
+\link https://linguagemprisma.br4.biz/Notas_da_versao_nov_2023.html Notas da versão 1.0.107
+&nbsp;
+\link https://linguagemprisma.br4.biz/detalhes.html Sobre
+<br><br>
+\img 50 https://www.lua.org/images/logo.gif lua 
+\link https://www.lua.org/ Prisma utiliza os fontes de Lua 5.2 visite a página oficial de Lua <aqui>
+
+\subtitulo Prisma - a fantástica linguagem de programação
+\parag
+   Prisma é uma linguagem de programação interpretada com comandos em português do Brasil. Ela pode ser muito útil para aprendizagem de iniciantes em cursos de programação, ou, mesmo para ser usada profissionalmente, visto que possui características das linguagens mais atuais,  como Python, Ruby, Perl, etc.
+\parag--
+<hr>
+<h2 id='exemplos_codigos'>Exemplos:</h2>
+\h3 Hello world em Prisma:
+\codigo  ola_mundo.prisma
+    //olá mundo em Prisma:
+    imprima('Olá mundo em Prisma!');
+\codigo--
+
+\h3 Usando a função main() versão Prisma:
+\codigo  principal.prisma
+//isto é um comentário:
+funcao principal(args)
+    imprima("Olá mundo em Prisma!");
+    retorne 0;
+fim
+\codigo--
+
+\h3 Acentos opcionais em palavras chave a partir de Prisma 1.0.107
+\codigo  ex3.prisma
+    função soma(a, b)
+        retorne a+b;
+    fim
+    local res = soma(2, 10);
+    imprima(res); // --> 12
+\codigo--
+
+\h3 Veja um exemplo de leitura de arquivo:
+\codigo leia_arquivo.prisma
+#!/usr/local/bin/prisma
+
+local funcao leia_arquivo(nome_arq)
+    local a, erro_arq = es.abra(nome_arq, 'leiturabin');
+    se nao a entao 
+        retorne falso, erro_arq; //é possível retornar mais de um valor!
+    fim
+    local txt = a:leia('*t');//lê todo o conteúdo do arquivo de uma só vez.
+    a:feche();//fechando o arqivo aberto.
+    retorne txt;
+fim
+se nao args[1] entao //não há argumentos.
+    imprima('Use: leia_arquivo arquivo');    
+fim
+    
+local conteudo, erro_arq = leia_arquivo(args[1]);
+se nao conteudo entao
+    erro(erro_arq);
+fim
+
+imprima(conteudo);//imprime o conteúdo do arquivo aberto.
+        
+\codigo--
+
+\h3 Exemplo de fatorial:
+\codigo fatorial.prisma
+//exemplo de fatorial
+funcao fatorial(n)
+  se n == 0 entao
+    retorne 1
+  senao
+    retorne n * fatorial(n - 1)
+  fim
+fim
+
+imprima( fatorial(9) ); //--> 362880
+\codigo--
+
+\h3 Exemplo de fibonacci:
+\codigo fibo.prisma
+//série de Fibonacci
+funcao fib(n)
+      a, b = 0, 1
+              enquanto a < n inicio
+               es.escreva(a, ' ')
+               a, b = b, a+b
+            fim
+      imprima()
+fim
+
+fib(1000)
+
+//--> 0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987
+\codigo--
+]]
+
+--[[[
+\seção Baixar Prisma-1.0.107 Ubuntu 22.04 x86_64
+<br>
+\h3 Pacote compilado em formato .run (auto extraível):
+<a id="baixar" href="https://www.mediafire.com/file/3jovfpg11akwiip/prisma_install_linux.run/file" download>Baixar instalador</a>
+<p> Execute no terminal em modo sudo e siga os procedimentos:</p>
+<pre># ./prisma_install_linux.run</pre>
+<br>
+\h3 Pacote compilado em formato tar.xz:
+<a href="https://www.mediafire.com/file/k6lxjzaf6bmp2fx/prisma_install_linux.tar.xz/file">Baixar arquivo</a>
+<p> Extraia e execute no terminal:</p>
+<pre>sudo ./instalar.sh</pre>
+
+\h3 Pacote código fonte Prisma:
+<a href="https://www.mediafire.com/file/yw3532ff0r5jrdw/prisma_fontes.tar.xz/file" download>Baixar fontes</a>
+<p> Extraia e execute no terminal:</p>
+<pre> ./compila_so_prisma.sh && instalar.sh</pre>
+
+<br>
+\h3 Especificações dos binários:
+<pre>
+Informações do sistema onde Prisma foi compilado:
+
+Linux
+6.2.0-39-generic
+#40~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Nov 16 10:53:04 UTC 2
+x86_64
+GNU/Linux
+---------------------------------
+Informações do compilador usado:
+
+gcc version 11.4.0 (Ubuntu 11.4.0-1ubuntu1~22.04) 
+Target: x86_64-linux-gnu
+Thread model: posix
+</pre>
+\h3 Arquivo incluídos na instalação:
+<ul>
+<li> prisma  - interpretador principal  (executa scripts prisma, inclusive via cgi)</li>
+<li> prismac - compilador principal     (precompila scripts prisma em byte-codes para máquina virtual prisma)</li>
+<li><a href="https://linguagemprisma.br4.biz/pric.html">pric - compilador alternativo </a> (gera executáveis sem necessitar do interpretador Prisma)</li>
+<li>prismaterm - interpretador alternativo (interpretador interativo prisma feito em prisma)</li>
+</ul>
+
+\h3 Bibliotecas nativas incluídas na instalação ( feitas em C ):
+\lista
+1	libprisma1.0.a (static lib prisma para compilar programas C que usam prisma)
+2	pblz.so  (lib que compacta em blz)
+3	pcgi.so  (lib básica para cgi, lê variáveis de formes, decodifica a string)
+4	pdiretorio.so (em combinação com a lib dir, facilita a manipulação de arquivos e diretórios)
+5	perrno.so     (mensagens de errno)
+6	pfork.so      (cria um fork do processo atual, ótimo para usar em mini servidores)
+7	plz4.so       (compactação de arquivos em lz4)
+8	pmd5.so       (hash md5)
+9	pmicrotar.so  (empacota e manipula arquivos no formato .tar);
+10	ppdf.so       (cria pdf)
+11	psha1.so      (hash sha1)
+12	psha256.so    (hash sha256)
+13	psignal.so    (lib experimental signal somente linux por enquanto)
+14	psqlite3.so   (criar e manipular banco de dados sqlite3)
+15	pubidisc.so   ( lib baseada no programa ubidiscover em C)
+16	pzip.so       (compactação de arquivos zip)
+17	terminal.so   (funções para o terminal e cmd - ex.: mudar cores)
+\lista--
+
+\h3 Para incluir uma lib use o comando em Prisma: 
+<pre>local lib = inclua'lib'</pre>
+
+\h3 Ao instalar Prisma há também várias bibiotecas feitas diretamente em Prisma, veja na pasta install_utils/prisma/1.0/plib
+\h3 Há uma lib cgi.pris mais atualizada que a pcgi, e com mais recursos.
+
+<ul>
+<li><a href="https://linguagemprisma.br4.biz/bin.html">bin.html</a></li>
+<li><a href="https://linguagemprisma.br4.biz/cgi.html">cgi.html</a></li>
+<li><a href="https://linguagemprisma.br4.biz/colorize.html">colorize.html</a></li>
+<li><a href="https://linguagemprisma.br4.biz/enum.html">enum.html</a></li>
+<li><a href="https://linguagemprisma.br4.biz/estrito.html">estrito.html</a></li>
+
+<li><a href="https://linguagemprisma.br4.biz/meta.html">meta.html</a></li>
+<li><a href="https://linguagemprisma.br4.biz/shell.html">shell.html</a></li>
+</ul>
+]]
+
+--[[[
+\seção Baixar Prisma-1.0.107 Windows (x64)
+<br>
+
+\h3 Cuidado, se já tiver Prisma instalada, é aconselhável que instale esta versão em outro destino.
+\obs Há incompatibilidades com a versão anterior(x86), pois esta é x64, e a biblioteca 'ig' não funciona ainda nesta versão.
+<div class="caixa com-borda">
+\h3 Pacote compilado em formato .exe (rar auto extraível):
+<b>Em breve</b>
+</div>
+
+<div class="caixa com-borda">
+\h3 Pacote compilado em formato .zip:
+\link https://www.mediafire.com/file/boqvsq2nye6ophq/Prisma_win.zip/file Baixar zip
+<p>
+Extraia o arquivo, usando 7z ou winrar. Depois copie a pasta Prisma para o local de sua preferência.<br>
+Pode ser, por exemplo, em
+</p>
+<pre> C:\Prisma</pre>
+<p>
+Agora só testar:<br>
+</p>
+\lista
+Entre na pasta de instalação Prisma (C:\Prisma\1.0\bin\)
+Duplo clique em prismaterm.exe
+Digite no prompt aberto: imprima("olá mundo!"); e pressione ENTER
+\lista--
+\inicio
+  Para compilar scripts prisma é necessário saber usar a tela de comandos do Windows.
+  Em geral se renomear um arquivo prisma para extensão .pbrexe ele será executado automaticamente pelo interpretador Prisma.
+\fim
+\inicio
+  Mas é preciso definir o registro. Vá na pasta de instalação prisma, dentro de 'bin' execute o configure.exe em modo administrador.
+\fim
+\inicio
+  O comando para compilar programa é:
+\fim
+<pre>pric.exe -o prog.exe prog.prisma</pre>
+\inicio
+Logicamente, ainda é possível usar o pric para gerar bytecodes para serem carregados pelo interpretador prisma.exe:
+\fim
+<pre>pric.exe -p prog.pbrexe prog.prisma</pre>
+\obs O compilador aceita mais de um fonte para compilar: pric.exe -o prog.exe font1.prisma font2.prisma ... prog.prisma. 
+\obs Sempre deixe para o final o arquivo principal que usa funções dos outros fontes.
+</div>
+
+<div class="caixa com-borda">
+\h3 Pacote código fonte Prisma em formato .zip:
+<b>Em breve</b>
+</div>
+
+<div class="caixa com-borda">
+\h3 Compilador Prisma com interface gráfica (para quem prefere não usar cmd) .zip:
+<b>Em breve</b>
+</div>
+
+\h3 Especificações:
+<b>Em breve</b>
+]]
+
+
+--[[[
+\seção Baixar PrismaJS-1.0.107 (Compilada em Wasm)
+<br>
+\h3 Use com cuidado
+\inicio
+  PrismaJS não foi testada exaustivamente, e muitas funções nativas em C não funcionam 
+  de modo esperado em Wasm, haja visto que o navegador é um ambiente em modo protegido (sandbox);
+\fim
+
+\link https://www.mediafire.com/file/q7p9wya0d1449sn/Prismajs.zip/file Baixar arquivo zip
+
+\h3 Pasta com diversos exemplos PrismaJS, incluindo JQuery e w3c libraries.
+<b>Em breve.</b>
+\h3 PrismaJS com nwjs:
+<b>Em breve.</b>
+\bloco
+Informações do sistema onde PrismaJS foi compilado:
+
+Linux
+6.2.0-39-generic
+#40~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Nov 16 10:53:04 UTC 2
+x86_64
+GNU/Linux
+---------------------------------
+Informações do compilador usado:
+
+emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.34 (57b21b8fdcbe3ebb523178b79465254668eab408)
+clang version 17.0.0 (https://github.com/llvm/llvm-project a031f72187ce495b9faa4ccf99b1e901a3872f4b)
+Target: wasm32-unknown-emscripten
+Thread model: posix
+\bloco--
+  
+]]
+
+
+--[[[
+\seção Baixar Prisma-1.0.107 CentOS 7.9 (x86_64)
+<br>
+\h3 Instalador binários  *.run
+\link https://www.mediafire.com/file/haycf74g46pzzo5/prisma_install_linux.run/file Baixar arquivo
+
+\h3 Binários compactados  *.tar.xz
+\link https://www.mediafire.com/file/drmdbn02c6y2c6l/prisma_install_linux.tar.xz/file Baixar arquivo
+
+\h3 Fontes Prisma CentOS 7.9  *.tar.xz (== Ubuntu 22.04)
+\link https://www.mediafire.com/file/8jsy58q6bvdd2iq/prisma_fontes.tar.xz/file Baixar arquivo
+
+<pre>
+Informações do sistema onde Prisma foi compilado:
+
+Linux
+3.10.0-1160.105.1.el7.x86_64
+#1 SMP Thu Dec 7 15:39:45 UTC 2023
+x86_64
+GNU/Linux
+
+-------------------------------
+
+Informações do compilador usado:
+
+gcc version 4.8.5 20150623 (Red Hat 4.8.5-44) (GCC) 
+Target: x86_64-redhat-linux
+Thread model: posix
+</pre>
+\h3 Arquivo incluídos na instalação:
+<ul>
+<li> prisma  - interpretador principal  (executa scripts prisma, inclusive via cgi)</li>
+<li> prismac - compilador principal     (precompila scripts prisma em byte-codes para máquina virtual prisma)</li>
+<li><a href="https://linguagemprisma.br4.biz/pric.html">pric - compilador alternativo </a> (gera executáveis sem necessitar do interpretador Prisma)</li>
+<li>prismaterm - interpretador alternativo (interpretador interativo prisma feito em prisma)</li>
+</ul>
+
+\h3 Bibliotecas nativas incluídas na instalação ( feitas em C ):
+\lista
+1	libprisma1.0.a (static lib prisma para compilar programas C que usam prisma)
+2	pblz.so  (lib que compacta em blz)
+3	pcgi.so  (lib básica para cgi, lê variáveis de formes, decodifica a string)
+4	pdiretorio.so (em combinação com a lib dir, facilita a manipulação de arquivos e diretórios)
+5	perrno.so     (mensagens de errno)
+6	pfork.so      (cria um fork do processo atual, ótimo para usar em mini servidores)
+7	plz4.so       (compactação de arquivos em lz4)
+8	pmd5.so       (hash md5)
+9	pmicrotar.so  (empacota e manipula arquivos no formato .tar);
+10	ppdf.so       (cria pdf)
+11	psha1.so      (hash sha1)
+12	psha256.so    (hash sha256)
+13	psignal.so    (lib experimental signal somente linux por enquanto)
+14	psqlite3.so   (criar e manipular banco de dados sqlite3)
+15	pubidisc.so   ( lib baseada no programa ubidiscover em C)
+16	pzip.so       (compactação de arquivos zip)
+17	terminal.so   (funções para o terminal e cmd - ex.: mudar cores)
+\lista--
+
+\h3 Para incluir uma lib use o comando em Prisma: 
+<pre>local lib = inclua'lib'</pre>
+
+\h3 Ao instalar Prisma há também várias bibiotecas feitas diretamente em Prisma, veja na pasta install_utils/prisma/1.0/plib
+\h3 Há uma lib cgi.pris mais atualizada que a pcgi, e com mais recursos.
+
+<ul>
+<li><a href="https://linguagemprisma.br4.biz/bin.html">bin.html</a></li>
+<li><a href="https://linguagemprisma.br4.biz/cgi.html">cgi.html</a></li>
+<li><a href="https://linguagemprisma.br4.biz/colorize.html">colorize.html</a></li>
+<li><a href="https://linguagemprisma.br4.biz/enum.html">enum.html</a></li>
+<li><a href="https://linguagemprisma.br4.biz/estrito.html">estrito.html</a></li>
+
+<li><a href="https://linguagemprisma.br4.biz/meta.html">meta.html</a></li>
+<li><a href="https://linguagemprisma.br4.biz/shell.html">shell.html</a></li>
+</ul>
+
+  
+]]
+

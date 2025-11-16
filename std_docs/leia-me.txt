@@ -1,0 +1,9 @@
+
+Prisma-1.0.107
+
+dom 11 mai 2025 10:57:45
+
+Conjunto de documentação das bibliotecas nativas Prisma (nativas aqui significa embutidas no interpretador)
+
+Os arquivo *.pris neste diretório são somente para gerar a documentação, portanto, não há a implementação 
+das funções de fato.

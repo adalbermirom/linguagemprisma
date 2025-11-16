@@ -1,0 +1,51 @@
+//mini prompt prisma em menos de 60 linhas de comandos:
+local cab ='Mini prompt 0.1\n'.. _INFO;
+local prompt1 = '> ';
+local prompt2 = ' >> '; //prompt indica comando multilinha. 
+local prompt = prompt1;
+local eof='<eof>'
+local eof_tam=#('<eof>');
+local execute_cmd, teste_eof; //funções auxiliares abaixo de principa();
+
+local cmd = '';
+imprima(cab);
+
+função principal()
+    local trecho_incompleto = falso;
+    enquanto 1 inicio
+        imprimaf(prompt);
+        cmd = leia(); //lê o que o usuário digita.
+        se trecho_incompleto entao 
+            cmd = trecho_incompleto .. '\n' .. cmd;
+        senao
+            prompt = prompt1;
+        fim        
+        trecho_incompleto = execute_cmd(cmd);
+    fim
+fim
+
+função execute_cmd(cmd)
+    //imprima(cmd);
+    local f, err = carregue(cmd);
+    se tipo(f)=='funcao' entao //erro de compilação
+        local ret, str = pchame(f);
+        se não ret entao//erro de execução
+            imprima('Erro ao executar: ' .. str);
+        fim
+    senao 
+        se teste_eof(err) entao
+                 prompt = prompt2;
+                 retorne cmd; //trecho incompleto;
+        fim
+        imprima('Erro ao compilar: ' .. err);
+    fim  
+    prompt =  prompt1;  
+fim
+
+função teste_eof(str)
+    se str:corte( -(eof_tam), -1) == eof entao
+        retorne verdadeiro;
+    fim
+    retorne falso;
+fim
+

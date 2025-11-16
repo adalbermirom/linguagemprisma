@@ -1,0 +1,65 @@
+
+// A partir de prisma 1.0.107 - nov-2023 é possível acessar cada caractere de uma string
+//como se ela fosse uma tabela
+
+local s = 'abcd';
+local s2 = 'ola mundo em Prisma!';
+
+imprima(s[1]);
+imprima(s[2]);
+imprima(s[3]);
+imprima(s[4]);
+
+poe'-----------++++++++++++++++--------------';
+
+para i=1, #s2 inicio
+    imprima(s2[i]);
+fim
+
+
+funcao str_inverta(s)
+    Str(s); //funcao da biblioteca base Prisma 1.0.107 ou superior. Testa se é string.
+    local ret = '';
+    para i = #s, 1,  -1 inicio // decrementa do tamanho da string até chegar a 1
+        ret = ret .. s[i]
+    fim
+    retorne ret;
+fim
+
+imprima(str_inverta(s));
+
+//não é possível mudar o valor, pois em Prisma strings são imutáveis.
+// s[1] = 'z'; //essa linha gera erro.
+//para simular atribuição de valor podemos fazer uma função:
+
+local minha_string = 'uma frase qualquer ...';
+local mt = obtmetatabela(minha_string);//pegamos a metatabela da string (como uma tabela, 
+                                       //mas possui metamétodos ocultos que mudam o comportamento 
+                                       //em operações.)
+//imprima(mt);
+mt.__call = funcao (este, idx, s) //o metametodo oculto __call é ativado quando executamos a string como se fosse uma função  str();
+    Str(s);
+    //imprima(este,idx,s);
+    local pre = este:corte(1, idx-1);     // abcdefgh  -> abcxzfgh
+    //imprima(pre);
+    local post = este:corte(idx+#s, -1);
+    //imprima(post);
+    retorne pre .. s .. post;
+fim
+
+//agora podemos executar a string como função e a função __call que definimos acima vai ser chamada
+poe'================================='
+imprima('orignal:', minha_string);
+imprima('1:             ', minha_string(1,'U') )
+imprima('2:             ', minha_string(4,' palavra.........'));
+  
+
+
+
+
+
+
+
+
+
+

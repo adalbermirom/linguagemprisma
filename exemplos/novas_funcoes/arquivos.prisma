@@ -1,0 +1,109 @@
+/*mudanças e correções nas funções de manipulação de arquivo:*/
+
+
+local a, err = es.abra('zfile.txt', 'eb');//eb é o mesmo que escritabin, use o que mais preferir.
+se nao a entao erro(err); fim
+a:escreva([[
+   22
+   115
+   0
+   24
+   32
+   100
+   52
+   2089
+   ola apenas um texto!
+   hello em Prisma!!!
+]])
+
+a:feche();
+
+a, err = es.abra('zfile.txt', 'lb');  //--> lb = leitura binária, se preferir use o modo antigo: leiturabin
+se tipo(a)<>'arquivo' entao erro(err); fim //função tipo aciona o metamétodo __tipo() e retorna o valor definido pelo programador, neste caso 'arquivo'
+
+local n = a:leia('*n'); //retorna convertido para número.
+poe'\n\n----------------------------\nConteudo (apenas número):\n';
+enquanto n inicio
+    imprima(n);
+    n = a:leia('*n');
+fim
+//será que tem algum texto que não seja número?
+
+local txt = a:leia('*l'); //lê uma linha sem incluir o caractere nova linha
+poe'\n\n----------------------------\nConteudo (restante após os números):\n';
+enquanto txt inicio
+    imprima(txt);
+    txt = a:leia('*l');
+fim
+a:feche();
+
+
+poe'---------------\n\n  leitura e adição binária \n----------------\n'
+
+  a, err = es.abra('zfile.txt', 'a+b'); //se preferir use adicao+bin ou adição+bin os dois são aceitos
+  se nao a entao erro(err); fim
+  txt = a:leia('*t');//primeiro faz a leitura depois a escrita para dar certo.
+  poe'\n\n----------------------------\nConteudo:\n';
+  imprima(txt);
+  a:escreva('\nMais uma linha adicionada!!!!'); //adicionando e depois lendo, podemos fazer ambos.
+  a:feche();
+  
+  a, err = es.abra('zfile.txt','leiturabin')
+  se nao a entao erro(err); fim
+  poe'\n\n----------------------------\nConteudo:\n';
+  imprima(a:leia('*t'));
+  poe'\n\n----------------------------\nTestando metamétodo __tipo():\n';
+  imprima('(Antes de fechar o arquivo)    tipo(a):', tipo(a));
+  a:feche();
+  imprima('(Depois de fechar o arquivo)   tipo(a):', tipo(a));
+  
+/* Acresentados nomes curtos para os modos:
+                 l     : leitura
+                 lb    : leitura binária
+                 l+    : leitura e escrita
+                 l+b   : leitura e escrita binária
+                 e     : escrita
+                 eb    : escrita binária
+                 e+    : escrita e leitura
+                 e+b   : escrita e leitura binária
+                 a     : adição sem apagar o conteúdo atual do arquivo.
+                 a+    : leitura e adição de conteúdo sem apagar o conteúdo atual;
+                 a+b   : leitura e adição binária (sem apagar)
+                 
+              Modos anteriores permanecem:
+                 leitura       : leitura
+                 leiturabin    : leitura binária
+                 leitura+bin   : leitura e escrita binária
+                 escrita       : escrita
+                 escritabin    : escrita binária
+                 escrita+bin   : escrita e leitura binária
+                 adicao        : adição de conteúdo sem apagar o conteúdo atual do arquivo.
+                 adição        : mesmo que o de cima com acentos
+                 adicaobin     : adição binária sem apagar o conteúdo
+                 adiçãobin     : mesmo de cima com acentos
+                 adicao+       : leitura e adição sem apagar o conteúdo
+                 adição+       : mesmo que o de cima com acentos
+                 adicao+bin    : leitura e adição binária sem apagar o conteúdo
+                 adição+bin    : mesmo de cima com acentos.
+                 
+                 
+                 ex.:   local a, err = es.abra('arq.txt', 'lb'); //abre um arquivo em leitura binária
+                        se tipo(a) == 'arquivo' entao 
+                            imprima('arquivo aberto com sucesso') 
+                        senao  
+                            erro(err)
+                        fim
+                 
+                 Os modos originais do inglês são permitidos:   
+                 
+                       r, w, a, rb, wb, ab, r+, w+, a+, r+b, w+b, a+b
+ */
+  
+  
+  
+  
+  
+  
+  
+  
+  

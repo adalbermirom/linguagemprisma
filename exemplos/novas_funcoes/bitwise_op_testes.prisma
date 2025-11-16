@@ -1,0 +1,73 @@
+-- ===========================
+-- Suíte estendida de testes de bits
+-- ===========================
+/*
+⚠️ Disclaimer: Operadores de Bits em Prisma 1.0
+
+Base numérica
+
+Prisma 1.0 utiliza internamente números do tipo double, igual ao Lua 5.2.
+
+Isso significa que operações bitwise são precisas apenas para inteiros no intervalo ±2^53.
+
+Valores maiores que ±2^53 podem produzir resultados incorretos devido à limitação de precisão do double.
+
+Shifts (<< e >>)
+
+Shifts negativos retornam 0, seguindo o comportamento do Lua moderno.
+
+Shifts maiores que o tamanho da representação interna (aproximadamente 64 bits) são mascarados, mas resultados podem ser inconsistentes para inteiros muito grandes.
+
+Inteiros decimais
+
+Números com parte fracionária são truncados para inteiro antes de aplicar operadores bitwise.
+
+Exemplo: 5.9 << 1 → 10, -5.9 >> 1 → -3.
+*/
+
+local tests = {
+    -- AND
+    { "5 & 3", 5 & 3, 1 },
+    { "-5 & 3", -5 & 3, 3 & -5 },  -- negativo
+    { "-5 & -3", -5 & -3, -7 },
+
+    -- OR
+    { "5 | 3", 5 | 3, 7 },
+    { "-5 | 3", -5 | 3, -5 },
+    { "-5 | -3", -5 | -3, -1 },
+
+    -- XOR
+    { "5 ~ 3", 5 ~ 3, 6 },
+    { "-5 ~ 3", -5 ~ 3, -8 },
+    { "-5 ~ -3", -5 ~ -3, 6 },
+
+    -- NOT
+    { "~0", ~0, -1 },
+    { "~5", ~5, -6 },
+    { "~-5", ~-5, 4 },
+
+    -- SHL (left shift)
+    { "1 << 0", 1 << 0, 1 },
+    { "1 << 1", 1 << 1, 2 },
+    { "1 << 10", 1 << 10, 1024 },
+    { "1 << -1", 1 << -1, 0 },
+    { "1 << 64", 1 << 64, 1 },  -- assume 64 bits
+    { "5.9 << 1", 5.9 << 1, 10 }, -- truncamento para inteiro
+    { "-1 << 2", -1 << 2, -4 },
+
+    -- SHR (right shift)
+    { "1 >> 0", 1 >> 0, 1 },
+    { "2 >> 1", 2 >> 1, 1 },
+    { "1024 >> 10", 1024 >> 10, 1 },
+    { "1 >> -1", 1 >> -1, 0 },
+    { "1 >> 64", 1 >> 64, 1 },  -- assume 64 bits
+    { "5.9 >> 1", 5.9 >> 1, 2 }, -- truncamento para inteiro
+    { "-8 >> 2", -8 >> 2, -2 },
+}
+
+-- Função para rodar os testes
+para _, t em ipares(tests) inicio
+    local expr, result, expected = t[1], t[2], t[3]
+    local pass = (result == expected)
+    poe(expr .. " = " .. convstring(result) .. " | esperado: " .. convstring(expected) .. " | " .. (pass e "OK" ou "ERRO"))
+fim

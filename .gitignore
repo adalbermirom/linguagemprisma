@@ -1,0 +1,18 @@
+# Binários e Executáveis
+bin/
+prisma
+prismac
+prismaterm
+pric
+srprisma
+
+# Arquivos Objeto e Temporários
+**/*.o
+**/*.a
+**/*.lib
+*~
+.goutputstream-*
+#arquivo de testes
+zfile.txt
+zteste.txt
+zz.txt

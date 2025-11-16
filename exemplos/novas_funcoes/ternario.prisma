@@ -1,0 +1,17 @@
+/* operador ternário em Prisma */
+
+
+poe'Digite um número de 1 a 10'
+local num = convnumero(leia());
+se num > 10 ou num < 1 entao
+    poe'Você digitou um número fora do intervalo de 1 a 10';
+    sis.saia(1);
+fim
+
+local res = num >= 5 ? 'Número maior ou igual a 5' ou 'Número menor que 5';
+
+imprima(res);
+
+/* na verdade esse operador é um açúcar sintático para num >= 5 e 'Número maior ou igual a 5' ou 'Número menor que 5';
+ * deu para perceber que simplesmente o 'e' foi trocado por um '?' ajudando e muito na interpretação do código
+ * assim: num é maior ou igual a 5? se sim então 'Número maior ou igual a 5', caso contrário: 'Número menor que 5';

@@ -1,0 +1,22 @@
+--[[[
+ \fonte Operador de divisão inteira
+ \autor Adalberto
+ \data dez/2023
+ 
+ \parag
+ Uma novidade em Prisma 1.0.107 é o operador de divisão inteira, muito útil em situações em que queremos
+ o resultado inteiro, sem o resto da divisão.
+ \parag--
+ 
+ \h3 O operador de divisão inteira é composto:
+ Operador de divisão '/' mais o ponto '.' <br>Veja: &nbsp;<b>/.</b>
+ \codigo ex1.prisma
+     imprima( 5 / 2 ); --> 2.5
+     imprima( 5 /. 2); --> 2
+ \codigo--
+]]
+
+imprima( 'Divisão decimal:', 5 / 2); --> 2.5
+imprima('Divisão inteira:', 5 /. 2); --> 2
+
+

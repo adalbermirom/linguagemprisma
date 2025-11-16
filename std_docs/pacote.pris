@@ -1,0 +1,85 @@
+
+//arquivo somente com o propósito de documentação, portanto não há a implementação das funções aqui, apenas os nomes.
+
+/*@doc
+    \file pacote
+    \brief Biblioteca pacote em Prisma...
+*/
+
+
+/*@doc
+\var config
+\brief variável pacote.config = "/
+;
+?
+!
+-
+"
+*/
+pacote.config = "/
+;
+?
+!
+-
+";
+
+/*@doc
+\var clib
+\brief variável pacote.clib = "./lib?1.0.so;./?.so;/usr/local/lib/prisma/1.0/clib/lib?1.0.so;/usr/local/lib/prisma/1.0/clib/?.so;/usr/local/lib/prisma/1.0/clib/ini.so;"
+*/
+pacote.clib = "./lib?1.0.so;./?.so;/usr/local/lib/prisma/1.0/clib/lib?1.0.so;/usr/local/lib/prisma/1.0/clib/?.so;/usr/local/lib/prisma/1.0/clib/ini.so;";
+
+/*@doc
+\var precarregado
+\brief variável pacote.precarregado = {}
+*/
+pacote.precarregado = {};
+
+/*@doc
+\var plib
+\brief variável pacote.plib = "./?_pris.so;/usr/local/share/prisma/1.0/plib/?_pris.so;./?.pris;/usr/local/share/prisma/1.0/plib/?.pris;/usr/local/share/prisma/1.0/plib/?/ini.pris;/usr/local/lib/prisma/1.0/clib/?.pris;/usr/local/lib/prisma/1.0/clib/?/ini.pris;"
+*/
+pacote.plib = "./?_pris.so;/usr/local/share/prisma/1.0/plib/?_pris.so;./?.pris;/usr/local/share/prisma/1.0/plib/?.pris;/usr/local/share/prisma/1.0/plib/?/ini.pris;/usr/local/lib/prisma/1.0/clib/?.pris;/usr/local/lib/prisma/1.0/clib/?/ini.pris;";
+
+/*@doc
+\fn pasta
+\brief funcao pacote.pasta()
+*/
+
+funcao pacote.pasta()
+fim
+
+/*@doc
+\var carregadores
+\brief variável pacote.carregadores = {}
+*/
+pacote.carregadores = {};
+
+/*@doc
+\fn importe
+\brief funcao pacote.importe()
+*/
+
+funcao pacote.importe()
+fim
+
+/*@doc
+\var carregado
+\brief variável pacote.carregado = {}
+*/
+pacote.carregado = {};
+
+/*@doc
+\fn tudo
+\brief funcao pacote.tudo()
+*/
+
+funcao pacote.tudo()
+fim
+
+/*@doc
+\var buscadores
+\brief variável pacote.buscadores = {}
+*/
+pacote.buscadores = {};
+

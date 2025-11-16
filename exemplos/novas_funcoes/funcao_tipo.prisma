@@ -1,0 +1,94 @@
+//modifiquei a função tipo() para aceitar o metamétodo __tipo() para retornar um tipo de dado definido pelo usuário
+
+
+//o metamétodo __tipo() foi introduzido por mim para permitir o uso de tipos definidos pelo usuário  pelo função tipo
+
+//podemos usar em C, ao criar um userdata, ou diretamente em prisma ao definir um tipo para uma tabela, 
+//é o que vammos fazer aqui.
+
+/*:::::::::::::::::::  EXEMPLO 1 ::::::::::::::::::::::*/
+
+//Exemplo simples, apenas o metamétodo __tipo();
+funcao novo_retangulo(alt, larg)
+    N(alt); N(larg); //N() verifica se é número, se não for finaliza o programa com mensagem de erro.
+    local t = {alt=alt, larg=larg};//criamos a tabela.
+    local mt = { //esta metatabela é uma tabela normal, porém com metamétodos usados internamente em Prisma
+	          __tipo = funcao(este) //definindo o metamétodo __tipo()
+	              retorne 'obj-retângulo';
+	          fim			
+	}
+    defmetatabela(t,mt);//definimos a metatabela acima nesta tabela t;
+    retorne t; //em fim retornamos a tabela com os metamétodos __tipo();
+fim
+
+
+local novo_ret = novo_retangulo(10, 50);
+
+imprima("\n::::::::::::::::::  EXEMPLO 1 ::::::::::::::::::::::");
+imprima(novo_ret);//observe que a função imprima mostrou tabela como resultado na tela, 
+                  //para mostrar o nome do objeto devemos criar o metamétodo __convstring(), no exemplo 2 abaixo eu faço isso.
+imprima('tipo():', tipo(novo_ret)); //já a função tipo retornou o tipo definido lá em cima.
+
+
+
+
+
+/*:::::::::::::::::::  EXEMPLO 2 ::::::::::::::::::::::*/
+
+/* vammos implementar um metamétodo para a função imprima mostrar o tipo definido e imprimir os elementos: */
+
+
+funcao novo_objeto(obj_nome, tab) //ex.: local obj = novo_objeto('retangulo', {larg=10, alt=4} );
+    local obj_nome = S(obj_nome); //checando a tipagem (se é string);
+    local tab = T(tab);//checando a tipagem, se tab é tabela ou não.
+    local mt = obtmetatabela(tab) ou {}; //metatabela;
+    funcao mt.__tipo(este)
+        retorne obj_nome;
+    fim
+    funcao mt.__convstring(este)
+        local s = '{\n'; //vamos transformar a tabela em string para imprimir seus elementos:
+        para k,v em pares(este) inicio //poderíamos criar uma func. para imprimir até as tabelas aninhadas, mas não é o propósito aqui.
+            s = s ..'    '.. convstring(k) .. ' = ' .. convstring(v) .. ',\n';
+        fim
+        s = s:corte(1,-3); //retirando os caracteres ',\n' do final
+        s = s .. '\n}';
+        retorne S('Objeto: ' .. obj_nome .. ':\n' .. s); //S() garantindo que seja uma string o retorno.
+    fim
+    tab = defmetatabela(tab, mt);
+    retorne tab;//em fim retornamos nosso objeto
+fim
+
+local quadrado = novo_objeto('quadrado', {lado = 10});
+funcao quadrado:area()
+    V('quadrado', este); //verifica se o objeto é do tipo 'quadrado';
+    N(este.lado);//verifica se o campo do objeto '.lado' é número
+    retorne N(este.lado*este.lado);
+fim	
+
+
+imprima("\n\n::::::::::::::::::  EXEMPLO 2 ::::::::::::::::::::::");
+imprima(quadrado);
+imprima('\ntipo():', tipo(quadrado));
+imprima('\nÁrea do quadrado:', quadrado->area());// se preferir use ':' em vez dos '->' para acessar o método: quadrado:area();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

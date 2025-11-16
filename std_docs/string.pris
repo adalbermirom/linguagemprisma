@@ -1,0 +1,209 @@
+
+//arquivo somente com o propósito de documentação, portanto não há a implementação das funções aqui, apenas os nomes.
+
+/*@doc
+    \file string
+    \brief Biblioteca string em Prisma...
+*/
+
+
+/*@doc
+\fn byte
+\brief funcao string.byte()
+*/
+
+funcao string.byte()
+fim
+
+/*@doc
+\fn hex
+\brief funcao string.hex()
+*/
+
+funcao string.hex()
+fim
+
+/*@doc
+\fn substring
+\brief funcao string.substring()
+*/
+
+funcao string.substring()
+fim
+
+/*@doc
+\fn cod
+\brief funcao string.cod()
+*/
+
+funcao string.cod()
+fim
+
+/*@doc
+\fn compile
+\brief funcao string.compile()
+*/
+
+funcao string.compile()
+fim
+
+/*@doc
+\fn junte
+\brief funcao string.junte()
+*/
+
+funcao string.junte()
+fim
+
+/*@doc
+\fn entrecar
+\brief funcao string.entrecar()
+*/
+
+funcao string.entrecar()
+fim
+
+/*@doc
+\fn tamanho
+\brief funcao string.tamanho()
+*/
+
+funcao string.tamanho()
+fim
+
+/*@doc
+\fn procure
+\brief funcao string.procure()
+*/
+
+funcao string.procure()
+fim
+
+/*@doc
+\fn minuscula
+\brief funcao string.minuscula()
+*/
+
+funcao string.minuscula()
+fim
+
+/*@doc
+\fn dec_hex
+\brief funcao string.dec_hex()
+*/
+
+funcao string.dec_hex()
+fim
+
+/*@doc
+\fn apare
+\brief funcao string.apare()
+*/
+
+funcao string.apare()
+fim
+
+/*@doc
+\fn dec_base64
+\brief funcao string.dec_base64()
+*/
+
+funcao string.dec_base64()
+fim
+
+/*@doc
+\fn nconcat
+\brief funcao string.nconcat()
+*/
+
+funcao string.nconcat()
+fim
+
+/*@doc
+\fn base64
+\brief funcao string.base64()
+*/
+
+funcao string.base64()
+fim
+
+/*@doc
+\fn analise
+\brief funcao string.analise()
+*/
+
+funcao string.analise()
+fim
+
+/*@doc
+\fn maiuscula
+\brief funcao string.maiuscula()
+*/
+
+funcao string.maiuscula()
+fim
+
+/*@doc
+\fn car
+\brief funcao string.car()
+*/
+
+funcao string.car()
+fim
+
+/*@doc
+\fn troque
+\brief funcao string.troque()
+*/
+
+funcao string.troque()
+fim
+
+/*@doc
+\fn capte
+\brief funcao string.capte()
+*/
+
+funcao string.capte()
+fim
+
+/*@doc
+\fn inverta
+\brief funcao string.inverta()
+*/
+
+funcao string.inverta()
+fim
+
+/*@doc
+\fn formate
+\brief funcao string.formate()
+*/
+
+funcao string.formate()
+fim
+
+/*@doc
+\fn corte
+\brief funcao string.corte()
+*/
+
+funcao string.corte()
+fim
+
+/*@doc
+\fn sub
+\brief funcao string.sub()
+*/
+
+funcao string.sub()
+fim
+
+/*@doc
+\fn separe
+\brief funcao string.separe()
+*/
+
+funcao string.separe()
+fim
+

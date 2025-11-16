@@ -1,0 +1,41 @@
+//uma mínima implementação de grep em prisma, sem usar recursos especiais.
+
+
+função principal(args)
+    se não args[1] entao
+        imprima('Use: grep search file');
+        imprima('ou: command | grep search');
+        sis.saia(1);
+    fim
+    se args[1] e args[2] entao //grep busca file
+        grep_file(args);
+    senão //  comand | grep busca
+        local lin;
+        local str = '';
+        local busca = args[1];
+        enquanto 1 inicio
+            lin = es.leia();//lê cada linha redirecionada
+            //imprima(lin);
+            se não lin então quebre; fim
+            se lin:procure(busca) então
+                imprima(lin);
+            fim
+        fim
+    fim
+fim
+
+função grep_file(args)
+    local busca = args[1];
+    local file = args[2];
+    local a, err = es.abra(file, 'lb');
+    se não a então erro(err); fim
+    local lin;
+    enquanto 1 inicio
+        lin = a:leia(); //lê uma linha;
+        se não lin então quebre; fim
+        se lin:procure(busca) então
+            imprima(lin);
+        fim
+    fim
+    a:feche();
+fim

@@ -1,0 +1,133 @@
+
+//prisma >=1.0.107, nov. 20223
+
+//Novo metamétodo __tipo();   podemos definir o que vai ser retornado da função tipo()
+
+// __tipo já está implementado para arquivos:
+local a, err = es.abra('zteste.txt', 'escrita');
+se tipo(a) <> 'arquivo' entao erro(err); fim
+a:escreva('----- linha teste.......');
+
+imprima(tipo(a));
+a:feche();
+
+se tipo(a) == 'arquivo fechado' entao imprima('Arquivo foi fechado!!!'); fim
+
+//  ---  para arquivos o retorno pode ser dois:   'arquivo'  ou 'arquivo fechado'   (sem aspas);
+
+//implementando o metametodo em uma tabela:
+
+local funcao retangulo(alt, larg)
+    local alt = alt ou 0; local larg = larg ou 0; //definindo valores padrão.
+    local t = {alt=alt, larg=larg};
+    local mt = { //metatabela é uma tabela normal com alguns metodos com nomes já definidos que podem alterar o comportamento do programa
+        __tipo = funcao(este) //metamétodo: __tipo() para retornar um tipo definido pelo programador:
+            retorne 'retangulo';
+        fim,
+        __convstring = funcao(ret1) 
+            retorne string.formate('retângulo: x.alt: %0.2f, x.larg: %0.2f', ret1.alt, ret1.larg);
+        fim,
+        __add = funcao(ret1, ret2) //modifica o comportamento da soma   ret1 + ret2;
+            Val('retangulo', ret1); Val('retangulo', ret2);
+            local ret0 = retangulo();
+            ret0.alt = ret1.alt + ret2.alt;
+            ret0.larg = ret1.larg + ret2.larg;
+            retorne ret0;
+        fim,
+        __sub = funcao(r1,r2) //modifica o comportamento da subtração   ret1 - ret2;
+           Val('retangulo', r1); Val('retangulo', r2);
+            local r0 = retangulo();
+            r0.alt = r1.alt - r2.alt;
+            r0.larg = r1.larg - r2.larg;
+            retorne r0;
+        fim, 
+        __mul = funcao(r1,r2) //modifica o comportamento da multiplicação   ret1 * ret2;
+            Val('retangulo', r1); Val('retangulo', r2);
+            local r0 = retangulo();
+            r0.alt = r1.alt * r2.alt;
+            r0.larg = r1.larg * r2.larg;
+            retorne r0;
+        fim, 
+        __div = funcao(r1,r2) //modifica o comportamento da divisão   ret1 / ret2;
+            Val('retangulo', r1); Val('retangulo', r2);
+            local r0 = retangulo();
+            r0.alt = r1.alt / r2.alt;
+            r0.larg = r1.larg / r2.larg;
+            retorne r0;
+        fim, 
+        __len = funcao(este) //esta função é executada quando usamos o operador de tamanho #
+            Val('retangulo', este);
+            retorne este.alt * este.larg;//retorna a área;
+        fim,
+        __eq = funcao(r1,r2) // modifica o comportamento dos operadores ==  <> 
+            Val('retangulo', r1); Val('retangulo', r2);
+            retorne r1.alt == r2.alt e r1.larg == r2.larg;            
+        fim,
+        __le = funcao(r1,r2) //modifica o comportamento dos operadores >= <=
+            Val('retangulo', r1); Val('retangulo', r2);
+            retorne r1.alt >= r2.alt e r1.larg >= r2.larg;            
+        fim,
+        __lt = funcao(r1,r2) // modifica o comportamento dos operadores >  <
+            Val('retangulo', r1); Val('retangulo', r2);
+            retorne r1.alt > r2.alt e r1.larg > r2.larg;            
+        fim
+    }
+    defmetatabela(t, mt); //definimos mt como metatabela de t, todos os metamétodos estarão disponíveis agora.
+    retorne t;
+fim
+poe'\n---------------------------';
+// pronto podemos verificar o tipo
+local r1 = retangulo(12,40);
+imprima('tipo de r1:', tipo(r1));
+//podemos converter para string:
+local sr = convstring(r1);
+imprima('r1:', sr);
+//somando retangulos:
+local r2 = retangulo(10,20);
+local r3 = r1 + r2; 
+imprima('r3:', r3);
+
+funcao soma_retangulo(ra, rb)
+    Val('retangulo', ra, rb); //val aceita multipos valores...
+    retorne ra + rb; //com o metamétodo __add ficou bem mais fácil somar
+fim
+
+local r4 = soma_retangulo(r2,r3);
+imprima('r4:', r4);
+
+poe'\n----------------------------\n        subtração:'
+imprima('r4-r1:', r4 - r1);
+
+poe'\n----------------------------\n        multiplicação:'
+imprima('r4xr1:', r4 * r1);
+
+poe'\n----------------------------\n        divisão:'
+imprima('r4/r1:', r4 / r1);
+
+imprima('Área r4:', #r4, 'm2');
+imprima('r4==r1:', r4==r1);
+local r5 = retangulo(32,80); //-- igual ao r4
+imprima('r5==r4:', r5==r4);
+imprima('r5',r5);
+imprima('r4',r4);
+
+poe'-------------------------';
+poe'-------------------------';
+imprima(tipo(r4) == tipo(r9));//r9 não existe, no metamétodo == é retornado falso antes de verificar o tipo.
+imprima(tipo(r4), tipo(r9));
+
+poe'\n\n\n::::::::::::::::::::::::::::::::::::::::::\nCriando um erro de tipo para ver se funciona a mensagem de erro:\n';
+//teste em caso de erro - espera-se retãngulo em vez de número:
+local a = r5 + 1;
+
+
+
+
+
+
+
+
+
+
+
+

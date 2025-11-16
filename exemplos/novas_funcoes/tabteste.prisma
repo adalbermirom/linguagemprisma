@@ -1,0 +1,151 @@
+
+
+local co = corrotina.wrap(funcao()
+    enquanto 1 inicio
+        imprima('ola...');
+        corrotina.resulte(10);
+    fim
+fim);
+
+para i=1, 100 inicio
+   imprima(co());
+   imprima(i);
+fim
+leia();
+
+
+
+
+
+//teste classe;
+
+
+person = Classe{
+	construtor = funcao(este, name, age)
+	    este.name = name;
+	    este.age = age;
+	fim
+	;
+	set_name = funcao(este, name)
+	    este.name = name;
+	fim
+	;
+	get_name = funcao(este)
+	    retorne este.name;
+	fim
+	;
+	set_age = funcao(este, age)
+	    este.age = age;
+	fim
+	;
+	get_age = funcao( este)
+	    retorne este.age;
+	fim
+}
+
+local p1 = person('Alice', 19);
+imprima(p1:get_name());
+
+
+leia();
+
+
+
+
+local items = tabela.crie{
+	{ name = "bone", price =  40.54 },
+	{ name = "blusa", price =  69.90 },
+	{ name = "calcinha", price =  25.90 },
+	{ name = "sutia", price =  49.99 },
+	{ name = "calca", price =  325.50 },
+	{ name = "sapato", price =  419.00 },
+	{ name = "meias", price = 29.00 }
+};
+
+local compras = items:map(funcao(v) // 10 % de descontos
+                              retorne {name = v.name, price = v.price - v.price * 0.10}; 
+                          fim)
+                      :filtre(funcao(v) //filtra entre 10 e 99;
+                                 retorne v.price >= 10 e v.price <= 300;
+                             fim);
+local total = compras:reduza(funcao(total, atual)
+                                 retorne {price = total.price + atual.price};
+                             fim);
+imprima('Lista de compras:');
+para i, v em ipares(compras) inicio
+    imprimaf('Produto: %010s | preco: %.2f\n', v.name, v.price);
+fim
+poe'-------------------------';
+imprimaf("Total: %.2f\n", total.price);
+
+
+leia();
+
+
+
+
+
+
+
+
+//testando tabela funcs
+local funcao imp(t) 
+    se tipo(t)<>'tabela' entao
+        imprima(t);
+        retorne;
+    fim
+    imprima('{'..tabela.concat(t, ', ')..'}');
+fim
+
+local a = tabela.crie{1,2,3,4,5};
+a:adicione(6);
+imp(a);
+local r =  a:reduza(funcao(total, atual)
+                        retorne total + atual;
+                    fim);
+imprima('reduza:', r);
+
+r = a:map(funcao (v, i, t)
+               retorne v * 2;
+          fim);
+imprimaf('map (dobro): ');
+imp(r);
+
+//pegando so os impares:
+imprima'pegando impares';
+r = a:filtre( funcao(v, i, t)
+                  retorne v % 2 <> 0; //retorna verdadeiro para os impares
+              fim);
+imp(r);
+
+//criando uma nova tabela array a partir da união de duas ou mais listas
+r = tabela.junte({1,2,3,4}, {5,6,7,8}, {9,10}); //-> {1,2,3,4,5,6,7,8,9,10}
+imprima('concat:', r:concat', ');
+
+//copiando uma lista:
+r = tabela.copie({1,2,3,4,5,6});
+imp(r);
+
+//copiando um trecho de uma lista:
+r = tabela.copie({1,2,3,4,5,6,7,8,9,10}, 5, 9); //copia do 5 ao 9 item da lista
+imprimaf("copia trecho: ");
+imp(r);
+r = tabela.copie({1,2,3,4,5,6,7,8,9}, 2); //do segundo ao final (omitido o 3 arg, o padrão é o último item);
+imp(r);
+//usando indices negativos:
+r = tabela.copie({1,2,3,4,5,6,7,8,9}, -3,-1); // -> {7,8,9};
+imprimaf("--> ");
+imp(r);
+
+//usando a caracteristica funcional:
+local total_soma = tabela.crie({1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,18,19,20})
+            :copie(1,10)   //copiando do 1 ao 10 elemento;
+            :map(funcao(v,i,t) retorne v*3;fim)  // multiplicando por 3 cada item
+            :filtre(funcao(v,i,t) retorne v % 2 == 0; fim) //filtrando somente os número pares
+            :reduza(funcao(total, atual, t) retorne total + atual; fim); //somando cada item
+            
+imprima('total_soma:', total_soma);
+
+                    
+
+

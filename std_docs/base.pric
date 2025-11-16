@@ -1,0 +1,82 @@
+
+sis.deflocal('');
+
+local funcao crie(file)
+
+
+local cab = [[
+
+//arquivo somente com o propósito de documentação, portanto não há a implementação das funções aqui, apenas os nomes.
+
+/*@doc
+    \file %s
+    \brief Biblioteca %s em Prisma...
+*/
+
+
+]]
+
+cab = string.formate(cab, file, file);
+
+local a,err = es.abra(file..'.pris', 'escrita');
+se nao a entao erro(err); fim
+a->escreva(cab);
+
+local prefix = file ..'.';
+se file=='base' entao file='_G'; prefix = ''; fim
+
+para i,v em pares(_G[file]) inicio
+    imprima(i,v);
+    se tipo(v) == 'funcao' entao
+        a->escreva('/*@doc\n');
+        a->escreva('\\fn ' .. i .. '\n\\brief funcao ' .. prefix .. i .. '()\n');
+        a->escreva('*/\n');
+        a->escreva('\nfuncao ', prefix ..i,'()\nfim\n\n');
+    senao
+        local val = '';
+        se tipo(v)=='tabela' entao val = '{}'
+        senaose tipo(v)=='string' entao val = '"'..v..'"'
+        senao
+            val = convstring(v);
+        fim
+        a->escreva('/*@doc\n');
+        a->escreva('\\var ' .. i .. '\n\\brief variável ' .. prefix .. i .. ' = ' .. val ..'\n');
+        a->escreva('*/\n');
+        a->escreva(prefix .. i .. ' = ' .. val,';\n\n');
+    fim
+fim
+
+a:feche();
+
+fim
+
+funcao grave_arquivo(file, txt)
+   local a, err = es.abra(file, 'escritabin');
+   se nao a entao retorne falso, err fim
+   a:escreva(txt);
+   a:feche();
+   retorne verdadeiro;
+fim
+
+
+crie('base'); crie('bit32'); crie('corrotina'); crie('debug');
+crie('es'); crie('mat'); crie('pacote'); crie('sis');
+crie('tabela'); crie('string'); crie('utf8');
+
+grave_arquivo('leia-me.txt', string.formate(
+[[
+
+Prisma-%s
+
+%s
+
+Conjunto de documentação das bibliotecas nativas Prisma (nativas aqui significa embutidas no interpretador)
+
+Os arquivo *.pris neste diretório são somente para gerar a documentação, portanto, não há a implementação 
+das funções de fato.
+]], _VERSAO, sis.data())
+
+);
+
+
+

@@ -1,0 +1,411 @@
+/*@doc
+ \file NOTA DE ATUALIZAÇÃO PRISMA 1.0.107
+
+
+    \subtitulo 1 - CORREÇÕES
+    
+    \h3 1.1 Foi corrigida interceptação de erros, as mensagens de erro apresentam trace back (rastro de execução) normalmente.
+     
+    \h3 1.2 Foi corrigido o acesso à tabela global _G (Estava com erro e inacessível em Prisma).
+         
+     \h3 1.3 Foram melhorados os parâmetros de modo de abertura de arquivo na função es.abra('nome_arquivo', 'modo');
+     \h3 onde modo pode ser:
+     \bloco
+   Acresentados nomes curtos:
+     l     : leitura
+     lb    : leitura binária
+     l+    : leitura e escrita
+     l+b   : leitura e escrita binária
+     e     : escrita
+     eb    : escrita binária
+     e+    : escrita e leitura
+     e+b   : escrita e leitura binária
+     a     : adição sem apagar o conteúdo atual do arquivo.
+     a+    : leitura e adição de conteúdo sem apagar o conteúdo atual;
+     a+b   : leitura e adição binária (sem apagar)
+     
+   Modos anteriores permanecem:
+     leitura       : leitura
+     leiturabin    : leitura binária
+     leitura+bin   : leitura e escrita binária
+     escrita       : escrita
+     escritabin    : escrita binária
+     escrita+bin   : escrita e leitura binária
+     adicao        : adição de conteúdo sem apagar o conteúdo atual do arquivo.
+     adição        : mesmo que o de cima com acentos
+     adicaobin     : adição binária sem apagar o conteúdo
+     adiçãobin     : mesmo de cima com acentos
+     adicao+       : leitura e adição sem apagar o conteúdo
+     adição+       : mesmo que o de cima com acentos
+     adicao+bin    : leitura e adição binária sem apagar o conteúdo
+     adição+bin    : mesmo de cima com acentos.
+\fim_bloco    
+     
+                   
+\codigo  ex1.prisma     
+ local a, err = es.abra('arq.txt', 'lb'); //abre um arquivo em leitura binária
+ se tipo(a) == 'arquivo' entao 
+    imprima('arquivo aberto com sucesso') 
+ senao  
+    erro(err)
+ fim
+\codigo--
+                 
+\h3 Os modos originais do inglês são permitidos: r, w, a, rb, wb, ab, r+, w+, a+, r+b, w+b, a+b
+    
+\h3 1.4 Corrigido o parâmetro da função pabra(arq, modo); (estava implementado incorretamente)
+\bloco
+   modos aceitos:
+       leitura    :  direciona a  saída do programa aberto para a entrada do programa atual prisma
+       escrita    :  direciona a saída do programa atual prisma para a entrada do programa aberto
+       
+       Modos curtos aceitos:
+           l : leitura
+           e : escrita
+\bloco--   
+
+\h3 1.5 Corrigida a função string.apare();
+\codigo
+//Teste string.apare();
+
+local s = '   ola mundo!       ';
+imprima( '>' .. string.apare(s) .. '<' );
+
+s = '';//string vazia
+imprima('>' .. s:apare() .. '<'); //podemos usar o método apare na própria string.
+
+s = '              '; //string com somente espaços.
+imprima('>' .. s:apare() .. '<' );
+\codigo--   
+
+\bloco
+   Saída:
+   
+   >ola mundo!<
+   ><
+   ><
+
+\bloco--           
+                 
+                 
+                 
+      
+\subtitulo 2 - Foi acrescentada a indexação de strings 
+\h3 E isso direto na VM para obter caractere a partir de um indice:   s = 'abc'; imprima(s[1]) --> 'a';
+\inicio
+     Quando um indice é maior que o tamanho da string ou menor que 1, o retorno é uma string vazia, mesmo comportamento de string.corte();
+\fim
+\inicio
+Porém não é possível mudar o valor apenas obtê-lo:
+\fim  
+\code
+   s[1] = 'A'; --> erro!
+\code--
+\subtitulo 3 - Novas funções na biblioteca de base para verificação de tipos:
+     
+\obs *Os [, ...] - indica que aceita mais parâmetros opcionais.
+\lista       
+ S('txt' [, ...]); //se nao for string gera erro e fecha a execução do programa   
+ N(numero [, ...]); //o mesmo para número     
+ T(tabela [, ...]); //se não for tabela 'erro'     
+ F(funcao [, ...]); //se não for funcao 'erro'    
+ B(booleano [, ...]); //se não for booleano 'erro'       
+ U(userdata [, ...]); //se não for userdata 'erro'      
+ Th(thread [, ...]); ////se não for thread 'erro'
+ V('tipo', valor  [, ...]); --> exemplo:    Val('numero', 1, 2, 3, 10); //retorna 1, 2, 3, 10 pois o tipo está correto.
+ \lista--
+ \inicio       
+É possível usar a função V() com tipos definidos pelo usuário, a partir do metamétodo __tipo();
+\fim
+\codigo ex.prisma
+local ret = retangulo:novo();
+local ret2 = retangulo:novo();
+V('retangulo', ret, ret2);
+\codigo--
+\obs caso o programador tenha definido o metamétodo __tipo() para retornar 'retangulo' dará certo, senão aparecerá uma mensagem de erro e o programa será finalizado.
+         
+\h3 Estas funções de tipo retornam o próprio valor ou valores se o tipo for correto ex.:
+\code
+funcao somar(a,b)
+  retorne N(a) + N(b); //caso a ou b não seja número, o programa é finalizado com erro.
+fim
+\code--
+         
+\subtitulo 4 - Foi modificada a função tipo() 
+\h3 Agora ela aceita um metamétodo __tipo para retornar um tipo definido pelo usuário
+\code
+ local a,err = es.abra('file.txt', 'leitura'); 
+ imprima(tipo(a)); //----> arquivo
+ local meu_tipo = defmetatabela({}, { __tipo=funcao(este) retorne '<meu tipo>'; fim })
+ imprima('tipo:', tipo(meu_tipo));//----> <meu tipo>
+\code--
+     
+
+\subtitulo 5 - Funcao escolha();
+\h3 Semelhante ao switch de outras linguagens:
+\codigo
+ local op = leia();
+  local for = escolha(op);
+  se for's' entao //único parâmetro é uma string, os parênteses são opcionais..
+      imprima('saindo ...');
+      sis.saia(0);
+  senaose for'n' entao
+      imprima('Usuário decidiu não sair ..\n');
+  senao
+      imprima('opção inválida ..\n');
+  fim
+\codigo--
+\inicio
+Essa função é boa para situações em que temos que comparar um mesmo item várias vezes com menos repetição, veja o mesmo código abaixo sem usar a funcao escolha()
+\fim
+\codigo
+ local op = leia();
+ se op == 's' entao
+    imprima('saindo ...');
+    sis.saia(0);
+ senaose op == 'n' entao
+     imprima('Usuário decidiu não sair ..\n');
+ senao
+     imprima('opção inválida ..\n');
+ fim
+\codigo--
+\h3 A condição aceita qualquer valor e quantidade para ser comparado:
+<pre>
+      se for(1,2,3,4,5) entao //mesmo que: se op==1 ou op==2 ou op==3 ou op==4 ou op==5 entao
+          ...
+      fim
+</pre>
+      
+\subtitulo 6 - Acrescentados os operadores de bits 32 diretamente na maquina virtual Prisma.
+\bloco
+   Nomes - operadores - exemplos
+   bor:     |         i = 3 | 5;
+   band:    &         a = 3 & 5;
+   bxor:    ~         b = 3 ~ 5;
+   lshift:  <<        c = 7 << 1;
+   rshift:  >>        n = 7 >> 1;
+   un. not: ~         n = ~7;
+\fim_bloco
+\h3 Para cada operador há um metamétodo:
+\bloco
+         __bor, __band, __bxor, __bshl, __bshr, __bnot
+\bloco--
+              
+\subtitulo 7 - Adicionado o operador de divisão inteira, quando não precisamos da parte decimal:
+\bloco    
+         nome    -    operador    -    exemplo
+         idiv            /.           imprima( 5 /. 2) //--> 2
+\bloco--
+<pre> metamétodo:  __idiv</pre>
+         
+\subtitulo 8 - Adicionado o metamétodo __tipo() para ser executado pela função tipo();
+ \h3 Exemplo:
+ \code
+ local circ = {};
+ local mt = {};
+ mt.__tipo = funcao() retorne 'circulo'; fim
+ 
+ defmetatabela( circ, mt);
+ imprima(tipo(circ) ); //--> circulo
+\code--   
+\subtitulo 9 - Operador ternário
+     
+\h3 operador '?'
+\inicio     
+Uso:   exp ? opcao1 ou opcao2
+\fim
+\h3 Exemplo:  
+     <pre> x = (n > 10) ? 1 ou n;</pre>
+     
+\obs Na verdade é um açúcar sintático para:   x = (n > 10) e 1 ou n; 
+     
+\subtitulo 10 - Permitido o uso de palavras chaves e variáveis com acentos:
+\code exemplo_acentos.prisma
+   local função máximo(...)
+       local tn = {...};
+       local atual=tn[1];
+       para i=1, #tn início
+      atual = (tn[i]>atual) ? tn[i] ou atual;
+       fim
+       retorne atual;
+   fim       
+   imprima( máximo(1,2,3,4,8,0,2,1,12,3,4,10,2,1,0) );//--> 12
+\code--
+ 
+\h3 As palavras sem acento ainda continuam compatíveis:
+\bloco
+     funcao ou função são válidos, mas 'funçao' não é.
+     entao ou então, senao ou senão, senaose ou senãose, ate ou até, nao ou não, inicio ou início etc.
+\bloco--
+\obs As variáveis da biblioteca padrão em Prisma continuam sem acento:
+<p>  Exemplo: poe (e não põe) - mas é facilmente possível adicionar acentos: local põe = poe; por isso, decidi não mudar
+     essa parte.
+</p>
+     
+\obs Os retornos de tipos também continuam sem acentos: tipo(1); retorna numero e não número.
+     
+\obs A tabela corotina foi mudada para corrotina; em caso de necessidade atribua: corotina = corrotina;
+         
+\subtitulo 11 - Nova função da biblioteca base: contador(inic, incr);
+\h3 Cria uma função fecho(closure) e a retorna, esta função incrementa um valor a cada execução.
+ \code Exemplo: 
+  local cont = contador();
+  imprima(cont() ); //-->1
+  imprima(cont() ); //-->2
+  imprima(cont() ); //-->3 e assim por diante.
+\code--              
+\code podemos definir um valor inicial e um incremento:
+  local cont = contador(0, 2);
+  imprima( cont() ); //-->0
+  imprima( cont() ); //-->2
+  imprima( cont() ); //-->4 e assim por diante;
+ \code--
+ \code *podemos definir um decremento, ou seja, um valor que diminui a cada execução:
+  local cont = contador(10,-1);
+  imprima( cont() ); //--> 10
+  imprima( cont() ); //--> 9
+  imprima( cont() ); //--> 8 e assim por diante.
+\code--       
+\obs observe que para o decremento apenas usamos um número negativo!
+    
+\subtitulo 12 - Alteração na função sis.tamanho(); da biblioteca sis (sistema operacional)
+    
+\h3 Esta função recebia o nome de um arquivo e retornava o seu tamanho em bytes.
+
+\inicio
+Agora ela pode também retornar o tamanho de um valor número C em bytes,
+bastando usar o caractere de escape % mais o caractere correspondente ao tipo numérico 
+da linguagem C (dependente de plataforma):
+\fim
+
+\code exemplo:
+        
+ local n = sis.tamanho('%i');  //sizeof(int);
+ imprima(n);//--> 4
+ imprima( sis.tamanho('%d'); //sizeof(int); --> 4 (%d ou %i são o mesmo valor);
+ imprima( sis.tamanho('%f'); //sizeof(float); --> 4
+ imprima( sis.tamanho('%lf'); //sizeof(double); --> 8
+ imprima( sis.tamanho('%Lf'); //sizeof(long double); --> 16
+ imprima( sis.tamanho('%lli'); //sizeof(long long int); --> 8
+ imprima( sis.tamanho('%llu'); //sizeof(unsigned long long); --> 8
+ imprima( sis.tamanho('%hi'); //sizeof(short int); --> 2
+ imprima( sis.tamanho('%hu'); //sizeof(unsigned short); --> 2
+ imprima( sis.tamanho('%p'); //sizeof(void *); --> 8
+ imprima( sis.tamanho('%c'); //sizeof(char); --> 1
+\code--
+
+\h3  Pode retornar também verdadeiro ou falso para sistema big-endian e little-endian
+\code endianess:
+ imprima( sis.tamanho('%le')) //--> verdadeiro se o sistema for little-endian do contrário falso.
+ imprima( sis.tamanho('%be')) //--> verdadeiro se o sistema for big-endian do contrário falso.
+\code--
+\obs geralmente o sistema é 'le' little-endian. Isso tem a ver com a ordem dos bytes que formam um número, pesquise por endianess in C
+
+  
+\subtitulo  13 - Correções e alterações na biblioteca mat (matemática)
+
+\bloco
+ *    ALTERAÇÕES: 
+ * 
+ *    ANTES  ------------>  DEPOIS
+ * 
+ *    mat.randonico()      mat.aleatorio()
+ *    mat.xrandonico()     mat.xaleatorio()
+ *    mat.arredonde()      mat.arredondeacima() //arredonda um número para cima. Ex.: 4.2 -> 5
+ *    mat.corte()          mat.arredondeabaixo() //arredonda um número para baixo. Ex: 5.9 -> 5
+ *    
+ *    
+ *    INCLUSÕES:
+ * 
+ *    mat.arredonde(n)  ----> arredonda um número para o valor inteiro mais próximo.  
+ *                           Ex.:   5.9 --> 6;    5.2 --> 5
+ *    mat.raizcubica(n)  ---> retorna a raiz cúbica de n    imprima(mat.raizcubica(1000) ); //-->10
+\bloco--                             
+ 
+\h3 Veja os exemplos:
+ 
+\code Exemplo mat.:
+local n;
+
+poe'---------------------------------------';
+poe'Observe o primeiro aleatório, é igual sempre';
+para i = 1, 9 inicio
+    n = N(mat.aleatorio(1,10) ); //aleatorio entre um e dez.
+    imprima(n);
+fim
+poe'---------------------------------------';
+poe(
+'Observe que segundo aleatorio é diferente a cada execução,',
+'\npois usamos xaleatorio:'
+)
+//usando xaleatorio() para criar uma semente.
+
+mat.xaleatorio(sis.tempo());//criando uma semente aleatória baseada no sis.tempo();
+para i = 1, 9 inicio
+    n = N(mat.aleatorio(1,10) ); //aleatorio entre um e dez.
+    imprima(n);
+fim
+
+poe'\n---------------------------------------';
+poe'---------------- mat.arredonde() -----------------';
+
+imprima('3.8:', mat.arredonde(3.8) )
+imprima('3.4', mat.arredonde(3.4) ); //a partir de 0.5 o número é arredondado para cima.
+
+poe'\n---------------------------------------';
+poe'---------------- mat.arredondeacima() -----------------';
+
+imprima('3.1:', mat.arredondeacima(3.1) )
+
+poe'\n---------------------------------------';
+poe'---------------- mat.arredondeabaixo() -----------------';
+
+imprima('3.8:', mat.arredondeabaixo(3.8) )
+
+
+poe'\n---------------------------------------';
+poe'---------------- mat.raizcubica(n) -----------------';
+
+imprima('mat.raizcubica(27):', mat.raizcubica(27) )
+\code--
+
+
+\subtitulo 14 - acréscimo da função sis.copie_arquivo(orig, dest);
+
+\h4 Copia um arquivo 'orig' para destino 'dest'
+\obs só copia um arquivo por vez, as pastas devem existir.
+
+\codigo ex_copia_arq.prisma
+    
+funcao principal()
+    local ok, err = sis.copie_arquivo('teste.txt', 'teste_copia.txt');
+    se nao ok entao erro(err); fim
+    imprima('Arquivo copiado com sucesso!');
+fim
+\codigo--
+
+\subtitulo 15 - Acréscimo da função es.descritor(arquivo_aberto);
+\h4 Pega o descritor numérico do arquivo aberto pela função es.abra();
+\obs é muito útil quando uma função de uma biblioteca precisa pegar o descritor e não arquivo.
+\codigo ex_descritor.prisma
+  funcao principal()
+      local a, err = es.abra('arquivo.txt', 'leitura');
+      se nao a entao erro(err); fim
+      local desc = es.descritor(a);
+      imprima(desc); //--> 3 ou 4 ou mais. Depende de quantos arquivos já estão abertos.
+      fwrite(desc, dados, #dados); //uma função fictícia de um possível binding que usa o file descriptor.
+  fim
+\codigo--
+
+
+*/  
+      
+      
+      
+      
+      
+                
+         
+         
+      
+ 
