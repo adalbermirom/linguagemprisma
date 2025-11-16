@@ -1,5 +1,8 @@
 # 🌟 Prisma - A Linguagem de Programação (Baseada em Lua5.2)
 
+![prisma-logo](https://linguagemprisma.br4.biz/blog/wp-content/uploads/2015/08/logo_prisma148.png)
+
+
 Prisma é um ambiente de *runtime* completo e uma linguagem de programação com sintaxe e bibliotecas totalmente em **Português**. Baseada no *runtime* Lua, Prisma oferece alta performance, portabilidade e uma VM robusta, otimizada para o desenvolvimento de *scripts* de sistema, ferramentas de linha de comando e aplicações de *runtime* rápido.
 
 O projeto visa tornar a programação de baixo nível acessível a falantes nativos de Português, mantendo a interoperabilidade com a API C do Lua.
