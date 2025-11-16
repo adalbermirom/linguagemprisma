@@ -105,7 +105,7 @@ fim
 
 ```
 
-### laço de repetição 'para'
+### Laço de repetição 'para'
 ```lua
 funcao principal()
     
