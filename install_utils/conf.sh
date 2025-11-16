@@ -17,6 +17,31 @@ LICENSE="licenca.txt"
 
 SUPER="sudo"
 
+
+if ! command -v sudo &> /dev/null
+then
+    # Se 'sudo' não for encontrado, tentamos 'su' (comumente usado em distros mais antigas/orientadas a root)
+    if command -v su &> /dev/null
+    then
+        # Nota: 'su' precisa ser chamado antes do script. Deixar SUPER vazio ou tentar 'doas' é mais seguro.
+        # Para evitar complicação, vamos apenas emitir um aviso se sudo não for encontrado:
+        echo "AVISO: O comando 'sudo' não foi encontrado."
+        echo "Por favor, execute o script como root (sudo ./instalar.sh) ou edite a variável 'SUPER'."
+        
+        # Tentamos 'doas' como alternativa popular (OpenBSD, algumas instalações Arch/Gentoo)
+        if command -v doas &> /dev/null
+        then
+            SUPER="doas"
+        else
+            # Forçamos o usuário a executar como root. Deixamos SUPER vazio, o que
+            # fará com que os comandos tentem rodar diretamente como root (se o script foi invocado com sudo).
+            SUPER=""
+        fi
+    fi
+fi
+
+
+
 CMD_DELETE="${SUPER} rm ${DESTINO}" #CUIDADO AO MODIFICAR PARA NÃO APAGAR PASTA DO SISTEMA
 CMD_COPY="${SUPER} cp -v ${ORIGEM} ${DESTINO}"; #comando de cópia.
 CMD_CHMOD=" ${SUPER} chmod +x ${DESTINO}"; #permissão para executar.
