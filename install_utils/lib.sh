@@ -88,7 +88,7 @@ local default_msg="No message passed."
 #segundo param; caso não seja igual, é executada a função do terceiro parâmetro.
 #caso 1 sim nao; 
 caso () {
-  read -s -n 1 op;
+  read -r -s -n 1 op;
   clear;
   if [ ${op^} == ${1} ]; then
     $2

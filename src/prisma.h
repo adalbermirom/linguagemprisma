@@ -9,8 +9,8 @@
 /* minhas definições para Prisma:*/
 
 #define NOME_PROG "prisma"
-#define SHOW_VERSION "1.0.107"
-#define SHOW_INFO "Prisma-" SHOW_VERSION "  linguagemprisma@gmail.com (jan/2024)"
+#define SHOW_VERSION "1.0.108"
+#define SHOW_INFO "Prisma-" SHOW_VERSION "  linguagemprisma@gmail.com (nov/2025)"
 
 
 /*facilidade para função de biblioteca C*/

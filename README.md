@@ -20,7 +20,7 @@ Prisma é um fork de lua5.2 modificado. Várias funções e características, qu
 
 | Item | Detalhes |
 | :--- | :--- |
-| **Versão Atual** | `1.0.107` |
+| **Versão Atual** | `1.0.108` |
 | **Status** | Estável  |
 | **Licença** | Consulte o arquivo `LICENSE.txt` para detalhes (MIT). |
 | **Contato** | linguagemprisma@gmail.com |
@@ -54,6 +54,9 @@ Utilize o *script* `compila_linux.sh` para compilar o interpretador (`prisma`), 
 ```bash
 # Navegue para o diretório raiz do projeto
 ./compila_linux.sh
+
+#após instalar:
+prisma -v
 ```
 
 ### 2. Compilação em Windows
@@ -64,16 +67,26 @@ Utilize o *script* `compila_win_x32.bat ou compila_win_x64.bat` para compilar o 
 ```bash
 # Navegue para o diretório raiz do projeto
 ./compila_win_x64.bat
+
+prisma -v
 ```
 
 ### 2. Compilação em outras plataformas
 
 Ainda não testei compilar em outras plataformas, é quase certo que Prisma, assim como Lua, compile em qualquer plataforma com compilador C89 acima. Com algumas adaptações. Para compilar liso em C89 é preciso desabilitar os goto computados em luaconf.h na linha 610: 
+
 ```C
 610   #define _USE_GOTO_COMPUTADO
 ```
 
+### Caso queira um interpretador interativo:
 
+ **Digite no terminal:** `prismaterm`
+
+
+
+
+## 📦 Estrutura do Projeto
 | Diretório | Conteúdo | Descrição |
 | :--- | :--- | :--- |
 | `src/` | Fontes C | O núcleo do interpretador e da Máquina Virtual (VM), incluindo os arquivos modificados do Lua. |
@@ -90,6 +103,7 @@ O Prisma utiliza uma camada de abstração sobre a API C do Lua, definida em `sr
 
 * **API C Personalizada:** Macros como `PFUNC`, `PRISMA_FUNC` e `PRIS_REGISTER_META` são usadas para registro rápido de funções e metatabelas.
 * **Args da Linha de Comando:** A tabela global `args` segue o padrão Lua 5.2/5.3: o nome do interpretador está em **`args[-1]`** e o nome do *script* está em **`args[0]`**.
+
 
 
 ## Alguns exemplos:
