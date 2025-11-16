@@ -138,7 +138,7 @@ local arq = "teste.txt";
 funcao principal()
     local a, err = es.abra('teste.txt', 'escrita');
     se nao a entao erro(err); fim
-    a:escreva('Um linha gravada no arquivo');
+    a:escreva('Uma linha gravada no arquivo');
     a:feche();
     retorne 0;
 fim
