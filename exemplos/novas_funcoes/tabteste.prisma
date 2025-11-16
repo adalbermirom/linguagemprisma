@@ -1,22 +1,38 @@
 
+s = [[
+    "e", //and
+    "quebre", //break
+    "inicio", //do
+    "senao", //else
+    "senaose",//elseif",
+    "fim", // "end",
+    "falso", // "false",
+    "para" , // "for",
+    "funcao" , // "function",
+    "vapara", // "goto",
+    "se", //   "if",
+    "em", //  "in",
+    "local", // "local",
+    "nulo", // "nil",
+    "nao", // "not",
+    "ou", // "or",
+    "repita", //  "repeat",
+    "retorne", //  "return",
+    "entao", // "then",
+    "verdadeiro", // "true",
+    "ate", // "until",
+    "enquanto" , // "while",
+    "este" // this / self
+]]
 
-local co = corrotina.wrap(funcao()
-    enquanto 1 inicio
-        imprima('ola...');
-        corrotina.resulte(10);
-    fim
-fim);
-
-para i=1, 100 inicio
-   imprima(co());
-   imprima(i);
+local t = s:analise('\n', 1);
+para i,v em ipares(t) inicio
+    local p, l = v:separe('%s*([a-z]+).-([a-z]+)');
+    imprima(p,'-->',l);
 fim
+
+
 leia();
-
-
-
-
-
 //teste classe;
 
 
