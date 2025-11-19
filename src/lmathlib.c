@@ -316,12 +316,14 @@ static const luaL_Reg mathlib[] = {
   {"absoluto",   math_abs}, /*/ (x) absoluto*/
   {"arcocosseno",  math_acos}, /*/ (x) arco co-seno radianos*/
   {"arcoseno",  math_asin}, /*/(x)  arco seno radianos*/
+  {"arcosseno",  math_asin}, /*/(x)  arco seno radianos*/
   {"arcotangente2", math_atan2}, /*/ (y/x) arco tangente radianos*/
   {"arcotangente",  math_atan}, /*/ (x) arco tangente radianos*/
   {"arredondeacima",  math_ceil}, /*/ arredonda para mais*/
   {"cossenoh",   math_cosh}, /*/ (x) co-seno hiperpolico*/
   {"cosseno",   math_cos}, /*/ co-seno (radiandos)*/
   {"emGrau",   math_deg}, /*/ de radianos para grau*/
+  {"emgrau",   math_deg}, /*/ de radianos para grau*/
   {"exp",   math_exp},
   {"arredondeabaixo", math_floor}, /*/arredonda por baixo: 4.5 = 4*/
   {"corte", math_floor}, /*/para retro compatibilidade.*/
@@ -337,19 +339,22 @@ static const luaL_Reg mathlib[] = {
   {"separe",   math_modf},/* separa a parte inteira da fracionaria de um numero com ponto decimal*/
   {"elevado",   math_pow},/* elevado(a,b) a elevado a b*/
   {"raiz" , math_root } , /* raiz y de x ( x , y )*/
-  {"emRadianos",   math_rad}, /*rad(x) converte de graus para radianos*/
-  {"randonico",     math_random}, /*(a,b) pseudo randonico entre a e b*/
-  {"xrandonico", math_randomseed},/* depois*/
+  {"emRadianos",   math_rad}, /* ##deprecated## rad(x) converte de graus para radianos*/
+  {"emradiano",   math_rad}, /*rad(x) converte de graus para radianos*/
+  {"randonico",     math_random}, /* ##deprecated## (a,b) pseudo randonico entre a e b*/
+  {"xrandonico", math_randomseed},/* ##deprecated## depois*/
   {"aleatorio",     math_random}, /*aleatorio(a,b) pseudo randonico entre a e b*/
   {"xaleatorio", math_randomseed},/* incrementa uma semente x randomica para a função aleatório.*/
   {"senoh",   math_sinh}, /* seno hiperbolico*/
   {"seno",   math_sin}, /* seno*/
-  {"raizquad",  math_sqrt}, /*raiz quadrada*/
+  {"raizquad",  math_sqrt}, /* ##deprecated## raiz quadrada*/
+  {"raizquadrada",  math_sqrt}, /*raiz quadrada*/
   {"tangenteh",   math_tanh}, /*tangente hiperbolica*/
   {"tangente",   math_tan},
   {"arredonde", math_round},
   {"raizcubica", math_cbrt}, /* retorna a raiz cúbica de um número:   local cub = mat.raizcubica(1000); //--> 10;*/
-  {"hipot", math_hypot}, /*calcula a hipotenusa dado ca e co:  local h = mat.hipot(2.5, 6.2);*/
+  {"hipot", math_hypot}, /* ##deprecated## calcula a hipotenusa dado ca e co:  local h = mat.hipot(2.5, 6.2);*/
+  {"hipotenuza", math_hypot}, /*calcula a hipotenusa dado ca e co:  local h = mat.hipot(2.5, 6.2);*/
   {NULL, NULL}
 };
 
