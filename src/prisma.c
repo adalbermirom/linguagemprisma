@@ -196,11 +196,7 @@ int prisma_verif_args(lua_State*L,int argc, char **argv){
    if(argc<=1) return 0;
    
    if(strcmp( argv[1], "-v")==0){
-   /*if(argv[1][0]=='-' && argv[1][1]=='v' && argv[1][2]=='\0'){*/
-	   puts("\n");
 	   puts(SHOW_VERSION);
-	   puts("\nENTER para sair...\n");
-	   getchar();
 	   prisma_finalize(L);	
 	   exit(1);   	   
    }else /*prisma -e  'imprima("ola mundo em prisma!")'*/
