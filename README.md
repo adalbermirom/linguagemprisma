@@ -84,6 +84,9 @@ Ainda não testei compilar em outras plataformas, é quase certo que Prisma, ass
  **Digite no terminal:** `prismaterm`
 
 
+## Syntax highlighting
+
+Suporte para coloração de vários editores neste link: [https://github.com/adalbermirom/prisma-syntax-conf](https://github.com/adalbermirom/prisma-syntax-conf)
 
 
 ## 📦 Estrutura do Projeto
@@ -91,7 +94,7 @@ Ainda não testei compilar em outras plataformas, é quase certo que Prisma, ass
 | :--- | :--- | :--- |
 | `src/` | Fontes C | O núcleo do interpretador e da Máquina Virtual (VM), incluindo os arquivos modificados do Lua. |
 | `std_docs/` | Libs Padrão (`.pris`) | Documentação da bibliotecas padrão do Prisma (ex: `mat.pris`, `string.pris`). |
-| `install_utils/` | Ferramentas de Instalação | Scripts de instalação, arquivos de sintaxe para editores (Geany, GTK), e recursos de documentação. |
+| `install_utils/` | Ferramentas de Instalação | Scripts de instalação e recursos de documentação. |
 | `exemplos/` | Exemplos de Código | Scripts de demonstração de recursos da linguagem. |
 | `bin/` | Binários Compilados | Onde os executáveis (`prisma`, `prismac`) e bibliotecas estáticas são gerados (ignorado pelo Git). |
 
