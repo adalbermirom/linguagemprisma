@@ -36,6 +36,7 @@ then
         else
             # Forçamos o usuário a executar como root. Deixamos SUPER vazio, o que
             # fará com que os comandos tentem rodar diretamente como root (se o script foi invocado com sudo).
+            echo "AVISO: o comando sudo e doas não foram encontrados, reinicie a instalação como superusuário."
             SUPER=""
         fi
     fi
@@ -75,17 +76,8 @@ super_copie bin/libprisma1.0.a /usr/local/lib/
 
 #utils:
 
-## lang-extensions
-super_copie install_utils/extensao-editores/geany/filedefs/filetypes.Prisma.conf /usr/share/geany/filedefs/
-
-super_copie install_utils/extensao-editores/geany/templates/main.prisma /usr/share/geany/templates/files/
-
-super_copie install_utils/extensao-editores/gtksourceview-2.0/language-specs/prismabr.lang  /usr/share/gtksourceview-2.0/language-specs/
-
+## libs prisma: /prisma/1.0/plib
 super_copie install_utils/prisma  /usr/local/share/
-
-super_copie install_utils/extensao-editores/nano/prisma.nanorc /usr/share/nano/
-
 
 
 msg_ok $vermelho " "  $result " " "       Processo terminado!" " " 
