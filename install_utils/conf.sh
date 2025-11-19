@@ -5,8 +5,9 @@
 #                                                                               #
 #--------------------------------------------------------------------------------
 
-
-NOME_PROG='Prisma 1.0.107 x86_64 - linux dez/2023'; #nome que será apresentado na instalação
+VER=$(./bin/prisma -v)
+SIS_NOME=$(./bin/prisma -e "imprimaf('%s', sis.nome)")
+NOME_PROG="Prisma-v${VER} - ${SIS_NOME}"; #nome que será apresentado na instalação
 AUTOR="Adalberto A. Felipe";
 EMAIL="adalbermirom@gmail.com"
 
