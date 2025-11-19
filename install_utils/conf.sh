@@ -73,12 +73,21 @@ $SUPER cp -a -v -r bin/*.so  /usr/local/lib/prisma/1.0/clib/
 super_copie bin/libprisma1.0.a /usr/local/lib/
 
 #utils:
-super_copie install_utils/geany/filedefs/filetypes.Prisma.conf /usr/share/geany/filedefs/
-super_copie install_utils/geany/templates/main.prisma /usr/share/geany/templates/files/
-super_copie install_utils/gtksourceview-2.0/language-specs/prismabr.lang  /usr/share/gtksourceview-2.0/language-specs/
+
+## lang-extensions
+super_copie install_utils/extensao-editores/geany/filedefs/filetypes.Prisma.conf /usr/share/geany/filedefs/
+
+super_copie install_utils/extensao-editores/geany/templates/main.prisma /usr/share/geany/templates/files/
+
+super_copie install_utils/extensao-editores/gtksourceview-2.0/language-specs/prismabr.lang  /usr/share/gtksourceview-2.0/language-specs/
+
 super_copie install_utils/prisma  /usr/local/share/
 
-  msg_ok $vermelho " "  $result " " "       Processo terminado!" " " 
+super_copie install_utils/extensao-editores/nano/prisma.nanorc /usr/share/nano/
+
+
+
+msg_ok $vermelho " "  $result " " "       Processo terminado!" " " 
   return;
 }
 
