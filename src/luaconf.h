@@ -140,6 +140,7 @@
         LUA_ALTCDIR"ini.dylib;"
 
 #else  /* LINUX { */
+
 /*
 ** Linux (usa .so)
 */
