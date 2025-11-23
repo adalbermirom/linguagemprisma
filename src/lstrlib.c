@@ -998,7 +998,7 @@ static int str_format (lua_State *L) {
 
  * */
 
-int isSpace_Otimizado(int c)
+int isSpace(int c)
 {
     /* Verifica se é espaço OU se está entre 9 e 13. */
        

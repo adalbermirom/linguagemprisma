@@ -88,52 +88,80 @@
 ** hierarchy or if you want to install your libraries in
 ** non-conventional directories.
 */
-#if defined(_WIN32)	/* { */
+#if defined(_WIN32)   /* WINDOWS { */
 /*
-** In Windows, any exclamation mark ('!') in the path is replaced by the
-** path of the directory of the executable file of the current process.
+** Windows
 */
-#define LUA_LDIR	"!\\plibs\\"
-#define LUA_CDIR	"!\\clibs\\"
+#define LUA_LDIR    "!\\plibs\\"
+#define LUA_CDIR    "!\\clibs\\"
 #define LUA_PATH_DEFAULT  \
-		 ".\\?_pris.dll;"\
-        LUA_LDIR"?_pris.dll;"\
+        ".\\?_pris.dll;" \
+        LUA_LDIR"?_pris.dll;" \
         ".\\?.pris;" \
-        LUA_LDIR"?.pris;"  LUA_LDIR"?\\ini.pris;" \
-		LUA_CDIR"?.pris;"  LUA_CDIR"?\\ini.pris;"
+        LUA_LDIR"?.pris;" LUA_LDIR"?\\ini.pris;" \
+        LUA_CDIR"?.pris;" LUA_CDIR"?\\ini.pris;"
+
 #define LUA_CPATH_DEFAULT \
-        ".\\lib?1.0.dll;"\
+        ".\\lib?1.0.dll;" \
         ".\\?.dll;" \
-		LUA_CDIR"lib?1.0.dll;" LUA_CDIR"ini.dll;"\
-		LUA_CDIR"?.dll;" 
+        LUA_CDIR"lib?1.0.dll;" LUA_CDIR"ini.dll;" \
+        LUA_CDIR"?.dll;"
 
-#else			/* }{ */
-
-#define LUA_VDIR	LUA_VERSION_MAJOR "." LUA_VERSION_MINOR "/"
-#define LUA_ROOT	"/usr/local/"
-#define LUA_LDIR	LUA_ROOT "share/prisma/" LUA_VDIR "plib/"
-#define LUA_CDIR	LUA_ROOT "lib/prisma/" LUA_VDIR "clib/"
-
-/*BETO MODIFICATION
-    ex. teste:
-   ./teste_pris.so; /usr/local/prisma/1.0/plib/teste_pris.so
-   ./teste.pris; /usr/local/prisma/1.0/plib/teste.pris
+#elif defined(__APPLE__) && defined(__MACH__)   /* macOS { */
+/*
+** macOS (usa .dylib)
 */
+#define LUA_VDIR    LUA_VERSION_MAJOR "." LUA_VERSION_MINOR "/"
+#define LUA_ROOT    "/usr/local/"
+#define LUA_LDIR    LUA_ROOT "share/prisma/" LUA_VDIR "plib/"
+#define LUA_CDIR    LUA_ROOT "lib/prisma/" LUA_VDIR "clib/"
 
+/* suporte a Apple Silicon (Homebrew) */
+#define LUA_ALTROOT "/opt/homebrew/"
+#define LUA_ALTLDIR LUA_ALTROOT "share/prisma/" LUA_VDIR "plib/"
+#define LUA_ALTCDIR LUA_ALTROOT "lib/prisma/" LUA_VDIR "clib/"
+
+#define LUA_PATH_DEFAULT \
+        "./?_pris.pris;" \
+        LUA_LDIR"?_pris.pris;" \
+        LUA_ALTLDIR"?_pris.pris;" \
+        "./?.pris;" \
+        LUA_LDIR"?.pris;" LUA_LDIR"?/ini.pris;" \
+        LUA_ALTLDIR"?.pris;" LUA_ALTLDIR"?/ini.pris;"
+
+#define LUA_CPATH_DEFAULT \
+        "./lib?1.0.dylib;" \
+        "./?.dylib;" \
+        LUA_CDIR"lib?1.0.dylib;" \
+        LUA_CDIR"?.dylib;" \
+        LUA_CDIR"ini.dylib;" \
+        LUA_ALTCDIR"lib?1.0.dylib;" \
+        LUA_ALTCDIR"?.dylib;" \
+        LUA_ALTCDIR"ini.dylib;"
+
+#else  /* LINUX { */
+/*
+** Linux (usa .so)
+*/
+#define LUA_VDIR    LUA_VERSION_MAJOR "." LUA_VERSION_MINOR "/"
+#define LUA_ROOT    "/usr/local/"
+#define LUA_LDIR    LUA_ROOT "share/prisma/" LUA_VDIR "plib/"
+#define LUA_CDIR    LUA_ROOT "lib/prisma/" LUA_VDIR "clib/"
 
 #define LUA_PATH_DEFAULT  \
-        "./?_pris.so;"\
-        LUA_LDIR"?_pris.so;"\
+        "./?_pris.so;" \
+        LUA_LDIR"?_pris.so;" \
         "./?.pris;" \
-        LUA_LDIR"?.pris;"  LUA_LDIR"?/ini.pris;" \
-		LUA_CDIR"?.pris;"  LUA_CDIR"?/ini.pris;"
+        LUA_LDIR"?.pris;" LUA_LDIR"?/ini.pris;" \
+        LUA_CDIR"?.pris;" LUA_CDIR"?/ini.pris;"
+
 #define LUA_CPATH_DEFAULT \
-        "./lib?1.0.so;"\
-        "./?.so;"\
-        LUA_CDIR"lib?1.0.so;"\
+        "./lib?1.0.so;" \
+        "./?.so;" \
+        LUA_CDIR"lib?1.0.so;" \
         LUA_CDIR"?.so;" LUA_CDIR"ini.so;"
- 
-#endif			/* } */
+
+#endif /* end platform */
 
 
 /*
