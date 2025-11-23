@@ -638,6 +638,7 @@ static int str_match (lua_State *L) {
 }
 
 
+
 static int gmatch_aux (lua_State *L) {
   MatchState ms;
   size_t ls, lp;
@@ -985,22 +986,23 @@ static int str_format (lua_State *L) {
 /*C implementation trim
 ' ' (0x20) space (SPC)
 
-'\t' (0x09) horizontal tab (TAB)
+'\t' (0x09, 9) horizontal tab (TAB)
 
-'\n' (0x0a) newline (LF)
+'\n' (0x0a, 10) newline (LF)
 
-'\v' (0x0b) vertical tab (VT)
+'\v' (0x0b, 11) vertical tab (VT)
 
-'\f' (0x0c) feed (FF)
+'\f' (0x0c, 12) feed (FF)
 
-'\r' (0x0d) carriage return (CR)
+'\r' (0x0d, 13) carriage return (CR)
 
  * */
 
-int isSpace(int c)
+int isSpace_Otimizado(int c)
 {
-    return (c == '\t' || c == '\n' || c == '\v' || 
-            c == '\f' || c == '\r' || c == ' ');
+    /* Verifica se é espaço OU se está entre 9 e 13. */
+       
+    return c == ' ' || (unsigned)(c - 9) < 5;
 }
 
 int str_trim(lua_State* L) {
