@@ -775,8 +775,9 @@ static int os_copie_arquivo(lua_State *L) {
     }
     else {
         /* Falha */
-        lua_pushnil(L);
-        lua_pushstring(L, "Erro de E/S: Nao foi possivel copiar o arquivo");
+        const char *mensagem_erro = strerror(errno);
+		lua_pushnil(L);
+		lua_pushstring(L, mensagem_erro);
         return 2; /* Retorna (nil, msg) */
     }
 }
