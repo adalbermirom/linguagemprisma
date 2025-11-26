@@ -706,7 +706,7 @@ static int os_realpath(lua_State*L){
  *
  * Retorna:
  * 0 em sucesso.
- * -1 em falha (nao pode abrir/ler/escrever).
+ * codigo_erro (>0) em falha (nao pode abrir/ler/escrever).
  */
 static int copiar_arquivo(const char *origem_path, const char *destino_path) {
     FILE *origem, *destino;
@@ -720,14 +720,16 @@ static int copiar_arquivo(const char *origem_path, const char *destino_path) {
     /* 2. Abrir origem em MODO BINARIO */
     origem = fopen(origem_path, "rb");
     if (origem == NULL) {
-        return -1; /* Nao foi possivel abrir a origem */
+		int codigo_erro = errno;
+        return codigo_erro; /* Nao foi possivel abrir a origem */
     }
 
     /* 3. Abrir destino em MODO BINARIO */
     destino = fopen(destino_path, "wb");
     if (destino == NULL) {
+		int codigo_erro = errno;
         fclose(origem);
-        return -1; /* Nao foi possivel criar o destino */
+        return codigo_erro; /* Nao foi possivel criar o destino */
     }
 
     /* 4. O loop de copia (leitura e escrita em "chunks") */
@@ -737,9 +739,11 @@ static int copiar_arquivo(const char *origem_path, const char *destino_path) {
          * Se fwrite nao retornar 'bytes_lidos', e um erro (ex: disco cheio).
          */
         if (fwrite(buffer, 1, bytes_lidos, destino) != bytes_lidos) {
+			int codigo_erro = errno; 
             fclose(origem);
             fclose(destino);
-            return -1; /* Erro de escrita */
+           
+            return codigo_erro; /* Erro de escrita */
         }
     }
 
@@ -747,9 +751,10 @@ static int copiar_arquivo(const char *origem_path, const char *destino_path) {
     /* fread retorna 0 em 'fim de arquivo' OU 'erro'. 
      * ferror() nos diz se foi um erro. */
     if (ferror(origem)) {
+        int codigo_erro = errno; /* Captura antes de fclose */
         fclose(origem);
         fclose(destino);
-        return -1; /* Erro de leitura */
+        return codigo_erro; /* Erro de leitura */
     }
 
     /* 6. Sucesso! Limpe tudo. */
@@ -775,9 +780,9 @@ static int os_copie_arquivo(lua_State *L) {
     }
     else {
         /* Falha */
-        const char *mensagem_erro = strerror(errno);
+        const char *mensagem_erro = strerror(resultado);
 		lua_pushnil(L);
-		lua_pushstring(L, mensagem_erro);
+		lua_pushfstring(L,"sis.copie_arquivo('%s', '%s') : %s", origem, destino, mensagem_erro);
         return 2; /* Retorna (nil, msg) */
     }
 }

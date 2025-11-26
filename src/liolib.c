@@ -159,6 +159,7 @@ static FILE *tofile (lua_State *L) {
   return p->f;
 }
 
+/* BETO MODIFICATION */
 /* Se estivermos usando o compilador MSVC (Visual Studio)... */
 #if defined(_MSC_VER)
 #include <io.h>      /* ...inclua o header dele... */
@@ -171,7 +172,7 @@ static int io_fileno(lua_State *L){
 	lua_pushinteger(L, n);
 	return 1;
 }
-
+/* FINAL BETO MODIFICATION */
 
 /*
 ** When creating file handles, always creates a `closed' file handle
