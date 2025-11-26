@@ -12,6 +12,8 @@
 #include <time.h>
 #include <sys/stat.h> /* file size Prisma: sis.tamanho(arquivo);*/
 
+
+
 #define loslib_c
 #define LUA_LIB
 
@@ -696,8 +698,7 @@ static int os_realpath(lua_State*L){
 
 /** BETO MODIFICATION */
 
-#include <stdio.h>
-#include <stdlib.h> /* Para size_t */
+
 
 /*
  * Copia um arquivo de 'origem_path' para 'destino_path'.
@@ -780,6 +781,136 @@ static int os_copie_arquivo(lua_State *L) {
     }
 }
 
+
+/*obtém o path da pasta temporária (tmp folder)*/
+
+/**
+ * Obtem o caminho da pasta de arquivos temporarios do sistema.
+ * * @param out Buffer onde o caminho sera armazenado. Deve ter pelo menos MAX_TMP_PATH_LEN.
+ * @return 0 em caso de sucesso, -1 em caso de erro.
+ */
+
+#if defined(_os_win)
+    // MAX_PATH geralmente é 260, mas é a constante certa para Windows.
+    #define MAX_TMP_PATH_LEN MAX_PATH 
+#elif defined(PATH_MAX)
+    // Sistemas POSIX que definem um limite fixo (ex: Linux 4096)
+    #define MAX_TMP_PATH_LEN PATH_MAX
+#else
+    // Fallback seguro: O limite histórico do Windows e um valor seguro.
+    #define MAX_TMP_PATH_LEN 260 
+#endif
+/*
+ * char out[256] = {0};
+ * int ret = get_tmpdir(out);
+ * if(ret != 0) { //error handler...
+*/
+int get_tmpdir(char *out) {
+    if (out == NULL) {
+        errno = EINVAL;
+        return -1;
+    }
+
+    const char *tmpdir_path = NULL;
+    
+    // =======================================================
+    // 1. CODIGO ESPECIFICO PARA WINDOWS (USANDO WinAPI)
+    // =======================================================
+    #if defined (_os_win)
+        DWORD path_len = GetTempPathA(MAX_TMP_PATH_LEN, out);
+
+        if (path_len > 0 && path_len < MAX_TMP_PATH_LEN) {
+            // Sucesso na WinAPI
+            return 0;
+        } 
+            /* Falha na WinAPI ou buffer muito pequeno
+            // Em caso de erro, tentamos a abordagem baseada em variavel de ambiente como fallback */
+    #endif
+
+    /* =======================================================
+    // 2. CODIGO PORTAVEL (Unix-like e fallback do Windows)
+    // =======================================================*/
+
+    /* Verifica variaveis de ambiente: */
+    tmpdir_path = getenv("TMPDIR"); // Unix/Linux/macOS padrao
+    if (tmpdir_path) goto success;
+
+    tmpdir_path = getenv("TEMP");   // Windows padrao
+    if (tmpdir_path) goto success;
+
+    tmpdir_path = getenv("TMP");    // Windows alternativo ou Unix secundario
+    if (tmpdir_path) goto success;
+
+
+    /* Usa caminhos padrao do sistema: */
+    
+    /* Constante POSIX padrao */
+    #ifdef P_tmpdir
+        tmpdir_path = P_tmpdir;
+        goto success;
+    #endif
+
+    // Caminho mais comum para sistemas Unix-like (Linux, macOS, etc.)
+    #if !defined (_os_win)
+        tmpdir_path = "/tmp";
+        goto success;
+    #endif
+
+
+    /* =======================================================
+       3. FALHA
+       =======================================================*/
+
+    /* Se chegou ate aqui, nao conseguiu determinar o diretorio.*/
+    errno = ENOENT; 
+    return -1;
+
+success:
+    // Garante que a cópia não exceda o tamanho do buffer.
+    // 'out' tem tamanho MAX_TMP_PATH_LEN. O -1 garante o espaço para o '\0'.
+    if (strlen(tmpdir_path) < MAX_TMP_PATH_LEN) {
+        // snprintf é preferível se for necessário manipulação de strings
+        // int len = snprintf(out, MAX_TMP_PATH_LEN, "%s", tmpdir_path);
+        
+        // strncpy e garantia de terminador nulo
+        strncpy(out, tmpdir_path, MAX_TMP_PATH_LEN - 1);
+        out[MAX_TMP_PATH_LEN - 1] = '\0';
+        return 0;
+    } else {
+        /* Caminho muito longo para o buffer */
+        errno = ENAMETOOLONG;
+        return -1;
+    }
+}
+
+/*
+   Obtém a pasta de arquivos temporários do sistema.
+   local tmp, err = sis.obt_pastatmp();
+   se nao tmp entao erro(err); fim
+   imprima(tmp);
+*/
+static int os_get_tmpdir(lua_State*L){
+	char *out = (char*)calloc(1, MAX_TMP_PATH_LEN);
+	if(!out){
+		lua_pushnil(L);
+		lua_pushliteral(L, "Erro: memoria insuficiente.");
+		return 2;
+	}
+	int ret = get_tmpdir(out);
+	if(ret!=0){
+		
+		const char *mensagem_erro = strerror(errno);
+		lua_pushnil(L);
+		lua_pushstring(L, mensagem_erro);
+		
+		free(out);
+		return 2;
+	}
+	lua_pushstring(L, out);
+	free(out);
+	return 1;
+}
+
 /** FIM BETO MODIFICATION */
 
 static const luaL_Reg syslib[] = {
@@ -807,6 +938,7 @@ static const luaL_Reg syslib[] = {
   {"tamanho", os_size},/*retorna o tamanho de um arquivo | o tamanho de um dado em C de acordo com o sistema em que foi compilado Prisma. | verdaeiro ou falso de acordo com o tipo de endianess "%be" big-endian ou "%le" little-endian */
   {"nome_arquivo", os_filename}, /*retorna três valores: pasta, nome_arquivo, extensao = sis.nome_arquivo'pasta/file.ext';*/
   {"copie_arquivo",     os_copie_arquivo},/*sis.copie_arquivo(orig, dest);*/
+  {"obt_pastatmp", os_get_tmpdir},
   {NULL, NULL}
 };
 
