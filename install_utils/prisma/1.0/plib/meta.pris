@@ -1,0 +1,321 @@
+/**
+ * @file meta.pris
+ * @author Adalberto
+ * @date 24 nov 2023
+ * \brief Biblioteca para facilitar a manipulação de metatabelas e metamétodos. 
+ * 
+ * <h2>Metatabela</h2>
+ * <p>
+        Metatabela é uma tabela normal Prisma, porém ela fica oculta dentro do objeto (que pode ser uma string, uma tabela, userdata etc). Essa metatabela tem campos chamados metamétodos, responsáveis por mudar o comportamento do objeto em uma operação (que pode ser aritmética, concatenação, tamanho, tipo etc);
+ * </p>
+
+
+   <h2>Metamétodos</h2>
+   <p>
+     Metamétodos são funções dentro de metatabelas, com nomes específicos de acordo com as operações e ações. É possível, por exemplo, definir um metamétodo em Prisma para somar duas tabelas, ou para mudar o nome do seu tipo.   
+   </p>
+   <b>Veja o exemplo abaixo:</b>
+   \inicio_codigo ex1.prisma
+   
+     local mt = {}; //metatabela;
+     mt.__tipo = funcao()  //metamétodo acionado com a função tipo();
+         retorne 'retangulo';
+     fim
+     
+     mt.__convstring = funcao(t)
+         local s = 'retangulo:{comprimento=' .. t.comprimento .. ', largura=' .. t.largura .. '}';
+         retorne s;
+     fim
+     local ret = {comprimento=10, largura=20};
+     defmetatabela(ret, mt); //definindo a tabela mt como metatabela de ret;
+     
+     //só testar:
+     
+     imprima(tipo(ret) ); //--> retangulo
+     imprima(ret); // --> retangulo:{comprimento=10, largura=20}
+       
+   
+   \fim_codigo
+   
+    Esta lib serve para fazer o que foi feito acima, mas de um jeito mais simples.
+   
+   <b>Veja:</b>
+   \inicio_codigo ex2.prisma
+     local meta = inclua'meta';
+     
+     local ret = {comprimento=10, largura=20};
+     meta.__('tipo', ret, funcao() retorne 'retangulo'; fim);
+     meta.__('convstring', ret, 
+     funcao(t) 
+         local s = 'retangulo:{comprimento=' .. t.comprimento .. ', largura=' .. t.largura .. '}';
+         retorne s;
+     fim);
+     //agora só testar
+     imprima(tipo(ret)); //--> retangulo
+     imprima(ret);// --> retangulo:{comprimento=10, largura=20}
+   
+   \fim_codigo
+   
+    Note que foram usados dois underlines(sublinhado) como método de meta:  meta.__
+
+   
+*/
+
+/**
+ *   \var meta
+     \brief meta é a tabela com os métodos para esta biblioteca prisma.
+     Obs.: ela é local portanto ao usar o inclua'' deve-se atribuir o valor de retorno:
+     ex.:   local meta = inclua'meta';
+*/
+
+
+
+local meta = {};
+
+/**
+     \fn mt(tabela) meta.cp(a(tabela), b(tabela))
+     \brief Função para copiar uma metatabela de uma tabela para outra tabela.
+     \param a(tabela) é a tabela destino, a qual irá receber a metatabela copiada da tabela 'b'
+     \param b(tabela) é a tabela alvo com a metatabela a ser copiada.
+     <b>OBS.: caso não exista uma metatabela em 'b' então nada é feito.</b>
+     \returns mt(tabela) o retorno é a metatabela copiada de 'b' para 'a' ou nulo caso não exista.
+*/
+funcao meta.cp(a,b) 
+    local mt = obtmetatabela(b);
+    se mt entao
+        defmetatabela(a,mt);
+    fim
+    retorne obtmetatabela(a);
+fim 
+
+/**
+ *    \fn meta.def
+-     \brief Funcao para definir uma tabela 'mt' como metatabela da tabela 'tab'.
+-     funcao meta.def(tab, mt)
+-     @param tab(tabela)  é a tabela que receberá a metatabela 'mt';
+-     @param mt(tabela) é uma tabela com metamétodos definidos.
+      @returns tab(tabela) o retorno é a própria tabela passada como parâmetro.
+     <hr>
+    Veja o exemplo abaixo:
+\inicio_codigo
+
+    local meta = inclua'meta';
+    local mt = { __add = funcao(a,b) a.val = a.val + b; retorne a.val; fim }; //meta tabela com metamétodo + definido
+    local tab = {val = 0;};
+    tab = meta.def(tab, mt);
+    imprima(tab+10); //--> 10
+    imprima(tab+1); //---> 11    
+
+\fim_codigo 
+****************************
+*/
+funcao meta.def(tab, mt) 
+//cuidado esta função apaga a metatabela anterior se houver.
+    T(tab,mt); //garante que seja tabela
+    retorne defmetatabela(tab,mt); //caso não seja possível definir a metatabela então será gerado o erro e terminado o programa.
+fim 
+
+
+/**  
+ *    \fn meta.mescle
+      \brief Funcao para mesclar uma tabela'mt' como metatabela da tabela 'tab'.
+      Se houver uma metatabela em tab ela não será apagada, apenas os metamétodos presentes em mt 
+      substituirão os já existentes na tabela original, senão serão apenas acrescentados.
+      @param tab(tabela)  é a tabela que receberá a metatabela 'mt' para ser mesclada na metatabela já existente
+      @param mt(tabela) é uma tabela com metamétodos definidos
+      @returns tab(tabela) o retorno é a própria tabela passada como parâmetro.
+     <hr>
+
+Veja um exemplo:
+
+\inicio_codigo
+
+local tab = {n=0};
+local mt = {__add=funcao(a, n) a.n = a.n + n; retorne a.n; fim};
+local mt2 = {__sub = funcao(a, n) a.n = a.n - n; retorne a.n; fim};
+local mt3 = {__mul = funcao(a,n) a.n = a.n * n; retorne a.n; fim};
+local mt4 = {__div = funcao(a,n) a.n = a.n / n; retorne a.n; fim};
+tab = meta.def(tab, mt);
+meta.mescle(tab, mt2);
+meta.mescle(tab, mt3);
+meta.mescle(tab, mt4);
+imprima(tab + 10);
+imprima(tab - 1);
+imprima(tab * 3);
+imprima(tab / 9);
+
+\fim_codigo
+*/
+
+funcao meta.mescle(tab, mt) 
+    T(tab, mt);
+    local orig_mt = obtmetatabela(tab);
+    se nao orig_mt entao
+        retorne defmetatabela(tab,mt);
+    fim
+    //sobreescrevendo apenas os metamétodos em mt:
+    para k,v em pares(mt) inicio
+        orig_mt[k] = v;
+    fim
+    retorne tab; //retorna a tabela com os metamétodos definidos.
+fim 
+
+
+/** 
+ *   \fn meta.defmetametodo
+
+     \brief Função para facilitar a definição de metamétodos em Prisma, fazendo a sobrecarga de operadores.
+     funcao defmetametodo( meta, tab, func)
+     \param meta(string) contendo o metamétodo ou operador a ser atribuído à tabela.
+      exemplo: '+' (soma), '-' (sub), '*' (mul), '&' (and bitwise) etc.
+     \param tab(tabela) é a tabela a ser atribuído ou modificado o metamétodo. 
+     Obs.: o 2nd parâmetro deve ser sempre uma tabela em Prisma
+     \param func é a função a ser executada na operação do metamétodo. Por exemplo: 
+     ao atribuir '+' em tab com a função func(), func() será chamada se fizermos a operação de adição: a+b
+     \returns tab(tabela) o retorno é a própria tabela com os metamétodos já modificados.
+*/
+funcao meta.defmetametodo(meta, tab, func) 
+    T(tab); S(meta); F(func);
+    local mt_criada = falso;
+    local mt = obtmetatabela(tab);
+    se nao mt entao
+        mt_criada = verdadeiro;
+        mt = {};
+    fim
+    se meta =='+' ou meta == 'add' entao
+        mt.__add = func;
+    senaose meta == '-' ou meta == 'sub' entao //  menos (binário) x = 5 - 1;
+        mt.__sub = func;    
+    senaose meta == 'unm' ou meta == '-u' entao  //  menos (unário)   x = -(x);
+        mt.__unm = func;
+    senaose meta == '*' ou meta == 'mul' entao  //multiplicação
+        mt.__mul = func;
+    senaose meta == '/' ou meta == 'div' entao  //divisão
+        mt.__div = func;
+    senaose meta == '^' ou meta == 'pow' entao  //exponenciação
+        mt.__pow = func;
+    senaose meta == '%' ou meta == 'mod' entao  //modulo (resto da divisão)
+        mt.__mod = func;
+    senaose meta == '#' ou meta == 'len' entao  //operador de tamanho tam_string = #str;
+        mt.__len = func;
+    senaose meta == '..' ou meta == 'concat' entao //concatenador de strings:   str3 = str1 .. str2;
+        mt.__concat = func; 
+    senaose meta == '&' ou meta == 'band' entao // band
+        mt.__band = func;
+    senaose meta == '|' ou meta == 'bor' entao // bor
+        mt.__bor = func;
+    senaose meta == '~' ou meta == 'bxor' entao //bxor
+        mt.__bxor = func;
+    senaose meta == 'bnot' ou meta == '~n' entao
+        mt.__bnot = func;
+    senaose meta == '>>' ou meta == 'bshr'  entao // right shift
+        mt.__bshr = func;
+    senaose meta == '<<' ou meta == 'bshl' entao // left shift
+        mt.__bshl = func;
+    senaose meta == 'tipo' entao //__tipo
+        mt.__tipo = func;
+    senaose meta == '==' ou meta == '<>' ou meta == 'eq' entao //retorne a==b
+        mt.__eq = func;        
+    senaose meta == '<' ou meta == '>' ou meta == 'lt' entao //retorne a<b
+        mt.__lt = func;
+    senaose meta == '<=' ou meta == '>=' ou meta == 'le' entao // retorne a<=b
+        mt.__le = func;
+    senaose meta == '[]' ou meta == 'index' entao // retorne a[b]
+        mt.__index = func;
+    senaose meta == '[]=' ou meta == 'newindex' entao // a[b] = c;
+        mt.__newindex = func;  
+    senaose meta == '()' ou meta == 'call' entao // a(...);
+        mt.__call = func;  
+    senaose meta == 's' ou meta == 'convstring' entao // a(...);
+        mt.__convstring = func; 
+    senao
+        mt['__' .. meta] = func;
+    fim
+    se mt_criada entao
+        defmetatabela(tab, mt);
+    fim
+    retorne tab;        
+fim 
+
+/**   \fn meta.__
+      \brief Esta função meta.__() é um açúcar sintático, um atalho para a função meta.defmetametodo() ficando mais curta assim.
+      
+      veja:  
+      \inicio_codigo
+      meta.defmetametodo() == meta.__()
+      \fim_codigo
+
+     Aqui temos um exemplo de sobrecarga dos operadores de + e de -
+
+<hr>
+<div>
+\inicio_codigo
+local meta = inclua'meta';
+local myint = Classe{val = 0};
+funcao myint:construtor(val) //funcao construtora:
+    meta.__('+', este, 
+        funcao (a,b)
+            local c = {val=0};
+            meta.cp(c,a);
+            c.val = a.val + b.val;
+            retorne c;
+    fim)
+
+    meta.__('-', este, 
+        funcao (a,b)
+            local c = {val=0};
+            meta.cp(c,a);
+            c.val = a.val - b.val;
+            retorne c;
+    fim)
+    
+    meta.__('s', este, 
+        funcao(a)
+            retorne convstring(a.val);        
+    fim)
+    este.val = val;
+fim
+
+
+
+local a = myint(1);
+local b = myint(2);
+imprima(a + b);
+imprima(a - b);
+
+meta.__('tipo', b, funcao() retorne 'myint'; fim);
+
+imprima(tipo(b));
+
+\fim_codigo
+</div>
+
+*/
+funcao meta.__(meta, tab, func) 
+fim; 
+//dummy só para sair na documentação.
+
+meta.__ = meta.defmetametodo; //verdadeira definição da função acima.
+defmetatabela(meta, {
+    __call = funcao(este, metodo, tab, func)
+        meta.defmetametodo(metodo, tab, func);
+    fim
+});
+
+
+
+retorne meta;
+
+
+
+
+
+
+
+
+
+
+
+
+
+

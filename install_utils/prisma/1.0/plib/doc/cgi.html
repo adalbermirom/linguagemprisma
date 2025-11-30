@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>cgi.pris</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<nav id="id_00002D"  class="floating-menu">
+<div class="menu-button" title="Ocultar painel lateral" onclick="show_menu_flutuante(this, 'id_00002E', 'id_00002D')">&#x2630;</div>
+<div class="com-rolagem" id="id_00002E" hidden>
+<div class="caixa "><h2>Funções:</h2>
+<a href="#id_000022">cgi.decod</a>
+<a href="#id_00002B">cgi.escape_html</a>
+<a href="#id_000025">cgi.obt_tabvar</a>
+<a href="#id_000023">cgi.obt_var</a>
+<a href="#id_00000A">cgi.va.gateway_interface </a>
+<a href="#id_000010">cgi.va.host_remoto </a>
+<a href="#id_000017">cgi.va.http_aceito </a>
+<a href="#id_00001F">cgi.va.http_cookie </a>
+<a href="#id_00001C">cgi.va.http_de </a>
+<a href="#id_000018">cgi.va.http_nav </a>
+<a href="#id_000019">cgi.va.http_url_atual </a>
+<a href="#id_00001A">cgi.va.http_url_referencia</a>
+<a href="#id_00001D">cgi.va.https </a>
+<a href="#id_000011">cgi.va.ip_remoto </a>
+<a href="#id_00000B">cgi.va.metodo </a>
+<a href="#id_00000E">cgi.va.nome_script </a>
+<a href="#id_00001B">cgi.va.pasta_servidor </a>
+<a href="#id_00001E">cgi.va.path </a>
+<a href="#id_00000C">cgi.va.path_info </a>
+<a href="#id_00000D">cgi.va.path_translated </a>
+<a href="#id_000014">cgi.va.remote_ident </a>
+<a href="#id_000020">cgi.va.script_abs </a>
+<a href="#id_000021">cgi.va.serv_admin </a>
+<a href="#id_000007">cgi.va.serv_assinatura </a>
+<a href="#id_000006">cgi.va.serv_nome </a>
+<a href="#id_000009">cgi.va.serv_porta </a>
+<a href="#id_000008">cgi.va.serv_protocolo </a>
+<a href="#id_000005">cgi.va.serv_soft </a>
+<a href="#id_000016">cgi.va.tamanho_conteudo </a>
+<a href="#id_000012">cgi.va.tipo_autent </a>
+<a href="#id_000015">cgi.va.tipo_conteudo </a>
+<a href="#id_000013">cgi.va.usuario_remoto </a>
+<a href="#id_00000F">cgi.va.var_string </a>
+
+</div>
+<div class="caixa "><h2>Variáveis:</h2>
+<a href="#id_000003">cgi </a>
+<a href="#id_000027">cgi.GET </a>
+<a href="#id_000029">cgi.POST </a>
+<a href="#id_000004">cgi.va </a>
+</div>
+
+</div>
+</nav>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> cgi.pris</h1>
+<h3> Adalberto</h3>
+<h3> 24 nov 2023</h3>
+<br>
+<div>
+Biblioteca cgi mínima com algumas funções básicas para processamento dos dados vindo do cliente.
+<a href="#id_00002F"> mais...</a></div>
+<div class="caixa com-borda"><div><h2 >Funções:</h2>
+<ol>
+<li><a href="#id_000022">cgi.decod</a></li>
+<li><a href="#id_00002B">cgi.escape_html</a></li>
+<li><a href="#id_000025">cgi.obt_tabvar</a></li>
+<li><a href="#id_000023">cgi.obt_var</a></li>
+<li><a href="#id_00000A">cgi.va.gateway_interface </a></li>
+<li><a href="#id_000010">cgi.va.host_remoto </a></li>
+<li><a href="#id_000017">cgi.va.http_aceito </a></li>
+<li><a href="#id_00001F">cgi.va.http_cookie </a></li>
+<li><a href="#id_00001C">cgi.va.http_de </a></li>
+<li><a href="#id_000018">cgi.va.http_nav </a></li>
+<li><a href="#id_000019">cgi.va.http_url_atual </a></li>
+<li><a href="#id_00001A">cgi.va.http_url_referencia</a></li>
+<li><a href="#id_00001D">cgi.va.https </a></li>
+<li><a href="#id_000011">cgi.va.ip_remoto </a></li>
+<li><a href="#id_00000B">cgi.va.metodo </a></li>
+<li><a href="#id_00000E">cgi.va.nome_script </a></li>
+<li><a href="#id_00001B">cgi.va.pasta_servidor </a></li>
+<li><a href="#id_00001E">cgi.va.path </a></li>
+<li><a href="#id_00000C">cgi.va.path_info </a></li>
+<li><a href="#id_00000D">cgi.va.path_translated </a></li>
+<li><a href="#id_000014">cgi.va.remote_ident </a></li>
+<li><a href="#id_000020">cgi.va.script_abs </a></li>
+<li><a href="#id_000021">cgi.va.serv_admin </a></li>
+<li><a href="#id_000007">cgi.va.serv_assinatura </a></li>
+<li><a href="#id_000006">cgi.va.serv_nome </a></li>
+<li><a href="#id_000009">cgi.va.serv_porta </a></li>
+<li><a href="#id_000008">cgi.va.serv_protocolo </a></li>
+<li><a href="#id_000005">cgi.va.serv_soft </a></li>
+<li><a href="#id_000016">cgi.va.tamanho_conteudo </a></li>
+<li><a href="#id_000012">cgi.va.tipo_autent </a></li>
+<li><a href="#id_000015">cgi.va.tipo_conteudo </a></li>
+<li><a href="#id_000013">cgi.va.usuario_remoto </a></li>
+<li><a href="#id_00000F">cgi.va.var_string </a></li>
+</ol>
+</div>
+
+<div><h2>Variáveis:</h2>
+<ol>
+<li><a href="#id_000003">cgi </a></li>
+<li><a href="#id_000027">cgi.GET </a></li>
+<li><a href="#id_000029">cgi.POST </a></li>
+<li><a href="#id_000004">cgi.va </a></li>
+</ol>
+</div>
+
+</div><br>
+
+<h2 id="id_00002F">cgi.pris</h2><div>
+Biblioteca cgi mínima com algumas funções básicas para processamento dos dados vindo do cliente.
+</div>
+
+
+
+
+ * 
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000002"><code> * 
+ * Prisma cgi-0.2  by Adalberto Amorim Felipe
+ * linguagemprisma.br4.biz
+ * linguagemprisma@gmail.com
+ * 
+ * Caso encontre um bug reporte em: 
+ * 
+ * https://linguagemprisma.br4.biz/prisma_forum/index.php?board=6.0
+ * 
+ * ----------------------------
+ * Licença: 
+ * Livre para usar como bem entender, não há garantias, 
+ * use por conta e risco, o autor não poderá ser
+ * responsabilizado.
+ * 
+ * ----------------------------
+ * 
+ * funções com facilidades para programas cgi web em Prisma:
+ * 
+ * leitura de variaveis do servidor
+ * decodificação de post e Get.
+ * obtenção de variaveis do post e Get. 
+ * conversao de variaveis do post e get para tabela prisma
+ * 
+</code></pre>
+</div>
+<b>Veja: </b><a href="https://linguagemprisma.br4.biz"> https://linguagemprisma.br4.biz</a>
+
+ <br>
+ <div>Caso encontre um bug reporte em: <a href="https://linguagemprisma.br4.biz/prisma_forum/index.php?board=6.0">aqui</a></div>
+ * 
+<h1>Funções:</h1>
+<a id="id_000005" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.serv_soft ( ) </h2><div class="corpo-doc">
+<p>Função cgi.va.serv_soft() retorna a variável de ambiente &#39;SERVER_SOFTWARE&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_000006" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.serv_nome ( )</h2><div class="corpo-doc">
+<p>Função cgi.va.serv_nome() retorna a variável de ambiente &#39;SERVER_NAME&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_000007" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.serv_assinatura ( ) </h2><div class="corpo-doc">
+<p>Função cgi.va.serv_assinatura() retorna a variável de ambiente &#39;SERVER_SIGNATURE&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_000008" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.serv_protocolo ( )</h2><div class="corpo-doc">
+<p>Função cgi.va.serv_protocolo() retorna a variável de ambiente &#39;SERVER_PROTOCOL&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_000009" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.serv_porta ( )</h2><div class="corpo-doc">
+<p>Função cgi.va.serv_porta() retorna a variável de ambiente &#39;SERVER_PORT&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_00000A" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.gateway_interface ( )</h2><div class="corpo-doc">
+<p>Função cgi.va.gateway_interface() retorna a variável de ambiente &#39;GATEWAY_INTERFACE&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_00000B" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.metodo ( ) </h2><div class="corpo-doc">
+<p>Função cgi.va.metodo() retorna a variável de ambiente &#39;REQUEST_METHOD&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+     O retorno pode ser 'GET' ou 'POST', por exemplo.
+</div>
+</section>
+<a id="id_00000C" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.path_info ( )</h2><div class="corpo-doc">
+<p>Função cgi.va.path_info() retorna a variável de ambiente &#39;PATH_INFO&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_00000D" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.path_translated ( ) </h2><div class="corpo-doc">
+<p>Função cgi.va.path_translated() retorna a variável de ambiente &#39;PATH_TRANSLATED&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_00000E" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.nome_script ( ) </h2><div class="corpo-doc">
+<p>Função cgi.va.nome_script() retorna a variável de ambiente &#39;SCRIPT_NAME&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_00000F" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.var_string ( ) </h2><div class="corpo-doc">
+<p>Função cgi.va.var_string() retorna a variável de ambiente &#39;QUERY_STRING&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_000010" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.host_remoto ( ) </h2><div class="corpo-doc">
+<p>Função cgi.va.host_remoto() retorna a variável de ambiente &#39;REMOTE_HOST&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_000011" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.ip_remoto ( ) </h2><div class="corpo-doc">
+<p>Função cgi.va.ip_remoto() retorna a variável de ambiente &#39;REMOTE_ADDR&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_000012" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.tipo_autent ( )</h2><div class="corpo-doc">
+<p>Função cgi.va.tipo_autent() retorna a variável de ambiente &#39;AUTH_TYPE&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_000013" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.usuario_remoto ( )</h2><div class="corpo-doc">
+<p>Função cgi.va.usuario_remoto() retorna a variável de ambiente &#39;REMOTE_USER&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_000014" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.remote_ident ( ) </h2><div class="corpo-doc">
+<p>Função cgi.va.remote_ident() retorna a variável de ambiente &#39;REMOTE_IDENT&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_000015" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.tipo_conteudo ( )</h2><div class="corpo-doc">
+<p>Função cgi.va.tipo_conteudo() retorna a variável de ambiente &#39;CONTENT_TYPE&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_000016" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.tamanho_conteudo ( ) </h2><div class="corpo-doc">
+<p>Função cgi.va.tamanho_conteudo() retorna a variável de ambiente &#39;CONTENT_LENGTH&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+     O tamanho em bytes...
+</div>
+</section>
+<a id="id_000017" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.http_aceito ( )</h2><div class="corpo-doc">
+<p>Função cgi.va.http_aceito() retorna a variável de ambiente &#39;HTTP_ACCEPT&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_000018" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.http_nav ( )</h2><div class="corpo-doc">
+<p>Função cgi.va.http_nav() retorna a variável de ambiente &#39;HTTP_USER_AGENT&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_000019" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.http_url_atual ( )</h2><div class="corpo-doc">
+<p>Função cgi.va.http_url_atual() retorna a variável de ambiente &#39;HTTP_REFERER&#39;</p>
+
+     <ul><i>Esta função foi modificada para http_url_referencia(), está aqui somente para compatibilidade
+     com a versão anterior, e possivelmente no futuro será excluída.</i></ul>
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_00001A" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.http_url_referencia()</h2><div class="corpo-doc">
+<p>Função cgi.va.http_url_referencia() retorna a variável de ambiente &#39;HTTP_REFERER&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_00001B" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.pasta_servidor ( ) </h2><div class="corpo-doc">
+<p>Função cgi.va.pasta_servidor() retorna a variável de ambiente &#39;DOCUMENT_ROOT&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_00001C" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.http_de ( ) </h2><div class="corpo-doc">
+<p>Função cgi.va.http_de() retorna a variável de ambiente &#39;HTTP_FROM&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_00001D" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.https ( )</h2><div class="corpo-doc">
+<p>Função cgi.va.https() retorna a variável de ambiente &#39;HTTPS&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_00001E" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.path ( )</h2><div class="corpo-doc">
+<p>Função cgi.va.path() retorna a variável de ambiente &#39;PATH&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_00001F" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.http_cookie ( ) </h2><div class="corpo-doc">
+<p>Função cgi.va.http_cookie() retorna a variável de ambiente &#39;HTTP_COOKIE&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_000020" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.script_abs ( ) </h2><div class="corpo-doc">
+<p>Função cgi.va.script_abs() retorna a variável de ambiente &#39;SCRIPT_FILENAME&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_000021" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.va.serv_admin ( )</h2><div class="corpo-doc">
+<p>Função cgi.va.serv_admin() retorna a variável de ambiente &#39;SERVER_ADMIN&#39;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > sem parâmetros;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.</span>
+</div>
+</div>
+</section>
+<a id="id_000022" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.decod(str)</h2><div class="corpo-doc">
+<p>Função cgi.decod(s) retorna uma string decodificada a partir de uma string obtida pelo método GET ou POST.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > s(string) - é a string obtida do GET ou POST para ser processada e decodificada os caracteres com escape %%nn</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna a string decodificada</span>
+</div>
+     <hr>
+    <b>Esta função geralmente é usada internamente, mas pode ser usada normalmente caso precise trocar os %%nn pelos caracteres equivalentes.</b>
+     Por exemplo, o '%20' é trocado por um espaço, o '+' também é trocado por um espaço.
+     e o '%22' é trocado por uma aspa " 
+</div>
+</section>
+<a id="id_000023" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.obt_var(str,var)</h2><div class="corpo-doc">
+<p>funcao cgi.obt_var(str, var) - obtem o valor de uma chave especifica a partir do GET ou POST</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > str(string) - a string obtida pelo GET ou POST para ser analisada a fim de buscar o valor de uma chave específica.</span>
+</div>
+<div class="params-doc"><span > var(string) - a chave a ser buscada pelo seu valor na string obtida pelo GET ou POST.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - o valor da chave buscada na string obtida pelo GET ou POST.</span>
+</div>
+
+   
+   Veja o exemplo abaixo:
+   <hr>
+   Supondo uma string: 'nome_user=manoel&amp;telefone=66xxxxx-xxxx'
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000024')">&#128203;</div>&nbsp;<i></i><pre id="id_000024" hidden>   
+local cgi = inclua&#39;cgi&#39;;
+local querystr = cgi.va.var_string(); //o mesmo que sis.obtvarambiente(&#39;QUERY_STRING&#39;);
+local nome_user = cgi.obt_var(querystr, &#39;nome_user&#39;);
+local telefone = cgi.obt_var(querystr, &#39;telefone&#39;);
+imprima(&#39;Nome do usuário:&#39;, nome_user);
+imprima(&#39;Telefone do usuário:&#39;, telefone);
+ 
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+   
+<span style="font-weight:bold;color:#b50546">local</span> cgi <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;cgi&#39;</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> querystr <span style="font-weight:bold;">=</span> cgi<span style="font-weight:bold;">.</span>va<span style="font-weight:bold;">.</span>var_string<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//o mesmo que sis.obtvarambiente(&#39;QUERY_STRING&#39;);
+</span><span style="font-weight:bold;color:#b50546">local</span> nome_user <span style="font-weight:bold;">=</span> cgi<span style="font-weight:bold;">.</span>obt_var<span style="font-weight:bold;">(</span>querystr, <span style="color:blue">&#39;nome_user&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> telefone <span style="font-weight:bold;">=</span> cgi<span style="font-weight:bold;">.</span>obt_var<span style="font-weight:bold;">(</span>querystr, <span style="color:blue">&#39;telefone&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Nome do usuário:&#39;</span>, nome_user<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Telefone do usuário:&#39;</span>, telefone<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+ 
+</pre></div></div>
+
+</div>
+
+</div>
+</section>
+<a id="id_000025" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao cgi.obt_tabvar(str) </h2><div class="corpo-doc">
+<p>funcao cgi.obt_tabvar(str) -- retorna uma tabela com todos as chaves e valores obtidos pelo método GET ou POST.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > str(string) -- é a string obtida pelo método GET ou POST.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (tabela) -- o retorno é uma tabela com todas as chaves obtidas por GET ou POST.</span>
+</div>
+     
+     
+
+  Veja o exemplo abaixo, supondo uma string: 'nome_user=manoel&amp;telefone=66xxxxx-xxxx'
+
+
+
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000026')">&#128203;</div>&nbsp;<i>Exemplo Prisma</i><pre id="id_000026" hidden>
+local cgi = inclua&#39;cgi&#39;;
+local querystr = cgi.va.var_string();
+local tab = cgi.obt_tabvar(querystr);
+imprima(&#39;Nome do usuário:&#39;, tab.nome_user);
+imprima(&#39;Telefone do usuário:&#39;, tab.telefone);
+
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+
+<span style="font-weight:bold;color:#b50546">local</span> cgi <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;cgi&#39;</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> querystr <span style="font-weight:bold;">=</span> cgi<span style="font-weight:bold;">.</span>va<span style="font-weight:bold;">.</span>var_string<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> tab <span style="font-weight:bold;">=</span> cgi<span style="font-weight:bold;">.</span>obt_tabvar<span style="font-weight:bold;">(</span>querystr<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Nome do usuário:&#39;</span>, tab<span style="font-weight:bold;">.</span>nome_user<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Telefone do usuário:&#39;</span>, tab<span style="font-weight:bold;">.</span>telefone<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+</pre></div></div>
+
+</div>
+ Lembrando que esses exemplos devem rodar apropriadamente em um ambiente servidor no modo cgi.
+<b>Veja: </b><a href="https://linguagemprisma.br4.biz/blog/?s=cgi"> https://linguagemprisma.br4.biz/blog/?s=cgi </a>
+
+</div>
+</section>
+<a id="id_00002B" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">função cgi.escape_html(str)</h2><div class="corpo-doc">
+<p>cgi.escape_html(str) - esta função faz a troca de caracteres especiais do html para o seu respectivo código ( &amp; &lt; &gt; &quot; &#39; ficando: &amp;amp; &amp;lt; &amp;gt; &amp;quot; &amp;#039;)</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > str (string) -- é a string para fazer o escape;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) -- o retorno é a string resultante do escape.</span>
+</div>
+   <hr>
+   Veja o exemplo:
+   <hr>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00002C')">&#128203;</div>&nbsp;<i>escape_html.prisma</i><pre id="id_00002C" hidden>
+  local cgi = inclua&#39;cgi&#39;;
+  local s = cgi.escape_html(&#39;&lt;h1&gt;TESTE&lt;/h1&gt;&#39;); 
+  imprima(s);//resultado: &amp;lt;h1&amp;gt;TESTE&amp;lt;/h1&amp;gt;
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+
+  <span style="font-weight:bold;color:#b50546">local</span> cgi <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;cgi&#39;</span><span style="font-weight:bold;">;</span>
+  <span style="font-weight:bold;color:#b50546">local</span> s <span style="font-weight:bold;">=</span> cgi<span style="font-weight:bold;">.</span>escape_html<span style="font-weight:bold;">(</span><span style="color:blue">&#39;&lt;h1&gt;TESTE&lt;/h1&gt;&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> 
+  <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>s<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//resultado: &amp;lt;h1&amp;gt;TESTE&amp;lt;/h1&amp;gt;
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<h1>Variáveis</h1>
+<a id="id_000003" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">local cgi = {};</h2><div class="corpo-doc">
+<p>cgi(tabela) - variável contendo os métodos desta biblioteca.</p>
+
+</div>
+</section>
+<a id="id_000004" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">cgi.va = {};</h2><div class="corpo-doc">
+<p>cgi.va(tabela) - variável contendo os métodos para obter as variáveis de ambiente.</p>
+
+</div>
+</section>
+<a id="id_000027" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">cgi.GET = {};</h2><div class="corpo-doc">
+<p>cgi.GET (tabela) - é a tabela que torna possível acessar diretamente os dados do cliente pelo método GET;</p>
+
+   
+   <hr>
+   Veja o exemplo:
+   <hr>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000028')">&#128203;</div>&nbsp;<i>Prisma</i><pre id="id_000028" hidden>  local cgi = inclua&#39;cgi&#39;;
+  imprima(&#39;Nome do cliente:&#39;, cgi.GET[&#39;nome&#39;]);
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+  <span style="font-weight:bold;color:#b50546">local</span> cgi <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;cgi&#39;</span><span style="font-weight:bold;">;</span>
+  <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Nome do cliente:&#39;</span>, cgi<span style="font-weight:bold;">.</span>GET<span style="font-weight:bold;">[</span><span style="color:blue">&#39;nome&#39;</span><span style="font-weight:bold;">]</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000029" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">cgi.POST = {}; </h2><div class="corpo-doc">
+<p>cgi.POST (tabela) - é a tabela que torna possível acessar diretamente os dados do cliente pelo método POST;</p>
+
+   
+   <hr>
+   Veja o exemplo:
+   <hr>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00002A')">&#128203;</div>&nbsp;<i></i><pre id="id_00002A" hidden>
+  local cgi = inclua&#39;cgi&#39;;
+  imprima(&#39;Nome do cliente:&#39;, cgi.POST[&#39;nome&#39;]);
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+
+  <span style="font-weight:bold;color:#b50546">local</span> cgi <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;cgi&#39;</span><span style="font-weight:bold;">;</span>
+  <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Nome do cliente:&#39;</span>, cgi<span style="font-weight:bold;">.</span>POST<span style="font-weight:bold;">[</span><span style="color:blue">&#39;nome&#39;</span><span style="font-weight:bold;">]</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

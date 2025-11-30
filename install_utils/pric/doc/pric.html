@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>pric - compilador prisma alternativo</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> pric - compilador prisma alternativo</h1>
+
+<h3>Compila arquivos fontes Prisma para executável (prog.exe em Win ou prog em Linux);</h3>
+
+<p>
+
+  Este programa serve para compilar programas Prisma gerando um &#39;auto&#39; interpretador,
+assim não será necessário ter o interpretador prisma instalado no computador alvo da instalação.
+
+</p>
+<p><i><b>Obs.: </b>Em sistema Windows é necessário a dll prisma tanto para o intepretador quanto para executáveis compilados com pric. A dll prisma correta será disponibilizada junto com o pric para windows.</i></p>
+<h3>Use:</h3>
+
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000002"><code>  [no Windows] C:\\Prisma\\1.0\\bin\\pric.exe -o prog.exe prog.prisma
+  [no Linux]   pric -o prog prog.prisma
+  
+  é possível passar mais de um fonte (arquivo.prisma):
+  pric -o prog fonte1.prisma fonte2.prisma fonte3.prisma fonteprincipal.prisma
+</code></pre>
+</div>
+ 
+<h3>pric possui várias opções, veja:</h3>
+
+<ul>
+<li>  [ -o file_out ] - Compila os fontes com a saída file_out (especifique a extensão apropriada - em Windows: .exe | em Linux não precisa de extensão).</li>
+<li>  [ -c file_out ] - Une os fontes em um só com a saída file_out (especifique a extensão apropriada).</li>
+<li>  [ -p file_out ] - Compila os fontes para byte-code necessitando do interpratador prisma instalado</li>
+<li>  [ -a file_out ] - gera um executável sem compilar o fonte prisma. (aceita apenas um fonte).</li>
+<li>  [ -d ] - define o modo como debug, o source é anexado ao arquivo compilado para informações extras.</li>
+<li>  [ -r ] - define o modo como release, o source não é anexado. (o padrão é release);</li>
+<li>  [ -l ] - (letra &#39;L&#39; minúscula) define uma biblioteca prisma para ligar ao arquivo compilado, exemplo: -l /home/myuser/libs/mylib.pris</li>
+<li>  [ -s ] - define o caminho do auto-interpretador, exemplo: -s /pasta/srprisma</li>
+<li>  [ -v ] - imprime a versão deste programa.</li>
+<li>  [ -h ] - imprime esta mensagem.</li>
+<li>  [ -z ] - define (shebang) um caminho para o interpretador, exemplo: -z /usr/local/bin/prisma</li>
+</ul>
+
+ <br>
+<h2>Veja abaixo algumas opções detalhadas:</h2>
+ 
+<h3>[ -c ] - Opção para unir os fontes em um único arquivo sem compilar:</h3>
+
+<p><i><b>Obs.: </b>Deixe no final o arquivo principal, aquele que usa funções que estão nos outros fontes.</i></p>
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000003"><code>     pric -c progfinal.prisma fontes1.prisma fontes2.prisma fontes3.prisma 
+</code></pre>
+</div>
+ 
+<h3>[ -p ] - Opção apenas compila para byte-codes sem gerar um &#39;auto interpretador&#39;</h3>
+
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000004"><code>     pric -p prog.pbrexe fontes1.prisma fontes2.prisma fontes3.prisma 
+</code></pre>
+</div>
+<h3>[ -a ] - Opção gera um executável sem compilar para byte-codes</h3>
+
+<p><i><b>Obs.: </b>Essa opção é útil para gerar um executável a partir de um arquivo já compilado em byte-codes.</i></p>
+<p><i><b>Obs.: </b>Essa opção aceita apenas um fonte.</i></p>
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000005"><code>    pric -a prog.out prog.prisma
+</code></pre>
+</div>
+
+<h3>[ -d ] - Opção gera um executável com informações para debug</h3>
+
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000006"><code>    pric -d -o prog.out prog.prisma
+</code></pre>
+</div>
+
+<h3>[ -r ] - Opção gera um executável em modo release.</h3>
+
+<p><i><b>Obs.: </b>Esta opção é padrão, então nem precisa usá-la, a menos que queira deixar explícita a escolha em um arquivo make, por exemplo.</i></p>
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000007"><code>    pric -r -o prog.out prog.prisma
+</code></pre>
+</div>
+
+
+<h3>[ -l ] - (&#39;L&#39; minúsculo) Opção para ligar uma biblioteca prisma ao programa</h3>
+
+<p><i><b>Obs.: </b>Esta opção aceita somente bibliotecas feitas em puro prisma, texto fonte prisma sem compilar.</i></p>
+<p><i><b>Obs.: </b>O programa não precisa mais da lib, pois ela fica embutida no executável final.</i></p>
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000008"><code>    pric -r -o prog.out prog.prisma -l pasta/mylib.pris
+</code></pre>
+</div>
+ *pasta pode ser um caminho absoluto ou relativo.<br>
+ *é possível passar mais de uma biblioteca para ser ligada, mas para cada uma é necessário a opção -l.
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000009"><code>    pric -o prog.out prog.prisma -l pasta/minhalib.pris -l pasta/outralib.pris ...
+</code></pre>
+</div>
+ 
+<h3>[ -s ] - Define outro caminho para do auto interpretador a ser usado</h3>
+
+ 
+<p><i><b>Obs.: </b>Muito útil para cross compilação, ligar um executável Win em ambiente Línux, vice-versa.</i></p>
+<p><i><b>Obs.: </b>O padrão é o próprio auto interpretador embutido no pric.</i></p>
+<h4>Em sistema Win você pode querer um programa com interface gráfica sem aparecer a janela preta do cmd.</h4>
+
+<p>
+
+ Para isso basta usar o auto interpretador igsrprisma.exe para gerar um executável com somente interface gráfica.
+
+</p>
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_00000A"><code>     pric.exe -o prog.exe prog.prisma -s C:\Prisma\1.0\bin\igsrprisma.exe
+</code></pre>
+</div>
+<p><i><b>Obs.: </b>Troque o caminho de acordo com sua instalação Prisma.</i></p>
+
+<h3>[ -z ] - Define (shebang) um caminho para o interpretador, exemplo: -z /usr/local/bin/prisma</h3>
+
+<p>
+
+   Para quem usa linux e está familiarizado com terminal, com certeza já deve ter visto ou até mesmo usado.
+   Shebang é aquela primeira linha em scripts Linux, iniciando pelos caracteres #! e que indicam o caminho
+   para o interpretador daquele script.
+
+</p>
+<h4>Um exemplo de início de um script bash:</h4>
+
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_00000B"><code>   #!/bin/bash
+   echo Iniciando processo!
+   ...
+</code></pre>
+</div>
+
+<h4>Outro exemplo, usando Prisma como interpretador</h4>
+
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_00000C"><code>   #!/usr/local/bin/prisma
+   imprima(&quot;Iniciando o processo!&quot;);
+   ...
+</code></pre>
+</div>
+
+<h4>Caso esteja usando Linux, ou Prisma cgi, esse recurso se torna muito útil:</h4>
+
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_00000D"><code>      pric -p  prog.cgi prog.prisma -z /usr/local/bin/prisma
+</code></pre>
+</div>
+ 
+<p><i><b>Obs.: </b>Logicamente só faz sentido usando a opção -p para criar um arquivo em byte code, pois se gerar um executável ele não precisa de shebang, já é um executável compilado em C.</i></p>
+ 
+<p><i><b>Obs.: </b>Ao utilizar a opção -p o compilador já adiciona a shebang por padrão, logo use a opção -z apenas se mudar o caminho do interpretador da shebang.</i></p>
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

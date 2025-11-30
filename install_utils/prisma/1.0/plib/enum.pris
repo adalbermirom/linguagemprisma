@@ -1,0 +1,173 @@
+
+/**
+ * \file enun.pris
+ * \author Adalberto
+ * \date 04/12/2023
+ * \brief Simples lib para simular o tipo enum da linguagm C.
+ * \footer 
+ * Feito com minidoc-0.1 linguagem prisma
+ * \footer--
+ * <div>
+   <p>
+    Esta lib tem o propósito de criar o tipo enum em Prisma. Enuns são sequências de números inteiros sem sinal muito usadas em linguagens como C, C++, C# e outras.
+   </p>
+   <b>Veja um exemplo de enum em C:</b>
+   \inicio_codigo  ex_enum.c
+    enum Level {
+                 LOW,
+                 MEDIUM,
+                 HIGH
+               };
+    //este enum (enumeration) acima atribui ao primeiro item da lista o valor 0, ao segundo 1 e assim por diante.
+    //poderíamos determinar o valor inicial, ou de qualquer parte dos itens do enum.
+    
+    if(LOW==0) puts('LOW = 0');
+   \fim_codigo
+ * </div>
+   <p>Em Prisma ficaria:</p>
+   
+\inicio_codigo ex1.prisma
+
+    local enum = inclua'enum'; //o retorno é uma única função.
+    local Level = enum(0); //parâmetro valor inicial, o padrão é 1 caso não seja definido.
+    local LOW = Level.LOW, Level.MEDIUM, Level.HIGH;//primeira forma    
+    imprima('Primeira forma:', Level.LOW, Level.MEDIUM, Level.HIGH);
+    
+    se Level.LOW == 0 entao 
+        poe('LOW = 0');
+    fim
+    
+    local LOW, MEDIUM, HIGH = Level(100,102); //segunda forma - range com inicio em 100 até 102 (100,101,102);
+    imprima('Segunda forma:', LOW, MEDIUM, HIGH);
+    
+    local LOW, MEDIUM, HIGH = Level({10,30,50});//cada valor da tabela é passado para cada variável do lado esquerdo.
+    imprima('Terceira forma:', LOW, MEDIUM, HIGH);
+    
+    //no caso de tabela (terceira forma) os parênteses podem ser omitidos:
+    local LOW, MEDIUM, HIGH = Level{10,30,50};
+    imprima('Omitindo parênteses:', LOW, MEDIUM, HIGH);
+    
+\fim_codigo
+    
+   \obs Outra forma que fica bem semelhante ao C:
+\inicio_codigo  ex2.prisma
+    local enum = inclua'enum';
+    
+    level = enum(0);//primeiro devemos criar o objeto enum(); o parâmetro opcional é o valor inicial.
+    enum{ //depois com a própria função enum, podemos enumerar quaisquer chaves e o valor será uma sequência;
+	     level.LOW; 
+	     level.MEDIUM;
+	     level.HIGH;
+	}
+    imprima('Quarta forma:', level.LOW, level.MEDIUM, level.HIGH );
+    
+\fim_codigo
+  
+  \obs Poderíamos mudar a sequência:
+  
+\inicio_codigo  ex3.prisma
+    local enum = inclua'enum';
+    pos = enum();
+    
+    pos.CENTRO = 0; //definimos um valor inicial
+    enum{ pos.DIREITA_TOPO, pos.ESQUERDA_TOPO; }
+    //mudando a sequência:
+    pos.DIREITA_BASE = 100;
+    enum{ pos.ESQUERDA_BASE, pos.ALEATORIO, pos.LOCAL_MOUSE, pos.LOCAL_ANTERIOR; }
+    
+    imprima( pos.CENTRO, pos.DIREITA_TOPO, pos.ESQUERDA_TOPO, pos.DIREITA_BASE, pos.ESQUERDA_BASE, pos.ALEATORIO, pos.LOCAL_MOUSE, pos.LOCAL_ANTERIOR );
+    
+    //--> saída: 0	1	2	100	101	102	103	104
+
+\fim_codigo
+
+ 
+ */
+
+
+/*@doc
+
+\fn enum
+\brief Esta função enum() simula o tipo enum do C, gerando uma enumeração contínua.
+\param ini(numero) - número inicial do enum.
+\returns (tabela) - tabela enum.
+
+\obs Ao chamar a função enum passando uma tabela, podemos simular a criação de um enum no estilo C, veja o exemplo abaixo:
+
+\start_code  ex4.prisma
+
+     local enum = inclua'enum'; //retorna uma única função ao incluir esta lib.
+     local Level = enum(); //construtor da enum, sem valor inicial, o padrão é 1;
+     Level.LOW=0; //definindo o valor inicial;
+     enum{Level.MEDIUM, Level.HIGH}; //quarta maneira.
+     imprima("Levels:", Level.LOW, Level.MEDIUM, Level.HIGH);
+     imprima(Level); // 
+     imprima('tipo: ', tipo(Level)); // --> "enum" (a partir de Prisma-1.0.107, o metamétodo __tipo foi definido.)
+     
+\end_code
+
+*/
+
+local funcao enum(ini)
+    local t = {};
+    local mt = {};
+    se tipo(ini)=='numero' entao
+        mt.n = ini;
+    fim
+    
+    mt.__newindex = funcao(t,k,n)
+        N(n);
+        local mt = obtmetatabela(t);
+        mt.n = n ou mt.n ou 1;
+        def(t,k, mt.n);
+        mt.n = mt.n + 1;
+    fim
+    mt.__index  = funcao(t,k)
+        local mt = obtmetatabela(t);
+        mt.n = mt.n ou 1;//padrão caso não houver ainda.
+        def(t,k, mt.n);
+        mt.n = mt.n + 1;
+        retorne mt.n;
+    fim
+    mt.__tipo = funcao()
+        retorne 'enum';
+    fim
+    mt.__convstring = funcao(t)
+        local s = 'enum{ '
+        para c, v em pares(t) inicio
+            s = s .. c .. ' = ' .. v .. '; ';
+        fim
+        s = s .. '}';
+        retorne s;
+    fim
+    
+    mt.__call = funcao(t, a,b)
+        se tipo(a)=='tabela' entao retorne tabela.desempacote(a); fim
+        local a = a ou 1;
+        local b = b ou 100;
+        local t = {};
+        para i = a, b inicio
+            t[#t+1] = i;
+        fim
+        retorne tabela.desempacote(t);
+    fim
+    
+    defmetatabela(t, mt);
+    //t.enum = funcao(...)
+    //fim
+    retorne t;   
+fim
+
+
+    
+retorne enum;
+            
+    
+    
+    
+     
+     
+
+
+
+

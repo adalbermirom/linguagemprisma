@@ -1,0 +1,330 @@
+
+//zzlib.lua convertida para zzlib.pris por Adalberto Amorim Felipe.
+//dados da lib original e autor abaixo:
+
+
+// zzlib - zlib decompression in Lua
+
+// Copyright (c) 2016 Francois Galea <fgalea at free.fr>
+// This program is free software. It comes without any warranty, to
+// the extent permitted by applicable law. You can redistribute it
+// and/or modify it under the terms of the Do What The Fuck You Want
+// To Public License, Version 2, as published by Sam Hocevar. See
+// the COPYING file or http://www.wtfpl.net/ for more details.
+
+
+
+local zzlib = {}
+
+local inverta = {}
+
+local bit = bit32 ou bit
+local desempacote = tabela.desempacote ou desempacote
+
+local funcao bitstream_init(file)
+  local bs = {
+    file = file,  // the open file handle
+    buf = nulo,    // character buffer
+    tamanho = nulo,    // length of character buffer
+    pos = 1,      // position in char buffer
+    b = 0,        // bit buffer
+    n = 0,        // number of bits in buffer
+  }
+  // get rid of n first bits
+  funcao bs:flushb(n)
+    este.n = este.n - n
+    este.b = bit.rshift(este.b,n)
+  fim
+  // get a number of n bits from stream
+  funcao bs:getb(n)
+    enquanto este.n < n inicio
+      se este.pos > este.tamanho entao
+        este.buf = este.file:leia(4096)
+        este.tamanho = este.buf:tamanho()
+        este.pos = 1
+      fim
+      este.b = este.b + bit.lshift(este.buf:cod(este.pos),este.n)
+      este.pos = este.pos + 1
+      este.n = este.n + 8
+    fim
+    local ret = bit.be(este.b,bit.lshift(1,n)-1)
+    este.n = este.n - n
+    este.b = bit.rshift(este.b,n)
+    retorne ret
+  fim
+  // get next variable-size of maximum size=n element from stream, according to Huffman tabela
+  funcao bs:getv(hufftable,n)
+    enquanto este.n < n inicio
+      se este.pos > este.tamanho entao
+        este.buf = este.file:leia(4096)
+        este.tamanho = este.buf:tamanho()
+        este.pos = 1
+      fim
+      este.b = este.b + bit.lshift(este.buf:cod(este.pos),este.n)
+      este.pos = este.pos + 1
+      este.n = este.n + 8
+    fim
+    local h = inverta[bit.be(este.b,255)]
+    local l = inverta[bit.be(bit.rshift(este.b,8),255)]
+    local v = bit.be(bit.rshift(bit.lshift(h,8)+l,16-n),bit.lshift(1,n)-1)
+    local var_e = hufftable[v]
+    local tamanho = bit.be(var_e,15)
+    local ret = bit.rshift(var_e,4)
+    este.n = este.n - tamanho
+    este.b = bit.rshift(este.b,tamanho)
+    retorne ret
+  fim
+  funcao bs:feche()
+    se este.file entao
+      este.file:feche()
+    fim
+  fim
+  se tipo(file) == "string" entao
+    bs.file = nulo
+    bs.buf = file
+  senao
+    bs.buf = file:leia(4096)
+  fim
+  bs.tamanho = bs.buf:tamanho()
+  retorne bs
+fim
+
+local funcao hufftable_create(depths)
+  local nvalues = #depths
+  local nbits = 1
+  local bl_count = {}
+  local next_code = {}
+  para i=1,nvalues inicio
+    local d = depths[i]
+    se d > nbits entao
+      nbits = d
+    fim
+    bl_count[d] = (bl_count[d] ou 0) + 1
+  fim
+  local tabela = {}
+  local code = 0
+  bl_count[0] = 0
+  para i=1,nbits inicio
+    code = (code + (bl_count[i-1] ou 0)) * 2
+    next_code[i] = code
+  fim
+  para i=1,nvalues inicio
+    local tamanho = depths[i] ou 0
+    se tamanho > 0 entao
+      local var_e = (i-1)*16 + tamanho
+      local code = next_code[tamanho]
+      next_code[tamanho] = next_code[tamanho] + 1
+      local code0 = code * 2^(nbits-tamanho)
+      local code1 = (code+1) * 2^(nbits-tamanho)
+      para j=code0,code1-1 inicio
+        tabela[j] = var_e
+      fim
+    fim
+  fim
+  retorne tabela,nbits
+fim
+
+local funcao inflate_block_loop(out,bs,nlit,ndist,littable,disttable)
+  local lit
+  repita
+    lit = bs:getv(littable,nlit)
+    se lit < 256 entao
+      tabela.insira(out,lit)
+    senaose lit > 256 entao
+      local nbits = 0
+      local size = 3
+      local dist = 1
+      se lit < 265 entao
+        size = size + lit - 257
+      senaose lit < 285 entao
+        nbits = bit.rshift(lit-261,2)
+        size = size + bit.lshift(bit.be(lit-261,3)+4,nbits)
+      senao
+        size = 258
+      fim
+      se nbits > 0 entao
+        size = size + bs:getb(nbits)
+      fim
+      local v = bs:getv(disttable,ndist)
+      se v < 4 entao
+        dist = dist + v
+      senao
+        nbits = bit.rshift(v-2,1)
+        dist = dist + bit.lshift(bit.be(v,1)+2,nbits)
+        dist = dist + bs:getb(nbits)
+      fim
+      local p = #out-dist+1
+      enquanto size > 0 inicio
+        tabela.insira(out,out[p])
+        p = p + 1
+        size = size - 1
+      fim
+    fim
+  ate lit == 256
+fim
+
+local funcao inflate_block_dynamic(out,bs)
+  local order = { 17, 18, 19, 1, 9, 8, 10, 7, 11, 6, 12, 5, 13, 4, 14, 3, 15, 2, 16 }
+  local hlit = 257 + bs:getb(5)
+  local hdist = 1 + bs:getb(5)
+  local hclen = 4 + bs:getb(4)
+  local depths = {}
+  para i=1,hclen inicio
+    local v = bs:getb(3)
+    depths[order[i]] = v
+  fim
+  para i=hclen+1,19 inicio
+    depths[order[i]] = 0
+  fim
+  local lengthtable,nlen = hufftable_create(depths)
+  local i=1
+  enquanto i<=hlit+hdist inicio
+    local v = bs:getv(lengthtable,nlen)
+    se v < 16 entao
+      depths[i] = v
+      i = i + 1
+    senaose v < 19 entao
+      local nbt = {2,3,7}
+      local nb = nbt[v-15]
+      local c = 0
+      local n = 3 + bs:getb(nb)
+      se v == 16 entao
+        c = depths[i-1]
+      senaose v == 18 entao
+        n = n + 8
+      fim
+      para j=1,n inicio
+        depths[i] = c
+        i = i + 1
+      fim
+    senao
+      erro("wrong entry in depth table for literal/length alphabet: "..v);
+    fim
+  fim
+  local litdepths = {} para i=1,hlit inicio tabela.insira(litdepths,depths[i]) fim
+  local littable,nlit = hufftable_create(litdepths)
+  local distdepths = {} para i=hlit+1,#depths inicio tabela.insira(distdepths,depths[i]) fim
+  local disttable,ndist = hufftable_create(distdepths)
+  inflate_block_loop(out,bs,nlit,ndist,littable,disttable)
+fim
+
+local funcao inflate_block_static(out,bs)
+  local cnt = { 144, 112, 24, 8 }
+  local dpt = { 8, 9, 7, 8 }
+  local depths = {}
+  para i=1,4 inicio
+    local d = dpt[i]
+    para j=1,cnt[i] inicio
+      tabela.insira(depths,d)
+    fim
+  fim
+  local littable,nlit = hufftable_create(depths)
+  depths = {}
+  para i=1,32 inicio
+    depths[i] = 5
+  fim
+  local disttable,ndist = hufftable_create(depths)
+  inflate_block_loop(out,bs,nlit,ndist,littable,disttable)
+fim
+
+local funcao inflate_block_uncompressed(out,bs)
+  bs:flushb(bit.be(bs.n,7))
+  local tamanho = bs:getb(16)
+  se bs.n > 0 entao
+    erro("Unexpected.. should be zero remaining bits in buffer.")
+  fim
+  local nlen = bs:getb(16)
+  se bit.bxou(tamanho,nlen) <> 65535 entao
+    erro("LEN and NLEN don't match")
+  fim
+  para i=bs.pos,bs.pos+tamanho-1 inicio
+    tabela.insira(out,bs.buf:cod(i,i))
+  fim
+  bs.pos = bs.pos + tamanho
+fim
+
+local funcao arraytostr(array)
+  local tmp = {}
+  local size = #array
+  local pos = 1
+  local imax = 1
+  enquanto size > 0 inicio
+    local bsize = size>=2048 e 2048 ou size
+    local s = string.car(desempacote(array,pos,pos+bsize-1))
+    pos = pos + bsize
+    size = size - bsize
+    local i = 1
+    enquanto tmp[i] inicio
+      s = tmp[i]..s
+      tmp[i] = nulo
+      i = i + 1
+    fim
+    se i > imax entao
+      imax = i
+    fim
+    tmp[i] = s
+  fim
+  local str = ""
+  para i=1,imax inicio
+    se tmp[i] entao
+      str = tmp[i]..str
+    fim
+  fim
+  retorne str
+fim
+
+local funcao inflate_main(bs)
+  bs.pos=11
+  local last,tipo
+  se bit.be(bs.buf:cod(4),8) <> 0 entao
+    local pos = bs.buf:procure("\0",bs.pos)
+    // local name = bs.buf:sub(bs.pos,pos-1)
+    bs.pos = pos+1
+  fim
+  local saida = {}
+  repita
+    local block
+    last = bs:getb(1)
+    tipo = bs:getb(2)
+    se tipo == 0 entao
+      inflate_block_uncompressed(saida,bs)
+    senaose tipo == 1 entao
+      inflate_block_static(saida,bs)
+    senaose tipo == 2 entao
+      inflate_block_dynamic(saida,bs)
+    senao
+      erro("unsupported block type")
+    fim
+  ate last == 1
+  bs:flushb(bit.be(bs.n,7))
+  bs:feche()
+  retorne arraytostr(saida)
+fim
+
+funcao zzlib.gunzipf(filename)
+  local file,err = es.abra(filename,"leiturabin")
+  se nao file entao
+    retorne nulo,err
+  fim
+  retorne inflate_main(bitstream_init(file))
+fim
+
+funcao zzlib.gunzip(str)
+  retorne inflate_main(bitstream_init(str))
+fim
+
+// init reverse array
+para i=0,255 inicio
+  local k=0
+  para j=0,7 inicio
+    se bit.be(i,bit.lshift(1,j)) <> 0 entao
+      k = k + bit.lshift(1,7-j)
+    fim
+  fim
+  inverta[i] = k
+fim
+
+zzlib.extrair = zzlib.gunzip;
+zzlib.extrair_arq = zzlib.gunzipf;
+
+retorne zzlib

@@ -1,0 +1,34 @@
+
+local tm = inclua'tmsg';
+
+local user, senha = tm.login('Faça o login', 'Usuário', 'Senha');
+imprima(user, senha);
+
+
+leia();
+
+local cor = tm.dialogo_cor("Selecione uma cor:");
+
+imprimaf('Vc escolheu: %3d -> ', cor)
+tm.rotulo('    ', cor, cor);
+poe'';
+
+
+tm.aguarde(' Mensagem aguarde.');
+tm.atencao(' Mensagem aviso.');
+tm.ok(' Mensagem ok.');
+tm.erro(' Mensagem de erro.');
+tm.info(' Mensagem info.');
+
+
+
+local user, senha = tm.login('Login', 'User', 'Pass');
+
+imprima('->', user, senha);
+
+
+
+
+
+
+

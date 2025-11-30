@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>colorize.pris</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<nav id="id_000009"  class="floating-menu">
+<div class="menu-button" title="Ocultar painel lateral" onclick="show_menu_flutuante(this, 'id_00000A', 'id_000009')">&#x2630;</div>
+<div class="com-rolagem" id="id_00000A" hidden>
+<div class="caixa "><h2>Funções:</h2>
+<a href="#id_000005">hl.colorize</a>
+<a href="#id_000006">hl.colorize_md</a>
+<a href="#id_000007">hl.colorize_str</a>
+
+</div>
+<div class="caixa "><h2>Variáveis:</h2>
+<a href="#id_000003">hl.lista_prisma </a>
+</div>
+
+</div>
+</nav>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<img src="prisma.png" alt="" width="150">
+<h1 id="id_000001"> colorize.pris</h1>
+<h3> Adalberto</h3>
+<h3> nov 2023</h3>
+<br>
+<div>
+Converte um texto para html e coloriza as palavras para destaque. (semelhante aos editores de codigo fonte)  
+<a href="#id_00000B"> mais...</a></div>
+<div class="caixa com-borda"><div><h2 >Funções:</h2>
+<ol>
+<li><a href="#id_000005">hl.colorize</a></li>
+<li><a href="#id_000006">hl.colorize_md</a></li>
+<li><a href="#id_000007">hl.colorize_str</a></li>
+</ol>
+</div>
+
+<div><h2>Variáveis:</h2>
+<ol>
+<li><a href="#id_000003">hl.lista_prisma </a></li>
+</ol>
+</div>
+
+</div><br>
+
+<h2 id="id_00000B">colorize.pris</h2><div>
+Converte um texto para html e coloriza as palavras para destaque. (semelhante aos editores de codigo fonte)  
+</div>
+
+
+
+
+ * Esta biblioteca converte um texto fonte Prisma gerando um html com as palavras chaves destacadas.
+
+<h3>Veja o exemplo de saída abaixo:</h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000002')">&#128203;</div>&nbsp;<i>Exemplo:</i><pre id="id_000002" hidden>   
+   local s = [[
+   //comentário de linha única
+   --comentário de linha única estilo Lua funciona em Prisma
+   funcao soma(a,b)
+        retorne a+b;
+    fim
+    
+    imprima(&#39;olá mundo.&#39;);
+    imprima(soma(1,2) );
+
+]]
+
+  
+
+ --[[
+    Comentário
+    multilinha 
+    estilo Lua
+    também funciona em Prisma
+    ]]
+
+    local color = inclua&#39;colorize&#39;;
+    local tab = color.colorize(s);
+    local str = &#39;&lt;pre&gt;&#39;;
+    para i,v em ipares(tab) inicio
+        str = str .. v;    
+    fim
+    str = str .. &#39;\n&lt;/pre&gt;&#39;;
+    
+    //agora só fazer algo com a str html, usar em cgi web, por exemplo.
+    //esta área de código foi feita usando a lib colorize.pris a partir do programa minidoc
+    //um gerador de documentação, muito básico e simples, mas que funciona, feito em Prisma-1.0.107
+   
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 14</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 15</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 16</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 17</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 18</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 19</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 20</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 21</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 22</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 23</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 24</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 25</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 26</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 27</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 28</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 29</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 30</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 31</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 32</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 33</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 34</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+   
+   <span style="font-weight:bold;color:#b50546">local</span> s <span style="font-weight:bold;">=</span> <span style="color:blue">[[
+   //comentário de linha única
+   --comentário de linha única estilo Lua funciona em Prisma
+   funcao soma(a,b)
+        retorne a+b;
+    fim
+    
+    imprima(&#39;olá mundo.&#39;);
+    imprima(soma(1,2) );
+
+]]</span>
+
+  
+
+ <span style="color:grey">--[[
+    Comentário
+    multilinha 
+    estilo Lua
+    também funciona em Prisma
+    ]]</span>
+
+    <span style="font-weight:bold;color:#b50546">local</span> color <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;colorize&#39;</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">local</span> tab <span style="font-weight:bold;">=</span> color<span style="font-weight:bold;">.</span>colorize<span style="font-weight:bold;">(</span>s<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">local</span> str <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;&lt;pre&gt;&#39;</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">para</span> i,v <span style="font-weight:bold;color:#b50546">em</span> <span style="color:#b50546">ipares</span><span style="font-weight:bold;">(</span>tab<span style="font-weight:bold;">)</span> <span style="font-weight:bold;color:#b50546">inicio</span>
+        str <span style="font-weight:bold;">=</span> str <span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> v<span style="font-weight:bold;">;</span>    
+    <span style="font-weight:bold;color:#b50546">fim</span>
+    str <span style="font-weight:bold;">=</span> str <span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> <span style="color:blue">&#39;\n&lt;/pre&gt;&#39;</span><span style="font-weight:bold;">;</span>
+    
+    <span style="color:green">//agora só fazer algo com a str html, usar em cgi web, por exemplo.
+</span>    <span style="color:green">//esta área de código foi feita usando a lib colorize.pris a partir do programa minidoc
+</span>    <span style="color:green">//um gerador de documentação, muito básico e simples, mas que funciona, feito em Prisma-1.0.107
+</span>   
+</pre></div></div>
+
+</div>
+ 
+ 
+<h1>Funções:</h1>
+<a id="id_000005" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao hl.colorize(txt, list)</h2><div class="corpo-doc">
+<p>Função hl.colorize(txt, list) - recebe uma string txt e retorna uma string com destaque palavras em html de acordo com as configurações da tabela list.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > txt(string) - é o texto com o código fonte Prisma para ser convertido para md com destaque (highlighting);</span>
+</div>
+<div class="params-doc"><span > list(tabela) - é a tabela contendo as definições e palavras chave Prisma, use hl.lista_prisma;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     t(tabela) - retorna uma tabela contendo todo o texto html com destaque da linguagem Prisma.</span>
+</div>
+</div>
+</section>
+<a id="id_000006" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao hl.colorize_md(txt, list)</h2><div class="corpo-doc">
+<p>Função hl.colorize_md(txt, list) - mesma função, praticamente, mas com escape para caracteres markdown.</p>
+
+*A saída pode ser lida por um leitor de pdf compatível, como o okular, por exemplo.
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > txt(string) - é o texto com o código fonte Prisma para ser convertido para md com destaque (highlighting);</span>
+</div>
+<div class="params-doc"><span > list(tabela) - é a tabela contendo as definições e palavras chave Prisma, use hl.lista_prisma;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     t(tabela) - retorna uma tabela contendo todo o texto html com destaque da linguagem Prisma.</span>
+</div>
+</div>
+</section>
+<a id="id_000007" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao hl.colorize_str(txt, list)</h2><div class="corpo-doc">
+<p>Função hl.colorize_str(txt, list) - coloriza o fonte Prisma e já retorna uma string preparada para embutir no html.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > txt(string) - é o texto com o código fonte Prisma para ser convertido para md com destaque (highlighting);</span>
+</div>
+<div class="params-doc"><span > list(tabela) - é a tabela contendo as definições e palavras chave Prisma, use hl.lista_prisma;</span>
+</div>
+<p>Para customizar as definições da área de código (como cor da fonte, cor de fundo, tamanho etc.) veja o exemplo acima, a tabela hl.lista_prisma e modifique o quanto quiser!</p>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - retorna uma string já com tag &lt;pre&gt; totalmente configurada para embutir no corpo html.</span>
+</div>
+
+<p><i><b>Obs.: </b>A string retornada já está preparada com a tag &lt;pre&gt; com contagem de números de linhas e highlighting.</i></p>
+<h3>Veja o exemplo abaixo:</h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000008')">&#128203;</div>&nbsp;<i></i><pre id="id_000008" hidden>
+local cl = inclua&#39;colorize&#39;;
+local s = [[
+    imprima(&quot;olá mundo&quot;);
+    para i=1, 10 inicio 
+        imprima(i);
+    fim
+]]
+
+local txt = cl.colorize_str(s);
+
+txt = &#39;&lt;html&gt;&lt;head&gt;&lt;title&gt;Teste colorize&lt;/title&gt;&lt;/head&gt;&lt;body&gt;\n&lt;h1&gt;Teste colorize&lt;/h1&gt;\n&#39; .. txt .. &#39;&lt;/body&gt;&lt;/html&gt;\n&#39;;
+local a, err = es.abra(&#39;teste_colorize.html&#39;, &#39;escrita&#39;);
+se nao a entao erro(err); fim
+a:escreva(txt);
+a:feche();
+
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 14</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 15</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 16</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 17</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+
+<span style="font-weight:bold;color:#b50546">local</span> cl <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;colorize&#39;</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> s <span style="font-weight:bold;">=</span> <span style="color:blue">[[
+    imprima(&quot;olá mundo&quot;);
+    para i=1, 10 inicio 
+        imprima(i);
+    fim
+]]</span>
+
+<span style="font-weight:bold;color:#b50546">local</span> txt <span style="font-weight:bold;">=</span> cl<span style="font-weight:bold;">.</span>colorize_str<span style="font-weight:bold;">(</span>s<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+txt <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;&lt;html&gt;&lt;head&gt;&lt;title&gt;Teste colorize&lt;/title&gt;&lt;/head&gt;&lt;body&gt;\n&lt;h1&gt;Teste colorize&lt;/h1&gt;\n&#39;</span> <span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> txt <span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> <span style="color:blue">&#39;&lt;/body&gt;&lt;/html&gt;\n&#39;</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> a, err <span style="font-weight:bold;">=</span> <span style="color:#b50546">es</span><span style="font-weight:bold;">.</span><span style="color:#b50546">abra</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;teste_colorize.html&#39;</span>, <span style="color:blue">&#39;escrita&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">se</span> <span style="font-weight:bold;color:#b50546">nao</span> a <span style="font-weight:bold;color:#b50546">entao</span> <span style="color:#b50546">erro</span><span style="font-weight:bold;">(</span>err<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span>
+a<span style="font-weight:bold;">:</span><span style="color:#b50546">escreva</span><span style="font-weight:bold;">(</span>txt<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+a<span style="font-weight:bold;">:</span><span style="color:#b50546">feche</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+</pre></div></div>
+
+</div>
+
+</div>
+</section>
+<h1>Variáveis</h1>
+<a id="id_000003" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">hl.lista_prisma = { //estilo padrão da área código:</h2><div class="corpo-doc">
+<p>(tabela) - variável tabela com as definições de estilo para a colorização dos fontes Prisma.</p>
+
+   
+   Obs.: é possível alterar os valores desta tabela e customizar o estilo de seu highlighting.
+   basta analisar e modificar aquilo que quiser nela.
+<h3>Veja:</h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000004')">&#128203;</div>&nbsp;<i>lista_prisma</i><pre id="id_000004" hidden>   
+    
+hl.lista_prisma = { //estilo padrão da área código:
+	               // pad 2, cor texto: preto, cor fundo: branco; tamanho fonte: 16pixels
+	               //altura linha: 16px; borda de 1px cor: #d5d5d5; rolagem: auto; altura máxima 400px; 
+	area_codigo = {estilo=&#39; padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; &#39;;
+	    num_linhas = {
+	        cor_letra = &#39;black&#39;;  //na contagem de linhas essa cor é o padrão dos números.
+	        cor_letra_par = &#39;black&#39;;
+	        cor_fundo = &#39;#ffffff&#39;; //padrão cor de fundo (branco); (impar);
+	        cor_fundo_par = &#39;#ddd&#39;; //cor par, alternância de cores (impar, par);
+    };
+		
+		
+	};
+	comentario={
+		[&#39;//&#39;]=&#39;color:green&#39;;
+		[&#39;/*&#39;] = &#39;color:green&#39;;
+		[&#39;--&#39;] = &#39;color:grey&#39;;
+		[&#39;--[[&#39;]=&#39;color:grey&#39;; 
+    };
+    strings = {
+		[&#39;&quot;&#39;] = &#39;color:blue&#39;; //strings
+		[&#39;\&#39;&#39;] = &#39;color:blue&#39;; //strings
+		[&#39;[[&#39;] = &#39;color:blue&#39;;//string mult linha
+	};
+	
+	numeros = { 
+	    estilo=&#39;color:red&#39;;
+	};
+	simbolos = {
+		estilo=&#39;font-weight:bold;&#39;;
+		&#39;[&#39;,&#39;]&#39;,&#39;{&#39;,&#39;}&#39;,&#39;(&#39;,&#39;)&#39;, &#39;+&#39;,&#39;-&#39;,&#39;/&#39;,&#39;*&#39;,&#39;%&#39;,&#39;&gt;&#39;,&#39;&lt;&#39;,&#39;=&#39;,&#39;.&#39;,&#39;;&#39;,&#39;#&#39;,&#39;?&#39;,&#39;:&#39;,
+		&#39;^&#39;,&#39;~&#39;,&#39;&amp;&#39;,&#39;|&#39;,&#39;\\&#39;
+	};
+	
+    comandos = { estilo=&#39;font-weight:bold;color:#b50546&#39;; //defina o estilo html aqui.{
+    &quot;e&quot;, &quot;quebre&quot;, &quot;inicio&quot;, &quot;início&quot;, &quot;senao&quot;, &quot;senão&quot;, &quot;senaose&quot;,&quot;senãose&quot;,
+    &quot;fim&quot;, &quot;falso&quot;, &quot;para&quot;, &quot;funcao&quot;,&quot;função&quot;, &quot;vapara&quot;, &quot;se&quot;,
+    &quot;em&quot;, &quot;local&quot;, &quot;nulo&quot;, &quot;nao&quot;,&quot;não&quot;, &quot;ou&quot;, &quot;repita&quot;,
+    &quot;retorne&quot;, &quot;entao&quot;,&quot;então&quot;, &quot;verdadeiro&quot;, &quot;ate&quot;,&quot;até&quot;, &quot;enquanto&quot;,
+    &quot;..&quot;, &quot;...&quot;, &quot;==&quot;, &quot;&gt;=&quot;, &quot;&lt;=&quot;, &quot;&lt;&gt;&quot;,&quot;&lt;&lt;&quot;, &quot;&gt;&gt;&quot;, &quot;::&quot;, &quot;&lt;eof&gt;&quot;,
+    &quot;&lt;numero&gt;&quot;, &quot;&lt;nome&gt;&quot;, &quot;&lt;string&gt;&quot;,&quot;este&quot;, &quot;vapara&quot;
+    };
+	base = { estilo=&#39;color:#b50546&#39;;
+        &quot;erro&quot;, &quot;compile&quot;, &quot;convnumero&quot;, &quot;cod&quot;, 	
+        &quot;string&quot;, &quot;pchame&quot;, &quot;U&quot;, &quot;V&quot;, &quot;convstring&quot;, 	
+        &quot;mat&quot;, &quot;S&quot;, &quot;T&quot;, &quot;N&quot;, &quot;_VERSAO&quot;, 	
+        &quot;proximo&quot;, &quot;F&quot;, &quot;B&quot;, &quot;_INFO&quot;, &quot;contador&quot;, 	
+        &quot;corotina&quot;, &quot;tabela&quot;, &quot;tipo&quot;, &quot;modulo&quot;, &quot;carregue&quot;, 	
+        &quot;prismadir&quot;, &quot;imprimaf&quot;, &quot;Tab&quot;, &quot;executestring&quot;, &quot;Bool&quot;, 	
+        &quot;args&quot;, &quot;igual&quot;, &quot;executearquivo&quot;, &quot;debug&quot;, &quot;defmetatabela&quot;, 	
+        &quot;poe&quot;, &quot;desempacote&quot;, &quot;bit32&quot;, &quot;escolha&quot;, &quot;inclua&quot;, 	
+        &quot;tente&quot;, &quot;leia&quot;, &quot;Num&quot;, &quot;ipares&quot;, &quot;obt&quot;, 	
+        &quot;coletelixo&quot;, &quot;Thre&quot;, &quot;pares&quot;, &quot;Func&quot;, &quot;obtmetatabela&quot;, 	
+        &quot;car&quot;, &quot;sis&quot;, &quot;es&quot;, &quot;carreguearquivo&quot;, &quot;pacote&quot;, 	
+        &quot;_G&quot;, &quot;imprima&quot;, &quot;def&quot;, &quot;Classe&quot;, &quot;xpchame&quot;, 	
+        &quot;Udat&quot;, &quot;utf8&quot;, &quot;Val&quot;, &quot;selecione&quot;, &quot;Str&quot;, 	
+        &quot;tamanho&quot;
+	};
+	
+	es={ estilo=&#39;color:#b50546&#39;;
+	    &quot;tipo&quot;, &quot;saida&quot;, &quot;erro&quot;, &quot;escreva&quot;, 	
+        &quot;abra&quot;, &quot;linhas&quot;, &quot;leia&quot;, &quot;tmparquivo&quot;, &quot;feche&quot;, 	
+        &quot;leitura&quot;, &quot;escrita&quot;, &quot;entrada&quot;, &quot;pabra&quot;, &quot;esvazie&quot;			
+	};
+	mat={ estilo=&#39;color:#b50546&#39;;
+		&quot;log&quot;, &quot;log10&quot;, &quot;arcoseno&quot;, &quot;pi&quot;, 	
+        &quot;exp&quot;, &quot;senoh&quot;, &quot;separe&quot;, &quot;minimo&quot;, &quot;arredondeabaixo&quot;, 	
+        &quot;arredonde&quot;, &quot;arcotangente&quot;, &quot;aleatorio&quot;, &quot;seno&quot;, &quot;arcocosseno&quot;, 	
+        &quot;frexp&quot;, &quot;absoluto&quot;, &quot;arredondeacima&quot;, &quot;arcotangente2&quot;, &quot;corte&quot;, 	
+        &quot;raiz&quot;, &quot;tangenteh&quot;, &quot;maximo&quot;, &quot;xaleatorio&quot;, &quot;cossenoh&quot;, 	
+        &quot;raizquad&quot;, &quot;ldexp&quot;, &quot;elevado&quot;, &quot;infinito&quot;, &quot;hipot&quot;, 	
+        &quot;emGrau&quot;, &quot;raizcubica&quot;, &quot;tangente&quot;, &quot;cosseno&quot;, &quot;cmodulo&quot;, 	
+        &quot;xrandonico&quot;, &quot;randonico&quot;, &quot;emRadianos&quot;		
+	};
+	sis={ estilo=&#39;color:#b50546&#39;;
+		&quot;durma&quot;, &quot;execute&quot;, &quot;tamanho&quot;, &quot;obtvarambiente&quot;, 	
+        &quot;data&quot;, &quot;tempo&quot;, &quot;defvarambiente&quot;, &quot;diftempo&quot;, &quot;saia&quot;, 	
+        &quot;nome&quot;, &quot;nome_arquivo&quot;, &quot;deflocal&quot;, &quot;nometmp&quot;, &quot;relogio&quot;, 	
+        &quot;renomeie&quot;, &quot;caminho_absoluto&quot;, &quot;remova&quot;, &quot;delvarambiente&quot;		
+	};
+	string={ estilo=&#39;color:#b50546&#39;;
+		&quot;separe&quot;, &quot;capte&quot;, &quot;inverta&quot;, &quot;car&quot;, 	
+        &quot;cod&quot;, &quot;base64&quot;, &quot;substring&quot;, &quot;minuscula&quot;, &quot;byte&quot;, 	
+        &quot;tamanho&quot;, &quot;hex&quot;, &quot;dec_hex&quot;, &quot;corte&quot;, &quot;compile&quot;, 	
+        &quot;procure&quot;, &quot;entrecar&quot;, &quot;formate&quot;, &quot;junte&quot;, &quot;apare&quot;, 	
+        &quot;maiuscula&quot;, &quot;troque&quot;, &quot;dec_base64&quot;, &quot;sub&quot;, &quot;nconcat&quot;, 	
+        &quot;analise&quot;
+	};
+	tabela={ estilo=&#39;color:red&#39;;
+		&quot;empacote&quot;, &quot;ordene&quot;, &quot;maxn&quot;, &quot;concat&quot;, 	
+        &quot;insira&quot;, &quot;remova&quot;, &quot;desempacote&quot;
+	};
+	corotina={ estilo=&#39;color:#b50546&#39;;
+		&quot;estado&quot;, &quot;exec&quot;, &quot;yield&quot;, &quot;wrap&quot;, 	
+        &quot;executando&quot;, &quot;crie&quot;
+	};
+	utf8 = { estilo=&#39;color:#b50546&#39;;
+		&quot;largindex&quot;, &quot;offset&quot;, &quot;ncasecmp&quot;, &quot;tamanho&quot;, 	
+        &quot;remova&quot;, &quot;fold&quot;, &quot;titulo&quot;, &quot;insira&quot;, &quot;cod&quot;, 	
+        &quot;inverta&quot;, &quot;troque&quot;, &quot;corte&quot;, &quot;maiuscula&quot;, &quot;cods&quot;, 	
+        &quot;separe&quot;, &quot;charpattern&quot;, &quot;capte&quot;, &quot;procure&quot;, &quot;larg&quot;, 	
+        &quot;proximo&quot;, &quot;carpos&quot;, &quot;car&quot;, &quot;escape&quot;, &quot;pontocod&quot;, 	
+        &quot;minuscula&quot;, &quot;byte&quot;
+	};
+	bit32={ estilo=&#39;color:#b50546&#39;;
+		&quot;rrotate&quot;, &quot;bou&quot;, &quot;bteste&quot;, &quot;arshift&quot;, 	
+        &quot;be&quot;, &quot;lrotate&quot;, &quot;lshift&quot;, &quot;bnao&quot;, &quot;rshift&quot;, 	
+        &quot;bxou&quot;, &quot;extract&quot;, &quot;replace&quot;
+   };
+	
+}
+
+
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 14</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 15</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 16</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 17</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 18</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 19</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 20</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 21</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 22</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 23</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 24</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 25</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 26</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 27</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 28</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 29</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 30</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 31</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 32</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 33</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 34</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 35</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 36</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 37</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 38</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 39</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 40</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 41</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 42</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 43</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 44</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 45</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 46</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 47</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 48</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 49</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 50</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 51</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 52</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 53</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 54</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 55</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 56</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 57</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 58</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 59</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 60</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 61</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 62</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 63</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 64</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 65</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 66</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 67</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 68</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 69</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 70</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 71</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 72</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 73</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 74</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 75</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 76</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 77</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 78</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 79</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 80</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 81</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 82</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 83</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 84</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 85</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 86</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 87</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 88</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 89</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 90</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 91</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 92</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 93</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 94</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 95</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 96</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 97</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 98</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 99</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 100</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 101</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 102</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 103</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 104</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 105</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 106</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 107</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 108</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 109</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 110</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 111</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 112</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 113</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 114</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 115</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+   
+    
+hl<span style="font-weight:bold;">.</span>lista_prisma <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span> <span style="color:green">//estilo padrão da área código:
+</span>	               <span style="color:green">// pad 2, cor texto: preto, cor fundo: branco; tamanho fonte: 16pixels
+</span>	               <span style="color:green">//altura linha: 16px; borda de 1px cor: #d5d5d5; rolagem: auto; altura máxima 400px; 
+</span>	area_codigo <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span>estilo<span style="font-weight:bold;">=</span><span style="color:blue">&#39; padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; &#39;</span><span style="font-weight:bold;">;</span>
+	    num_linhas <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span>
+	        cor_letra <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;black&#39;</span><span style="font-weight:bold;">;</span>  <span style="color:green">//na contagem de linhas essa cor é o padrão dos números.
+</span>	        cor_letra_par <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;black&#39;</span><span style="font-weight:bold;">;</span>
+	        cor_fundo <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;#ffffff&#39;</span><span style="font-weight:bold;">;</span> <span style="color:green">//padrão cor de fundo (branco); (impar);
+</span>	        cor_fundo_par <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;#ddd&#39;</span><span style="font-weight:bold;">;</span> <span style="color:green">//cor par, alternância de cores (impar, par);
+</span>    <span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+		
+		
+	<span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+	comentario<span style="font-weight:bold;">=</span><span style="font-weight:bold;">{</span>
+		<span style="font-weight:bold;">[</span><span style="color:blue">&#39;//&#39;</span><span style="font-weight:bold;">]</span><span style="font-weight:bold;">=</span><span style="color:blue">&#39;color:green&#39;</span><span style="font-weight:bold;">;</span>
+		<span style="font-weight:bold;">[</span><span style="color:blue">&#39;/*&#39;</span><span style="font-weight:bold;">]</span> <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;color:green&#39;</span><span style="font-weight:bold;">;</span>
+		<span style="font-weight:bold;">[</span><span style="color:blue">&#39;--&#39;</span><span style="font-weight:bold;">]</span> <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;color:grey&#39;</span><span style="font-weight:bold;">;</span>
+		<span style="font-weight:bold;">[</span><span style="color:blue">&#39;--[[&#39;</span><span style="font-weight:bold;">]</span><span style="font-weight:bold;">=</span><span style="color:blue">&#39;color:grey&#39;</span><span style="font-weight:bold;">;</span> 
+    <span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+    strings <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span>
+		<span style="font-weight:bold;">[</span><span style="color:blue">&#39;&quot;&#39;</span><span style="font-weight:bold;">]</span> <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;color:blue&#39;</span><span style="font-weight:bold;">;</span> <span style="color:green">//strings
+</span>		<span style="font-weight:bold;">[</span><span style="color:blue">&#39;\&#39;&#39;</span><span style="font-weight:bold;">]</span> <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;color:blue&#39;</span><span style="font-weight:bold;">;</span> <span style="color:green">//strings
+</span>		<span style="font-weight:bold;">[</span><span style="color:blue">&#39;[[&#39;</span><span style="font-weight:bold;">]</span> <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;color:blue&#39;</span><span style="font-weight:bold;">;</span><span style="color:green">//string mult linha
+</span>	<span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+	
+	numeros <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span> 
+	    estilo<span style="font-weight:bold;">=</span><span style="color:blue">&#39;color:red&#39;</span><span style="font-weight:bold;">;</span>
+	<span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+	simbolos <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span>
+		estilo<span style="font-weight:bold;">=</span><span style="color:blue">&#39;font-weight:bold;&#39;</span><span style="font-weight:bold;">;</span>
+		<span style="color:blue">&#39;[&#39;</span>,<span style="color:blue">&#39;]&#39;</span>,<span style="color:blue">&#39;{&#39;</span>,<span style="color:blue">&#39;}&#39;</span>,<span style="color:blue">&#39;(&#39;</span>,<span style="color:blue">&#39;)&#39;</span>, <span style="color:blue">&#39;+&#39;</span>,<span style="color:blue">&#39;-&#39;</span>,<span style="color:blue">&#39;/&#39;</span>,<span style="color:blue">&#39;*&#39;</span>,<span style="color:blue">&#39;%&#39;</span>,<span style="color:blue">&#39;&gt;&#39;</span>,<span style="color:blue">&#39;&lt;&#39;</span>,<span style="color:blue">&#39;=&#39;</span>,<span style="color:blue">&#39;.&#39;</span>,<span style="color:blue">&#39;;&#39;</span>,<span style="color:blue">&#39;#&#39;</span>,<span style="color:blue">&#39;?&#39;</span>,<span style="color:blue">&#39;:&#39;</span>,
+		<span style="color:blue">&#39;^&#39;</span>,<span style="color:blue">&#39;~&#39;</span>,<span style="color:blue">&#39;&amp;&#39;</span>,<span style="color:blue">&#39;|&#39;</span>,<span style="color:blue">&#39;\\&#39;</span>
+	<span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+	
+    comandos <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span> estilo<span style="font-weight:bold;">=</span><span style="color:blue">&#39;font-weight:bold;color:#b50546&#39;</span><span style="font-weight:bold;">;</span> <span style="color:green">//defina o estilo html aqui.{
+</span>    <span style="color:blue">&quot;e&quot;</span>, <span style="color:blue">&quot;quebre&quot;</span>, <span style="color:blue">&quot;inicio&quot;</span>, <span style="color:blue">&quot;início&quot;</span>, <span style="color:blue">&quot;senao&quot;</span>, <span style="color:blue">&quot;senão&quot;</span>, <span style="color:blue">&quot;senaose&quot;</span>,<span style="color:blue">&quot;senãose&quot;</span>,
+    <span style="color:blue">&quot;fim&quot;</span>, <span style="color:blue">&quot;falso&quot;</span>, <span style="color:blue">&quot;para&quot;</span>, <span style="color:blue">&quot;funcao&quot;</span>,<span style="color:blue">&quot;função&quot;</span>, <span style="color:blue">&quot;vapara&quot;</span>, <span style="color:blue">&quot;se&quot;</span>,
+    <span style="color:blue">&quot;em&quot;</span>, <span style="color:blue">&quot;local&quot;</span>, <span style="color:blue">&quot;nulo&quot;</span>, <span style="color:blue">&quot;nao&quot;</span>,<span style="color:blue">&quot;não&quot;</span>, <span style="color:blue">&quot;ou&quot;</span>, <span style="color:blue">&quot;repita&quot;</span>,
+    <span style="color:blue">&quot;retorne&quot;</span>, <span style="color:blue">&quot;entao&quot;</span>,<span style="color:blue">&quot;então&quot;</span>, <span style="color:blue">&quot;verdadeiro&quot;</span>, <span style="color:blue">&quot;ate&quot;</span>,<span style="color:blue">&quot;até&quot;</span>, <span style="color:blue">&quot;enquanto&quot;</span>,
+    <span style="color:blue">&quot;..&quot;</span>, <span style="color:blue">&quot;...&quot;</span>, <span style="color:blue">&quot;==&quot;</span>, <span style="color:blue">&quot;&gt;=&quot;</span>, <span style="color:blue">&quot;&lt;=&quot;</span>, <span style="color:blue">&quot;&lt;&gt;&quot;</span>,<span style="color:blue">&quot;&lt;&lt;&quot;</span>, <span style="color:blue">&quot;&gt;&gt;&quot;</span>, <span style="color:blue">&quot;::&quot;</span>, <span style="color:blue">&quot;&lt;eof&gt;&quot;</span>,
+    <span style="color:blue">&quot;&lt;numero&gt;&quot;</span>, <span style="color:blue">&quot;&lt;nome&gt;&quot;</span>, <span style="color:blue">&quot;&lt;string&gt;&quot;</span>,<span style="color:blue">&quot;este&quot;</span>, <span style="color:blue">&quot;vapara&quot;</span>
+    <span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+	base <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span> estilo<span style="font-weight:bold;">=</span><span style="color:blue">&#39;color:#b50546&#39;</span><span style="font-weight:bold;">;</span>
+        <span style="color:blue">&quot;erro&quot;</span>, <span style="color:blue">&quot;compile&quot;</span>, <span style="color:blue">&quot;convnumero&quot;</span>, <span style="color:blue">&quot;cod&quot;</span>, 	
+        <span style="color:blue">&quot;string&quot;</span>, <span style="color:blue">&quot;pchame&quot;</span>, <span style="color:blue">&quot;U&quot;</span>, <span style="color:blue">&quot;V&quot;</span>, <span style="color:blue">&quot;convstring&quot;</span>, 	
+        <span style="color:blue">&quot;mat&quot;</span>, <span style="color:blue">&quot;S&quot;</span>, <span style="color:blue">&quot;T&quot;</span>, <span style="color:blue">&quot;N&quot;</span>, <span style="color:blue">&quot;_VERSAO&quot;</span>, 	
+        <span style="color:blue">&quot;proximo&quot;</span>, <span style="color:blue">&quot;F&quot;</span>, <span style="color:blue">&quot;B&quot;</span>, <span style="color:blue">&quot;_INFO&quot;</span>, <span style="color:blue">&quot;contador&quot;</span>, 	
+        <span style="color:blue">&quot;corotina&quot;</span>, <span style="color:blue">&quot;tabela&quot;</span>, <span style="color:blue">&quot;tipo&quot;</span>, <span style="color:blue">&quot;modulo&quot;</span>, <span style="color:blue">&quot;carregue&quot;</span>, 	
+        <span style="color:blue">&quot;prismadir&quot;</span>, <span style="color:blue">&quot;imprimaf&quot;</span>, <span style="color:blue">&quot;Tab&quot;</span>, <span style="color:blue">&quot;executestring&quot;</span>, <span style="color:blue">&quot;Bool&quot;</span>, 	
+        <span style="color:blue">&quot;args&quot;</span>, <span style="color:blue">&quot;igual&quot;</span>, <span style="color:blue">&quot;executearquivo&quot;</span>, <span style="color:blue">&quot;debug&quot;</span>, <span style="color:blue">&quot;defmetatabela&quot;</span>, 	
+        <span style="color:blue">&quot;poe&quot;</span>, <span style="color:blue">&quot;desempacote&quot;</span>, <span style="color:blue">&quot;bit32&quot;</span>, <span style="color:blue">&quot;escolha&quot;</span>, <span style="color:blue">&quot;inclua&quot;</span>, 	
+        <span style="color:blue">&quot;tente&quot;</span>, <span style="color:blue">&quot;leia&quot;</span>, <span style="color:blue">&quot;Num&quot;</span>, <span style="color:blue">&quot;ipares&quot;</span>, <span style="color:blue">&quot;obt&quot;</span>, 	
+        <span style="color:blue">&quot;coletelixo&quot;</span>, <span style="color:blue">&quot;Thre&quot;</span>, <span style="color:blue">&quot;pares&quot;</span>, <span style="color:blue">&quot;Func&quot;</span>, <span style="color:blue">&quot;obtmetatabela&quot;</span>, 	
+        <span style="color:blue">&quot;car&quot;</span>, <span style="color:blue">&quot;sis&quot;</span>, <span style="color:blue">&quot;es&quot;</span>, <span style="color:blue">&quot;carreguearquivo&quot;</span>, <span style="color:blue">&quot;pacote&quot;</span>, 	
+        <span style="color:blue">&quot;_G&quot;</span>, <span style="color:blue">&quot;imprima&quot;</span>, <span style="color:blue">&quot;def&quot;</span>, <span style="color:blue">&quot;Classe&quot;</span>, <span style="color:blue">&quot;xpchame&quot;</span>, 	
+        <span style="color:blue">&quot;Udat&quot;</span>, <span style="color:blue">&quot;utf8&quot;</span>, <span style="color:blue">&quot;Val&quot;</span>, <span style="color:blue">&quot;selecione&quot;</span>, <span style="color:blue">&quot;Str&quot;</span>, 	
+        <span style="color:blue">&quot;tamanho&quot;</span>
+	<span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+	
+	<span style="color:#b50546">es</span><span style="font-weight:bold;">=</span><span style="font-weight:bold;">{</span> estilo<span style="font-weight:bold;">=</span><span style="color:blue">&#39;color:#b50546&#39;</span><span style="font-weight:bold;">;</span>
+	    <span style="color:blue">&quot;tipo&quot;</span>, <span style="color:blue">&quot;saida&quot;</span>, <span style="color:blue">&quot;erro&quot;</span>, <span style="color:blue">&quot;escreva&quot;</span>, 	
+        <span style="color:blue">&quot;abra&quot;</span>, <span style="color:blue">&quot;linhas&quot;</span>, <span style="color:blue">&quot;leia&quot;</span>, <span style="color:blue">&quot;tmparquivo&quot;</span>, <span style="color:blue">&quot;feche&quot;</span>, 	
+        <span style="color:blue">&quot;leitura&quot;</span>, <span style="color:blue">&quot;escrita&quot;</span>, <span style="color:blue">&quot;entrada&quot;</span>, <span style="color:blue">&quot;pabra&quot;</span>, <span style="color:blue">&quot;esvazie&quot;</span>			
+	<span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+	<span style="color:#b50546">mat</span><span style="font-weight:bold;">=</span><span style="font-weight:bold;">{</span> estilo<span style="font-weight:bold;">=</span><span style="color:blue">&#39;color:#b50546&#39;</span><span style="font-weight:bold;">;</span>
+		<span style="color:blue">&quot;log&quot;</span>, <span style="color:blue">&quot;log10&quot;</span>, <span style="color:blue">&quot;arcoseno&quot;</span>, <span style="color:blue">&quot;pi&quot;</span>, 	
+        <span style="color:blue">&quot;exp&quot;</span>, <span style="color:blue">&quot;senoh&quot;</span>, <span style="color:blue">&quot;separe&quot;</span>, <span style="color:blue">&quot;minimo&quot;</span>, <span style="color:blue">&quot;arredondeabaixo&quot;</span>, 	
+        <span style="color:blue">&quot;arredonde&quot;</span>, <span style="color:blue">&quot;arcotangente&quot;</span>, <span style="color:blue">&quot;aleatorio&quot;</span>, <span style="color:blue">&quot;seno&quot;</span>, <span style="color:blue">&quot;arcocosseno&quot;</span>, 	
+        <span style="color:blue">&quot;frexp&quot;</span>, <span style="color:blue">&quot;absoluto&quot;</span>, <span style="color:blue">&quot;arredondeacima&quot;</span>, <span style="color:blue">&quot;arcotangente2&quot;</span>, <span style="color:blue">&quot;corte&quot;</span>, 	
+        <span style="color:blue">&quot;raiz&quot;</span>, <span style="color:blue">&quot;tangenteh&quot;</span>, <span style="color:blue">&quot;maximo&quot;</span>, <span style="color:blue">&quot;xaleatorio&quot;</span>, <span style="color:blue">&quot;cossenoh&quot;</span>, 	
+        <span style="color:blue">&quot;raizquad&quot;</span>, <span style="color:blue">&quot;ldexp&quot;</span>, <span style="color:blue">&quot;elevado&quot;</span>, <span style="color:blue">&quot;infinito&quot;</span>, <span style="color:blue">&quot;hipot&quot;</span>, 	
+        <span style="color:blue">&quot;emGrau&quot;</span>, <span style="color:blue">&quot;raizcubica&quot;</span>, <span style="color:blue">&quot;tangente&quot;</span>, <span style="color:blue">&quot;cosseno&quot;</span>, <span style="color:blue">&quot;cmodulo&quot;</span>, 	
+        <span style="color:blue">&quot;xrandonico&quot;</span>, <span style="color:blue">&quot;randonico&quot;</span>, <span style="color:blue">&quot;emRadianos&quot;</span>		
+	<span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+	<span style="color:#b50546">sis</span><span style="font-weight:bold;">=</span><span style="font-weight:bold;">{</span> estilo<span style="font-weight:bold;">=</span><span style="color:blue">&#39;color:#b50546&#39;</span><span style="font-weight:bold;">;</span>
+		<span style="color:blue">&quot;durma&quot;</span>, <span style="color:blue">&quot;execute&quot;</span>, <span style="color:blue">&quot;tamanho&quot;</span>, <span style="color:blue">&quot;obtvarambiente&quot;</span>, 	
+        <span style="color:blue">&quot;data&quot;</span>, <span style="color:blue">&quot;tempo&quot;</span>, <span style="color:blue">&quot;defvarambiente&quot;</span>, <span style="color:blue">&quot;diftempo&quot;</span>, <span style="color:blue">&quot;saia&quot;</span>, 	
+        <span style="color:blue">&quot;nome&quot;</span>, <span style="color:blue">&quot;nome_arquivo&quot;</span>, <span style="color:blue">&quot;deflocal&quot;</span>, <span style="color:blue">&quot;nometmp&quot;</span>, <span style="color:blue">&quot;relogio&quot;</span>, 	
+        <span style="color:blue">&quot;renomeie&quot;</span>, <span style="color:blue">&quot;caminho_absoluto&quot;</span>, <span style="color:blue">&quot;remova&quot;</span>, <span style="color:blue">&quot;delvarambiente&quot;</span>		
+	<span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+	<span style="color:#b50546">string</span><span style="font-weight:bold;">=</span><span style="font-weight:bold;">{</span> estilo<span style="font-weight:bold;">=</span><span style="color:blue">&#39;color:#b50546&#39;</span><span style="font-weight:bold;">;</span>
+		<span style="color:blue">&quot;separe&quot;</span>, <span style="color:blue">&quot;capte&quot;</span>, <span style="color:blue">&quot;inverta&quot;</span>, <span style="color:blue">&quot;car&quot;</span>, 	
+        <span style="color:blue">&quot;cod&quot;</span>, <span style="color:blue">&quot;base64&quot;</span>, <span style="color:blue">&quot;substring&quot;</span>, <span style="color:blue">&quot;minuscula&quot;</span>, <span style="color:blue">&quot;byte&quot;</span>, 	
+        <span style="color:blue">&quot;tamanho&quot;</span>, <span style="color:blue">&quot;hex&quot;</span>, <span style="color:blue">&quot;dec_hex&quot;</span>, <span style="color:blue">&quot;corte&quot;</span>, <span style="color:blue">&quot;compile&quot;</span>, 	
+        <span style="color:blue">&quot;procure&quot;</span>, <span style="color:blue">&quot;entrecar&quot;</span>, <span style="color:blue">&quot;formate&quot;</span>, <span style="color:blue">&quot;junte&quot;</span>, <span style="color:blue">&quot;apare&quot;</span>, 	
+        <span style="color:blue">&quot;maiuscula&quot;</span>, <span style="color:blue">&quot;troque&quot;</span>, <span style="color:blue">&quot;dec_base64&quot;</span>, <span style="color:blue">&quot;sub&quot;</span>, <span style="color:blue">&quot;nconcat&quot;</span>, 	
+        <span style="color:blue">&quot;analise&quot;</span>
+	<span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+	<span style="color:#b50546">tabela</span><span style="font-weight:bold;">=</span><span style="font-weight:bold;">{</span> estilo<span style="font-weight:bold;">=</span><span style="color:blue">&#39;color:red&#39;</span><span style="font-weight:bold;">;</span>
+		<span style="color:blue">&quot;empacote&quot;</span>, <span style="color:blue">&quot;ordene&quot;</span>, <span style="color:blue">&quot;maxn&quot;</span>, <span style="color:blue">&quot;concat&quot;</span>, 	
+        <span style="color:blue">&quot;insira&quot;</span>, <span style="color:blue">&quot;remova&quot;</span>, <span style="color:blue">&quot;desempacote&quot;</span>
+	<span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+	<span style="color:#b50546">corotina</span><span style="font-weight:bold;">=</span><span style="font-weight:bold;">{</span> estilo<span style="font-weight:bold;">=</span><span style="color:blue">&#39;color:#b50546&#39;</span><span style="font-weight:bold;">;</span>
+		<span style="color:blue">&quot;estado&quot;</span>, <span style="color:blue">&quot;exec&quot;</span>, <span style="color:blue">&quot;yield&quot;</span>, <span style="color:blue">&quot;wrap&quot;</span>, 	
+        <span style="color:blue">&quot;executando&quot;</span>, <span style="color:blue">&quot;crie&quot;</span>
+	<span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+	<span style="color:#b50546">utf8</span> <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span> estilo<span style="font-weight:bold;">=</span><span style="color:blue">&#39;color:#b50546&#39;</span><span style="font-weight:bold;">;</span>
+		<span style="color:blue">&quot;largindex&quot;</span>, <span style="color:blue">&quot;offset&quot;</span>, <span style="color:blue">&quot;ncasecmp&quot;</span>, <span style="color:blue">&quot;tamanho&quot;</span>, 	
+        <span style="color:blue">&quot;remova&quot;</span>, <span style="color:blue">&quot;fold&quot;</span>, <span style="color:blue">&quot;titulo&quot;</span>, <span style="color:blue">&quot;insira&quot;</span>, <span style="color:blue">&quot;cod&quot;</span>, 	
+        <span style="color:blue">&quot;inverta&quot;</span>, <span style="color:blue">&quot;troque&quot;</span>, <span style="color:blue">&quot;corte&quot;</span>, <span style="color:blue">&quot;maiuscula&quot;</span>, <span style="color:blue">&quot;cods&quot;</span>, 	
+        <span style="color:blue">&quot;separe&quot;</span>, <span style="color:blue">&quot;charpattern&quot;</span>, <span style="color:blue">&quot;capte&quot;</span>, <span style="color:blue">&quot;procure&quot;</span>, <span style="color:blue">&quot;larg&quot;</span>, 	
+        <span style="color:blue">&quot;proximo&quot;</span>, <span style="color:blue">&quot;carpos&quot;</span>, <span style="color:blue">&quot;car&quot;</span>, <span style="color:blue">&quot;escape&quot;</span>, <span style="color:blue">&quot;pontocod&quot;</span>, 	
+        <span style="color:blue">&quot;minuscula&quot;</span>, <span style="color:blue">&quot;byte&quot;</span>
+	<span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+	<span style="color:#b50546">bit32</span><span style="font-weight:bold;">=</span><span style="font-weight:bold;">{</span> estilo<span style="font-weight:bold;">=</span><span style="color:blue">&#39;color:#b50546&#39;</span><span style="font-weight:bold;">;</span>
+		<span style="color:blue">&quot;rrotate&quot;</span>, <span style="color:blue">&quot;bou&quot;</span>, <span style="color:blue">&quot;bteste&quot;</span>, <span style="color:blue">&quot;arshift&quot;</span>, 	
+        <span style="color:blue">&quot;be&quot;</span>, <span style="color:blue">&quot;lrotate&quot;</span>, <span style="color:blue">&quot;lshift&quot;</span>, <span style="color:blue">&quot;bnao&quot;</span>, <span style="color:blue">&quot;rshift&quot;</span>, 	
+        <span style="color:blue">&quot;bxou&quot;</span>, <span style="color:blue">&quot;extract&quot;</span>, <span style="color:blue">&quot;replace&quot;</span>
+   <span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+	
+<span style="font-weight:bold;">}</span>
+
+
+</pre></div></div>
+
+</div>
+
+</div>
+</section>
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

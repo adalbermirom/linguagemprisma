@@ -1,0 +1,327 @@
+/** 
+ * \file Biblioteca jpginfo.pris 
+ * \author Adalberto. dez, 2017   
+ * \brief Biblioteca Prisma jpeginfo-0.2 - linguagemprisma@gmail.com 
+   
+   <p>
+    Módulo Prisma básico para obter informações de uma imagem jpeg (*.jpg, *.jpeg / *.JPG, *.JPEG)
+   </p>
+    
+    \h2 Prisma Linguagem de programação em portugês   
+    
+   
+    \bloco
+    Licença: nenhuma; use como bem entender, sem pagar e sem necessidade de repetir esta informação.
+    o autor não será responsabilizado pelo uso deste software;
+    \bloco--
+    Use:
+    
+    \codigo exemplo_info.prisma
+    local jpg = inclua'jpginfo';
+    local info = jpg.info();
+    
+    se nao info entao imprima(jpg.erro()); sis.saia(1); fim
+    
+    imprima(info.alt,info.larg);
+    imprima(info.cs); //DeviceRGB / DeviceGray / DeviceCMYK
+    imprima(info.bpc);//bits por componente
+    imprima(info.f); //Decoder DCTDecode
+    imprima(info.id); //JFIF
+    imprima(info.tam); //tamanho em bytes da imagem
+    imprima(info.versao); //versao jpeg;
+    \codigo--
+
+*/  
+
+
+/**
+ * \var jpg
+ * \brief variável tabela contendo os métodos desta lib.
+ * Para incluir use: local jpg = inclua'jpginfo';  
+*/
+local jpg = {};//namespace.
+
+/**
+ * \var jpg.VERSAO
+ * \brief variável string contendo a versão desta lib.  
+ * 
+---
+\h3 Use:
+\codigo
+     local jpg = inclua'jpginfo';
+      imprima(jpg.VERSAO); //--> 0.2
+     
+\codigo-- 
+*/
+jpg.VERSAO = '0.2';
+
+/**
+ * \var jpg.INFO
+   \brief variável string contendo informações sobre esta lib.  
+   
+
+\h3    Use:
+\codigo
+     local jpg = inclua'jpginfo';
+      imprima(jpg.INFO); //--> jpginfo-0.2 - biblioteca para obter informações de imagens JPG
+     
+\codigo--
+*/
+jpg.INFO= 'jpginfo-0.2 - biblioteca para obter informações de imagens JPG';
+
+/**
+ * \var ultimo_erro
+ * \brief Variável string contendo a descrição do último erro.
+ * Esta variável é local (private) não podendo ser acessada fora desta biblioteca.  
+ 
+  \h3 Para saber o último erro use a função  
+\codigo
+    local txt_erro = jpg.erro();  
+\codigo--
+    Para definir o último erro use:  
+\codigo
+   jpg.erro('minha mensagem de erro aqui...');  
+\codigo--
+*/
+local ultimo_erro = "";  
+
+/**
+\fn jpg.erro
+\brief Função jpg.erro(s) - define ou retorna o último erro.
+\param s {string ou nulo} - se string então define uma string como último erro e a retorna, se nulo retorna o último erro. 
+\returns {string} - o retorno é uma string contento a descrição do último erro.
+*/
+funcao jpg.erro(s)
+  se tipo(s)=='nulo' entao
+    retorne ultimo_erro;
+  senao
+    ultimo_erro = convstring(s);
+  fim
+  retorne ultimo_erro;
+fim
+
+local SOI = 0xFFD8; //inicio da imagem;
+local EOI = 0xFFD9; //fim da imagem
+local APP0 = 0xffe0; //app0 signature
+
+local funcao obt_16be(a)//big endian
+  se nao (convstring(a)):procure('arquivo') entao 
+    retorne falso, 'Erro: espera-se arquivo em vez de: ' .. tipo(a); 
+  fim
+  local A = a:leia(1):cod(); //obtém 1 byte
+  local B = a:leia(1):cod();
+  local ret = A*256+B; //calcula em decimal big endian 
+  retorne ret;  
+fim
+
+local pos_16be = 0; //em string como entrada da imagem devemos usar a posição para cortar no lugar correto.
+local funcao inc(n)
+    N(n);
+    pos_16be = pos_16be + n;
+    retorne pos_16be;
+fim
+
+//a:busque('def',4);//volta o leitor do arquivo para posição do byte 5;
+funcao string.busque(este,dummy, n)
+    S(este); N(n);
+    pos_16be = n;
+    retorne pos_16be;
+fim
+
+funcao string.leia(este, n) 
+    S(este); N(n);
+    local ret = este:corte(pos_16be + 1, pos_16be + 1 + n-1);
+    inc(n);
+    retorne ret;
+fim
+
+funcao string.feche()
+fim;
+
+local funcao obt_16be_str(a)//str big endian
+  S(a);
+  local A = a:leia(1):cod(); //corte(pos_16be, pos_16be):cod(); //obtém 1 byte
+  local B = a:leia(1):cod(); //corte(pos_16be, pos_16be):cod(); //obtém outro byte 1 posicao pra frente.
+  local ret = A*256+B; //calcula em decimal big endian 
+  retorne ret;  
+fim
+
+
+
+local funcao obt_tamanho(a)
+  local tam = a:busque('final');//leva a leitura para o fim do arquivo e retorna a posicao em bytes(tamanho total);
+  a:busque('def',0);//retorna para o início
+  retorne tam;
+fim  
+
+
+
+/**
+ \fn jpg.info()
+ \brief Obtém as informações dentro de um arquivo JPG ;    
+ \param  arq(string) - nome do arquivo JPG a ser analisado.
+ \returns (tabela) contendo os seguintes campos:  
+
+\h3 Campos da tabela retornada:
+\lista
+ alt = altura da imagem em pixels
+ larg = largura da imagem em pixels
+ id = identificador da imagem JFIF
+ cs = canal de cor (DeviceRGB ou DeviceGray ou DeviceCMYK)
+ bpc = bits por componentes;
+ tam = tamanho do arquivo em bytes;
+ f = decoder para pdf: DCTDecode;
+ versao = versão do jpeg (1.01 ou 1.02)
+ versao_maior = 1
+ versao_menor = 1 ou 2
+\lista--
+*/
+funcao jpg.info(arq)
+  local info={};
+  se tipo(arq)<>'string' entao 
+    jpg.erro('Erro: espera-se string em vez de: ' .. tipo(arq));
+    retorne falso; 
+  fim
+  local  a, err = es.abra(arq,'leiturabin');
+  se nao a entao 
+    jpg.erro(err);
+    retorne falso;
+  fim //retorna erro falha ao abrir arquivo
+  info.tam = obt_tamanho(a);
+  se SOI <> obt_16be(a) entao 
+    jpg.erro('Erro: arquivo não é jpg ou está corrompido');
+    retorne falso;
+  fim
+  
+  se APP0 <> obt_16be(a) entao
+    jpg.erro( 'Erro: arquivo corrompido, falta APP0');
+    retorne falso; 
+  fim
+  local tam_bloco = obt_16be(a);
+  local identificador = a:leia(5);
+  se identificador<> 'JFIF\0' entao 
+    jpg.erro('Erro: formato não suportado: ' .. identificador);
+    retorne falso;
+  fim
+  info.id = identificador:corte(1,-2);//retira o \0 no fim.(pois há um a mais: JFIF\0\0;
+  local versao_maior = a:leia(1):cod();
+  info.versao_maior = versao_maior;
+  local versao_menor = a:leia(1):cod();
+  info.versao_menor = versao_menor
+  local versao = string.formate('%d.%02d',versao_maior, versao_menor);
+  info.versao = versao;
+  local i = tam_bloco;
+  //imprima('--------------- tam bloco:', tam_bloco);
+  local pos = a:busque('def',4);//volta o leitor do arquivo para posição do byte 5;
+  pos = a:busque('def',pos+tam_bloco);
+  enquanto i < info.tam inicio
+    imprima(i);
+    local c = a:leia(1):cod();
+    local d = a:leia(1):cod();   
+    se c <> 0xff ou c == 0xff e d == 0xd9 entao
+      a:feche(); retorne falso, 'Erro ao analisar imagem';
+    fim
+    se d == 0xc0 ou d == 0xc2 entao //0xff* 0xc0* 0x00 0x11 [0x08=bpc] 
+      local tam = obt_16be(a);
+      local bpc = a:leia(1):cod();
+      info.bpc = bpc;
+      info.alt = obt_16be(a);
+      info.larg = obt_16be(a);
+      info.f="DCTDecode"
+      local cs = a:leia(1):cod();
+      local canal = { [1]="DeviceGray",[2]='none',[3]="DeviceRGB",[4]="DeviceCMYK"};
+      info.cs = canal[cs];  
+      a:feche();
+      retorne info;//retorna a tabela info 
+    senao
+      tam_bloco = obt_16be(a);
+      i = tam_bloco + pos+2;//+2 pois não conta os dois bytes do marcador [0xff 0xc0].
+      pos = a:busque('def',i);//define a posicao de leitura para i;
+    fim    
+  fim  
+  a:feche();  
+fim //fim funcao jpg.info()
+
+/**
+ \fn jpg.info_str()
+ \brief Obtém as informações de um JPG a partir de uma string.   
+ \param  txt_img(string) - o conteúdo da imagem lida em string \[use a função es.abra(arq_jpg, 'leiturabin')\]
+
+\parag
+ Ao optar por este método, o programador fica responsável por ler a imagem de um arquivo para uma string e depois passar a string para esta função.  
+\parag--
+
+ \returns (tabela) contendo os seguintes campos:  
+
+\lista
+ alt = altura da imagem em pixels
+ larg = largura da imagem em pixels
+ id = identificador da imagem JFIF
+ cs = canal de cor (DeviceRGB ou DeviceGray ou DeviceCMYK)
+ bpc = bits por componentes;
+ tam = tamanho do arquivo em bytes;
+ f = decoder para pdf: DCTDecode;
+ versao = versão do jpeg (1.01 ou 1.02)
+ versao_maior = 1
+ versao_menor = 1 ou 2
+\lista--
+*/
+funcao jpg.info_str(a)
+  local info={};
+  se tipo(a)<>'string' entao     
+    retorne falso, jpg.erro('Erro: espera-se string em vez de: ' .. tipo(arq));
+  fim
+  
+  info.tam = #a;
+  se SOI <> obt_16be_str(a) entao     
+    retorne falso, jpg.erro('Erro: arquivo não é jpg ou está corrompido');
+  fim
+  
+  se APP0 <> obt_16be_str(a) entao
+    retorne falso, jpg.erro( 'Erro: arquivo corrompido, falta APP0');
+  fim
+  local tam_bloco = obt_16be_str(a);
+  local identificador = a:leia(5);
+  se identificador<> 'JFIF\0' entao 
+    retorne falso, jpg.erro('Erro: formato não suportado: ' .. identificador);
+  fim
+  info.id = identificador:corte(1,-2);//retira o \0 no fim.(pois há um a mais: JFIF\0\0;
+  local versao_maior = a:leia(1):cod();
+  info.versao_maior = versao_maior;
+  local versao_menor = a:leia(1):cod();
+  info.versao_menor = versao_menor
+  local versao = string.formate('%d.%02d',versao_maior, versao_menor);
+  info.versao = versao;
+  local i = tam_bloco;
+  //imprima('--------------- tam bloco:', tam_bloco);
+  local pos = a:busque('def',4);//volta o leitor do arquivo para posição do byte 5;
+  pos = a:busque('def',pos+tam_bloco);
+  enquanto i < info.tam inicio
+    //imprima(i);
+    local c = a:leia(1):cod();
+    local d = a:leia(1):cod();   
+    se c <> 0xff ou c == 0xff e d == 0xd9 entao
+      a:feche(); retorne falso, jpg.erro'Erro ao analisar imagem';
+    fim
+    se d == 0xc0 ou d == 0xc2 entao //0xff* 0xc0* 0x00 0x11 [0x08=bpc] 
+      local tam = obt_16be_str(a);
+      local bpc = a:leia(1):cod();
+      info.bpc = bpc;
+      info.alt = obt_16be_str(a);
+      info.larg = obt_16be_str(a);
+      info.f="DCTDecode"
+      local cs = a:leia(1):cod();
+      local canal = { [1]="DeviceGray",[2]='none',[3]="DeviceRGB",[4]="DeviceCMYK"};
+      info.cs = canal[cs];  
+      a:feche();
+      retorne info;//retorna a tabela info 
+    senao
+      tam_bloco = obt_16be_str(a);
+      i = tam_bloco + pos+2;//+2 pois não conta os dois bytes do marcador [0xff 0xc0].
+      pos = a:busque('def',i);//define a posicao de leitura para i;
+    fim    
+  fim  
+  a:feche();  
+fim //fim funcao jpg.info_str()
+
+retorne jpg;

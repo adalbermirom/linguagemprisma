@@ -1,0 +1,478 @@
+
+/*@doc
+ * 
+ * \fonte gifinfo.pris
+ * \autor Adalberto 
+ * \data 03/01/2017
+ * 
+   \resumo Biblioteca Prisma gifinfo-0.1 básica para extrair informações de imagens gif com altura, largura etc.
+ * 
+ * linguagemprisma@gmail.com
+ * \veja linguagemprisma.br4.biz
+ * 
+ Exemplo básico:
+\inicio_codigo ex1.prisma
+
+local gif = inclua'gifinfo';
+local arq = 'b.gif';
+
+local tab,err = gif.info(arq);
+tente(tab,err);
+imprima("Id:......................................:",tab.id);
+imprima("Formato .................................:",tab.formato);
+imprima("Versão...................................:", tab.versao);
+imprima("Número de imagens no gif.................:", tab.num);
+imprima("Tabela global de cor está presente?......:", tab.tgc == 1);
+imprima("Tamanho da tabela global de cor..........:", tab.tam_tgc);
+imprima("Tamanho da tabela global de cor em bytes.:", tab.tam_tgc*3);
+imprima("Indice da cor de fundo...................:", tab.icorfundo);
+imprima("Resolução da cor.........................:", tab.res_cor);
+imprima("Relação de aspecto de pixel..............:", tab.rap);//geralmente 0
+imprima("Bits por componente......................:", tab.bpc);//geralmente 8, o mesmo que res_cor
+imprima("Largura x Altura.........................:",tab.larg,'x',tab.alt);
+imprima("Tempo de transição.......................:",tab.ext_ctrl_grafico.tempo,'centésimos de segundo');
+
+\fim_codigo
+ */
+ 
+local string_corte, emnumero, emstring = string.corte,convnumero,convstring;
+
+
+local funcao tamanho_arquivo(a)
+  local atual = a:busque('atual');
+  local tam = a:busque('final');
+  a:busque('def',atual);
+  retorne tam;
+fim
+
+funcao bin_para_dec(b)
+  local b = emstring(b);
+  se nao b entao retorne nulo fim;
+  local valor = 0;
+  local cont=0;
+  para i = #b, 1, -1 inicio    
+    local c = string_corte(b,i,i);
+    local n = emnumero(c);
+    valor = valor + ( n * (2^cont) );
+    cont = cont + 1;
+  fim
+  retorne valor;  
+fim
+ 
+local funcao dec_para_bin(d)
+  se d == 0 entao retorne '00000000';
+  senaose d == 1 entao retorne '00000001' fim
+  se tipo(d) <> 'numero' entao
+    retorne nulo;
+  fim
+  local mat_corte = mat.corte; //dentro de loops é aconselhável usar variáveis locais
+                               //para mais rapidez;
+  local result,resto,valor = 0,0,'';
+  local tmp = d;
+  enquanto result <> 1 inicio
+    result = mat.corte(tmp/2);//tirando a parte fracionaria com o mat.corte
+    resto = tmp%2;
+    tmp = result;
+    valor = resto .. valor
+  fim
+  valor = 1 .. valor;//o ultimo 1 tem de colocar agora pois o laço é interrompido nele.
+  retorne string.formate('%s%s',('0'):nconcat(8-#valor),valor);  
+fim
+
+local gif = {};
+
+local funcao obt_16le(a) //obtem 16 bits little endian (dois bytes representa um inteiro);
+  local aa = a:leia(1):cod(); local b = a:leia(1):cod();
+  retorne b*256+aa;
+fim
+
+local funcao obt_byte(a)
+  retorne a:leia(1):cod();
+fim
+
+
+local funcao obt_extensao_ctrl_grafico(a,info)
+  local tab = {};
+  local bsize = obt_byte(a); //sempre 0x04 4 bytes de tamanho fora o 0x00 terminator block
+  local tmp = dec_para_bin(obt_byte(a));//1
+  //tab.flags={};
+  tab.res = bin_para_dec(tmp:corte(1,3)); //reservado para futuro 3 primeiros bits.
+  tab.met_disp = bin_para_dec(tmp:corte(4,6) ); //metodo de disposicao
+  tab.flag_usuario = convnumero(tmp:corte(7,7));//flag de entrada reservado ao usuario
+  tab.flag_cor_transp = convnumero(tmp:corte(8,8)); //flag de cor transparente
+  tab.tempo = obt_16le(a); //2-3
+  tab.ict = obt_byte(a);//4  itc: indice da cor transparente;
+  //imprima(tab.res,tab.met_disp,tab.flag_usuario, tab.flag_transp_cor,'delay',tab.tempo,'idx transp',tab.itc);leia();
+  local eof = obt_byte(a);//terminator 0x00;
+  se eof <> 0x00 entao retorne falso,'erro ao extrair' fim
+  info.ext_ctrl_grafico[#info.ext_ctrl_grafico+1] = tab;
+fim
+
+local funcao obt_extensao_aplicativo(a,info)
+  local bsize = obt_byte(a);
+  se (bsize<>0x0b) entao retorne falso,'tamanho do bloco de extensao ap não é 11'; fim
+  local id = a:leia(8); //identificador de aplicativo ex.: NETSCAPE máx. 8 bytes;
+  local aut = a:leia(3); //codigo de autenticacao ex.: 2.0, máx. 3 bytes;
+  local tamSubBloco = obt_byte(a); //tamanho a primeiro informação gravada.
+  local bloco = {};
+  enquanto tamSubBloco <> 0 inicio
+    bloco[#bloco+1]={};
+    para i=1,tamSubBloco inicio
+      bloco[#bloco][i]=obt_byte(a);//pega em binario devido aos possíveis \000 
+    fim
+    tamSubBloco = obt_byte(a);//lê o próximo byte, se igual a 0 entao fim de dados;
+  fim
+  info.ext_aplicativo = {id=id,ver=aut,bloco=bloco};  
+fim
+
+local funcao obt_extensao_texto(a,info)
+  local tam = obt_byte(a); se tam<>0x0c entao retorne falso,'Erro: tamanho bloco ext texto não é 12'; fim
+  local tab = {};
+  tab.x = obt_16le(a); tab.y = obt_16le(a); //obtem x = left position grid text, e y = top posi...
+  tab.larg=obt_16le(a); tab.alt=obt_16le(a); //larg e alt da grade de texto.
+  tab.larg_car = obt_byte(a); tab.alt_car = obt_byte(a); //largura e alt dos caracteres.
+  tab.icorletra = obt_byte(a); tab.icorfundo = obt_byte(a);//indices cor letra e fundo do texto.
+  local bloco = {};
+  local tam_subbloco = obt_byte(a);//tamanho do bloco de texto
+  //imprima(tam_subbloco);leia();
+  local n = 1;
+  enquanto tam_subbloco <> 0 inicio
+   // poe(n);n=n+1;leia();
+    bloco[#bloco+1]=a:leia(tam_subbloco);
+    tam_subbloco=obt_byte(a);
+  fim
+  tab.bloco={};
+  tab.bloco = bloco;
+  info.ext_texto[#info.ext_texto+1] = tab;
+  retorne verdadeiro;
+fim
+
+local funcao obt_extensao_comentario(a,info)
+  local tam = obt_byte(a);
+  local tab = {};
+  enquanto tam<>0 inicio
+    tab[#tab+1]=a:leia(tam);
+    tam=obt_byte(a);
+  fim
+  info.ext_comentario[#info.ext_comentario+1] = tab;
+  retorne verdadeiro;
+fim
+
+funcao obt_descritor_imagem(a)
+  local tab = {};
+  tab.imagem_pos = a:busque('atual')-1;//marca na posicao 0x2c do inicio do descritor de imagem.
+  tab.x=obt_16le(a); tab.y = obt_16le(a); //x e y (left and top);
+  tab.larg = obt_16le(a); tab.alt=obt_16le(a); //largura e altura da imagem.
+  local flag = dec_para_bin(obt_byte(a));
+  tab.tlc = convnumero( flag:corte(1,1));// 0 = tabela ausente, 1 = tabela presente.
+  tab.entrelace = convnumero(flag:corte(2,2));
+  tab.ord = convnumero(flag:corte(3,3)); //tabela organizada ascendente por frequencia. geralmente 0;
+  tab.res = bin_para_dec(flag:corte(4,5));//reservado para uso futuro
+  local tmp = bin_para_dec(flag:corte(6,8));
+  tab.tam_tlc = tmp; 
+  se tab.tlc <> 0 entao
+    tab.tam_tlc = 2^(tmp+1); //o numero total de bytes = 3* tam(2^(N+1));
+  fim
+  local atual = a:busque('atual'); //retorna a posição atual de leitura;
+  //local bloco={};//tabela de subblocos
+  //leia();
+  se tab.tlc == 0 entao //tabela local de cor não presente
+    tab.lzw_min = obt_byte(a);
+    local tam = obt_byte(a);//tamanho do sub bloco
+    local pos = a:busque('atual');//posicao atual de leitura é o inicio da imagem data.
+    enquanto tam<>0 inicio
+      a:busque('def',pos+tam);
+      tam = obt_byte(a);
+      pos = a:busque('atual');
+    fim
+  senao
+     
+  fim
+ // poe'-------------------------------------'
+ // para i,v em pares(tab) inicio imprima(i,v); fim
+  //leia();
+  retorne tab;
+fim
+
+funcao obt_extensoes(a,info)
+ local cc = 0;
+ enquanto 1 inicio
+  local ext = obt_byte(a);
+  //local ctrl = obt_byte(a);
+  se ext == 0x21 entao
+    local ctrl = obt_byte(a);
+    se ctrl == 0xff entao //marcador de ext de aplicativo
+      obt_extensao_aplicativo(a,info); //dados de aplicativos ex.: NETSCAPE 2.2
+    senaose ctrl == 0xf9 entao
+      obt_extensao_ctrl_grafico(a,info); //controle gráfico como tempo de transição, transparencia etc. 
+    senaose ctrl == 0x01 entao //texto plain
+      obt_extensao_texto(a,info); 
+    senaose ctrl == 0xfe entao //comentarios
+      obt_extensao_comentario(a,info);
+    senao
+      quebre;
+    fim
+  senaose ext == 0x2c entao // image descriptor
+    info.num = info.num + 1;
+    //imprima('------------------------\n->',info.num);
+    info.descritor_imagem[#info.descritor_imagem+1] = obt_descritor_imagem(a);
+    
+  senaose ext==0x3b entao
+    //imprima('\n====================\nfim de arquivo\n====================\n');
+    quebre;
+  senao
+    quebre;
+  fim
+ fim
+fim
+
+local funcao obt_info(a,info)
+  info.larg = obt_16le(a); // 7-8
+  info.alt = obt_16le(a);// 9-10
+  local tmp = obt_byte(a);//11
+  //imprima('...>',tmp);
+  //info.gct = tmp;
+  tmp = dec_para_bin(tmp);
+  
+  info.tgc = convnumero(tmp:corte(1,1));//global color table flag
+  info.res_cor = bin_para_dec(tmp:corte(2,4))+1; //resolucao da cor;
+  info.ord = tmp:corte(5,5); //sorte flag para global color table
+  info.tam_tgc = 2^(bin_para_dec(tmp:corte(6,8))+1);//tamanho da global color table, cores no palete. *001  
+  info.icorfundo = obt_byte(a);//12 - um byte(background color index) indice_cor_fundo;
+  local N = obt_byte(a);//13;
+  se N <> 0 entao N = (N + 15) / 64; fim
+  info.rap = N;//relação de aspecto de pixel pixel aspect ratio;
+  se info.tgc=='0' entao //não há tabela global de cores:
+    obt_extensao_controle_grafico(a,info);
+  senao
+    a:busque('def',(info.tam_tgc*3)+13);
+    obt_extensoes(a,info);
+  fim
+  info.tam = tamanho_arquivo(a);
+  info.bpc = info.res_cor; //bits por compenente
+fim
+
+/*@doc
+   \fn gif.info
+   \resumo Obtem informações de um arquivo de imagem .gif, com alt., larg. etc.
+   \param arq(string) - o nome do arquivo para ser aberto e se obter as informações.
+   \retorno (tabela) - o retorno é uma tabela contendo as informações da imagem .gif ou nulo, err.
+   
+   
+   A tabela info terá os seguintes campos:
+   
+   \inicio_bloco
+   
+  .id = GIF89a  (ou em alguns casos: 'GIF87a') //--> assinatura + versao do formato
+  .formato = GIF //-->assinatura
+  .versao = 89a ou 87a
+  .num = número de imagens sequenciais da animação gif (as vezes 1, outras mais de 1);
+  .tgc = 1 se a tabela global de cor está presente e 0 se está ausente;
+  .tam_tgc = <número> tamanho da tabela global de cor em índices;  tam_gtc * 3 = número de bytes
+  .icorfundo = <número> índice da cor de fundo na tabela cores
+  .res_cor = <número> resolução de cor (geralmente 8 bits por componente para rgb);
+  .rap = <número> relação de aspecto de pixels (geralmente 0 = ausente)
+  .bpc = <número> bits por componente (o mesmo que res_cor);
+  .larg = <número> largura da imagem em pixels
+  .alt = <número> altura da imagem em pixels
+
+  .ext_ctrl_grafico[n] = <tabela> extensão de controle gráfico, é uma tabela em que 'n' é um índice número de acordo com o número de imagens embutidas ([1]=primeira imagem etc.) cada indice é uma outra tabela
+  com os seguintes campos: (ex.: local resolucao = info.ext_ctrl_grafico[1].res)
+     |  [n].res = <num> reservado para o futuro (sem uso atualmente);
+     |  [n].met_disp = <num> método de disposição
+     |  [n].flag_cor_transp = <num> flag da cor transparente; (1 = sim,  0 = não);
+     |  [n].tempo = <num> tempo da transição em centésimos de segundo (1/100);
+     |  [n].ict = <num> indice de transparência da cor (na tabela de cores);
+     
+  .ext_aplicativo = <tabela> extensão para aplicativos guardarem dados, tem os seguintes campos:
+     |  .id  = <string> de 8 letras no máximo, nome do aplicativo ex.: FIREFOX, NETSCAPE etc.
+     |  .ver = <string> de 3 letras no máximo, verificador, ex.:  '2.2',  'xyz' etc.
+     |  .bloco = <tabela> contendo todos os sub-blocos (dados) existentes;
+     | |   [1] = {...}, [2] = {...} e assim por diante, cada índice de sub-bloco é um número de 0-255
+  
+  .ext_comentario[n] = <tabela> contendo índices para cada compentário (string)
+     | [1] = "primeiro comentário"; [2]="segundo comentário" e assim por diante.
+  
+  .info.ext_texto[n] = <tabela> contendo informações de texto para serem inseridos na imagem gif.
+   contém os seguintes campos: (Obs. de acordo com a expecificação gif esta extensão foi abandonada
+   e deve ser ignorada, possivelmente nenhum gif atual a usa mais.
+     | .x = posição coluna (left)
+     | .y = posição linha(top);
+     | .larg = largura do rótulo (em pixels);
+     | .alt = altura do rótulo (em pixels);
+     | .larg_car = largura da letra (em pixels);
+     | .alt_car = altura da letra (em pixels);
+     | .icorletra = <numero> indice da cor da letra (na tabela de cores);
+     | .bloco = <tabela> cada índice contém um trecho de texto de 255 caracteres no máximo.
+     |  \ [1] = 'primeiro texto' [2] = 'segundo texto' e assim por diante.
+     
+  \fim_bloco
+   
+*/
+
+funcao gif.info(arq)
+  local info = {}; //tabela de informação
+  info.num = 0;
+  //essas extensões estão declaradas aqui como tabelas porque pode haver mais de uma ocorrência
+  //delas em um gif.
+  info.descritor_imagem = {}; //guarda as informaçoes das imagens / pega só as posicoes das imagens.
+  info.ext_ctrl_grafico = {};//guarda informações como tempo de transiçao, transparencia e alguns flags.
+  info.ext_texto = {};//esta extensão não é mais usada dentro de gifs, está aqui para ser ignorada apenas.
+  info.ext_comentario = {}; 
+  local tmp;
+  local a, err = es.abra(arq,'leiturabin');
+  se nao a entao retorne falso, err; fim
+  info.id = a:leia(6); //lê os 6 primeiros bytes
+  se info.id:corte(1,3) <> 'GIF' entao
+    retorne falso, 'Erro: o formato não é gif';
+  fim
+  info.formato = info.id:corte(1,3);
+  info.versao = info.id:corte(4,6);
+  obt_info(a,info); 
+  info.cs = "DeviceRGB";
+  
+  a:feche(); 
+  retorne info;
+fim 
+
+local funcao obt_tam_tgc(a)
+  a:busque('def',10); //define a posição de leitura para 10;
+  local tmp = dec_para_bin(obt_byte(a));//11 
+  se tmp:corte(1,1)=='0' entao retorne falso, 'Tabela global de cor não está presente'; fim
+  local tam_tgc = 2^(bin_para_dec(tmp:corte(6,8))+1);//tamanho da global color table, cores no palete. *001
+  retorne tam_tgc; //tamanho da tabela de cores em indices:
+fim
+
+local funcao obt_bytes_tgc(a)
+  local tam_tgc,err = obt_tam_tgc(a);
+  se nao tam_tgc entao retorne falso, err; fim
+  retorne tam_tgc * 3;
+fim
+
+/*@doc
+  
+  \fn gif.obt_tgc
+  \resumo  gif.obt_tgc(img); --> obtém as informações da tabela de cores do arquivo img.gif.
+  \param img(string) - arquivo gif para abrir e obter as informações.
+  \retorno (tabela) - a tabela global de cores.
+  
+  
+  \inicio_bloco Detalhes:
+
+     Obtém a tabela global de cores, cada indice 'n' tem uma pequena tabela contendo o rgb
+     tgc[n].r = red, tgc[n].g = green e tgc[n].b = blue
+     ou
+     tgc[n][1] = red, tgc[n][2] = green e tgc[n][3] = blue
+     
+     tamanho da tgc = #tgc + 1; começa com o primeiro índice;  
+  
+  \fim_bloco 
+*/
+
+funcao gif.obt_tgc(arq)
+  local a, err = es.abra(arq,'leiturabin'); se nao a entao retorne falso, err; fim
+  local id = a:leia(3); se id<>'GIF' entao a:feche(); retorne falso, 'Arquivo não é um gif válido'; fim
+  local num_bytes_tgc = obt_bytes_tgc(a);//porque cada cor é uma composição de 3 bytes (de 0-255 cada);
+  //agora que já sabemos o tamanho da tabela global de cores basta percorrê-la:
+  local tgc = {};
+  a:busque('def',13); //o inicio da tabela é em 14;
+  local r,g,b
+  local cont=0;
+  para i=1,num_bytes_tgc,3 inicio //de 3 em 3
+    r = obt_byte(a);
+    g = obt_byte(a);
+    b = obt_byte(a);
+    tgc[cont] = {r,g,b,r=r,g=g,b=b};//[1]=reg, [2]=green, [3]=blue e tab.r = red, tab.g=green, tab.b = blue; 
+    cont = cont+1;   
+  fim
+  //imprima(a:busque('atual'),num_bytes_tgc+13);
+  //imprima('-->',mat.corte((a:busque('atual')-13)/3));//imprime a (posicao atual de leitura -13)/3 = tam_tabela ;
+  a:feche();
+  retorne tgc;
+fim
+
+
+retorne gif;
+
+/*
+  *001 - global color table é uma sequencia de bytes em que a cada 3 bytes é uma cor em sequencia indexada 
+  * como uma tabela que vai do 000 ao 255 (256)
+  * então esses indices irão contruir a grade de pixels da imagem
+  * como cada indice tem 3 bytes entao é preciso fazer a conta:  3* tam_gct para ter o tanto de bytes usados.
+
+
+
+para incluir use:   
+  [code]local gif = inclua'gifinfo';[/code]
+  
+  Funções:
+
+  [code]local info, err = gif.info('img.gif');[/code]
+  O retorno é uma tabela info ou nulo + erro;
+
+ [b] A tabela info terá os seguintes campos:[/b]
+
+  .id = GIF89a  (ou em alguns casos: 'GIF87a') //--> assinatura + versao do formato
+  .formato = GIF //-->assinatura
+  .versao = 89a ou 87a
+  .num = número de imagens sequenciais da animação gif (as vezes 1, outras mais de 1);
+  .tgc = 1 se a tabela global de cor está presente e 0 se está ausente;
+  .tam_tgc = <número> tamanho da tabela global de cor em índices;  tam_gtc * 3 = número de bytes
+  .icorfundo = <número> índice da cor de fundo na tabela cores
+  .res_cor = <número> resolução de cor (geralmente 8 bits por componente para rgb);
+  .rap = <número> relação de aspecto de pixels (geralmente 0 = ausente)
+  .bpc = <número> bits por componente (o mesmo que res_cor);
+  .larg = <número> largura da imagem em pixels
+  .alt = <número> altura da imagem em pixels
+
+  .ext_ctrl_grafico[n] = <tabela> extensão de controle gráfico, é uma tabela em que 'n' é um índice número de acordo com o número de imagens embutidas ([1]=primeira imagem etc.) cada indice é uma outra tabela
+  com os seguintes campos: (ex.: local resolucao = info.ext_ctrl_grafico[1].res)
+     |  [n].res = <num> reservado para o futuro (sem uso atualmente);
+     |  [n].met_disp = <num> método de disposição
+     |  [n].flag_cor_transp = <num> flag da cor transparente; (1 = sim,  0 = não);
+     |  [n].tempo = <num> tempo da transição em centésimos de segundo (1/100);
+     |  [n].ict = <num> indice de transparência da cor (na tabela de cores);
+     
+  .ext_aplicativo = <tabela> extensão para aplicativos guardarem dados, tem os seguintes campos:
+     |  .id  = <string> de 8 letras no máximo, nome do aplicativo ex.: FIREFOX, NETSCAPE etc.
+     |  .ver = <string> de 3 letras no máximo, verificador, ex.:  '2.2',  'xyz' etc.
+     |  .bloco = <tabela> contendo todos os sub-blocos (dados) existentes;
+     | |   [1] = {...}, [2] = {...} e assim por diante, cada índice de sub-bloco é um número de 0-255
+  
+  .ext_comentario[n] = <tabela> contendo índices para cada compentário (string)
+     | [1] = "primeiro comentário"; [2]="segundo comentário" e assim por diante.
+  
+  .info.ext_texto[n] = <tabela> contendo informações de texto para serem inseridos na imagem gif.
+   contém os seguintes campos: (Obs. de acordo com a expecificação gif esta extensão foi abandonada
+   e deve ser ignorada, possivelmente nenhum gif atual a usa mais.
+     | .x = posição coluna (left)
+     | .y = posição linha(top);
+     | .larg = largura do rótulo (em pixels);
+     | .alt = altura do rótulo (em pixels);
+     | .larg_car = largura da letra (em pixels);
+     | .alt_car = altura da letra (em pixels);
+     | .icorletra = <numero> indice da cor da letra (na tabela de cores);
+     | .bloco = <tabela> cada índice contém um trecho de texto de 255 caracteres no máximo.
+     |  \ [1] = 'primeiro texto' [2] = 'segundo texto' e assim por diante.
+     
+  
+
+     2ª função:
+     
+     local tgc = gif.obt_tgc('img.gif');
+     
+     Obtém a tabela global de cores, cada indice 'n' tem uma pequena tabela contendo o rgb
+     tgc[n].r = red, tgc[n].g = green e tgc[n].b = blue
+     ou
+     tgc[n][1] = red, tgc[n][2] = green e tgc[n][3] = blue
+     
+     tamanho da tgc = #tgc + 1; começa com o primeiro índice;     
+
+    
+
+ */
+
+
+
+
+

@@ -1,0 +1,522 @@
+/*@doc
+ \fonte Prismaterm 1.0.2 - prompt interativo para linguagem Prisma.
+ 
+*/
+
+local locallinenoise = inclua'plinenoise';
+linenoise = nulo;
+local linenoise = locallinenoise;
+local terminal = inclua'terminal';
+term = nulo;
+local term = terminal;
+local string = string;
+para k,v em pares(utf8) inicio//coloca na tabela string os metodos da lib utf8 ficando 'string.utf8metodo'
+    string['utf8'..k] = v;
+fim 
+
+
+se sis.nome:procure'win' entao
+    inclua'win';
+fim
+
+
+
+//funções e variáveis locais usados na função principal(), implementação após a função principal();
+local lista_complete, completar_callback, complete, ative_complete, desative_complete, exemplos;
+local execute_trecho, trecho_incompleto, lin, use, manual, imprima_erro, execute_bloco;
+local registre_comandos, modo_global_ativado, ative_modo_global, erro_global;
+local estrito = {};
+local lincenca;
+
+//tabela usada para criar comandos mais facilmente do que fazer vários 'se' 'senãose';
+local cmd = {funcs={}, info={}, dado={}};//implementação dos métodos no fim
+
+local cabeçalho = _INFO .. '\nPressione --s para sair --a para ajuda';
+local prompt1 = '> ';
+local prompt2 = '... ';
+
+local função principal(args) //funcao principal como local é necessário chamá-la no fim do programa.
+    //registrando os comandos interativos.
+    //estrito.modo_global(); //ativa uma proteção contra variáveis não declaradas.
+    registre_comandos();
+    linenoise.leia_histórico('historico.txt');//deve ter o mesmo nome do arquivo gravado!
+    ative_complete();//veja esta função abaixo, ativa a função auto complete com a tecla tab.
+    imprima(cabeçalho);
+    
+    local prompt = prompt1;
+    
+    enquanto 1 inicio
+          se não modo_global_ativado e ative_modo_global entao
+               estrito.modo_global();
+          fim
+          lin = linenoise.leia(prompt);
+          lin = lin ? lin:apare() ou lin;
+          
+          se não lin ou  lin:minuscula() == '--s' então 
+               linenoise.grave_histórico('historico.txt');//salvando o histórico no arquivo
+               linenoise.libere_histórico();//liberando a memória do histórico.
+               sis.saia(0);          
+          senaose cmd:execute(lin) entao //executa os comandos preprogramados, ex.: --a - ajuda etc.
+                                    
+          senaose lin:corte(1,3)=='--' ou lin:corte(1,1)=='-' entao
+              imprima('Opção inválida');
+              use();                     
+          senaose trecho_incompleto entao
+              trecho_incompleto = trecho_incompleto .. '\n'.. lin;
+              local old_trecho_incompleto = trecho_incompleto;
+              trecho_incompleto = execute_trecho(trecho_incompleto);
+              se não trecho_incompleto então 
+                  prompt = prompt1;
+                  linenoise.ad_histórico( old_trecho_incompleto);
+              fim             
+          senao
+            local f,err = carregue('retorne ' .. lin);
+            se tipo(f)=='funcao' entao
+                lin = 'retorne ' .. lin;
+                //imprima'tem retorno';
+            fim
+            trecho_incompleto = execute_trecho(lin);
+            se trecho_incompleto então 
+                prompt = prompt2; 
+            senao
+                linenoise.ad_histórico(lin);
+            fim
+          fim     
+    fim 
+    retorne 0;
+fim //fim principal();
+
+
+funcao registre_comandos()
+    cmd:ad_comando('--a', use, '[ --a ] - Mostra a mensagem de ajuda.');
+    cmd:ad_comando('--v', funcao() imprima(_INFO);fim, '[ --v ] - mostra a versão Prisma.');
+    cmd:ad_comando('--ative-complete', ative_complete, '[ --ative-complete ] - Ativa o auto complete através da tecla tab, das palavras chave Prisma.');
+    cmd:ad_comando('--desative-complete', desative_complete, '[ --desative-complete ] - Desativa o auto complete das palavras chave Prisma.');    
+    cmd:ad_comando('--inicio', execute_bloco, '[ --inicio ] - Inicia um bloco multilinha de comandos.\n[ --fim ] - finaliza o bloco.');
+    cmd:ad_comando('--r', funcao() linenoise.limpe_tela(); imprima(cabeçalho); fim,
+    '[ --r ] - Limpa a tela e inicia o prompt.');
+    cmd:ad_comando('--m',funcao() imprima(manual); fim, '[ --m ] - mostra o manual');
+    cmd:ad_comando('--ative-modo-global', funcao() 
+        //estrito.modo_global();
+        ative_modo_global = verdadeiro; 
+    fim,
+    '[ --ative-modo-global ] - ativa o modo estrito global.');
+    cmd:ad_comando('--desative-modo-global', funcao() 
+        ative_modo_global = falso;
+    fim,
+    '[ --desative-modo-global ] - desativa o modo estrito global.');
+    cmd:ad_comando('--l', função () 
+        imprima(licenca);
+    fim,
+    '[ --l ] (L minúsculo) - mostra a licença.'
+    );
+fim
+
+
+//a função callback, lc é um userdata do tipo estrutura em C, passado automaticamente à função callback.
+função completar_callback( prefix, lc, dado)
+    local tab = {};
+    para i=1, #lista_complete inicio
+        se prefix == lista_complete[i]:corte(1, #prefix) entao
+            tab[#tab+1]=lista_complete[i];
+        fim    
+    fim
+    se #tab>0 entao
+        linenoise.complete(lc, tab[1]);//pega sempre o primeiro
+    fim
+fim
+
+complete=falso;
+funcao ative_complete()
+    se não complete entao
+        linenoise.ad_auto_complete(completar_callback);
+        complete = verdadeiro;
+    fim
+fim
+
+funcao desative_complete()
+    se complete entao
+        complete = falso;
+        linenoise.rem_auto_complete(completar_callback);
+    fim
+fim
+
+local funcao teste_ret(...)
+    local tam = selecione('#', ...);//se por acaso tam == 1 então só há 1 retorno do pchame, logo não temos retornos 
+                                    //da função chamada.
+    local t  = {...};
+    retorne t[1], t[2], tam>1;
+fim
+
+função execute_trecho(txt)
+    local txt = S(txt);
+    //imprima(txt);
+    local f, err = carregue(txt,'=(stdin)');
+    se tipo(f)=='funcao' entao
+        local ret, s, n = teste_ret(pchame(f));
+        se não ret então 
+            se erro_global entao
+                local ini, fini = s:procure'*';
+                se ini entao
+                    s ='(stdin): '.. s:corte(ini+1,-1);
+                fim
+            fim
+            imprima_erro(s); retorne; 
+        fim
+        se n entao
+            imprima(s);
+        fim
+    senao
+        local err = err ou ''; //<eof>
+        se err:corte(-(#('<eof>')),-1)=='<eof>' entao //caso o trecho dê erro por estar incompleto (comando multilinha)
+            //imprima('trecho imcompleto');
+            retorne txt;
+        fim
+        imprima_erro('\nErro: ' .. err );
+        poe'';
+    fim
+fim
+
+
+função imprima_erro(...)
+    local tam = selecione('#', ...);
+    term.defCorletra(term.amarelo);
+    para i, v em ipares{...} início
+        imprimaf(v);
+        imprimaf(' ');
+    fim 
+    term.defPadrao(); //volta a cor padrao
+    poe'';
+fim
+
+função use()
+    imprima('Opções:');
+    imprima('[ --s ] - sai do programa');
+    para k,v em pares(cmd.info) inicio
+        imprima(v);
+    fim
+fim
+
+função execute_bloco()
+              local cont = 1;
+              local lin = linenoise.leia(cont..'.  ');
+              cont = cont + 1;
+              local txt_bloco = '';
+              enquanto lin início
+                  txt_bloco = txt_bloco .. lin .. '\n';
+                  lin = linenoise.leia(cont..'.  ');
+                  se lin=='--fim' então quebre; fim
+                  cont = cont + 1;
+              fim  
+              se txt_bloco <> '' entao
+                  local f, err = carregue(txt_bloco);
+                  se tipo(f)=='funcao' então
+                      local ret, s = pchame(f);
+                      se nao ret então imprima_erro(s); fim
+                  senao imprima_erro(err);
+                  fim
+                  linenoise.ad_histórico(txt_bloco);
+              fim
+
+fim
+
+funcao cmd:ad_comando(s, func, info, dado) // tab:ad_comando('--s',função() sis.saia(0); fim);
+    S(s);
+    este.funcs[s:utf8minuscula()]=func;
+    este.info[s:utf8minuscula()]=info;
+    este.dado[s:utf8minuscula()]=dado;
+fim
+
+função cmd:execute(s)
+   S(s);
+   local t = s:analise(' ,;\'"');//2 param (1) é um flag para não retornar os caracteres separadores.
+   se nao t entao t = {s}; fim//comando apenas sem args.
+   s = t[1];
+   tabela.remova(t,1);
+   //imprima(tabela.concat(t,', '));
+   local tt = {};
+   local fecha_str, string_aberta;
+   para i,v em ipares(t) inicio
+       se v<>' ' e v<>',' e v<>';' e v<>"'" e v <> '"' e não fecha_str entao
+           tt[#tt+1]=v;
+       senaose v=='"' ou v=="'" e não fecha_str entao
+           fecha_str = v;
+           tt[#tt+1]='';
+       senaose fecha_str e v<>fecha_str entao
+           tt[#tt] = tt[#tt] .. v;
+       senaose v == fecha_str entao
+           fecha_str = falso;
+       fim
+   fim
+   tt[#tt+1] = cmd.dado[s:utf8minuscula()];//dado extra sempre no final.
+   se tipo(cmd.funcs[s:utf8minuscula()])=='funcao' entao
+       local ret, srr = pchame(cmd.funcs[s:utf8minuscula()],tabela.desempacote(tt));
+       se nao ret entao
+           imprima_erro(srr);
+       fim
+       retorne ret;
+   fim 
+   retorne falso;
+fim
+
+
+
+//tabela com lista de palavras para auto completar
+lista_complete = {
+	//palavras chave:
+    "e", "quebre", "início", "senão ", "senãose ",
+    "fim", "falso", "para", "função(", "vapara ", "se ",
+    "em ", "local", "nulo", "não", "ou", "repita",
+    "retorne ", "então ", "verdadeiro ", "até ", "enquanto ",
+    "número", "string",
+    //pricipal:
+    "principal(args)",
+    //base:
+    "_G", "selecione", "erro", "poe", "linenoise", 
+    "prismadir", "string", "B", "defmetatabela", "T", 
+    "utf8", "carregue", "Th", "leia", "ipares", 
+    "obtmetatabela", "sis", "mat", "bit32", "imprima", 
+    "cod", "Classe", "proximo", "pares", "car", 
+    "imprimaf", "contador", "V", "modulo", "escolha", 
+    "U", "convnumero", "executestring", "desempacote", "debug", 
+    "tabela", "inclua", "es", "executearquivo", "xpchame", 
+    "def", "convstring", "tipo", "F", "obt", 
+    "igual", "pacote", "args", "coletelixo", "_INFO", 
+    "tamanho", "N", "compile", "pchame", "corrotina", 
+    "carreguearquivo", "S", "tente", "_VERSAO", 
+      //es.         
+    "es.leitura", "es.abra", "es.leia", "es.esvazie", "es.tmparquivo", 
+    "es.feche", "es.linhas", "es.erro", "es.escrita", "es.tipo", 
+    "es.escreva", "es.pabra", "es.saida", "es.entrada",
+    //string
+    "string.base64", "string.cod", "string.compile", "string.tamanho", "string.maiuscula", 
+    "string.capte", "string.troque", "string.junte", "string.car", "string.dec_hex", 
+    "string.hex", "string.dec_base64", "string.nconcat", "string.procure", "string.apare", 
+    "string.entrecar", "string.inverta", "string.separe", "string.corte", "string.formate", 
+    "string.sub", "string.byte", "string.substring", "string.analise", "string.minuscula",
+    //sis
+    "sis.delvarambiente", "sis.caminho_absoluto", "sis.diftempo", "sis.defvarambiente", "sis.remova", 
+    "sis.deflocal", "sis.obtvarambiente", "sis.execute", "sis.relogio", "sis.renomeie", 
+    "sis.durma", "sis.tempo", "sis.data", "sis.nome", "sis.nome_arquivo", 
+    "sis.tamanho", "sis.nometmp", "sis.saia", 
+    //utf8
+    "utf8.remova", "utf8.car", "utf8.maiuscula", "utf8.escape", "utf8.cods", 
+    "utf8.charpattern", "utf8.cod", "utf8.fold", "utf8.tamanho", "utf8.separe", 
+    "utf8.proximo", "utf8.inverta", "utf8.troque", "utf8.offset", "utf8.byte", 
+    "utf8.procure", "utf8.ncasecmp", "utf8.largindex", "utf8.pontocod", "utf8.larg", 
+    "utf8.titulo", "utf8.corte", "utf8.capte", "utf8.insira", "utf8.carpos", 
+    "utf8.minuscula", 
+    //tabela:
+    "tabela.maxn", "tabela.ordene", "tabela.insira", "tabela.empacote", "tabela.remova", 
+    "tabela.concat", "tabela.desempacote",
+    //mat
+    "mat.arredondeabaixo", "mat.xrandonico", "mat.ldexp", "mat.tangente", "mat.cossenoh", 
+    "mat.cosseno", "mat.cmodulo", "mat.pi", "mat.log10", "mat.randonico", 
+    "mat.frexp", "mat.aleatorio", "mat.arcotangente2", "mat.minimo", "mat.arcoseno", 
+    "mat.tangenteh", "mat.arcotangente", "mat.corte", "mat.log", "mat.raizquad", 
+    "mat.xaleatorio", "mat.separe", "mat.infinito", "mat.hipot", "mat.raizcubica", 
+    "mat.absoluto", "mat.arredondeacima", "mat.emGrau", "mat.arredonde", "mat.seno", 
+    "mat.senoh", "mat.emRadianos", "mat.elevado", "mat.exp", "mat.raiz", 
+    "mat.maximo", "mat.arcocosseno",  
+    //bit32
+    "bit32.bxou", "bit32.lrotate", "bit32.arshift", "bit32.rshift", "bit32.replace", 
+    "bit32.lshift", "bit32.bnao", "bit32.rrotate", "bit32.extract", "bit32.bteste", 
+    "bit32.be", "bit32.bou",
+    //pacote
+    "pacote.clib", "pacote.buscadores", "pacote.config", "pacote.pasta", "pacote.precarregado", 
+    "pacote.carregado", "pacote.importe", "pacote.tudo", "pacote.carregadores", "pacote.plib", 
+    //corrotina
+    "corrotina.executando", "corrotina.exec", "corrotina.wrap", "corrotina.yield", "corrotina.crie", 
+    "corrotina.estado"             
+};
+
+manual = [[
+Interpretador interativo Prisma.
+
+Para fechar o programa pressione --s 
+__________________________________________________________
+Executar comandos:
+
+Digite os comandos Prisma e pressione ENTER para executar.
+Caso o comando esteja incompleto, será requerida uma  nova
+linha para continuar a  digitar  o  restante,  isto   para
+comandos multilinhas.
+__________________________________________________________
+Completar comandos: 
+
+ao digitar o início de uma comando e  pressionar  a  tecla 
+tab o restante do comando será sugerido, caso haja mais de
+um  comando  com  o  mesmo  início,  o  primeiro  na ordem 
+alfabética  será sugerido.
+__________________________________________________________
+Comandos especiais do interpretador(não existem em Prisma)
+
+[ --s ]: salva o histórico e sai do programa.
+
+[ --v ]: mostra informações da versão.
+
+[ --a ]: mostra a mensagem de ajuda.
+
+[ --ative-complete ]: ativa auto completar usando  a tecla 
+tab (por padrão já está ativo).
+
+[ --desative-complete ]: desativa o auto complete.
+
+[ --ative-modo-global ]: ativa o modo estrito global.
+
+[ --desative-modo-global ] : desativa o modo global.
+
+[ --inicio ]: inicia um bloco que só é executado ao fechar 
+com um --fim.
+
+[ --fim ]: fecha um bloco.
+
+[ --r ]: reinicia a prompt (limpa a tela).
+
+[ --m ]: mostra este manual.
+]]
+
+funcao estrito.desative(t)
+    modo_global_ativado=falso;
+    local t = t ou _G;
+    T(t);
+    local mt = obtmetatabela(t);
+    se mt entao
+        mt.__newindex = mt.__old_newindex;
+        mt.__index = mt.__old_index;
+        retorne B(verdadeiro);
+    fim
+    retorne B(falso);
+fim
+
+funcao estrito.modo_global(t)
+    modo_global_ativado = verdadeiro;
+    local t = t ou _G; //uma tabela específica ou _G caso não seja passado nenhum param.
+    T(t);
+    estrito.desative(t);
+    principal = principal ou funcao() fim; //evitar um bugg 
+    local mt = obtmetatabela(t);
+    se nao mt entao
+        mt = {};
+        defmetatabela(t,mt);
+    fim
+    
+    se mt entao
+        mt.__old_newindex = mt.__newindex;
+        mt.__old_index = mt.__index;
+    fim
+    mt.__newindex = funcao(self, k, val) 
+       // imprima(self,k,val);
+        se val == nulo entao
+           estrito.desative(self);
+           erro_global = verdadeiro;
+           erro(
+              '*Erro ao atribuir nulo a uma variável global.\n(modo global ativado!)'
+              .. '\n\n\t --> ' .. k .. ' = nulo'
+              );
+        fim
+        local mt2 = obtmetatabela(self);
+        se nao mt2.__self entao
+            mt2.__self = {};
+        fim
+        se mt2.__self[k] == nulo entao
+            def(mt2.__self,k,val);
+            retorne;
+        fim
+        se tipo(mt2.__self[k]) <> tipo(val) entao
+            estrito.desative(self);
+            local val_anterior = obt(mt2.__self, k);
+            se tipo(val_anterior) == 'string' entao
+                se #val_anterior > 20 entao
+                    val_anterior = '"' .. val_anterior:corte(1,20)..'..."';
+                senao
+                    val_anterior = '"' .. val_anterior .. '"';
+                fim
+            senaose tipo(val_anterior)=='numero' entao
+                val_anterior = convstring(val_anterior);
+            senaose tipo(val_anterior)=='booleando' entao
+                val_anterior = convstring(val_anterior); 
+            senao
+                val_anterior = '<'..tipo(val_anterior) ..'>';
+            fim   
+            
+            local tipo_val = tipo(val);
+            
+            se tipo(val) == 'string' entao
+                se #val > 20 entao
+                    val = '"'..val:corte(1,20)..'..."';
+                senao 
+                    val = '"'..val..'"';
+                fim
+            senaose tipo(val)=='numero' entao
+                val = convstring(val);
+            senaose tipo(val)=='booleando' entao
+                val = convstring(val); 
+            senaose tipo(val)=='tabela' entao
+                val = '{}'; 
+            senao
+                val = '<'..tipo(val) ..'>';
+            fim
+                erro_global = verdadeiro;
+                erro(
+                '*Erro ao alterar o tipo de uma variável global.'
+                ..'\nDe `'.. tipo(mt2.__self[k]) .. '\' para `' .. tipo_val
+                ..'\'\n(modo global ativado!)\n\t--> valor anterior: ' .. val_anterior 
+                ..'\n\t--> ( ' .. k .. ' = ' .. val .. ')'
+                
+               );   
+        fim
+        def(mt2.__self, k, val);
+    fim 
+    
+    //---------------------------------------------------
+    //poe'-------------------';
+    mt.__index = funcao(self,k)
+        //imprima(self,k);
+        local mt2 = obtmetatabela(self);
+        se nao mt2.__self entao
+            mt2.__self = {};
+        fim
+        se obt(mt2.__self,k)==nulo entao           
+            estrito.desative(self);
+            erro_global = verdadeiro;
+            erro('*Variável global não declarada -> `'..k..'\'\n(modo global ativado!)');
+        fim
+        retorne obt(mt2.__self, k);
+    fim
+    retorne T(t);
+fim 
+
+
+licenca = [[
+  ________________________________ LICENÇA ____________________________________
+  A permissão é concedida, a título gratuito, a qualquer pessoa que obtenha uma 
+  cópia deste software e arquivos de  documentação  associados  (o "Software"), 
+  para negociar o Software sem restrição, incluindo, sem limitação, os direitos
+  para usar, copiar,  modificar, mesclar,  publicar,  distribuir,  sublicenciar
+  e/ou vender   cópias do Software, e permitir que as pessoas a quem o Software 
+  é fornecido o façam, sujeito às seguintes condições:
+
+  O aviso de autoria acima e este aviso de permissão  devem  ser  incluídos  em 
+  todas as cópias ou partes substanciais do Software.
+
+  O SOFTWARE É FORNECIDO "COMO ESTÁ", SEM GARANTIA DE QUALQUER  TIPO,  EXPRESSA 
+  OU IMPLÍCITA, INCLUINDO, SEM  LIMITAÇÃO,  AS  GARANTIAS  DE  COMERCIALIZAÇÃO,
+  ADEQUAÇÃO A UM DETERMINADO FIM E NÃO VIOLAÇÃO. EM NENHUMA HIPÓTESE OS AUTORES 
+  OU DETENTORES DE DIREITOS AUTORAIS SERÃO RESPONSÁVEIS POR QUALQUER RECLAMAÇÃO, 
+  DANOS OU OUTRAS  RESPONSABILIDADES,  SEJA  EM  UMA  AÇÃO  DE  CUMPRIMENTO  DE 
+  CONTRATO OU QUALQUER OUTRO MEIO, OU EM CONEXÃO COM O SOFTWARE  OU  O  USO  OU 
+  OUTRAS FUNÇÕES DO SOFTWARE.
+  ]]
+
+
+
+//executando principal();
+principal(args);
+
+
+
+
+
+
+

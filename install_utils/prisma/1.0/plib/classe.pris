@@ -1,0 +1,37 @@
+
+//implementação de classes com multiplas heranças
+//convertido para prismabr
+//a partir do manual programming in lua 3ed.
+
+
+local funcao search ( k , plist )
+     para i = 1 , #plist inicio
+         local v = plist[i][k]
+         se v entao retorne v fim
+     fim
+fim //fim funcao search
+
+funcao Classe(...)
+    local c = {} ; //nova classe
+    local parents = {...};
+    
+    funcao c:novo ( o )
+        o = o ou {}
+        defmetatabela( o , c );
+        retorne o 
+    fim
+    
+    defmetatabela ( c , { __index = funcao( t , k )
+       retorne search ( k , parents )
+       fim;
+       __call = funcao(este,...) 
+                  local obj = este:novo();
+                  obj:construtor(...);
+                  retorne obj;
+               fim}  ) ;//fim defmetatabela
+ 
+    c.__index = c;
+         
+   retorne c;
+fim 
+

@@ -1,0 +1,16 @@
+prompt interativo prisma feito em puro prisma com mais opções
+v 1.0 3 jan de 2017
+
+A partir da versão Prisma-1.0.106 eu simplifiquei o interpretador C prisma,
+ele, agora, apenas executa programas prisma ou mostra a versão, não há mais
+o suporte interativo.
+  Caso queria usar Prisma de modo interativo, use o comando prismaterm no 
+terminal linux, ou execute prismaterm.pbrexe no Windows.
+
+
+Para usar o histórico de comandos no Prismaterm, é necessário duas dependências:
+
+  1 - A lib prisma feita em C : terminal 
+
+Caso contrário não terá como usar as setas para ver os comandos digitados anteriormente.
+Nem terá saída colorida.

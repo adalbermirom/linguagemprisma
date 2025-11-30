@@ -1,0 +1,174 @@
+/**
+
+ * @file
+ * @file shell.pris
+ * @author Adalberto
+ * @date 24 nov 2023
+ * @brief Biblioteca shell permite comandos shell (ou cmd) como se fossem funções em Prisma.
+ 
+ 
+ * Ex.:   shell.clear(); //no linux <br>
+ *        shell.cls();   //no win
+ *   
+ *        Qualquer comando do terminal ou cmd pode ser executado como método de shell.
+ *        
+ *        Veja:
+ *               shell.ls('.');<br>
+ *               shell.cp('a.txt', '/path/destino/');
+ * 
+ * <hr>
+ \inicio
+ * Esta biblioteca utiliza o metamétodo __index para simular as funções e a função es.pabra() para executar 
+ * os comandos, sendo assim é possível pegar o retorno de tudo que foi impresso pelo comando em uma tabela. E
+ * qualquer comando shell ou cmd pode ser usado após o nome shell.
+ \fim
+
+\h3 Veja os exemplos:
+
+\codigo Exemplo.
+ //teste da lib shell
+
+local shell = inclua'shell'
+
+imprima(shell.info);
+imprima(shell.VERSAO);
+
+funcao principal()
+    local ret;
+    ret = shell.uname('-a');
+    imprima(tabela.concat(ret,'\n'));
+    
+    poe'Apagando zz.zip e zz.tar se houver';
+    shell.rm('zz.zip', 'zz.tar');
+    leia();
+    
+    poe'\n\n------------------------------'
+      // Diretório atual:
+    ret = shell.pwd();
+    imprima(ret[1]);
+    //usando o retorno do diretório atual para listar e arquivar em um zip:
+    ret = shell.ls(ret[1]):zip('zz.zip');//o retorno é uma tabela indexada ([1],[2]...);
+    imprima(tabela.concat(ret,'\n'));
+    leia();
+    ret = shell.cat(args[0]);
+    poe'\n\n------------------------------';
+    imprima( tabela.concat(ret,'\n'));
+    
+    poe'\n\n------------------------------'
+    ret = shell.grep('reto'.. 'rne', args[0]);
+    imprima(tabela.concat(ret,'\n'));
+    
+    
+    
+    poe'\n\n------------------------------'
+      // Espaço em disco em MB:
+    ret = shell.df('-m');
+    imprima(tabela.concat(ret,'\n'));
+    
+    poe'\n\n------------------------------'
+      // comando TAR:   tar -cvf arquivo.tar   pasta_ou_arquivo_alvo
+    ret = shell.tar('-cvf', 'zz.tar', '.');
+    imprima(tabela.concat(ret,'\n'));
+    
+    poe'\n\n------------------------------'
+      // comando ps
+    ret = shell.ps('-e');
+    imprima(tabela.concat(ret,'\n') );
+    
+    //qualquer comando linux terminal que você souber poderá ser usado assim:  shell.seucomando(args...);
+    
+    
+    retorne 0;
+fim
+
+\codigo--
+
+*/
+
+
+/**
+   \brief shell(tabela) - variável que contém os métodos desta biblioteca.
+
+*/
+
+local shell = {};
+
+/**
+   \brief shell.info(string) - descrição resumida desta biblioteca.
+
+*/
+shell.info = 'Lib Prisma para facilitar comandos em shell no Linux';
+
+/**
+   \brief shell.VERSAO(string) - versão desta biblioteca.
+
+*/
+shell.VERSAO = 'shell-0.1';
+
+--{
+local mt = {};
+local tab_concat=funcao(tab,sp)
+    local sp = sp ou '';
+    T(tab);
+    local s = '';
+    para i=1, #tab inicio
+        s = s .. '"' .. tab[i] .. '"'.. sp;
+    fim
+    retorne s;
+fim
+
+local __index2 = funcao(k,v)
+    retorne funcao(k2, ...) 
+        local k2 = k2 ou '';
+        local cmd = v .. ' ' .. tabela.concat({...},' ') .. ' ' .. tab_concat(k2,' ') ;
+        // imprima(cmd);
+        //*
+        //sis.execute(cmd);
+        local a, err = es.pabra(cmd, 'leitura');
+        se nao a entao erro(err); fim
+        local txt = {}; //tabela para gravar os conteúdos..
+        local lin;
+        enquanto 1 inicio
+            lin = a:leia();
+            se nao lin entao quebre; fim
+            txt[#txt+1] = lin; //cada linha em um índice de tabela.
+        fim
+        a:feche();//*/
+        defmetatabela(txt, obtmetatabela(k));
+        retorne txt;
+    fim
+
+fim
+
+mt.__index = funcao(k,v)
+   // imprima(mt.__index);
+    retorne funcao(k2, ...) 
+        local k2 = k2 ou '';
+        local cmd = v ;
+        se tipo(k2)=='tabela' entao
+            cmd = cmd .. ' ' .. tabela.concat({...},' ') .. ' ' .. tab_concat(k2,' ') ;
+        senao
+            cmd = cmd .. ' ' .. k2 .. ' ' .. tabela.concat({...},' ');
+        fim
+        //imprima(cmd);
+        //sis.execute(cmd);
+        local a, err = es.pabra(cmd, 'leitura');
+        se nao a entao erro(err); fim
+        local txt = {}; //tabela para gravar os conteúdos..
+        local lin;
+        enquanto 1 inicio
+            lin = a:leia();
+            se nao lin entao quebre; fim
+            txt[#txt+1] = lin; //cada linha em um índice de tabela.
+        fim
+        defmetatabela(txt, {__index = __index2});
+        a:feche();
+        retorne txt;
+    fim
+fim
+
+defmetatabela(shell,mt);
+
+
+retorne shell;
+

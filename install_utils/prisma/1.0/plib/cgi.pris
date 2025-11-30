@@ -1,0 +1,587 @@
+/** 
+ * @file cgi.pris
+ * @author Adalberto
+ * @date 24 nov 2023
+ * @resumo Biblioteca cgi mínima com algumas funções básicas para processamento dos dados vindo do cliente.
+ * 
+   \inicio_bloco 
+ * 
+ * Prisma cgi-0.2  by Adalberto Amorim Felipe
+ * linguagemprisma.br4.biz
+ * linguagemprisma@gmail.com
+ * 
+ * Caso encontre um bug reporte em: 
+ * 
+ * https://linguagemprisma.br4.biz/prisma_forum/index.php?board=6.0
+ * 
+ * ----------------------------
+ * Licença: 
+ * Livre para usar como bem entender, não há garantias, 
+ * use por conta e risco, o autor não poderá ser
+ * responsabilizado.
+ * 
+ * ----------------------------
+ * 
+ * funções com facilidades para programas cgi web em Prisma:
+ * 
+ * leitura de variaveis do servidor
+ * decodificação de post e Get.
+ * obtenção de variaveis do post e Get. 
+ * conversao de variaveis do post e get para tabela prisma
+ * 
+ * \fim_bloco 
+ * @veja https://linguagemprisma.br4.biz
+ <br>
+ <div>Caso encontre um bug reporte em: <a href="https://linguagemprisma.br4.biz/prisma_forum/index.php?board=6.0">aqui</a></div>
+ * 
+ * */
+ 
+
+//-------------------------  FUNCOES DE VARIAVEIS DE AMBIENTE :
+//declarando funcoes como locais para eficiencia e rapidez nos loops.
+
+local _car,_convnumero = car, convnumero;
+local obtvarambiente = sis.obtvarambiente;
+local tab_concat = tabela.concat;
+local str_formate, str_procure,str_analise = string.formate,string.procure,string.analise;
+local S = S ou funcao(v) retorne v; fim
+local N = N ou funcao(v) retorne v; fim
+local T = T ou funcao(v) retorne v; fim
+
+//================================================================
+/** 
+  \var cgi
+  \brief cgi(tabela) - variável contendo os métodos desta biblioteca.
+*/
+local cgi = {};
+
+/*@doc
+ \var cgi.va
+ \brief cgi.va(tabela) - variável contendo os métodos para obter as variáveis de ambiente.
+*/
+cgi.va = {};
+
+/**  
+    \fn cgi.va.serv_soft
+     \brief Função cgi.va.serv_soft() retorna a variável de ambiente 'SERVER_SOFTWARE'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.serv_soft ( ) 
+	retorne obtvarambiente( "SERVER_SOFTWARE" );	
+fim 
+
+/**  
+     \fn cgi.va.serv_nome
+     \brief Função cgi.va.serv_nome() retorna a variável de ambiente 'SERVER_NAME'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.serv_nome ( )
+	retorne obtvarambiente( "SERVER_NAME" );	
+fim
+
+/**
+    \fn cgi.va.serv_assinatura
+     \brief Função cgi.va.serv_assinatura() retorna a variável de ambiente 'SERVER_SIGNATURE'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.serv_assinatura ( ) 
+	retorne obtvarambiente( "SERVER_SIGNATURE" );	
+fim
+
+/**
+ *   \fn cgi.va.serv_protocolo
+     \brief Função cgi.va.serv_protocolo() retorna a variável de ambiente 'SERVER_PROTOCOL'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.serv_protocolo ( )
+	retorne obtvarambiente( "SERVER_PROTOCOL" );	
+fim 
+/**
+ *   \fn cgi.va.serv_porta
+     \brief Função cgi.va.serv_porta() retorna a variável de ambiente 'SERVER_PORT'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.serv_porta ( )
+	retorne obtvarambiente( "SERVER_PORT" );	
+fim 
+/*@doc
+ *   \fn cgi.va.gateway_interface
+     \brief Função cgi.va.gateway_interface() retorna a variável de ambiente 'GATEWAY_INTERFACE'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.gateway_interface ( )
+	retorne obtvarambiente( "GATEWAY_INTERFACE" );	
+fim
+/*@doc
+ *   \fn cgi.va.metodo
+     \brief Função cgi.va.metodo() retorna a variável de ambiente 'REQUEST_METHOD'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+     O retorno pode ser 'GET' ou 'POST', por exemplo.
+*/
+funcao cgi.va.metodo ( ) 
+	retorne obtvarambiente( "REQUEST_METHOD" );	
+fim
+
+/**
+ *   \fn cgi.va.path_info
+     \brief Função cgi.va.path_info() retorna a variável de ambiente 'PATH_INFO'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.path_info ( )
+	retorne obtvarambiente( "PATH_INFO" );	
+fim  
+
+/**
+ *   \fn cgi.va.path_translated
+     \brief Função cgi.va.path_translated() retorna a variável de ambiente 'PATH_TRANSLATED'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.path_translated ( ) 
+	retorne obtvarambiente( "PATH_TRANSLATED" );	
+fim
+
+/**
+ *   \fn cgi.va.nome_script
+     \brief Função cgi.va.nome_script() retorna a variável de ambiente 'SCRIPT_NAME'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.nome_script ( ) 
+	retorne obtvarambiente( "SCRIPT_NAME" );	
+fim 
+
+/**
+ *   \fn cgi.va.var_string
+     \brief Função cgi.va.var_string() retorna a variável de ambiente 'QUERY_STRING'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.var_string ( ) 
+	retorne obtvarambiente( "QUERY_STRING" );	
+fim
+
+/**
+ *   \fn cgi.va.host_remoto
+     \brief Função cgi.va.host_remoto() retorna a variável de ambiente 'REMOTE_HOST'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.host_remoto ( ) 
+	retorne obtvarambiente( "REMOTE_HOST" );	
+fim 
+
+/** 
+ *   \fn cgi.va.ip_remoto
+     \brief Função cgi.va.ip_remoto() retorna a variável de ambiente 'REMOTE_ADDR'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.ip_remoto ( ) 
+	retorne obtvarambiente( "REMOTE_ADDR" );	
+fim
+
+/**
+ *   \fn cgi.va.tipo_autent
+     \brief Função cgi.va.tipo_autent() retorna a variável de ambiente 'AUTH_TYPE'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.tipo_autent ( )
+	retorne obtvarambiente( "AUTH_TYPE" );	
+fim 
+
+/**
+ *   \fn cgi.va.usuario_remoto
+     \brief Função cgi.va.usuario_remoto() retorna a variável de ambiente 'REMOTE_USER'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.usuario_remoto ( )
+	retorne obtvarambiente( "REMOTE_USER" );	
+fim
+
+/**   
+    \fn cgi.va.remote_ident
+     \brief Função cgi.va.remote_ident() retorna a variável de ambiente 'REMOTE_IDENT'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.remote_ident ( ) 
+	retorne obtvarambiente( "REMOTE_IDENT" );	
+fim   
+
+/**   
+     \fn cgi.va.tipo_conteudo
+     \brief Função cgi.va.tipo_conteudo() retorna a variável de ambiente 'CONTENT_TYPE'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.tipo_conteudo ( )
+	retorne obtvarambiente( "CONTENT_TYPE" );	
+fim
+
+/**
+     \fn cgi.va.tamanho_conteudo
+     \brief Função cgi.va.tamanho_conteudo() retorna a variável de ambiente 'CONTENT_LENGTH'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+     O tamanho em bytes...
+*/
+funcao cgi.va.tamanho_conteudo ( ) 
+	retorne obtvarambiente( "CONTENT_LENGTH" );	
+fim
+
+/**   
+     \fn cgi.va.http_aceito
+     \brief Função cgi.va.http_aceito() retorna a variável de ambiente 'HTTP_ACCEPT'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.http_aceito ( )
+	retorne obtvarambiente( "HTTP_ACCEPT" );	
+fim
+
+/**
+     \fn cgi.va.http_nav
+     \brief Função cgi.va.http_nav() retorna a variável de ambiente 'HTTP_USER_AGENT'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.http_nav ( )
+	retorne obtvarambiente( "HTTP_USER_AGENT" );	
+fim
+
+/** 
+      \fn cgi.va.http_url_atual
+     \brief Função cgi.va.http_url_atual() retorna a variável de ambiente 'HTTP_REFERER'
+     <ul><i>Esta função foi modificada para http_url_referencia(), está aqui somente para compatibilidade
+     com a versão anterior, e possivelmente no futuro será excluída.</i></ul>
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.http_url_atual ( )
+	retorne obtvarambiente( "HTTP_REFERER" );	
+fim
+
+/**
+      \fn  cgi.va.http_url_referencia
+     \brief Função cgi.va.http_url_referencia() retorna a variável de ambiente 'HTTP_REFERER'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.http_url_referencia()
+        retorne obtvarambiente("HTTP_REFERER");
+fim
+
+/**
+     \fn cgi.va.pasta_servidor
+     \brief Função cgi.va.pasta_servidor() retorna a variável de ambiente 'DOCUMENT_ROOT'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.pasta_servidor ( ) 
+	retorne obtvarambiente( "DOCUMENT_ROOT" );	
+fim 
+
+/**
+     \fn cgi.va.http_de
+     \brief Função cgi.va.http_de() retorna a variável de ambiente 'HTTP_FROM'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.http_de ( ) 
+	retorne obtvarambiente( "HTTP_FROM" );	
+fim 
+
+/**
+ *    \fn cgi.va.https
+     \brief Função cgi.va.https() retorna a variável de ambiente 'HTTPS'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.https ( )
+	retorne obtvarambiente( "HTTPS" );	
+fim 
+
+/**
+ *   \fn cgi.va.path
+     \brief Função cgi.va.path() retorna a variável de ambiente 'PATH'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+
+funcao cgi.va.path ( )
+	retorne obtvarambiente( "PATH" );	
+fim
+
+/**
+ *   \fn cgi.va.http_cookie
+     \brief Função cgi.va.http_cookie() retorna a variável de ambiente 'HTTP_COOKIE'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.http_cookie ( ) 
+	retorne obtvarambiente( "HTTP_COOKIE" );	
+fim 
+
+/**
+ *  \fn cgi.va.script_abs
+     \brief Função cgi.va.script_abs() retorna a variável de ambiente 'SCRIPT_FILENAME'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.script_abs ( ) 
+	retorne obtvarambiente( "SCRIPT_FILENAME" );	
+fim   
+
+/**
+ *   \fn cgi.va.serv_admin
+     \brief Função cgi.va.serv_admin() retorna a variável de ambiente 'SERVER_ADMIN'
+     \param sem parâmetros;
+     \returns (string) - retorna a variável de ambiente ou string vazia caso não esteja definida.
+*/
+funcao cgi.va.serv_admin ( )
+	retorne obtvarambiente( "SERVER_ADMIN" );	
+fim   
+
+//==-------------------------  FIM FUNCOES DE VARIAVEIS DE AMBIENTE
+
+/**
+ *    \fn cgi.decod
+     \brief Função cgi.decod(s) retorna uma string decodificada a partir de uma string obtida pelo método GET ou POST.
+     \param s(string) - é a string obtida do GET ou POST para ser processada e decodificada os caracteres com escape %%nn
+     \returns (string) - retorna a string decodificada
+     <hr>
+    <b>Esta função geralmente é usada internamente, mas pode ser usada normalmente caso precise trocar os %%nn pelos caracteres equivalentes.</b>
+     Por exemplo, o '%20' é trocado por um espaço, o '+' também é trocado por um espaço.
+     e o '%22' é trocado por uma aspa " 
+*/
+funcao cgi.decod(str)
+  se tipo(str)<>'string' entao erro("\n\nErro: arg #1 - Espera-se string ao invés de: " .. tipo(str)); fim
+   local ret = {};//tabela de retorno
+   local t = { str:cod(1,#str) }; 
+   para i,v em pares(t) inicio
+     t[i]=_car(v);
+   fim     
+   local c, i, cont = '', 1, 1;
+   enquanto 1 inicio //laco infinito
+     c = t[i];
+     se c == '%' entao
+       ret[cont] = str_formate('%c', '0x'.. t[i+1] .. t[i+2]); //junta 0xhh e converte em car.
+       i = i+2;
+       cont = cont + 1;
+     senaose c == '+' entao
+       ret[cont] = ' ';
+       cont = cont + 1;
+     senao //default
+       ret[cont] = t[i];
+       cont = cont + 1;//index de ret;
+     fim 
+     i = i +1; //incremente 1 em i;  
+     se i > #t entao quebre fim; //quebra se for maior que o tamanho da tabela
+   fim
+   retorne tab_concat(ret,'');     
+fim
+
+/**
+     \fn cgi.obt_var
+     \brief funcao cgi.obt_var(str, var) - obtem o valor de uma chave especifica a partir do GET ou POST
+     \param str(string) - a string obtida pelo GET ou POST para ser analisada a fim de buscar o valor de uma chave específica.
+     \param var(string) - a chave a ser buscada pelo seu valor na string obtida pelo GET ou POST.
+     \returns (string) - o valor da chave buscada na string obtida pelo GET ou POST.
+
+   
+   Veja o exemplo abaixo:
+   <hr>
+   Supondo uma string: 'nome_user=manoel&amp;telefone=66xxxxx-xxxx'
+   \inicio_codigo
+   
+local cgi = inclua'cgi';
+local querystr = cgi.va.var_string(); //o mesmo que sis.obtvarambiente('QUERY_STRING');
+local nome_user = cgi.obt_var(querystr, 'nome_user');
+local telefone = cgi.obt_var(querystr, 'telefone');
+imprima('Nome do usuário:', nome_user);
+imprima('Telefone do usuário:', telefone);
+ 
+    \fim_codigo
+
+*/
+funcao cgi.obt_var(str,var)
+  se tipo(str)<>'string' entao erro("\n\nErro: arg #1 - Espera-se string ao invés de: " .. tipo(str)); fim
+  se tipo(var)<>'string' entao erro("\n\nErro: arg #2 - Espera-se string ao invés de: " .. tipo(var)); fim
+  
+  se str:corte(1,#var+1) == var .. '=' entao
+    local pos = str:procure('&',1);//procura '&' em str comecando por 1
+    se pos entao
+      retorne cgi.decod(str:corte(#var+2,pos -1 ));
+    senao
+      retorne cgi.decod(str:corte(#var+2,#str));//pega toda str pois nao tem outra var.
+    fim
+  fim
+  
+  local in,fi=str_procure(str, '&' .. var .. '='); //se a variavel estiver no meio entao será &var=valor&;
+  se in entao
+    local pos = str_procure(str,'&',fi+1);
+    se pos entao
+      retorne cgi.decod(str:corte(fi+1,pos-1));//-1 pois elimina o &
+    senao //caso seja a ultima var entao não tem o & no final:
+      retorne cgi.decod(str:corte(fi+1,#str)); //decodifica a string.
+    fim
+  fim
+  retorne nulo;
+fim 
+
+/**
+ *   \fn cgi.obt_tabvar
+     \brief funcao cgi.obt_tabvar(str) -- retorna uma tabela com todos as chaves e valores obtidos pelo método GET ou POST.
+     \param str(string) -- é a string obtida pelo método GET ou POST.
+     \returns (tabela) -- o retorno é uma tabela com todas as chaves obtidas por GET ou POST.
+     
+     
+
+  Veja o exemplo abaixo, supondo uma string: 'nome_user=manoel&amp;telefone=66xxxxx-xxxx'
+
+
+
+
+\inicio_codigo Exemplo Prisma
+
+local cgi = inclua'cgi';
+local querystr = cgi.va.var_string();
+local tab = cgi.obt_tabvar(querystr);
+imprima('Nome do usuário:', tab.nome_user);
+imprima('Telefone do usuário:', tab.telefone);
+
+\fim_codigo
+ Lembrando que esses exemplos devem rodar apropriadamente em um ambiente servidor no modo cgi.
+ \veja https://linguagemprisma.br4.biz/blog/?s=cgi 
+*/
+funcao cgi.obt_tabvar(str) 
+  se tipo(str)<>'string' entao erro("\n\nErro: arg #1 - Espera-se string ao invés de: " .. tipo(str)); fim
+  local ret = {};//tabela de retorno
+  local t = str_analise(str,'&');//tokeniza a string e retorna tabela
+  se nao t entao //nenhum & encontrado
+    local tmp = str_analise(str,'=');//verifica se tem igual.
+    se nao tmp entao retorne nulo fim;
+    ret[tmp[1]] = cgi.decod(tmp[3]ou''); //tmp[2] = '=';
+  senao//caso um ou mais '&' sejam encontrados.
+    para i=1,#t inicio
+      se t[i]<>'&' entao
+        local tmp = str_analise(t[i],'=');
+        se tmp entao
+          ret[tmp[1]]=cgi.decod(tmp[3]ou'');
+        senao
+          retorne nulo;
+        fim
+      fim
+    fim  //fim para
+  fim //fim senao  
+  retorne ret;
+fim//fim local funcao
+
+
+
+
+
+/**
+   \var cgi.GET
+   \brief cgi.GET (tabela) - é a tabela que torna possível acessar diretamente os dados do cliente pelo método GET;
+   
+   <hr>
+   Veja o exemplo:
+   <hr>
+\inicio_codigo Prisma
+  local cgi = inclua'cgi';
+  imprima('Nome do cliente:', cgi.GET['nome']);
+\fim_codigo
+*/
+cgi.GET = {};
+defmetatabela(cgi.GET, {
+   __call = funcao(este, str_chave)
+       S(str_chave);
+       cgi._get = cgi._get ou cgi.va.var_string();
+       local qs = cgi._get;
+       retorne cgi.obt_var(qs, str_chave);
+   fim;
+   __index = funcao(este, str_chave)
+       S(str_chave);
+       cgi._get = cgi._get ou cgi.va.var_string();
+       local qs = cgi._get;
+       retorne cgi.obt_var(qs, str_chave);
+   fim;
+});
+
+
+
+/**
+   \var cgi.POST
+   \brief cgi.POST (tabela) - é a tabela que torna possível acessar diretamente os dados do cliente pelo método POST;
+   
+   <hr>
+   Veja o exemplo:
+   <hr>
+\inicio_codigo
+
+  local cgi = inclua'cgi';
+  imprima('Nome do cliente:', cgi.POST['nome']);
+\fim_codigo
+*/
+cgi.POST = {}; 
+local leia = leia;
+defmetatabela(cgi.POST, {
+   __call = funcao(este, str_chave)
+       S(str_chave);
+       local qs = cgi._post ou leia('*t');
+       cgi._post = qs;
+       retorne cgi.obt_var(qs, str_chave);
+   fim;
+   __index = funcao(este, str_chave)
+       S(str_chave);
+       local qs = cgi._post ou leia('*t');
+       cgi._post = qs;
+       retorne cgi.obt_var(qs, str_chave);
+   fim;
+});
+
+
+
+/**
+   \fn cgi.escape_html
+   \brief cgi.escape_html(str) - esta função faz a troca de caracteres especiais do html para o seu respectivo código ( & < > " ' ficando: &amp; &lt; &gt; &quot; &#039;)
+   \param str (string) -- é a string para fazer o escape;
+   \returns (string) -- o retorno é a string resultante do escape.
+   <hr>
+   Veja o exemplo:
+   <hr>
+\inicio_codigo escape_html.prisma
+
+  local cgi = inclua'cgi';
+  local s = cgi.escape_html('<h1>TESTE</h1>'); 
+  imprima(s);//resultado: &lt;h1&gt;TESTE&lt;/h1&gt;
+\fim_codigo
+*/
+local tab={
+		['&'] = '&amp;',
+        ['<'] = '&lt;',
+        ['>'] = '&gt;',
+        ['"'] = '&quot;',
+        ["'"] = '&#039;'		
+}
+local str_troque = string.troque;
+função cgi.escape_html(str)
+    retorne (str_troque(str, '[&<>"\']', funcao(c)
+          retorne tab[c];
+    fim));
+fim
+
+
+retorne cgi;//retornando a tabela com os metodos para o 'inclua'

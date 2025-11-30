@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>gifinfo.pris</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<nav id="id_000007"  class="floating-menu">
+<div class="menu-button" title="Ocultar painel lateral" onclick="show_menu_flutuante(this, 'id_000008', 'id_000007')">&#x2630;</div>
+<div class="com-rolagem" id="id_000008" hidden>
+<div class="caixa "><h2>Funções:</h2>
+<a href="#id_000003">gif.info</a>
+<a href="#id_000005">gif.obt_tgc</a>
+
+</div>
+</div>
+</nav>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> gifinfo.pris</h1>
+<h3> Adalberto </h3>
+<h3> 03/01/2017</h3>
+<br>
+<div>
+Biblioteca Prisma gifinfo-0.1 básica para extrair informações de imagens gif com altura, largura etc.
+<a href="#id_000009"> mais...</a></div>
+<div class="caixa com-borda"><div><h2 >Funções:</h2>
+<ol>
+<li><a href="#id_000003">gif.info</a></li>
+<li><a href="#id_000005">gif.obt_tgc</a></li>
+</ol>
+</div>
+
+</div><br>
+
+<h2 id="id_000009">gifinfo.pris</h2><div>
+Biblioteca Prisma gifinfo-0.1 básica para extrair informações de imagens gif com altura, largura etc.
+</div>
+
+
+
+ * 
+
+ * 
+ * linguagemprisma@gmail.com
+<b>Veja: </b><a href="linguagemprisma.br4.biz"> linguagemprisma.br4.biz</a>
+
+ * 
+ Exemplo básico:
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000002')">&#128203;</div>&nbsp;<i>ex1.prisma</i><pre id="id_000002" hidden>
+local gif = inclua&#39;gifinfo&#39;;
+local arq = &#39;b.gif&#39;;
+
+local tab,err = gif.info(arq);
+tente(tab,err);
+imprima(&quot;Id:......................................:&quot;,tab.id);
+imprima(&quot;Formato .................................:&quot;,tab.formato);
+imprima(&quot;Versão...................................:&quot;, tab.versao);
+imprima(&quot;Número de imagens no gif.................:&quot;, tab.num);
+imprima(&quot;Tabela global de cor está presente?......:&quot;, tab.tgc == 1);
+imprima(&quot;Tamanho da tabela global de cor..........:&quot;, tab.tam_tgc);
+imprima(&quot;Tamanho da tabela global de cor em bytes.:&quot;, tab.tam_tgc*3);
+imprima(&quot;Indice da cor de fundo...................:&quot;, tab.icorfundo);
+imprima(&quot;Resolução da cor.........................:&quot;, tab.res_cor);
+imprima(&quot;Relação de aspecto de pixel..............:&quot;, tab.rap);//geralmente 0
+imprima(&quot;Bits por componente......................:&quot;, tab.bpc);//geralmente 8, o mesmo que res_cor
+imprima(&quot;Largura x Altura.........................:&quot;,tab.larg,&#39;x&#39;,tab.alt);
+imprima(&quot;Tempo de transição.......................:&quot;,tab.ext_ctrl_grafico.tempo,&#39;centésimos de segundo&#39;);
+
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 14</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 15</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 16</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 17</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 18</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 19</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 20</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+
+<span style="font-weight:bold;color:#b50546">local</span> gif <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;gifinfo&#39;</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> arq <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;b.gif&#39;</span><span style="font-weight:bold;">;</span>
+
+<span style="font-weight:bold;color:#b50546">local</span> tab,err <span style="font-weight:bold;">=</span> gif<span style="font-weight:bold;">.</span>info<span style="font-weight:bold;">(</span>arq<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">tente</span><span style="font-weight:bold;">(</span>tab,err<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Id:......................................:&quot;</span>,tab<span style="font-weight:bold;">.</span>id<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Formato .................................:&quot;</span>,tab<span style="font-weight:bold;">.</span>formato<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Versão...................................:&quot;</span>, tab<span style="font-weight:bold;">.</span>versao<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Número de imagens no gif.................:&quot;</span>, tab<span style="font-weight:bold;">.</span>num<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Tabela global de cor está presente?......:&quot;</span>, tab<span style="font-weight:bold;">.</span>tgc <span style="font-weight:bold;">=</span><span style="font-weight:bold;">=</span> <span style="color:red">1</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Tamanho da tabela global de cor..........:&quot;</span>, tab<span style="font-weight:bold;">.</span>tam_tgc<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Tamanho da tabela global de cor em bytes.:&quot;</span>, tab<span style="font-weight:bold;">.</span>tam_tgc<span style="font-weight:bold;">*</span><span style="color:red">3</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Indice da cor de fundo...................:&quot;</span>, tab<span style="font-weight:bold;">.</span>icorfundo<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Resolução da cor.........................:&quot;</span>, tab<span style="font-weight:bold;">.</span>res_cor<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Relação de aspecto de pixel..............:&quot;</span>, tab<span style="font-weight:bold;">.</span>rap<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//geralmente 0
+</span><span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Bits por componente......................:&quot;</span>, tab<span style="font-weight:bold;">.</span>bpc<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//geralmente 8, o mesmo que res_cor
+</span><span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Largura x Altura.........................:&quot;</span>,tab<span style="font-weight:bold;">.</span><span style="color:#b50546">larg</span>,<span style="color:blue">&#39;x&#39;</span>,tab<span style="font-weight:bold;">.</span>alt<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Tempo de transição.......................:&quot;</span>,tab<span style="font-weight:bold;">.</span>ext_ctrl_grafico<span style="font-weight:bold;">.</span><span style="color:#b50546">tempo</span>,<span style="color:blue">&#39;centésimos de segundo&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+</pre></div></div>
+
+</div>
+<h1>Funções:</h1>
+<a id="id_000003" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao gif.info(arq)</h2><div class="corpo-doc">
+<p>Obtem informações de um arquivo de imagem .gif, com alt., larg. etc.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > arq(string) - o nome do arquivo para ser aberto e se obter as informações.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (tabela) - o retorno é uma tabela contendo as informações da imagem .gif ou nulo, err.</span>
+</div>
+   
+   
+   A tabela info terá os seguintes campos:
+   
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000004"><code>   
+  .id = GIF89a  (ou em alguns casos: &#39;GIF87a&#39;) //--&gt; assinatura + versao do formato
+  .formato = GIF //--&gt;assinatura
+  .versao = 89a ou 87a
+  .num = número de imagens sequenciais da animação gif (as vezes 1, outras mais de 1);
+  .tgc = 1 se a tabela global de cor está presente e 0 se está ausente;
+  .tam_tgc = &lt;número&gt; tamanho da tabela global de cor em índices;  tam_gtc * 3 = número de bytes
+  .icorfundo = &lt;número&gt; índice da cor de fundo na tabela cores
+  .res_cor = &lt;número&gt; resolução de cor (geralmente 8 bits por componente para rgb);
+  .rap = &lt;número&gt; relação de aspecto de pixels (geralmente 0 = ausente)
+  .bpc = &lt;número&gt; bits por componente (o mesmo que res_cor);
+  .larg = &lt;número&gt; largura da imagem em pixels
+  .alt = &lt;número&gt; altura da imagem em pixels
+
+  .ext_ctrl_grafico[n] = &lt;tabela&gt; extensão de controle gráfico, é uma tabela em que &#39;n&#39; é um índice número de acordo com o número de imagens embutidas ([1]=primeira imagem etc.) cada indice é uma outra tabela
+  com os seguintes campos: (ex.: local resolucao = info.ext_ctrl_grafico[1].res)
+     |  [n].res = &lt;num&gt; reservado para o futuro (sem uso atualmente);
+     |  [n].met_disp = &lt;num&gt; método de disposição
+     |  [n].flag_cor_transp = &lt;num&gt; flag da cor transparente; (1 = sim,  0 = não);
+     |  [n].tempo = &lt;num&gt; tempo da transição em centésimos de segundo (1/100);
+     |  [n].ict = &lt;num&gt; indice de transparência da cor (na tabela de cores);
+     
+  .ext_aplicativo = &lt;tabela&gt; extensão para aplicativos guardarem dados, tem os seguintes campos:
+     |  .id  = &lt;string&gt; de 8 letras no máximo, nome do aplicativo ex.: FIREFOX, NETSCAPE etc.
+     |  .ver = &lt;string&gt; de 3 letras no máximo, verificador, ex.:  &#39;2.2&#39;,  &#39;xyz&#39; etc.
+     |  .bloco = &lt;tabela&gt; contendo todos os sub-blocos (dados) existentes;
+     | |   [1] = {...}, [2] = {...} e assim por diante, cada índice de sub-bloco é um número de 0-255
+  
+  .ext_comentario[n] = &lt;tabela&gt; contendo índices para cada compentário (string)
+     | [1] = &quot;primeiro comentário&quot;; [2]=&quot;segundo comentário&quot; e assim por diante.
+  
+  .info.ext_texto[n] = &lt;tabela&gt; contendo informações de texto para serem inseridos na imagem gif.
+   contém os seguintes campos: (Obs. de acordo com a expecificação gif esta extensão foi abandonada
+   e deve ser ignorada, possivelmente nenhum gif atual a usa mais.
+     | .x = posição coluna (left)
+     | .y = posição linha(top);
+     | .larg = largura do rótulo (em pixels);
+     | .alt = altura do rótulo (em pixels);
+     | .larg_car = largura da letra (em pixels);
+     | .alt_car = altura da letra (em pixels);
+     | .icorletra = &lt;numero&gt; indice da cor da letra (na tabela de cores);
+     | .bloco = &lt;tabela&gt; cada índice contém um trecho de texto de 255 caracteres no máximo.
+     |  \ [1] = &#39;primeiro texto&#39; [2] = &#39;segundo texto&#39; e assim por diante.
+     
+</code></pre>
+</div>
+   
+</div>
+</section>
+<a id="id_000005" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao gif.obt_tgc(arq)</h2><div class="corpo-doc">
+<p> gif.obt_tgc(img); --&gt; obtém as informações da tabela de cores do arquivo img.gif.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > img(string) - arquivo gif para abrir e obter as informações.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (tabela) - a tabela global de cores.</span>
+</div>
+  
+  
+<div><i>Detalhes:</i>
+<pre class="bloco com-rolagem" id="id_000006"><code>
+     Obtém a tabela global de cores, cada indice &#39;n&#39; tem uma pequena tabela contendo o rgb
+     tgc[n].r = red, tgc[n].g = green e tgc[n].b = blue
+     ou
+     tgc[n][1] = red, tgc[n][2] = green e tgc[n][3] = blue
+     
+     tamanho da tgc = #tgc + 1; começa com o primeiro índice;  
+  
+</code></pre>
+</div>
+</div>
+</section>
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

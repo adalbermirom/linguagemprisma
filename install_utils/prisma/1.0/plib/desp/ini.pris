@@ -1,0 +1,196 @@
+inclua'classe';
+//simples despertador Classe
+//funcao Classe( tabela , ... ); cria uma classe
+local desp = Classe{  
+
+//dados da classe:
+
+ERRO = { [0] = "Padrao: erro nao definido" ,
+[1] = '\n\n\nErro: falta algum campo na tabela passada para funcao defAlarme(tab)\n\nTente: {dia=1,mes=2,ano=3,hora=4,minuto=5}\n\nSubstitua os numeros pelo seu valor desejando\n\n' 
+
+};//final ERRO
+
+alarme = {};
+func = funcao(alarme)alarme.nome = alarme.nome ou 'alarme sem nome'; imprima( 'O alarme: "' .. alarme.nome .. '" disparou!!!\n\n') fim;
+cont = 1; 
+};
+
+//metodos da classe:
+funcao desp:impErro(n)
+    n = n ou 0; //se nenhum numero for passado o erro é indefinido [0]
+    imprima( este.ERRO[n] );
+    
+fim
+funcao desp:TempoAtual()
+       retorne sis.data('*t');
+fim
+funcao desp:defAlarme(tab)
+       
+       se nao tab.dia ou nao tab.mes ou nao tab.ano ou nao tab.hora ou nao tab.minuto entao 
+               este:impErro(1);
+       senao
+              se nao tab.nome entao tab.nome = 'Alarme' .. este.cont fim
+              tab.func = tab.func ou este.func; //definindo a funcao call back
+              tab.ind = este.cont;
+              tab.ativado = verdadeiro;
+              este.alarme[este.cont] = tab;
+              este.cont = este.cont + 1;
+                           
+              retorne este.alarme[este.cont - 1];
+       fim //se nao tab.dia...
+fim
+
+//obtem a tabela de alarme definida contendo nome, dia, mes, ano, hora e minuto
+funcao desp:obtAlarmePorNome(nome)
+     para i = 1 , #este.alarme inicio
+             se este.alarme[i].nome == nome entao retorne este.alarme[i] fim;
+     fim //para i = 1..
+fim
+funcao desp:obtAlarmePorInd(ind) //obtem pelo indice da tabela, na ordem de definicao do alarme
+       se ind entao
+              se este.alarme[ind] entao retorne este.alarme[ind] fim
+       fim
+fim
+
+funcao desp:obtInd(nome)
+       para i = 1 , #este.alarme inicio
+             se este.alarme[i].nome == nome entao retorne i fim;
+       fim //para i = 1..   
+fim
+
+funcao desp:defFuncaoPorNome ( nome,func )
+            ind = este:obtInd(nome);
+            se ind entao
+                este.alarme[ind].func=func;
+                retorne verdadeiro;
+            fim
+fim
+
+funcao desp:defFuncao(alarme, func)
+  se tipo(alarme)=='tabela' entao
+        alarme.func = func;
+        retorne verdadeiro;
+  fim
+fim
+
+funcao desp:compare( tab )
+    local tab = tab;
+    se tab entao //verdadeiro diz que pode executar o alarme.
+                  local tmp = sis.data'*t';
+                  se tab.ano - tmp.ano == 0 entao
+                          se tab.mes - tmp.mes == 0 entao
+                                      se tab.dia - tmp.dia == 0 entao
+                                            se tab.hora - tmp.hora == 0 entao
+                                                   se tab.minuto - tmp.minuto <= 0 entao
+                                                             retorne verdadeiro;
+                                                   fim
+                                            senaose tab.hora - tmp.hora < 0 entao
+                                                   retorne verdadeiro;
+                                            fim
+                                      senaose tab.dia - tmp.dia < 0 entao
+                                            retorne verdadeiro;
+                                      fim 
+                          senaose tab.mes - tmp.mes < 0 entao
+                                      retorne verdadeiro;                              
+                          fim
+                  senaose tab.ano - tmp.ano < 0 entao
+                          retorne verdadeiro;
+                  fim
+    fim
+fim
+funcao desp:testeAlarmes()
+  local teste = falso;
+  se este.alarme entao
+   
+           para i = 1 , #este.alarme inicio           
+              
+              se este.alarme[i].soneca entao
+                 se este:compare( este.alarme[i]) entao //se bater o tempo  
+                          teste = verdadeiro;                 
+                          // imprima(este.alarme[i].contador);
+                           se este.alarme[i].contador entao //ve se já esta ativada a soneca tem um contador
+                                se este.alarme[i].contador >= este.alarme[i].repet entao
+                                       este.alarme[i].soneca = nulo; //desativa a soneca
+                                       este.alarme[i].contador = nulo; //desativa o contador
+                                senao
+                                este.alarme[i].contador = este.alarme[i].contador + 1;
+                                este.alarme[i].func(este.alarme[i]);//executa a funcao ate contador ser maior que a repet
+                                fim
+                           fim
+                               //se a soneca estiver ativada ela conta o numero de repetições e desativa caso passe do   número  
+                 fim //se este:compare(...  
+              fim //fim soneca
+
+
+              se este.alarme[i].ativado entao //ativado                                  
+                  se este:compare( este.alarme[i] ) entao //compara se já é data e hora programada ou se já passou para disparar ou nao
+                         este.alarme[i].func(este.alarme[i]); //executa a funcao se o retorno da comparacao for verdadeiro
+                         este:desativeAlarme(este.alarme[i]);  
+                         teste = verdadeiro;   
+                  fim //fim se desp:compare
+              fim //fim se este.alarme[i].ativado...
+
+
+              
+           fim//fim para
+ fim //fim se este.alarme
+ retorne teste; // se algum alarme for disparado entao o retorno é verdadeiro, veja linha 130;
+fim
+
+funcao desp:defSoneca( dado, minuto , repet ) //( dado=este.alarme[ind] , minuto=numero, repet=numero repeticao)
+minuto = minuto ou 5; //padrao é 5 minutos
+dado.soneca = verdadeiro;
+dado.repet = repet ou 3 ; //definicao padrao é 3 vezes;
+dado.contador = dado.contador ou  0;
+se nao dado entao retorne nulo fim;
+local tmp = sis.data'*t';
+           dado.hora = tmp.hora;
+
+      se minuto > 60 entao minuto = 60 fim; //certifica de que minuto nao seja um valor invalido evitando bugs.
+      
+           se tmp.minuto + minuto > 59 entao
+              dado.minuto = (tmp.minuto + minuto) - 60 
+              dado.hora = dado.hora + 1;
+           senao 
+              dado.minuto = tmp.minuto + minuto;
+           fim
+           dado.dia = tmp.dia;
+           dado.mes = tmp.mes;
+           dado.ano = tmp.ano;
+  retorne verdadeiro;
+fim
+
+
+funcao desp:ativeAlarme(alarme)
+    se alarme entao
+       alarme.ativado = verdadeiro;  
+    fim       
+fim
+
+funcao desp:desativeAlarme(alarme)
+    se alarme entao
+       alarme.ativado = falso;  
+    fim       
+fim
+
+
+funcao desp:ativeAlarmePorNome(nome)
+     local ind = este:obtInd(nome);
+    se ind entao
+       este.alarme[ind].ativado = verdadeiro;  
+    fim       
+fim
+
+funcao desp:desativeAlarmePorNome(nome)
+      local ind = este:obtInd(nome);
+    se ind entao
+       este.alarme[ind].ativado = falso;  
+    fim            
+fim
+
+
+
+retorne desp;
+
+
+

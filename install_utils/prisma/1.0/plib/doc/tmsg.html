@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>tmsg.pris</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<nav id="id_00001B"  class="floating-menu">
+<div class="menu-button" title="Ocultar painel lateral" onclick="show_menu_flutuante(this, 'id_00001C', 'id_00001B')">&#x2630;</div>
+<div class="com-rolagem" id="id_00001C" hidden>
+<div class="caixa "><h2>Funções:</h2>
+<a href="#id_000016">f:ad_campo</a>
+<a href="#id_000014">f:ad_campos</a>
+<a href="#id_000017">f:ad_confirmar</a>
+<a href="#id_000015">f:mostre</a>
+<a href="#id_000009">t.aguarde</a>
+<a href="#id_000012">t.alerta</a>
+<a href="#id_00000B">t.atencao</a>
+<a href="#id_000010">t.confirme</a>
+<a href="#id_000004">t.cor.rgb</a>
+<a href="#id_000007">t.cor_normal</a>
+<a href="#id_00001A">t.dialogo_cor </a>
+<a href="#id_00000C">t.erro</a>
+<a href="#id_00000E">t.escolha</a>
+<a href="#id_000013">t.form</a>
+<a href="#id_00000A">t.info</a>
+<a href="#id_000018">t.login </a>
+<a href="#id_000005">t.mude_cor</a>
+<a href="#id_00000D">t.ok</a>
+<a href="#id_000008">t.rotulo</a>
+
+</div>
+<div class="caixa "><h2>Variáveis:</h2>
+<a href="#id_000002">t.SUPORTE_256CORES </a>
+<a href="#id_000003">t.SUPORTE_VT100 </a>
+</div>
+
+</div>
+</nav>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> tmsg.pris</h1>
+<br>
+<div>
+Prisma Lib para gerar diálogos simples no terminal.
+<a href="#id_00001D"> mais...</a></div>
+<div class="caixa com-borda"><div><h2 >Funções:</h2>
+<ol>
+<li><a href="#id_000016">f:ad_campo</a></li>
+<li><a href="#id_000014">f:ad_campos</a></li>
+<li><a href="#id_000017">f:ad_confirmar</a></li>
+<li><a href="#id_000015">f:mostre</a></li>
+<li><a href="#id_000009">t.aguarde</a></li>
+<li><a href="#id_000012">t.alerta</a></li>
+<li><a href="#id_00000B">t.atencao</a></li>
+<li><a href="#id_000010">t.confirme</a></li>
+<li><a href="#id_000004">t.cor.rgb</a></li>
+<li><a href="#id_000007">t.cor_normal</a></li>
+<li><a href="#id_00001A">t.dialogo_cor </a></li>
+<li><a href="#id_00000C">t.erro</a></li>
+<li><a href="#id_00000E">t.escolha</a></li>
+<li><a href="#id_000013">t.form</a></li>
+<li><a href="#id_00000A">t.info</a></li>
+<li><a href="#id_000018">t.login </a></li>
+<li><a href="#id_000005">t.mude_cor</a></li>
+<li><a href="#id_00000D">t.ok</a></li>
+<li><a href="#id_000008">t.rotulo</a></li>
+</ol>
+</div>
+
+<div><h2>Variáveis:</h2>
+<ol>
+<li><a href="#id_000002">t.SUPORTE_256CORES </a></li>
+<li><a href="#id_000003">t.SUPORTE_VT100 </a></li>
+</ol>
+</div>
+
+</div><br>
+
+<h2 id="id_00001D">tmsg.pris</h2><div>
+Prisma Lib para gerar diálogos simples no terminal.
+</div>
+
+
+
+
+<h1>Funções:</h1>
+<a id="id_000004" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao t.cor.rgb(r, g, b)</h2><div class="corpo-doc">
+<p>Em terminais com suporte a &#39;256color&#39; esta função retorna um número da cor a partir da combinação rgb de 0-5.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > r {numero} - um número de 0 a 5 para red (vermelho)</span>
+</div>
+<div class="params-doc"><span > g {numero} - um número de 0 a 5 para green (verde)</span>
+</div>
+<div class="params-doc"><span > b {numero} - um número de 0 a 5 para blue (azul)</span>
+</div>
+   
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     ret {numero} - Um número correspondente ao código da cor 256.</span>
+</div>
+   
+<p><i><b>Obs.: </b>Esta função só pode ser usada em terminais com suporte a 256color. Para isso faça o teste: se t.SUPORTE_256COLOR entao ... fim</i></p>
+   
+</div>
+</section>
+<a id="id_000005" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao t.mude_cor(fgcode, bgcode)</h2><div class="corpo-doc">
+<p>Muda a cor da letra e do fundo no terminal. </p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > fgcode {numero} - Código da cor da letra.</span>
+</div>
+<div class="params-doc"><span > bgcode {numero} - Código da cor do fundo.</span>
+</div>
+
+<h3>exemplo:</h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000006')">&#128203;</div>&nbsp;<i></i><pre id="id_000006" hidden>  local t = inclua&#39;tmsg&#39;;
+  t.mude_cor(t.cor.vermelho, t.cor.verde_claro);
+  imprima(&quot;Cor de fundo verde claro e da letra vermelho.&quot;);
+  t.cor_normal(); //volta ao padrao
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+  <span style="font-weight:bold;color:#b50546">local</span> t <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;tmsg&#39;</span><span style="font-weight:bold;">;</span>
+  t<span style="font-weight:bold;">.</span>mude_cor<span style="font-weight:bold;">(</span>t<span style="font-weight:bold;">.</span>cor<span style="font-weight:bold;">.</span>vermelho, t<span style="font-weight:bold;">.</span>cor<span style="font-weight:bold;">.</span>verde_claro<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+  <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Cor de fundo verde claro e da letra vermelho.&quot;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+  t<span style="font-weight:bold;">.</span>cor_normal<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//volta ao padrao
+</span></pre></div></div>
+
+</div>
+
+</div>
+</section>
+<a id="id_000007" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao t.cor_normal()</h2><div class="corpo-doc">
+<p>Redefina as cores para o padrão.</p>
+
+</div>
+</section>
+<a id="id_000008" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao t.rotulo(txt, corletra, corfundo)</h2><div class="corpo-doc">
+<p>imprime um texto usando cores de letra e de fundo caso haja suporte.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > txt {string} - o texto a ser impresso.</span>
+</div>
+<div class="params-doc"><span > corletra {numero} - o número do código da cor da letra.</span>
+</div>
+<div class="params-doc"><span > corfundo {numero} - o número do código da cor de fundo.</span>
+</div>
+</div>
+</section>
+<a id="id_000009" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao t.aguarde(txt)</h2><div class="corpo-doc">
+<p>Cria uma mensagem padrão e espera o usuário pressionar Enter para sair.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > txt {string} - o texto a ser impresso na mensagem.</span>
+</div>
+</div>
+</section>
+<a id="id_00000A" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao t.info(txt)</h2><div class="corpo-doc">
+<p>Cria uma mensagem info com cores preto (letra) e azul-claro (fundo)</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > txt {string} - o texto a ser impresso na mensagem.</span>
+</div>
+</div>
+</section>
+<a id="id_00000B" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao t.atencao(txt)</h2><div class="corpo-doc">
+<p>Cria uma mensagem de atenção com cores branco-brilhante (letra) e amarelo (fundo)</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > txt {string} - o texto a ser impresso na mensagem.</span>
+</div>
+</div>
+</section>
+<a id="id_00000C" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao t.erro(txt)</h2><div class="corpo-doc">
+<p>Cria uma mensagem de erro com cores branco-brilhante (letra) e vermelho (fundo)</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > txt {string} - o texto a ser impresso na mensagem.</span>
+</div>
+</div>
+</section>
+<a id="id_00000D" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao t.ok(txt)</h2><div class="corpo-doc">
+<p>Cria uma mensagem de ok (sucesso) com cores branco-brilhante (letra) e verde (fundo)</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > txt {string} - o texto a ser impresso na mensagem.</span>
+</div>
+</div>
+</section>
+<a id="id_00000E" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao t.escolha(...)</h2><div class="corpo-doc">
+<p>Cria um diálogo com opções para se escolher.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > ... {variado - strings} - primeiro: título, os demais são as opções.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     op {numero} - O número da opção escolhida.</span>
+</div>
+<div class="returns-doc"><span >     txt {string} - O rótulo da opção escolhida.</span>
+</div>
+ 
+<h3>Exemplo:</h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000F')">&#128203;</div>&nbsp;<i>prisma</i><pre id="id_00000F" hidden> local tm = inclua&#39;tmsg&#39;;
+
+ local op, rot = tm.escolha(&#39;O que quer fazer?&#39;, &#39;Desligar&#39;, &#39;Reiniciar&#39;, &#39;Suspender&#39;);
+ imprima(op, rot);// op = rot --&gt; 1 = Desligar, 2 = Reiniciar, 3 = Suspender.
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+ <span style="font-weight:bold;color:#b50546">local</span> tm <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;tmsg&#39;</span><span style="font-weight:bold;">;</span>
+
+ <span style="font-weight:bold;color:#b50546">local</span> op, rot <span style="font-weight:bold;">=</span> tm<span style="font-weight:bold;">.</span><span style="color:#b50546">escolha</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;O que quer fazer?&#39;</span>, <span style="color:blue">&#39;Desligar&#39;</span>, <span style="color:blue">&#39;Reiniciar&#39;</span>, <span style="color:blue">&#39;Suspender&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+ <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>op, rot<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">// op = rot --&gt; 1 = Desligar, 2 = Reiniciar, 3 = Suspender.
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000010" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao t.confirme(titulo, Sim, Nao)</h2><div class="corpo-doc">
+<p>Cria um diálogo de Sim ou Não (Ok, Cancel).</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > titulo {string} - O título do diálogo.</span>
+</div>
+<div class="params-doc"><span > Sim {string} - O rótulo equivalente a verdadeiro no retorno.</span>
+</div>
+<div class="params-doc"><span > Nao {string} - O rótulo equivalente a falso no retorno.</span>
+</div>
+
+<h3>Exemplo:</h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000011')">&#128203;</div>&nbsp;<i>prisma</i><pre id="id_000011" hidden>local tm = inclua&#39;tmsg&#39;;
+
+local op = tm.confirme(&#39;Deseja continuar?&#39;, &#39;Ok&#39;, &#39;Cancelar&#39;);
+imprima(op);
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> tm <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;tmsg&#39;</span><span style="font-weight:bold;">;</span>
+
+<span style="font-weight:bold;color:#b50546">local</span> op <span style="font-weight:bold;">=</span> tm<span style="font-weight:bold;">.</span>confirme<span style="font-weight:bold;">(</span><span style="color:blue">&#39;Deseja continuar?&#39;</span>, <span style="color:blue">&#39;Ok&#39;</span>, <span style="color:blue">&#39;Cancelar&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>op<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000012" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao t.alerta(...)</h2><div class="corpo-doc">
+<p>Cria uma mensagem de aviso.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > ... {variados- string} - Cada argumento é uma linha da mensagem.</span>
+</div>
+
+</div>
+</section>
+<a id="id_000013" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao t.form(titulo)</h2><div class="corpo-doc">
+<p>cria um formulário simplificado modo texto.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > titulo {string} - O título do formulário.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     form {tabela} - O objeto formulário contendo métodos.</span>
+</div>
+</div>
+</section>
+<a id="id_000014" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">    funcao f:ad_campos(...)</h2><div class="corpo-doc">
+<p>método do objeto formulário para adicionar campos. </p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > ... {variados-string | tabela&lt;string&gt;} - Cada argumento é um campo que poderá ser preenchido. Caso seja uma tabela, cada item da tabela será um campo a ser preenchido.</span>
+</div>
+</div>
+</section>
+<a id="id_000015" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">    funcao f:mostre()</h2><div class="corpo-doc">
+<p>Método do objeto formulário - ativa o formulário na tela para ser preenchido ou alterado.</p>
+
+
+</div>
+</section>
+<a id="id_000016" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">    funcao f:ad_campo(rotulo)</h2><div class="corpo-doc">
+<p>Método do objeto formulário - adiciona um campo a ser preenchido.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > rotulo {string} - campo que será preenchido.</span>
+</div>
+</div>
+</section>
+<a id="id_000017" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">    funcao f:ad_confirmar(rotulo)</h2><div class="corpo-doc">
+<p>Método do objeto formulário - adiciona uma opção de submit para sair do formulário.</p>
+
+
+</div>
+</section>
+<a id="id_000018" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao t.login (titulo, txt_user, txt_pass)</h2><div class="corpo-doc">
+<p>Cria um diálogo de login, com usuário e senha.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > titulo {string} - título do diálogo.</span>
+</div>
+<div class="params-doc"><span > txt_user {string} - texto correspondente ao rótulo &#39;User&#39;, permitindo customização.</span>
+</div>
+<div class="params-doc"><span > txt_pass {string} - texto correstondente ao rótulo &#39;Password&#39;.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     user {string} - O que foi digitado no usuário.</span>
+</div>
+<div class="returns-doc"><span >     senha {string} - O que foi digitado na senha.</span>
+</div>
+<h3>Exemplo:</h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000019')">&#128203;</div>&nbsp;<i>prisma</i><pre id="id_000019" hidden>local tm = inclua&#39;tmsg&#39;;
+
+local user, senha = tm.login(&#39;Faça o login&#39;, &#39;Usuário&#39;, &#39;Senha&#39;);
+imprima(user, senha);
+
+leia();
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> tm <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;tmsg&#39;</span><span style="font-weight:bold;">;</span>
+
+<span style="font-weight:bold;color:#b50546">local</span> user, senha <span style="font-weight:bold;">=</span> tm<span style="font-weight:bold;">.</span>login<span style="font-weight:bold;">(</span><span style="color:blue">&#39;Faça o login&#39;</span>, <span style="color:blue">&#39;Usuário&#39;</span>, <span style="color:blue">&#39;Senha&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>user, senha<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+<span style="color:#b50546">leia</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+</pre></div></div>
+
+</div>
+
+<p><i><b>Obs.: </b>Esta função apenas cria o diálogo, não lida com a confirmação, autenticação.</i></p>
+</div>
+</section>
+<a id="id_00001A" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">t.dialogo_cor = funcao(txt)</h2><div class="corpo-doc">
+<p>Cria um diálogo para selecionar uma cor.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > txt {string} - A mensagem que aparece acima do diálogo.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     cor {numero} - O código correspondente à cor escolhida.</span>
+</div>
+<p><i><b>Obs.: </b>Para terminais sem suporte a vt100 e cores, esta função não terá efeito.</i></p>
+<p><i><b>Obs.: </b>Para terminais com suporte a 256color, há mais cores além das 16 básicas.</i></p>
+</div>
+</section>
+<h1>Variáveis</h1>
+<a id="id_000002" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">t.SUPORTE_256CORES = suporte_256cores();</h2><div class="corpo-doc">
+<p>{booleano} - se verdadeiro, há suporte a 256cores, caso contrário não.</p>
+
+</div>
+</section>
+<a id="id_000003" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">t.SUPORTE_VT100 = suporte_vt100()</h2><div class="corpo-doc">
+<p>{booleano} - se verdadeiro apresenta suporte ao sistema de escape vt100.</p>
+
+</div>
+</section>
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

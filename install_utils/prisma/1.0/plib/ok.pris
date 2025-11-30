@@ -1,0 +1,90 @@
+
+/**
+ \fonte Biblioteca ok.pris
+ \resumo Retorna uma função para checar tipos de parâmetros em funções.
+ \autor Adalberto
+*/
+
+/**
+    \fn OK
+    \resumo Testa os tipos de parâmetros em uma função, em caso de incompatibilidade de tipos aborta o programa com mensagem de erro.
+    
+    \param ... {variados} - parâmetros variados, sempre em sequência: 'string_tipo', parametro ...
+    \h3 Em que strig_tipo pode ser:
+    \lista
+    numero
+    string
+    tabela
+    userdata
+    funcao
+    booleano
+    nulo
+    \lista--
+    \h3 Veja um exemplo:
+    \codigo
+local OK = inclua'ok';//testa parametros de funções, retorna uma função em OK.
+
+funcao teste(nome, num, tab)
+    OK('string', nome,  //testa se nome é do tipo 'string';
+       'numero', num, //testa se num é do tipo 'numero';
+       'tabela', tab); //testa se tab é do tipo 'tabela';
+    imprima(nome, numero, tab);
+fim
+
+teste('user', 1, {1}); //-->ok
+teste(1, falso, 'ola'); //-> erro!
+\codigo--
+
+\h3 A mensagem de erro:
+\bloco
+ //interpretador: nome do fonte: linha: nome da função e os tipos de parâmetros:
+prisma: teste.prisma:49: função teste(string, numero, tabela)
+
+ 3 erros de parâmetro:                       //quantidade de erros
+ * Arg#1 tipo incorreto, espera-se `string` em vez de `numero`        //os erros:
+ * Arg#2 tipo incorreto, espera-se `numero` em vez de `booleano`
+ * Arg#3 tipo incorreto, espera-se `tabela` em vez de `string`
+
+Rastro da pilha:  //rastro de chamada da pilha.
+	[C]: em funcao 'erro'    //a função OK usa internamente a função erro();
+	/usr/local/share/prisma/1.0/plib/ok.pris:22: em funcao 'OK'
+	teste.prisma:49: em funcao 'teste'
+	teste.prisma:56: em trecho principal
+\bloco--
+
+\h3 Entendendo o tracebak (rastro de chamada):
+\lista
+ A função erro() foi chamada dentro da função OK() 
+ A função OK() foi chamada dentro da função teste();
+ A função teste() foi chamada no fonte principal (não é a função principal);
+\lista--
+
+
+*/
+local 
+funcao OK(...)
+    local info = debug.getinfo(2, "n")  // nível 2: função que chamou b()
+    local func_nome = info.nome ou "(anônima)";
+    local tam = selecione('#', ...);
+    local args = {...};
+    local ok = 0;
+    local cont = 1;
+    local str_err = '';
+    local tab_types = {};
+    para i=1, tam, 2 inicio
+        tab_types[#tab_types+1] = args[i];
+        se tipo(args[i+1]) <> args[i] entao
+            ok = ok + 1;
+            str_err = str_err .. ' * Arg#' .. cont .. ' tipo incorreto, espera-se `' .. args[i] .. '` em vez de `' ..tipo(args[i+1])..'`\n';
+        fim
+        cont = cont + 1;
+    fim
+    se ok > 0 entao
+        local s = '';
+        se ok > 1 entao s = 's'; fim
+        erro( 'função ' .. func_nome .. '('.. tabela.concat(tab_types,', ') ..')\n\n ' .. ok ..' erro' .. s .. ' de parâmetro:\n' .. str_err, 2);
+    fim
+    retorne verdadeiro;
+fim
+
+retorne OK;

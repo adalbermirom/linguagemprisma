@@ -1,0 +1,238 @@
+/**
+\file tabutil.pris (utilidades extra para tabelas)
+\versao Versão: 0.1
+\autor Adalberto 
+\data <%
+    local semana={'Dom','Seg','Ter','Qua','Qui','Sex','Sáb'};
+    local t = sis.data('*t');
+    local s = string.formate('%s - %02d/%02d/%04d - %02d:%02d:%02d', semana[t.diasemana], t.dia, t.mes, t.ano, t.hora, t.minuto, t.segundo);
+    retorne s;
+%>
+*/
+
+
+/**
+\var tab
+\resumo Tabela local com os metodos desta lib.
+*/
+local tab = {};
+
+/**
+\fn tab.convstring (t,c,i,ncol)
+\resumo Converte uma tabela com todos os seus elementos para sua representação em string.
+\param t(tabela) - a tabela para ser convertida em string.
+\param c(string ou nulo) - um caractere ou string separador de cada elemento, geralmente um espaço' ' ou nova linha'\n'
+\obs O parâmetro c(string) é opcional seu valor padrão é espaço ' ';
+\param i(verdadeiro ou falso ou nulo) - se falso ou nulo, os indices serão adicionados, se verdadeiro ou qualquer outro valor válido, índices serão ignorados.
+\obs O parâmetro i é opcional, seu valor padrão é 'nulo', ou seja, adiciona os índices da tabela na string final.
+\obs Os campos sempre são adicionados!
+\param ncol (numero ou nulo) [opcional] - define o número de colunas, insere um quebra linha '\n', o padrão é sem colunas.
+\retorno (string) - o retorno é a string, a representação da tabela convertida.
+<br>
+\h3 Veja um exemplo:
+\codigo ex1.prisma
+local tab = inclua'tabutil';
+local t = {'ola','tudo','bem', nome='Aldebaran', pos={fig="quad", x=1,y=2,alt=10}};
+local s = tab.convstring(t);
+imprima(s);
+//saída: { [1] = "ola"; [2] = "tudo"; [3] = "bem"; nome = "Aldebaran"; pos = { y = 2; fig = "quad"; x = 1; alt = 10 } }
+\codigo--
+*/
+
+função tab.convstring (t, c, i, ncol)
+    T(t);
+    local ncol = (tipo(ncol)=='numero') ? ncol ou 0;
+    local c = (nao c ou c=='') ? ', ' ou c;
+    
+    local s = '{'
+    local cont = 1;
+    para k,v em pares(t) inicio
+        se tipo(v)=='tabela' entao
+            v = tab.convstring(v, c,i,ncol);
+        senaose tipo(v)=='string' entao
+            v = string.formate('%q',v);
+        senao
+            v = convstring(v);
+        fim
+        se tipo(k)=='numero' entao
+            k = i ? '' ou '[' .. k .. '] = ';
+            s = s .. k .. v .. c;
+        senaose tipo(k)=='string' entao
+            //k = i ? '' ou  k .. ' = ';
+            s = s .. k .. '=' .. v .. c;
+        senao 
+            k = i ? '[' ou  k .. '] = ';
+            s = s .. convstring(k) .. ' = ' .. v .. c;
+        fim
+        se cont % ncol == 0 entao 
+            s = s..'\n';
+        fim
+        cont = cont + 1;
+    fim
+    s = s:apare():corte(1,-2) ..'}'; 
+    retorne s;
+fim
+
+
+/**
+\fn tab.cada
+
+\resumo Executa uma callback para cada elemento da tabela, passando o elemento como parâmetro.
+\obs Funciona apenas com tabela indexadas (ignora campos se houver).
+\param t (tabela) - é a tabela para percorrer todos os elementos.
+\param f (funcao) - é a função para ser executada para cada elemento da tabela. 
+<pre>protótipo de f -->   função f(el) onde el é o elemento da tabela;</pre>
+\param começo(numero ou nulo) [opcional - padrão = 1] - é o número do índice inicial ao percorrer a tabela.
+\param final(numero ou nulo) [opcional - padrão = #t] - é o número do índice final ao percorrer a tabela.
+
+\retorno (nulo) - não há retorno.
+
+\codigo Exemplo:
+local tab = inclua'tabutil';
+local t = {'dom','seg','ter','qua','qui','sex','sáb'};
+tab.cada(t, imprima);
+\codigo--
+\bloco
+Saída:
+
+dom
+seg
+ter
+qua
+qui
+sex
+sáb
+\bloco--
+*/
+
+função tab.cada(t, f, começo, final) 
+    T(t);F(f);
+    local start = (tipo(começo)=='numero') ? começo ou 1;
+    local final = (tipo(final)=='numero') ? final ou #t;
+    para i=start, final início
+        f(t[i]);
+    fim
+fim
+/**
+\função tab.inc
+\obs Funciona apenas com tabela indexadas (ignora campos se houver).
+\resumo Semelhante à função anterior mas com mais recursos, em vez de passar só o elemento para função callback, passa outros parâmetros, veja abaixo:
+\param t (tabela) - é a tabela para percorrer todos os elementos.
+\param f (funcao) - é a função para ser executada para cada elemento da tabela. 
+<pre> protótipo de f -->   função f(t, i, dado) onde t é a tabela, i é o índice e dado é o dado extra.</pre>
+\param começo(numero ou nulo) [opcional - padrão = 1] - é o número do índice inicial ao percorrer a tabela.
+\param final(numero ou nulo) [opcional - padrão = #t] - é o número do índice final ao percorrer a tabela. 
+\param n (numero ou nulo) [opcional - padrão = 1] - é o incremento ou decremento a ser usado no laço 'para'
+\param dado(qualquer valor) [opcional - padrão = nulo] - é o dado extra a ser passado para callback.
+\retorno (nulo) - não há retornos.
+
+\codigo Exemplo:
+local tab = inclua'tabutil';
+funcao callback(t, i, dado)
+    imprima(dado, t[i]);
+fim
+
+local t = {'dom','seg','ter','qua','qui','sex','sáb'};
+tab.inc(t, função (t,i) imprima(t[i]); fim, 1, 3);
+tab.inc(t, callback, 6, 1, -1, 'Dia da semana:');
+//usamos o incremento -1 ou seja diminui 1 a cada execução da callback;
+\codigo--
+\bloco
+Saída:
+
+dom
+seg
+ter
+Dia da semana:	sex
+Dia da semana:	qui
+Dia da semana:	qua
+Dia da semana:	ter
+Dia da semana:	seg
+Dia da semana:	dom
+
+\bloco--
+*/
+função tab.inc(t, f, começo, final, n, dado)
+    T(t);F(f);
+    local n = (tipo(n)=='numero') ? n ou 1;
+    local start = (tipo(começo)=='numero') ? começo ou 1;
+    local final = (tipo(final)=='numero') ? final ou #t;
+    para i=start, final, n início
+        f(t, i, dado);
+    fim
+fim
+
+
+/**
+\função tab.map
+\resumo Mapeia todos os índices da tabela, trocando seus valores pelos valores retornados da callback.
+\obs Funciona somente com tabelas indexadas (array), campos são ignorados.
+\param t (tabela) - é a tabela para percorrer todos os elementos.
+\param f (funcao) - é a função para ser executada para cada elemento da tabela. 
+<pre> protótipo de f -->   função f(t, i, dado) onde t é a tabela, i é o índice e dado é o dado extra.</pre>
+\param começo(numero ou nulo) [opcional - padrão = 1] - é o número do índice inicial ao percorrer a tabela.
+\param final(numero ou nulo) [opcional - padrão = #t] - é o número do índice final ao percorrer a tabela. 
+\param dado(qualquer valor) [opcional - padrão = nulo] - é o dado extra a ser passado para callback.
+
+\obs Note que esta função não tem o incremento como parâmetro, pois não é necessário para o que ela faz.
+\retorno (nulo) - não há retornos.
+
+\codigo Exemplo:
+local tab = inclua'tabutil';
+local t = {'dom','seg','ter','qua','qui','sex','sáb'};
+
+tab.cada(t, imprima);
+
+imprima('--------------------');
+
+tab.map(t, funcao(t,i)
+    retorne t[i]:maiuscula();
+fim);
+
+tab.cada(t, imprima);
+\codigo--
+\bloco
+Saída:
+
+dom
+seg
+ter
+qua
+qui
+sex
+sáb
+--------------------
+DOM
+SEG
+TER
+QUA
+QUI
+SEX
+SáB
+
+\bloco--
+*/
+funcao tab.map(t, f, começo, final, dado)
+    T(t); F(f); 
+    local começo = tipo(começo)=='numero' ? começo ou 1;
+    local final = tipo(final)=='numero' ? final ou #t;
+    para i=começo, final início
+        t[i] = f(t, i, dado);
+    fim
+fim
+
+
+//tabela.convstring = tab.convstring;
+//tabela.cada = tab.cada;
+//tabela.inc = tab.inc;
+//tabela.map = tab.map;
+
+
+retorne tab;
+
+
+
+
+
+
+

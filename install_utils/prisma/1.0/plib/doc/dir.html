@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>dir.pris</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> dir.pris</h1>
+<h3> Adalberto Amorim Felipe</h3>
+<h3> agosto 2017</h3>
+<br>
+<div>
+Biblioteca com facilidades de arquivos e pasta, multiplataforma.
+<a href="#id_000002"> mais...</a></div>
+
+<h2 id="id_000002">dir.pris</h2><div>
+Biblioteca com facilidades de arquivos e pasta, multiplataforma.
+</div>
+
+
+
+
+
+    <p>
+    Esta biblioteca oferece funções para simplificar o acesso e manipulação de arquivos
+    e pastas. Podemos, por exemplo, criar pastas, listar aquivos dentro de pastas etc.
+    </p>
+    
+    Veja:
+    <pre>
+        local dir = inclua'dir';
+        local txt, err = dir.leia_arquivo('arq.txt');
+        se nao txt entao erro(err); fim
+        imprima(txt);
+        poe'';
+        poe'Enter para continuar...';
+        leia();
+        local t = dir.liste_todos('.'); //lista arquivos e pastas, recursivamente dentro de subpastas.
+        para i,v em ipares(t) inicio
+            imprima(i,v);
+        fim
+    </pre>
+    (Esta lib usa funções de baixo nível em C que foram retiradas da biblioteca lfs em Lua);
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

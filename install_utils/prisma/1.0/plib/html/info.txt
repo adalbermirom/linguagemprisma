@@ -1,0 +1,13 @@
+
+     
+ Obs. quando usamos o estilo 'pasta com nome da lib' devemos nomear o arquivo para 'ini.pris' 
+ depois pode usar o comando inclua'html' que o arquivo ini.pris dentro da pasta html será carregado..
+ 
+ Para carregar o obt.pris, use: local obt = inclua'html.obt';
+ 
+ Att. Adalberto
+ 
+linguagemprisma.br4.biz/blog/
+linguagemprisma.br4.biz/prisma_forum/
+     
+     

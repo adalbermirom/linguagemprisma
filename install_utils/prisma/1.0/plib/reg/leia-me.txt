@@ -1,0 +1,27 @@
+Esta é uma biblioteca prisma
+
+seu objetivo é facilitar a criação, gravação, leitura e 
+modificação de arquivos de configuração.
+
+use:   conf = inclua'reg';
+
+conf.grave('nomearquivo.ext' , { nomeVar = valor });
+dado = conf.leia('nomearquivo.ext');
+conf.adicione('nomearquivo.ext', {nomeVar = valor });
+
+você pode compilar caso queira esconder uma 
+sequência de números, por exemplo.
+
+use:
+
+conf.compile('nomearquivo.ext', {nomevar = valor} );
+
+para ler um arquivo de configuração compilado use:
+
+dado = conf.carregue('nomearquivo');
+
+//o comando leia não funciona para um arquivo compilado.
+
+apos ler ou carregar os dados em uma variavel, basta acessar suas configurações com campos de tabelas:
+
+dado.nomevar (dado.fonte.nome, dado.dimensao , dado.nome etc.)

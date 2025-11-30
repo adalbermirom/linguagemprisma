@@ -1,0 +1,647 @@
+/**  lib html-0.2 modificada em: 04/03/2017
+ * 
+Este progama é livre e gratuito, pode usá-lo para quaisquer fins,
+O autor não se resposabiliza pelo uso do mesmo.
+**///
+
+//biblioteca para facilitar desenvolvimento web prisma html cgi
+
+//use:   local html = inclua'html.obt';
+
+//essa lib é igual a html mas não imprime só retorna o resultado
+
+local html = {};
+
+//====================================== content types:
+funcao html.tipo_html(tab)
+   local str = '';
+   se tipo(tab) == 'tabela' entao
+         se tab.charset entao str = str .. ' charset=' .. tab.charset fim
+         se tab.atrib  entao str = str .. tab.atrib ; fim
+   fim   
+     local x = "Content-type: text/html" .. str .. "\r\n\r\n";
+     //imprima(x);
+     retorne x;
+fim
+
+funcao html.tipo_texto(tab)
+     local str = '';
+   se tipo(tab) == 'tabela' entao
+         se tab.charset entao str = str .. ' charset=' .. tab.charset fim
+         se tab.atrib  entao str = str .. tab.atrib ; fim
+   fim      
+     local x = "Content-type: text/plain" .. str .. "\r\n\r\n";
+     //imprima(x);
+     retorne x;
+fim
+
+funcao html.tipo_gif(tab)
+     local str = '';
+   se tipo(tab) == 'tabela' entao
+         se tab.charset entao str = str .. ' charset=' .. tab.charset fim
+         se tab.atrib  entao str = str .. tab.atrib ; fim
+   fim 
+     local x = "Content-type: image/gif" .. str .. "\r\n\r\n";
+     //imprima(x);     
+     retorne x;
+fim
+funcao html.tipo_png(tab)
+     local str = '';
+   se tipo(tab) == 'tabela' entao
+         se tab.charset entao str = str .. ' charset=' .. tab.charset fim
+         se tab.atrib  entao str = str .. tab.atrib ; fim
+   fim 
+     local x = "Content-type: image/png" .. str .. "\r\n\r\n"; 
+     //imprima(x);     
+     retorne x;
+fim
+funcao html.tipo_jpeg(tab)
+     local str = '';
+   se tipo(tab) == 'tabela' entao
+         se tab.charset entao str = str .. ' charset=' .. tab.charset fim
+         se tab.atrib  entao str = str .. tab.atrib ; fim
+   fim 
+     local x = "Content-type: image/jpeg" .. str .. "\r\n\r\n"; 
+     //imprima(x);     
+     retorne x;
+fim
+funcao html.tipo_postscript(tab)
+     local str = '';
+   se tipo(tab) == 'tabela' entao
+         se tab.charset entao str = str .. ' charset=' .. tab.charset fim
+         se tab.atrib  entao str = str .. tab.atrib ; fim
+   fim 
+     local x = "Content-type: application/postscript" .. str .. "\r\n\r\n"; 
+     //imprima(x);     
+     retorne x;
+fim
+funcao html.tipo_mpeg(tab)
+     local str = '';
+   se tipo(tab) == 'tabela' entao
+         se tab.charset entao str = str .. ' charset=' .. tab.charset fim
+         se tab.atrib  entao str = str .. tab.atrib ; fim
+   fim 
+     local x = "Content-type: video/mpeg" .. str .. "\r\n\r\n";
+     //imprima(x);     
+     retorne x;
+fim
+    
+//====================================== fim content types:
+
+
+funcao html.inicie(tab) 
+    local str = '';
+    se tipo(tab) <> 'tabela' entao tab = {} fim;
+    se tab.atrib entao str = str .. ' '.. tab.atrib .. ' ' ; fim //atributos no estilo html original.
+    se tab.estilo entao str = str .. ' style="' .. tab.estilo .. '"'; fim
+    local x = '<html' .. str .. '>\n<head>';
+    //imprima(x); 
+    retorne x;   
+fim
+
+//=====================================================================
+//===================== IMPLEMENTADO POR RAFAEL: ======================
+
+
+funcao html.folha_de_estilo(cadeia)
+    local cadeia = cadeia ou 'style.css';
+    local x = '<link href="' .. cadeia .. '" rel="stylesheet" type="text/css">';
+    //imprima(x) ; 
+    retorne x ;
+fim
+
+funcao html.atualiza_pagina(tempo, pagina)
+    local tempo = tempo ou '5'
+    local pagina = pagina ou 'index.cgi'
+    local x = '<meta http-equiv="refresh" content="' .. tempo .. '; url=' .. pagina ..'">'
+    //imprima(x) ; 
+    retorne x ;
+fim
+
+funcao html.defina_caracteres(cadeia)
+    local cadeia = cadeia ou 'utf-8'
+    local x = '<meta http-equiv="Content-Type" content="text/html; charset=' .. cadeia .. '">';
+    //imprima(x) ; 
+    retorne x ;
+fim
+
+html.define_caracteres = html.defina_caracteres;
+
+//fiz uma pequena modificação, acrescentei cadeia caso queira passar mais atributos.
+funcao html.audio(arquivo, tocar, cadeia)      
+   local arquivo = arquivo ou '';
+   local cadeia = cadeia ou '';
+   //se tocar entao tocar = 'autoplay' senao tocar = '' fim //tocar sempre é igual a tocar
+   se tocar entao tocar = 'autoplay' senao tocar = '' fim;//caso tocar seja verdadeiro.
+   
+   local x =  '<audio src="' .. arquivo .. '" ' .. tocar .. ' ' .. cadeia .. '></audio>'
+   //imprima(x) ; 
+   retorne x ;
+fim
+
+funcao html.botao_alerta(botao, mensagem)
+    local botao = botao ou 'aperte'
+    local mensagem = mensagem ou 'alerta'
+    local x = '<input type="button" onclick="alert(\'' .. mensagem .. '\')" value="' .. botao .. '">'
+    //imprima(x) ; retorne x ;
+fim
+
+//====================== FIM RAFAEL ==================
+//======================================================
+
+
+funcao html.titulo( str )
+    local str = str ou '';
+    local x = '<title>' .. str .. '</title>'; 
+    //imprima(x) ; 
+    retorne x ;
+fim
+
+
+funcao html.corpo(tab) //inicio  <body bgcolor=”#cor” text=”#cor” link=”#cor” vlink=”#cor” alink=”#cor”>    
+    se tipo(tab) <> 'tabela' entao tab = {} fim;
+    local str = '';
+    se tab.corfundo entao str = str .. string.formate(' bgcolor=%q ' , tab.corfundo); fim
+    se tab.cortexto entao str = str .. string.formate(' text=%q ', tab.cortexto ); fim
+    se tab.corlink entao str = str .. string.formate(' link=%q ' , tab.corlink ); fim
+    se tab.corlinkv entao str = str .. string.formate(' vlink=%q ' , tab.corlinkv ); fim
+    se tab.corlinka entao str = str .. string.formate(' alink=%q ' , tab.corlinka ); fim
+    se tab.imagemfundo entao str = str .. string.formate( ' background=%q ' , tab.imagemfundo ); fim
+    se tab.atrib entao str = str .. ' '.. tab.atrib .. ' ' ; fim //atributos no estilo html original.
+    se tab.estilo entao str = str .. ' style="' .. tab.estilo .. '"'; fim
+    
+    local x =  '</head>\n<body ' .. str .. '>' ; 
+    //imprima(x) ; 
+    retorne x ;  
+fim 
+
+
+
+
+funcao html.h(n, str , tab )
+      local atrib = '';
+      se tipo(tab) == 'tabela' entao 
+             se tab.atrib entao atrib = atrib .. ' '.. tab.atrib .. ' ' ; fim //atributos no estilo html original.
+             se tab.estilo entao atrib = atrib .. ' style="' .. tab.estilo .. '"'; fim       
+      fim
+      
+      local n = n ou 1;
+      local str = str ou '';
+      local x = '<h' .. n  .. atrib .. '>' .. str .. '</h' .. n .. '>'; 
+      //imprima(x) ; 
+      retorne x ;
+fim
+
+html.cabecalho = html.h;
+
+funcao html.linha(n)
+     local n = n ou 1;
+     local x = string.nconcat('<br>' , n );
+     //imprima(x); 
+     retorne str;
+fim
+
+funcao html.barrah()
+    local x = '<hr></hr>'; 
+    //imprima(x) ; 
+    retorne x ;
+fim
+
+funcao html.p (...)   
+   local tab = {...};
+   local concat_ate = #tab; //ate o ultimo elemento da tabela.
+    local atrib = '';
+    
+   se tipo(tab[#tab]) == 'tabela' entao //caso o ultimo parametro seja uma tabela, quer dizer que são atributos ou estilos
+      concat_ate = #tab - 1; 
+      ////imprima('dentro');     
+      se tab[#tab].atrib entao atrib =  ' ' .. atrib .. ' ' .. tab[#tab].atrib .. ' '; fim
+      se tab[#tab].estilo entao atrib =  ' ' .. atrib .. ' style="' .. tab[#tab].estilo .. '" '; fim   
+   fim 
+
+   local str = tabela.concat( tab , '', 1 , concat_ate ); //a ultima tabela não conta.
+   
+   local x =  '<p'.. atrib .. '>' .. str .. '</p>'; 
+   //imprima(x) ; 
+   retorne x ;
+fim
+
+funcao html.finalize()
+  local x =  '</body>\n</html>'; 
+  //imprima(x) ; 
+  retorne x ;  
+fim
+
+//===================================================formatação de texto
+funcao html.negrito(str) //<b>	Define texto em negrito
+    local str = str ou '';
+    retorne ("<b>" .. str .. '</b>');
+fim
+funcao html.grande(str) //<big>	Define texto grande
+     local str = str ou '';
+     retorne ( "<big>" .. str .. '</big>');
+fim
+funcao html.enfatico(str) //<em>	Define texto enfatizado;
+     local str = str ou '';
+     retorne ( "<em>" .. str .. '</em>');
+fim
+funcao html.italico(str) //<i>	Define texto em itálico
+     local str = str ou '';
+     retorne ( "<i>" .. str .. '</i>');
+fim
+funcao html.pequeno(str) //<small>	Define texto pequeno
+     local str = str ou '';
+     retorne ( "<small>" .. str .. '</small>');
+fim
+funcao html.forte(str) //<strong>	Define texto forte
+     local str = str ou '';
+     retorne ( "<strong>" .. str .. '</strong>');
+fim
+funcao html.sub(str) //<sub>	Define texto subescrito
+     local str = str ou '';
+     retorne ( "<sub>" .. str .. '</sub>');
+fim
+funcao html.sup(str) //<sup>	Define texto superescrito
+     local str = str ou '';
+     retorne ( "<sup>" .. str .. '</sup>');
+fim
+funcao html.ins(str) //<ins>	Define texto inserido
+     local str = str ou '';
+     retorne ( "<ins>" .. str .. '</ins>');
+fim
+
+funcao html.cancelado(str) //<del>	Define texto cancelado
+     local str = str ou '';
+     retorne ( "<del>" .. str .. '</del>');
+fim
+
+//====================================================fim formatação de texto
+
+//====================================================Tags de "Saída de Computador"
+
+funcao html.code(str) //<code>	Define texto de código de computador
+     local str = str ou '';
+     retorne ( "<code>" .. str .. '</code>');
+fim
+funcao html.kbd(str) //<kbd>	Define texto de teclado
+     local str = str ou '';
+     retorne ( "<kbd>" .. str .. '</kbd>');
+fim
+funcao html.samp(str) //<samp>	Define amostra de código de computador
+     local str = str ou '';
+     retorne ( "<samp>" .. str .. '</samp>');
+fim
+funcao html.tt(str) //<tt>	Define texto de teletipo
+     local str = str ou '';
+     retorne ( "<tt>" .. str .. '</tt>');
+fim
+funcao html.var(str) //<var>	Define uma variável
+     local str = str ou '';
+     retorne ( "<var>" .. str .. '</var>');
+fim
+funcao html.pre(str) //<pre>	Define texto pré-formatado
+     local str = str ou '';
+     retorne ( "<pre>" .. str .. '</pre>');
+fim
+//fim Tags de "Saída de Computador"
+
+//=============================================================cria tag generica:
+funcao html.tag( tag , str , tab )
+        local atrib = '';
+        
+      se tipo(tab) == 'tabela' entao 
+             se tab.atrib entao atrib = atrib .. ' '.. tab.atrib .. ' ' ; fim //atributos no estilo html original.
+             se tab.estilo entao atrib = atrib .. ' style="' .. tab.estilo .. '"'; fim       
+      fim
+          
+        local tag = tag ou 'p';
+        local str = str ou '';
+        retorne( '<' .. tag .. atrib ..'>' .. str .. '</' .. tag .. '>' );
+fim
+
+//====================================  tags links
+
+funcao html.link( lnk , str, dica ) //<a href="http://www.html.net/">Aqui um link para HTML.net</a>
+    local lnk = lnk ou '#';
+    local dica = dica ou '';
+     dica = 'title="'.. dica .. '"';
+    local str = str ou '';
+    local x = string.formate("<a href=%q %s>%s</a>", lnk , dica, str );
+    //imprima(x);
+    retorne x 
+fim
+
+//link h
+html_cont_id = 1;
+funcao html.h_id(n , id , titulo )
+     html_cont_id = html_cont_id + 1;
+     local id_padrao = 'id_' .. html_cont_id;
+     local titulo = titulo ou id_padrao;
+     local n = n ou 1; 
+     local id = id ou id_padrao;
+     local x = string.formate( '<h%d id=%q>%s</h%d>' , n , id , titulo , n );
+      
+      //imprima(x);
+      retorne x ;
+fim
+funcao html.h_link(id , titulo ,dica ) //<a href="#heading1">Link para o cabeçalho 1</a>
+
+     local dica = dica ou '';
+     dica = 'title="'.. dica .. '"';
+     local x = string.formate('<a href="#%s" %s>%s</a>' ,  id , dica, titulo );
+     //imprima(x)
+     retorne x ;    
+fim 
+
+funcao html.email(email , str ) //<a href="mailto:nobody@html.net">Enviar e-mail para nobody em HTML.net</a>
+     se tipo(email) <> 'string' entao poe'erro no e-mail' retorne fim;
+     local str = str ou 'E-mail';
+     local x = string.formate( '<a href="mailto:%s">%s</a>', email , str) ;
+     //imprima(x) ; 
+     retorne x ;
+fim
+
+//==================================== fim tags links
+
+//======================================== imagens
+
+//<img src="logo.png" width="141" height="32">
+funcao html.img( img , tab ) //imagem , atributos
+   local img = img ou '';
+   local str = '';
+   local tab = tab ou {};
+   se tab.desc entao str = str .. string.formate(' alt="%s" ', tab.desc ) fim
+   se tab.altura entao str = str .. string.formate(' height="%s" ' , tab.altura ) fim
+   se tab.largura entao str = str .. string.formate(' width="%s" ' , tab.largura) fim
+   se tab.dica entao str = str .. string.formate( ' title="%s" ' , tab.dica ) fim
+   
+   local x =  string.formate('<img src="%s" %s>', img , str  ) ;  
+   //imprima(x) ; 
+   retorne x ;
+fim
+
+//======================================== Listas 
+
+funcao html.li( itens )  //<li>  item  </li>
+       local itens = itens ou {};
+       se tipo(itens) <> 'tabela' entao poe'<li>A lista deve ser uma tabela</li>' retorne  '' 
+       senao
+                 local str = '<li>';
+                 str = str .. tabela.concat( itens , '</li>\n<li>' ) .. '</li>';
+                 retorne str;        
+       fim  
+fim
+
+funcao html.ul( lista, tab )
+          se tipo(tab) <> 'tabela' entao tab = {} fim; //se tab for nulo ou outro tipo de valor.
+          local type = '';
+          se tab.tipo == 'quadrado' entao  type = ' type="square"'
+          senaose tab.tipo == 'redondo' entao type = ' type="circle"'
+          fim;
+          se tab.atrib entao type = type .. ' '.. tab.atrib .. ' ' ; fim //atributos no estilo html original.
+          
+          local lista = lista ou '';
+          local x =  '<ul' .. type .. '>\n' .. lista .. '\n</ul>';
+          //imprima(x) ; 
+          retorne x ;
+fim
+
+funcao html.ol( lista, tab ) //atributos { tipo='a','A','i','I',1 ;  revertido=verdadeiro; inicial=1 ou 2 etc.
+          se tipo(tab) <> 'tabela' entao tab = {} fim; //se tab for nulo ou outro tipo de valor.
+          local type = '';
+          se tab.tipo entao  
+               type = string.formate(' type=%q ', tab.tipo );       
+          fim;
+          se tab.revertido == verdadeiro entao type = type .. ' reversed="reversed" '; fim
+          se tipo(tab.inicial) == 'numero' entao type = type .. ' start="' .. tab.inicial .. '" '; fim
+          se tab.atrib entao type = type .. ' '.. tab.atrib .. ' ' ; fim //atributos no estilo html original.
+          se tab.estilo entao type = type .. ' style="' .. tab.estilo .. '"'; fim
+              
+          local lista = lista ou '';
+          local x =  '<ol' .. type .. '>\n' .. lista .. '\n</ol>'; 
+          //imprima(x); 
+          retorne x ;
+fim
+//======================================== FIM  Listas 
+
+//======================================== Tabelas:
+
+funcao html.tabela(tab)
+          se tipo(tab) <> 'tabela' entao retorne fim;
+          local str = '';
+          local x = '';//para retornar todo o comando html
+          se tab.estilo entao  str = str .. ' style="' .. tab.estilo .. '" ';   fim
+          se tab.atrib entao  str = str .. ' ' .. tab.atrib .. ' ';   fim
+          se tab.borda entao str = str .. ' border="'.. tab.borda .. '" '; fim
+          
+          para i = 1 , #tab inicio
+                  se tipo(tab[i]) == 'tabela' entao
+                         local str = ''; 
+                         se tab[i].atrib entao str =  ' '.. str .. ' ' .. tab[i].atrib ; fim
+                         se tab[i].estilo entao str = ' ' .. str .. ' style="' .. tab[i].estilo .. '" '; fim
+                         local tr = '<tr>\n<td' .. str .. '>';
+                         local fecha = '</td>\n<td' .. str .. '>' ;
+                              tr = tr .. tabela.concat(tab[i] , fecha );
+                              tr = tr .. '</td>\n</tr>\n';
+                              x = x .. tr;                            
+                  fim
+          fim
+     x = '<table' .. str .. '>' .. x .. '</table>\n';
+     //imprima(x); 
+     retorne x;
+fim
+
+//=====================================  FORM E COMPONENTES HTML
+funcao html.form(a,m,str)
+     local form = "<form action=%q  method=%q %s >";
+     
+     se nao a entao
+          poe("<p>erro na funcao html.form, faltam parametros...</p>");
+     senao
+        str = str ou '';
+        m = m ou 'GET';//padrão
+        x = string.formate( form, a, m , str );
+        //imprima(x);
+        retorne x;    
+     fim
+      
+fim
+
+funcao html.fimform()
+     local x = '</form>';
+     //imprima(x);
+     retorne x;
+fim
+html.fim_form = html.fimform;//compatibi.
+funcao html.div(n , str )
+   se nao n ou n == '' entao
+       n = '';
+   senao 
+       n = 'id="' .. n .. '" ';
+   fim
+   
+   local str = str ou '';
+   local x = "<div " .. n .. str .. '>';
+   //imprima(x);
+   retorne x;   
+fim
+
+funcao html.fimdiv()
+        //imprima("</div>");
+        retorne "</div>";
+fim
+html.fim_div = html.fimdiv;
+
+//============================ BOTOES
+funcao html.botao_submit(txt,str)
+  local str = str ou '';
+  local x = '<input type="submit"  value="' .. txt.. '" ' .. str .. ' />';
+  //imprima(x); 
+  retorne x;
+fim
+
+funcao html.botao(txt,func,str)//o 2 param é uma função javascript. 3 é um atributo a mais opcional
+  local txt = txt ou 'Botão';
+  local str = str ou '';
+  local callback = '';
+  se func entao
+     callback = 'onclick="' .. func .. '"';
+  fim
+  local str = str ou '';
+  local x = string.formate('<input type="button" %s value=%q %s />',callback,str);
+  //imprima(x);
+  retorne(x);
+fim
+
+//=============== FIM BOTOES
+
+//======================== INPUTS
+funcao html.input(tip, valor,str)
+  local str = str ou '';
+  local tip = tip ou 'submit';//padrao é botao de envio.
+  local x = '<input type="'.. tip .. '"  value="' .. txt.. '" ' .. str .. ' />';
+fim
+
+//================= MOLDURA
+funcao html.moldura(titulo)
+  local x = '<fieldset><legend>'.. titulo .. '</legend>';
+  //imprima(x); 
+  retorne x;
+fim
+
+funcao html.fim_moldura()
+  local x = '</fieldset>';
+  //imprima(x); 
+  retorne x;
+fim
+
+//=============== LABEL
+funcao html.rotulo(rot,str)
+  local str = str ou '';
+  se tipo(rot)<>'string' entao 
+    local err = "<p>erro na funcao html.rotulo #1, espera-se string ao inves de %s</p>"; 
+    local x = string.formate(err,tipo(rot));
+    //imprima(x);
+  fim
+  local x = '<label>' .. rot .. ' ' .. str 
+  //imprima(x);
+  retorne(x);
+fim
+
+funcao html.fim_rotulo()
+  local x = '</label>'
+  //imprima(x);
+  retorne x;
+fim
+
+//============================== CAMPO DE ENVIO DE ARQUIVOS
+funcao html.upload(str)
+ local str = str ou '';
+ local x = string.formate('<input type="file" name=%q />',str);
+ //imprima(x);
+ retorne(x);
+fim
+
+funcao html.upload_obt_arquivo(str_dado)
+  local dado = str_dado;
+  local  _ , y = string.procure(dado , "Type:" ); 
+//a string contem não so o arquivo, mas umas 4 linhas de informaçoes, 
+//aqui nos separamos essas informações a mais:
+  local cont_inicio = 1;
+  para i = y , #dado inicio
+        local v = string.corte(dado, i , i );
+        se v == '\n' entao 
+           cont_inicio = i; 
+           quebre ; 
+        fim; 
+  fim
+  local cont_fim=#dado;
+  para i = #dado-1, 1 , -1 inicio
+      local v = string.corte(dado, i , i );
+      se v == '\n' entao 
+        cont_fim = i - 1; 
+        quebre ; 
+      fim; 
+  fim
+  
+  local dado = string.corte( dado , cont_inicio + 3 , cont_fim -1 ); //e assim temos o arquivo binario puro...
+  retorne dado;
+fim//fim funcao upload..
+
+funcao html.upload_obt_nome_arquivo(str_dado)
+  local  _ , y = string.procure(str_dado , "filename" ); 
+  local cont_inicio = 1;
+  para i = y , #str_dado inicio
+        local v = string.corte(str_dado, i , i );
+        se v == '"' entao cont_inicio = i; quebre fim; 
+  fim
+  local cont_fim = #str_dado;
+  para i = cont_inicio + 1 , #str_dado inicio
+        local v = string.corte(str_dado, i , i );
+        se v == '"' entao cont_fim = i; quebre fim; 
+  fim
+  cont_inicio = cont_inicio + 1; //eliminando aspas
+  cont_fim = cont_fim - 1;
+  retorne string.corte(str_dado, cont_inicio, cont_fim);
+fim
+
+
+
+
+//========================== FIM CAMPO ENVIO DE ARQUIVOS
+
+
+//=========== JAVA SCRIPT TAG
+funcao html.js(codigo_js,str)
+ local codigo_js = codigo_js ou '';
+ local x = '<script>\n';
+ se tipo(str)=='string' entao 
+   x = '<script ' .. str .. '>\n';
+ fim
+ x = x .. codigo_js .. '\n</script>\n'
+ //imprima(x);
+ retorne x;
+fim
+
+/* Exemplo de uso da tag acima, ela deve estar dentro do cabecalho (head);
+ 
+  ...
+  html.js(  
+  [[function mensagem()
+    {
+       alert("Eu sou um alert!");
+     }
+  ]]);
+ 
+  html.corpo();
+  html.botao('Clique-me','mensagem()');//criando o botao e conectando a função js acima.
+  html.finalize(); 
+ * 
+ * *////
+
+//============================ FIM HTML; RETORNANDO A TABELA DE METODOS:
+
+retorne html;
+
+
+

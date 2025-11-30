@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>tabutil.pris (utilidades extra para tabelas)</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<nav id="id_00000E"  class="floating-menu">
+<div class="menu-button" title="Mostrar painel lateral" onclick="show_menu_flutuante(this, 'id_00000F', 'id_00000E')">&#x2630;</div>
+<div class="com-rolagem" id="id_00000F" hidden >
+<div class="caixa com-borda"><h2>Funções:</h2>
+<a href="#id_000005">tab.cada</a>
+<a href="#id_000003">tab.convstring (t,c,i,ncol)</a>
+<a href="#id_000008">tab.inc</a>
+<a href="#id_00000B">tab.map</a>
+
+</div>
+<div class="caixa com-borda"><h2>Variáveis:</h2>
+<a href="#id_000002">tab </a>
+</div>
+
+</div>
+</nav>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> tabutil.pris (utilidades extra para tabelas)</h1>
+<h3> Adalberto </h3>
+<h3> Ter - 08/07/2025 - 15:17:33</h3>
+<h3>Versão: 0.1</h3><div class="caixa com-borda"><div><h2 >Funções:</h2>
+<ol>
+<li><a href="#id_000005">tab.cada</a></li>
+<li><a href="#id_000003">tab.convstring (t,c,i,ncol)</a></li>
+<li><a href="#id_000008">tab.inc</a></li>
+<li><a href="#id_00000B">tab.map</a></li>
+</ol>
+</div>
+
+<div><h2>Variáveis:</h2>
+<ol>
+<li><a href="#id_000002">tab </a></li>
+</ol>
+</div>
+
+</div><br>
+
+
+
+
+<h1>Funções:</h1>
+<a id="id_000003" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">função tab.convstring (t, c, i, ncol)</h2><div class="corpo-doc">
+<p>Converte uma tabela com todos os seus elementos para sua representação em string.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > t(tabela) - a tabela para ser convertida em string.</span>
+</div>
+<div class="params-doc"><span > c(string ou nulo) - um caractere ou string separador de cada elemento, geralmente um espaço&#39; &#39; ou nova linha&#39;\n&#39;</span>
+</div>
+<p><i><b>Obs.: </b>O parâmetro c(string) é opcional seu valor padrão é espaço &#39; &#39;;</i></p>
+<div class="params-doc"><span > i(verdadeiro ou falso ou nulo) - se falso ou nulo, os indices serão adicionados, se verdadeiro ou qualquer outro valor válido, índices serão ignorados.</span>
+</div>
+<p><i><b>Obs.: </b>O parâmetro i é opcional, seu valor padrão é &#39;nulo&#39;, ou seja, adiciona os índices da tabela na string final.</i></p>
+<p><i><b>Obs.: </b>Os campos sempre são adicionados!</i></p>
+<div class="params-doc"><span > ncol (numero ou nulo) [opcional] - define o número de colunas, insere um quebra linha &#39;\n&#39;, o padrão é sem colunas.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - o retorno é a string, a representação da tabela convertida.</span>
+</div>
+<br>
+<h3>Veja um exemplo:</h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000004')">&#128203;</div>&nbsp;<i>ex1.prisma</i><pre id="id_000004" hidden>local tab = inclua&#39;tabutil&#39;;
+local t = {&#39;ola&#39;,&#39;tudo&#39;,&#39;bem&#39;, nome=&#39;Aldebaran&#39;, pos={fig=&quot;quad&quot;, x=1,y=2,alt=10}};
+local s = tab.convstring(t);
+imprima(s);
+//saída: { [1] = &quot;ola&quot;; [2] = &quot;tudo&quot;; [3] = &quot;bem&quot;; nome = &quot;Aldebaran&quot;; pos = { y = 2; fig = &quot;quad&quot;; x = 1; alt = 10 } }
+</pre><div style=" padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> tab <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;tabutil&#39;</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> t <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span><span style="color:blue">&#39;ola&#39;</span>,<span style="color:blue">&#39;tudo&#39;</span>,<span style="color:blue">&#39;bem&#39;</span>, <span style="color:#b50546">nome</span><span style="font-weight:bold;">=</span><span style="color:blue">&#39;Aldebaran&#39;</span>, pos<span style="font-weight:bold;">=</span><span style="font-weight:bold;">{</span>fig<span style="font-weight:bold;">=</span><span style="color:blue">&quot;quad&quot;</span>, x<span style="font-weight:bold;">=</span><span style="color:red">1</span>,y<span style="font-weight:bold;">=</span><span style="color:red">2</span>,alt<span style="font-weight:bold;">=</span><span style="color:red">10</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> s <span style="font-weight:bold;">=</span> tab<span style="font-weight:bold;">.</span><span style="color:#b50546">convstring</span><span style="font-weight:bold;">(</span>t<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>s<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:green">//saída: { [1] = &quot;ola&quot;; [2] = &quot;tudo&quot;; [3] = &quot;bem&quot;; nome = &quot;Aldebaran&quot;; pos = { y = 2; fig = &quot;quad&quot;; x = 1; alt = 10 } }
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000005" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">função tab.cada(t, f, começo, final) </h2><div class="corpo-doc">
+
+<p>Executa uma callback para cada elemento da tabela, passando o elemento como parâmetro.</p>
+
+<p><i><b>Obs.: </b>Funciona apenas com tabela indexadas (ignora campos se houver).</i></p>
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > t (tabela) - é a tabela para percorrer todos os elementos.</span>
+</div>
+<div class="params-doc"><span > f (funcao) - é a função para ser executada para cada elemento da tabela. </span>
+</div>
+<pre>protótipo de f -->   função f(el) onde el é o elemento da tabela;</pre>
+<div class="params-doc"><span > começo(numero ou nulo) [opcional - padrão = 1] - é o número do índice inicial ao percorrer a tabela.</span>
+</div>
+<div class="params-doc"><span > final(numero ou nulo) [opcional - padrão = #t] - é o número do índice final ao percorrer a tabela.</span>
+</div>
+
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (nulo) - não há retorno.</span>
+</div>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000006')">&#128203;</div>&nbsp;<i>Exemplo:</i><pre id="id_000006" hidden>local tab = inclua&#39;tabutil&#39;;
+local t = {&#39;dom&#39;,&#39;seg&#39;,&#39;ter&#39;,&#39;qua&#39;,&#39;qui&#39;,&#39;sex&#39;,&#39;sáb&#39;};
+tab.cada(t, imprima);
+</pre><div style=" padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> tab <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;tabutil&#39;</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> t <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span><span style="color:blue">&#39;dom&#39;</span>,<span style="color:blue">&#39;seg&#39;</span>,<span style="color:blue">&#39;ter&#39;</span>,<span style="color:blue">&#39;qua&#39;</span>,<span style="color:blue">&#39;qui&#39;</span>,<span style="color:blue">&#39;sex&#39;</span>,<span style="color:blue">&#39;sáb&#39;</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+tab<span style="font-weight:bold;">.</span>cada<span style="font-weight:bold;">(</span>t, <span style="color:#b50546">imprima</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+</pre></div></div>
+
+</div>
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000007"><code>Saída:
+
+dom
+seg
+ter
+qua
+qui
+sex
+sáb
+</code></pre>
+</div>
+</div>
+</section>
+<a id="id_000008" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">função tab.inc(t, f, começo, final, n, dado)</h2><div class="corpo-doc">
+<p><i><b>Obs.: </b>Funciona apenas com tabela indexadas (ignora campos se houver).</i></p>
+<p>Semelhante à função anterior mas com mais recursos, em vez de passar só o elemento para função callback, passa outros parâmetros, veja abaixo:</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > t (tabela) - é a tabela para percorrer todos os elementos.</span>
+</div>
+<div class="params-doc"><span > f (funcao) - é a função para ser executada para cada elemento da tabela. </span>
+</div>
+<pre> protótipo de f -->   função f(t, i, dado) onde t é a tabela, i é o índice e dado é o dado extra.</pre>
+<div class="params-doc"><span > começo(numero ou nulo) [opcional - padrão = 1] - é o número do índice inicial ao percorrer a tabela.</span>
+</div>
+<div class="params-doc"><span > final(numero ou nulo) [opcional - padrão = #t] - é o número do índice final ao percorrer a tabela. </span>
+</div>
+<div class="params-doc"><span > n (numero ou nulo) [opcional - padrão = 1] - é o incremento ou decremento a ser usado no laço &#39;para&#39;</span>
+</div>
+<div class="params-doc"><span > dado(qualquer valor) [opcional - padrão = nulo] - é o dado extra a ser passado para callback.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (nulo) - não há retornos.</span>
+</div>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000009')">&#128203;</div>&nbsp;<i>Exemplo:</i><pre id="id_000009" hidden>local tab = inclua&#39;tabutil&#39;;
+funcao callback(t, i, dado)
+    imprima(dado, t[i]);
+fim
+
+local t = {&#39;dom&#39;,&#39;seg&#39;,&#39;ter&#39;,&#39;qua&#39;,&#39;qui&#39;,&#39;sex&#39;,&#39;sáb&#39;};
+tab.inc(t, função (t,i) imprima(t[i]); fim, 1, 3);
+tab.inc(t, callback, 6, 1, -1, &#39;Dia da semana:&#39;);
+//usamos o incremento -1 ou seja diminui 1 a cada execução da callback;
+</pre><div style=" padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> tab <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;tabutil&#39;</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">funcao</span> callback<span style="font-weight:bold;">(</span>t, i, dado<span style="font-weight:bold;">)</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>dado, t<span style="font-weight:bold;">[</span>i<span style="font-weight:bold;">]</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">fim</span>
+
+<span style="font-weight:bold;color:#b50546">local</span> t <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span><span style="color:blue">&#39;dom&#39;</span>,<span style="color:blue">&#39;seg&#39;</span>,<span style="color:blue">&#39;ter&#39;</span>,<span style="color:blue">&#39;qua&#39;</span>,<span style="color:blue">&#39;qui&#39;</span>,<span style="color:blue">&#39;sex&#39;</span>,<span style="color:blue">&#39;sáb&#39;</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+tab<span style="font-weight:bold;">.</span>inc<span style="font-weight:bold;">(</span>t, <span style="font-weight:bold;color:#b50546">função</span> <span style="font-weight:bold;">(</span>t,i<span style="font-weight:bold;">)</span> <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>t<span style="font-weight:bold;">[</span>i<span style="font-weight:bold;">]</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span>, <span style="color:red">1</span>, <span style="color:red">3</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+tab<span style="font-weight:bold;">.</span>inc<span style="font-weight:bold;">(</span>t, callback, <span style="color:red">6</span>, <span style="color:red">1</span>, <span style="font-weight:bold;">-</span><span style="color:red">1</span>, <span style="color:blue">&#39;Dia da semana:&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:green">//usamos o incremento -1 ou seja diminui 1 a cada execução da callback;
+</span></pre></div></div>
+
+</div>
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_00000A"><code>Saída:
+
+dom
+seg
+ter
+Dia da semana:	sex
+Dia da semana:	qui
+Dia da semana:	qua
+Dia da semana:	ter
+Dia da semana:	seg
+Dia da semana:	dom
+
+</code></pre>
+</div>
+</div>
+</section>
+<a id="id_00000B" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao tab.map(t, f, começo, final, dado)</h2><div class="corpo-doc">
+<p>Mapeia todos os índices da tabela, trocando seus valores pelos valores retornados da callback.</p>
+
+<p><i><b>Obs.: </b>Funciona somente com tabelas indexadas (array), campos são ignorados.</i></p>
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > t (tabela) - é a tabela para percorrer todos os elementos.</span>
+</div>
+<div class="params-doc"><span > f (funcao) - é a função para ser executada para cada elemento da tabela. </span>
+</div>
+<pre> protótipo de f -->   função f(t, i, dado) onde t é a tabela, i é o índice e dado é o dado extra.</pre>
+<div class="params-doc"><span > começo(numero ou nulo) [opcional - padrão = 1] - é o número do índice inicial ao percorrer a tabela.</span>
+</div>
+<div class="params-doc"><span > final(numero ou nulo) [opcional - padrão = #t] - é o número do índice final ao percorrer a tabela. </span>
+</div>
+<div class="params-doc"><span > dado(qualquer valor) [opcional - padrão = nulo] - é o dado extra a ser passado para callback.</span>
+</div>
+
+<p><i><b>Obs.: </b>Note que esta função não tem o incremento como parâmetro, pois não é necessário para o que ela faz.</i></p>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (nulo) - não há retornos.</span>
+</div>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000C')">&#128203;</div>&nbsp;<i>Exemplo:</i><pre id="id_00000C" hidden>local tab = inclua&#39;tabutil&#39;;
+local t = {&#39;dom&#39;,&#39;seg&#39;,&#39;ter&#39;,&#39;qua&#39;,&#39;qui&#39;,&#39;sex&#39;,&#39;sáb&#39;};
+
+tab.cada(t, imprima);
+
+imprima(&#39;--------------------&#39;);
+
+tab.map(t, funcao(t,i)
+    retorne t[i]:maiuscula();
+fim);
+
+tab.cada(t, imprima);
+</pre><div style=" padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> tab <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;tabutil&#39;</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> t <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span><span style="color:blue">&#39;dom&#39;</span>,<span style="color:blue">&#39;seg&#39;</span>,<span style="color:blue">&#39;ter&#39;</span>,<span style="color:blue">&#39;qua&#39;</span>,<span style="color:blue">&#39;qui&#39;</span>,<span style="color:blue">&#39;sex&#39;</span>,<span style="color:blue">&#39;sáb&#39;</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+
+tab<span style="font-weight:bold;">.</span>cada<span style="font-weight:bold;">(</span>t, <span style="color:#b50546">imprima</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;--------------------&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+tab<span style="font-weight:bold;">.</span>map<span style="font-weight:bold;">(</span>t, <span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span>t,i<span style="font-weight:bold;">)</span>
+    <span style="font-weight:bold;color:#b50546">retorne</span> t<span style="font-weight:bold;">[</span>i<span style="font-weight:bold;">]</span><span style="font-weight:bold;">:</span><span style="color:#b50546">maiuscula</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">fim</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+tab<span style="font-weight:bold;">.</span>cada<span style="font-weight:bold;">(</span>t, <span style="color:#b50546">imprima</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+</pre></div></div>
+
+</div>
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_00000D"><code>Saída:
+
+dom
+seg
+ter
+qua
+qui
+sex
+sáb
+--------------------
+DOM
+SEG
+TER
+QUA
+QUI
+SEX
+SáB
+
+</code></pre>
+</div>
+</div>
+</section>
+<h1>Variáveis</h1>
+<a id="id_000002" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">local tab = {};</h2><div class="corpo-doc">
+<p>Tabela local com os metodos desta lib.</p>
+
+</div>
+</section>
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

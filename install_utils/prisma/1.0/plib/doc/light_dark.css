@@ -1,0 +1,41 @@
+    
+    [data-theme="light"] {
+   --color-bg: #ffffff;
+   --color-fg: #000000;
+}
+
+[data-theme="dark"] {
+   --color-bg: #000000;
+   --color-fg: #ffffff;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  /*display: grid;*/
+  /*min-height: 100vh;*/
+  /*place-items: center;*/
+}
+
+h1, h2, h3, h4, .titulo {
+	color: #000080 ;
+	font-family: Verdana, Geneva, sans-serif ;
+	font-weight: normal ;
+	font-style: normal ;
+	text-align: left ;
+}
+
+
+
+button {
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  transition: all var(--global-transition-time) ease-in-out;
+  border-radius: 2rem;
+  cursor: pointer;
+  color: var(--color-fg);
+  background-color: var(--color-bg);
+  border: 0.25rem solid var(--color-fg);
+}       
+   

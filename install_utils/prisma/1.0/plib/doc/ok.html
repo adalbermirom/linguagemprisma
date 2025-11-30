@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Biblioteca ok.pris</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<nav id="id_000005"  class="floating-menu">
+<div class="menu-button" title="Ocultar painel lateral" onclick="show_menu_flutuante(this, 'id_000006', 'id_000005')">&#x2630;</div>
+<div class="com-rolagem" id="id_000006" hidden>
+<div class="caixa "><h2>Funções:</h2>
+<a href="#id_000002">OK</a>
+
+</div>
+</div>
+</nav>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> Biblioteca ok.pris</h1>
+<h3> Adalberto</h3>
+<br>
+<div>
+Retorna uma função para checar tipos de parâmetros em funções.
+<a href="#id_000007"> mais...</a></div>
+<div class="caixa com-borda"><div><h2 >Funções:</h2>
+<ol>
+<li><a href="#id_000002">OK</a></li>
+</ol>
+</div>
+
+</div><br>
+
+<h2 id="id_000007">Biblioteca ok.pris</h2><div>
+Retorna uma função para checar tipos de parâmetros em funções.
+</div>
+
+
+
+<h1>Funções:</h1>
+<a id="id_000002" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao OK(...)</h2><div class="corpo-doc">
+<p>Testa os tipos de parâmetros em uma função, em caso de incompatibilidade de tipos aborta o programa com mensagem de erro.</p>
+
+    
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > ... {variados} - parâmetros variados, sempre em sequência: &#39;stringtipo&#39;, parametro ...</span>
+</div>
+    
+<h3>Veja um exemplo:</h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000003')">&#128203;</div>&nbsp;<i></i><pre id="id_000003" hidden>local OK = inclua&#39;ok&#39;;//testa parametros de funções, retorna uma função em OK.
+
+funcao teste(nome, num, tab)
+    OK(&#39;string&#39;, nome,  //testa se nome é do tipo &#39;string&#39;;
+       &#39;numero&#39;, num, //testa se num é do tipo &#39;numero&#39;;
+       &#39;tabela&#39;, tab); //testa se tab é do tipo &#39;tabela&#39;;
+    imprima(nome, numero, tab);
+fim
+
+teste(&#39;user&#39;, 1, {1}); //--&gt;ok
+teste(1, falso, &#39;ola&#39;); //-&gt; erro!
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> OK <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;ok&#39;</span><span style="font-weight:bold;">;</span><span style="color:green">//testa parametros de funções, retorna uma função em OK.
+</span>
+<span style="font-weight:bold;color:#b50546">funcao</span> teste<span style="font-weight:bold;">(</span><span style="color:#b50546">nome</span>, num, tab<span style="font-weight:bold;">)</span>
+    OK<span style="font-weight:bold;">(</span><span style="color:blue">&#39;string&#39;</span>, <span style="color:#b50546">nome</span>,  <span style="color:green">//testa se nome é do tipo &#39;string&#39;;
+</span>       <span style="color:blue">&#39;numero&#39;</span>, num, <span style="color:green">//testa se num é do tipo &#39;numero&#39;;
+</span>       <span style="color:blue">&#39;tabela&#39;</span>, tab<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//testa se tab é do tipo &#39;tabela&#39;;
+</span>    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:#b50546">nome</span>, numero, tab<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">fim</span>
+
+teste<span style="font-weight:bold;">(</span><span style="color:blue">&#39;user&#39;</span>, <span style="color:red">1</span>, <span style="font-weight:bold;">{</span><span style="color:red">1</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt;ok
+</span>teste<span style="font-weight:bold;">(</span><span style="color:red">1</span>, <span style="font-weight:bold;color:#b50546">falso</span>, <span style="color:blue">&#39;ola&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//-&gt; erro!
+</span></pre></div></div>
+
+</div>
+
+<h3>A mensagem de erro:</h3>
+
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000004"><code> //interpretador: nome do fonte: linha: nome da função e os tipos de parâmetros:
+prisma: teste.prisma:49: função teste(string, numero, tabela)
+
+ 3 erros de parâmetro:                       //quantidade de erros
+ * Arg#1 tipo incorreto, espera-se `string` em vez de `numero`        //os erros:
+ * Arg#2 tipo incorreto, espera-se `numero` em vez de `booleano`
+ * Arg#3 tipo incorreto, espera-se `tabela` em vez de `string`
+
+Rastro da pilha:  //rastro de chamada da pilha.
+	[C]: em funcao &#39;erro&#39;    //a função OK usa internamente a função erro();
+	/usr/local/share/prisma/1.0/plib/ok.pris:22: em funcao &#39;OK&#39;
+	teste.prisma:49: em funcao &#39;teste&#39;
+	teste.prisma:56: em trecho principal
+</code></pre>
+</div>
+
+<h3>Entendendo o tracebak (rastro de chamada):</h3>
+
+<ul>
+<li> A função erro() foi chamada dentro da função OK() </li>
+<li> A função OK() foi chamada dentro da função teste();</li>
+<li> A função teste() foi chamada no fonte principal (não é a função principal);</li>
+</ul>
+
+
+
+</div>
+</section>
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

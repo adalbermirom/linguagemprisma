@@ -1,0 +1,172 @@
+    
+
+body {
+  background-color: #ffffff;
+  color: #000000;
+  margin: 40px;
+  
+}
+
+h1, h2, h3, h4, .titulo {
+	color: #000080 ;
+	font-family: Verdana, Geneva, sans-serif ;
+	font-weight: normal ;
+	font-style: normal ;
+	text-align: left ;
+}
+
+h2:before {
+	content: "\2756" ;
+	padding-right: 0.5em ;
+}
+
+.com-corfundo{
+	background-color: white;
+}
+
+
+.com-corletra-black{
+	color: black;
+}
+.com-corletra-white{
+	color: white;
+}
+
+.caixa-doc {
+	    margin-top: 20px;
+        margin-bottom: 60px;
+        border-radius: 2px;
+        padding-top: 10px;
+        color: #253555;
+} 
+
+.params-doc, .returns-doc {
+	/*font-weight: bold;
+	text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.9);
+	color: brown;*/
+	margin-top: 10px;
+	margin-left: 40px;
+	margin-right: 10px;
+	margin-bottom: 20px;
+}
+
+.params-doc:before, .returns-doc:before {
+	content: "\2756" ;
+	padding-right: 0.5em ;
+}
+
+.titulo-doc, .subtitulo-doc {
+    margin: 10px;
+}
+
+float-left-top {
+    position:relative;
+    top: 5px;
+    left: 5px;
+    float: left;
+}
+
+.float-right-top {
+    position:relative;
+    top: 5px;
+    right: 5px;
+    float: right;
+}
+
+
+.float-left-bottom {
+    position:relative;
+    bottom: 5px;
+    left: 5px;
+    float: left;
+}
+
+.float-right-bottom {
+    position:relative;
+    bottom: 5px;
+    right: 5px;
+    float: right;
+}
+
+
+
+button {
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  transition: all var(--global-transition-time) ease-in-out;
+  border-radius: 2rem;
+  color: var(--color-fg);
+  background-color: var(--color-bg);
+  border: 0.25rem solid var(--color-fg);
+}   
+
+
+.footer {
+	color: gray ;
+	font-size: x-small ;
+	text-transform: lowercase ;
+	text-align:center;
+}
+
+
+.com-rolagem{
+        /*border: 2px solid #000;*/
+        padding: 1px;
+        overflow-y: auto;
+        height: 90%;
+ }
+
+
+
+ .tool-button{
+	background-color: #ffffff;
+	border: 0px solid #ffffff;
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 0px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;	 
+ }
+ 
+ .menu-button {
+    background-color: #ffffff;
+    color: #000080;
+    border: 0px solid #ffffff;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 24px;
+    padding: 0px;
+    cursor: pointer;
+}
+
+ .floating-menu {
+    font-family: sans-serif;
+    background: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: black;
+    padding: 5px;;
+    /*width: 5px;*/
+    z-index: 100;
+    position: fixed;
+    top: 5px;
+    right: 5px;
+    height: auto;
+  }
+  
+  .floating-menu h1 {
+    font-size: 13px;
+    display: block;
+    margin: 0 0.5em;
+    color: blue;
+  }
+
+  .floating-menu a {
+    font-size: 13px;
+    display: block;
+    margin: 0 0.5em;
+    color: blue;
+  }      
+   

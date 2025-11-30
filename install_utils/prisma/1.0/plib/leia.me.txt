@@ -1,0 +1,18 @@
+
+Ola, obrigado por testar ou usar Prisma e suas ferramentas
+
+Esta é uma pasta padrão para bibliotecas prisma
+
+Caso faça uma biblioteca própria coloque aqui
+e ela poderá ser chamada de qualquer lugar do seu
+Windows, onde estiver o script/programa prisma.
+
+não modifique o nome, 
+
+plibs vem de prisma libraries, bibliotecas prisma.
+
+
+Att. Adalberto
+
+14-06-2015
+

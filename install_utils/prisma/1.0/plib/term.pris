@@ -1,0 +1,8 @@
+/*Atalho para bibioteca terminal feita em C - 
+ * 
+ * linguagemprisma@gmail.com
+ * 
+ */
+
+local term = inclua'terminal';
+retorne term;

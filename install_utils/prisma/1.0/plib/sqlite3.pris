@@ -1,0 +1,7 @@
+//sqlite functions facility em portugues
+
+sqlite3 = inclua 'igsqlite3'
+
+retorne sqlite3;
+
+                                    

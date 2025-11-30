@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>reg.pris</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<nav id="id_000014"  class="floating-menu">
+<div class="menu-button" title="Ocultar painel lateral" onclick="show_menu_flutuante(this, 'id_000015', 'id_000014')">&#x2630;</div>
+<div class="com-rolagem" id="id_000015" >
+<div class="caixa com-borda"><h2>Funções:</h2>
+<a href="#id_00000A">reg.adicione</a>
+<a href="#id_00000E">reg.carregue</a>
+<a href="#id_00000C">reg.compile</a>
+<a href="#id_000006">reg.grave</a>
+<a href="#id_000013">reg.graveArquivo</a>
+<a href="#id_000008">reg.leia</a>
+<a href="#id_000012">reg.leiaArquivo</a>
+<a href="#id_000010">reg.limpe</a>
+<a href="#id_000004">reg.teste_reg</a>
+
+</div>
+<div class="caixa com-borda"><h2>Variáveis:</h2>
+<a href="#id_000002">reg.ARQ_COMPILADO </a>
+<a href="#id_000003">reg.ARQ_TEXTO </a>
+</div>
+
+</div>
+</nav>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> reg.pris</h1>
+<h3> Adalberto Amorim Felipe</h3>
+<h3> 07/01/2016; qui 16:40</h3>
+<br>
+<div>
+Biblioteca reg (registro) para salvar e acessar configurações de forma simples.
+<a href="#id_000016"> mais...</a></div>
+<div class="caixa com-borda"><div><h2 >Funções:</h2>
+<ol>
+<li><a href="#id_00000A">reg.adicione</a></li>
+<li><a href="#id_00000E">reg.carregue</a></li>
+<li><a href="#id_00000C">reg.compile</a></li>
+<li><a href="#id_000006">reg.grave</a></li>
+<li><a href="#id_000013">reg.graveArquivo</a></li>
+<li><a href="#id_000008">reg.leia</a></li>
+<li><a href="#id_000012">reg.leiaArquivo</a></li>
+<li><a href="#id_000010">reg.limpe</a></li>
+<li><a href="#id_000004">reg.teste_reg</a></li>
+</ol>
+</div>
+
+<div><h2>Variáveis:</h2>
+<ol>
+<li><a href="#id_000002">reg.ARQ_COMPILADO </a></li>
+<li><a href="#id_000003">reg.ARQ_TEXTO </a></li>
+</ol>
+</div>
+
+</div><br>
+
+<h2 id="id_000016">reg.pris</h2><div>
+Biblioteca reg (registro) para salvar e acessar configurações de forma simples.
+</div>
+
+
+
+
+  
+  <p>
+  Esta biblioteca Prisma tem a função de salvar variáveis em um arquivo e, posteriormente, ler estas variáveis novamente, como um mini banco de dados, mas para configuração.
+  </p>
+  
+  <p>
+<p><i><b>Obs.: </b>Atenção! Cuidado ao modificar este arquivo, qualquer erro pode comprometer o funcionamento. Mas, mexa a vontade se quiser, especialmente se for fazer aprimoramentos.</i></p>
+   </p>
+   <p>
+    E caso os aprimoramentos sejam úteis aos demais poste em:
+    
+   <a href="http://linguagemprisma.br4.biz/prisma_forum/index.php?board=5.0" target="_blank">http://linguagemprisma.br4.biz/prisma_forum/index.php?board=5.0</a>
+   <p>
+   
+<h3>Links úteis:</h3>
+
+   <a href="http://linguagemprisma.br4.biz/" target="_blank">Site oficial</a>
+   <a href="http://linguagemprisma.br4.biz/prisma_forum" target="_blank">Fórum oficial</a>
+   
+<h1>Funções:</h1>
+<a id="id_000004" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao reg.teste_reg(nome_arq)</h2><div class="corpo-doc">
+<p>Testa se um arquivo é do tipo reg, ou seja, se foi criado usando a lib reg;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > nome_arq {string} - nome do arquivo a ser testado.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {numero|booleano} - reg.ARQ_COMPILADO ou reg.ARQ_TEXTO, ou se inválido falso.</span>
+</div>
+<div class="returns-doc"><span >     {nulo|string} - mensagem de erro se arquivo for inválido ou nulo caso contrário.</span>
+</div>
+   
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000005')">&#128203;</div>&nbsp;<i>teste_reg.prisma</i><pre id="id_000005" hidden>   local reg = inclua&#39;reg&#39;;
+   
+   funcao principal()
+       local teste, txt = reg.teste_reg(&#39;app.conf&#39;);
+       se nao teste entao erro(txt); fim
+       se teste == reg.ARQ_COMPILADO entao
+           imprima(&#39;Arquivo reg no formato binário compilado&#39;);
+       senaose teste == reg.ARQ_TEXTO entao
+           imprima(&#39;Arquivo reg no formato texto.&#39;);
+       fim
+       
+       retorne 0;
+   fim
+</pre><div style=" padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+   <span style="font-weight:bold;color:#b50546">local</span> reg <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;reg&#39;</span><span style="font-weight:bold;">;</span>
+   
+   <span style="font-weight:bold;color:#b50546">funcao</span> principal<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>
+       <span style="font-weight:bold;color:#b50546">local</span> teste, txt <span style="font-weight:bold;">=</span> reg<span style="font-weight:bold;">.</span>teste_reg<span style="font-weight:bold;">(</span><span style="color:blue">&#39;app.conf&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+       <span style="font-weight:bold;color:#b50546">se</span> <span style="font-weight:bold;color:#b50546">nao</span> teste <span style="font-weight:bold;color:#b50546">entao</span> <span style="color:#b50546">erro</span><span style="font-weight:bold;">(</span>txt<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span>
+       <span style="font-weight:bold;color:#b50546">se</span> teste <span style="font-weight:bold;">=</span><span style="font-weight:bold;">=</span> reg<span style="font-weight:bold;">.</span>ARQ_COMPILADO <span style="font-weight:bold;color:#b50546">entao</span>
+           <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Arquivo reg no formato binário compilado&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+       <span style="font-weight:bold;color:#b50546">senaose</span> teste <span style="font-weight:bold;">=</span><span style="font-weight:bold;">=</span> reg<span style="font-weight:bold;">.</span>ARQ_TEXTO <span style="font-weight:bold;color:#b50546">entao</span>
+           <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Arquivo reg no formato texto.&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+       <span style="font-weight:bold;color:#b50546">fim</span>
+       
+       <span style="font-weight:bold;color:#b50546">retorne</span> <span style="color:red">0</span><span style="font-weight:bold;">;</span>
+   <span style="font-weight:bold;color:#b50546">fim</span>
+</pre></div></div>
+
+</div>
+   
+</div>
+</section>
+<a id="id_000006" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao reg.grave( a, tab )</h2><div class="corpo-doc">
+<p>Grava a tabela de variáveis no arquivo.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > a {string} - nome do arquivo a ser gravado (caminho absoluto ou relativo).</span>
+</div>
+<div class="params-doc"><span > tab {tabela} - a tabela contendo os valores a serem gravados.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     status {booleano} - verdadeiro em caso de sucesso, ou falso em caso de falha.</span>
+</div>
+<div class="returns-doc"><span >     msg_err {string} - nulo se status for verdadeiro e mensagem de erro se status for falso.</span>
+</div>
+   
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000007')">&#128203;</div>&nbsp;<i>ex1.prisma</i><pre id="id_000007" hidden>   local reg = inclua&#39;reg&#39;
+   
+   local status, msg_err = reg.grave(&#39;app.conf&#39;, {cor=&#39;azul&#39;, largura=120, altura=220});
+   
+</pre><div style=" padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+   <span style="font-weight:bold;color:#b50546">local</span> reg <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;reg&#39;</span>
+   
+   <span style="font-weight:bold;color:#b50546">local</span> status, msg_err <span style="font-weight:bold;">=</span> reg<span style="font-weight:bold;">.</span>grave<span style="font-weight:bold;">(</span><span style="color:blue">&#39;app.conf&#39;</span>, <span style="font-weight:bold;">{</span>cor<span style="font-weight:bold;">=</span><span style="color:blue">&#39;azul&#39;</span>, largura<span style="font-weight:bold;">=</span><span style="color:red">120</span>, altura<span style="font-weight:bold;">=</span><span style="color:red">220</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+   
+</pre></div></div>
+
+</div>
+   
+<p><i><b>Obs.: </b>- esta função apaga toda informação se já houver um arquivo salvo. Portanto é necessário fazer essa verificação, obter os dados, acrescentar os dados na tabela e regravá-la caso queira algo mais persistente.</i></p>
+
+</div>
+</section>
+<a id="id_000008" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao reg.leia( a )</h2><div class="corpo-doc">
+<p>Lê um arquivo de configuração retornando uma tabela com os valores.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > a {string} - nome do arquivo de configuração.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     status {booleano} - verdadeiro ou falso, em caso de sucesso ou falha.</span>
+</div>
+<div class="returns-doc"><span >     err {string} - nulo em caso de sucesso e mensagem de erro em caso de falha.</span>
+</div>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000009')">&#128203;</div>&nbsp;<i>ex2_leia.prisma</i><pre id="id_000009" hidden>    local reg = inclua&#39;reg&#39;;
+    
+    funcao principal()
+    
+        local conf, err = reg.leia(&#39;app.conf&#39;);
+        se nao conf entao erro(err); fim //tratamento de erro, termina o programa em caso de erro, com a mensagem na tela.
+        imprima(conf.cor);
+        imprima(conf.largura);
+        imprima(conf.altura);
+    
+        retorne 0;
+    fim //fim principal()
+</pre><div style=" padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="font-weight:bold;color:#b50546">local</span> reg <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;reg&#39;</span><span style="font-weight:bold;">;</span>
+    
+    <span style="font-weight:bold;color:#b50546">funcao</span> principal<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>
+    
+        <span style="font-weight:bold;color:#b50546">local</span> conf, err <span style="font-weight:bold;">=</span> reg<span style="font-weight:bold;">.</span><span style="color:#b50546">leia</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;app.conf&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+        <span style="font-weight:bold;color:#b50546">se</span> <span style="font-weight:bold;color:#b50546">nao</span> conf <span style="font-weight:bold;color:#b50546">entao</span> <span style="color:#b50546">erro</span><span style="font-weight:bold;">(</span>err<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span> <span style="color:green">//tratamento de erro, termina o programa em caso de erro, com a mensagem na tela.
+</span>        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>conf<span style="font-weight:bold;">.</span>cor<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>conf<span style="font-weight:bold;">.</span>largura<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>conf<span style="font-weight:bold;">.</span>altura<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+        <span style="font-weight:bold;color:#b50546">retorne</span> <span style="color:red">0</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">fim</span> <span style="color:green">//fim principal()
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00000A" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao reg.adicione( a, tab )</h2><div class="corpo-doc">
+<p>Adiciona valores ao arquivo de configuração.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > a {string} - nome do arquivo a ser adicionado.</span>
+</div>
+<div class="params-doc"><span > tab {tabela} - a tabela com valores.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     status {booleano} - verdadeiro ou falso, em caso de sucesso ou falha.</span>
+</div>
+<div class="returns-doc"><span >     err {string} - nulo em caso de sucesso e mensagem de erro em caso de falha.</span>
+</div>
+
+<p><i><b>Obs.: </b>em caso de chaves repetidas a última sobreescreve as anteriores.</i></p>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000B')">&#128203;</div>&nbsp;<i>ex3_adicione.prisma</i><pre id="id_00000B" hidden>    local reg = inclua&#39;reg&#39;;
+    
+    funcao principal()
+    
+        local status, err = reg.adicione(&#39;app.conf&#39;, {cor_fundo=&#39;Branco&#39;, pontos = 10});
+        se nao status entao erro(err); fim //tratamento de erro, termina o programa em caso de erro, com a mensagem na tela.
+        retorne 0;
+    fim //fim principal()
+    
+</pre><div style=" padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="font-weight:bold;color:#b50546">local</span> reg <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;reg&#39;</span><span style="font-weight:bold;">;</span>
+    
+    <span style="font-weight:bold;color:#b50546">funcao</span> principal<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>
+    
+        <span style="font-weight:bold;color:#b50546">local</span> status, err <span style="font-weight:bold;">=</span> reg<span style="font-weight:bold;">.</span>adicione<span style="font-weight:bold;">(</span><span style="color:blue">&#39;app.conf&#39;</span>, <span style="font-weight:bold;">{</span>cor_fundo<span style="font-weight:bold;">=</span><span style="color:blue">&#39;Branco&#39;</span>, pontos <span style="font-weight:bold;">=</span> <span style="color:red">10</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+        <span style="font-weight:bold;color:#b50546">se</span> <span style="font-weight:bold;color:#b50546">nao</span> status <span style="font-weight:bold;color:#b50546">entao</span> <span style="color:#b50546">erro</span><span style="font-weight:bold;">(</span>err<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span> <span style="color:green">//tratamento de erro, termina o programa em caso de erro, com a mensagem na tela.
+</span>        <span style="font-weight:bold;color:#b50546">retorne</span> <span style="color:red">0</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">fim</span> <span style="color:green">//fim principal()
+</span>    
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00000C" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao reg.compile( a, tab )</h2><div class="corpo-doc">
+<p>Compila em códigos bytes os valores e grava no arquivo de configuração, substituindo todo conteúdo anterior.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > a {string} - nome do arquivo a ser gravado.</span>
+</div>
+<div class="params-doc"><span > tab {tabela} - a tabela com valores.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     status {booleano} - verdadeiro ou falso, em caso de sucesso ou falha.</span>
+</div>
+<div class="returns-doc"><span >     err {string} - nulo em caso de sucesso e mensagem de erro em caso de falha.</span>
+</div>
+
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000D')">&#128203;</div>&nbsp;<i>ex4_compile.prisma</i><pre id="id_00000D" hidden>    local reg = inclua&#39;reg&#39;;
+    
+    funcao principal()
+    
+        local status, err = reg.compile(&#39;app.conf&#39;, {tam_tela=&quot;600x800&quot;, max_jogadores=20});
+        se nao status entao erro(err); fim //tratamento de erro, termina o programa em caso de erro, com a mensagem na tela.
+        
+        //para ler é preciso usar reg.carregue(); 
+        local conf, err = reg.carregue(&#39;app.conf&#39;);
+        se nao conf entao erro(err); fim //tratamento de erro, termina o programa em caso de erro, com a mensagem na tela.
+        imprima(conf.tam_tela);
+        imprima(cont.max_jogadores);
+            
+        retorne 0;
+    fim //fim principal()
+    
+</pre><div style=" padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 14</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 15</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 16</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="font-weight:bold;color:#b50546">local</span> reg <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;reg&#39;</span><span style="font-weight:bold;">;</span>
+    
+    <span style="font-weight:bold;color:#b50546">funcao</span> principal<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>
+    
+        <span style="font-weight:bold;color:#b50546">local</span> status, err <span style="font-weight:bold;">=</span> reg<span style="font-weight:bold;">.</span><span style="color:#b50546">compile</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;app.conf&#39;</span>, <span style="font-weight:bold;">{</span>tam_tela<span style="font-weight:bold;">=</span><span style="color:blue">&quot;600x800&quot;</span>, max_jogadores<span style="font-weight:bold;">=</span><span style="color:red">20</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+        <span style="font-weight:bold;color:#b50546">se</span> <span style="font-weight:bold;color:#b50546">nao</span> status <span style="font-weight:bold;color:#b50546">entao</span> <span style="color:#b50546">erro</span><span style="font-weight:bold;">(</span>err<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span> <span style="color:green">//tratamento de erro, termina o programa em caso de erro, com a mensagem na tela.
+</span>        
+        <span style="color:green">//para ler é preciso usar reg.carregue(); 
+</span>        <span style="font-weight:bold;color:#b50546">local</span> conf, err <span style="font-weight:bold;">=</span> reg<span style="font-weight:bold;">.</span><span style="color:#b50546">carregue</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;app.conf&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+        <span style="font-weight:bold;color:#b50546">se</span> <span style="font-weight:bold;color:#b50546">nao</span> conf <span style="font-weight:bold;color:#b50546">entao</span> <span style="color:#b50546">erro</span><span style="font-weight:bold;">(</span>err<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span> <span style="color:green">//tratamento de erro, termina o programa em caso de erro, com a mensagem na tela.
+</span>        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>conf<span style="font-weight:bold;">.</span>tam_tela<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>cont<span style="font-weight:bold;">.</span>max_jogadores<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+            
+        <span style="font-weight:bold;color:#b50546">retorne</span> <span style="color:red">0</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">fim</span> <span style="color:green">//fim principal()
+</span>    
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00000E" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao reg.carregue( a )</h2><div class="corpo-doc">
+<p>Carrega valores do arquivo de configuração compilado.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > a {string} - nome do arquivo a ser adicionado.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     status {booleano} - verdadeiro ou falso, em caso de sucesso ou falha.</span>
+</div>
+<div class="returns-doc"><span >     err {string} - nulo em caso de sucesso e mensagem de erro em caso de falha.</span>
+</div>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000F')">&#128203;</div>&nbsp;<i>ex5_carrege.prisma</i><pre id="id_00000F" hidden>    local reg = inclua&#39;reg&#39;;
+    
+    funcao principal()
+        //usado apenas se o arquivo foi gravado com reg.compile(a);
+        local conf = reg.carregue(&#39;app.conf&#39;);
+        imprima(conf.cor);
+        imprima(conf.largura);
+        imprima(conf.altura);
+    
+        retorne 0;
+    fim //fim principal()
+</pre><div style=" padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="font-weight:bold;color:#b50546">local</span> reg <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;reg&#39;</span><span style="font-weight:bold;">;</span>
+    
+    <span style="font-weight:bold;color:#b50546">funcao</span> principal<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>
+        <span style="color:green">//usado apenas se o arquivo foi gravado com reg.compile(a);
+</span>        <span style="font-weight:bold;color:#b50546">local</span> conf <span style="font-weight:bold;">=</span> reg<span style="font-weight:bold;">.</span><span style="color:#b50546">carregue</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;app.conf&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>conf<span style="font-weight:bold;">.</span>cor<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>conf<span style="font-weight:bold;">.</span>largura<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>conf<span style="font-weight:bold;">.</span>altura<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+        <span style="font-weight:bold;color:#b50546">retorne</span> <span style="color:red">0</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">fim</span> <span style="color:green">//fim principal()
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000010" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao reg.limpe(a)   </h2><div class="corpo-doc">
+<p>Limpa valores do arquivo de configuração.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > a {string} - nome do arquivo a ser limpado.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     status {booleano} - verdadeiro ou falso, em caso de sucesso ou falha.</span>
+</div>
+<div class="returns-doc"><span >     err {string} - nulo em caso de sucesso e mensagem de erro em caso de falha.</span>
+</div>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000011')">&#128203;</div>&nbsp;<i>ex6_limpe.prisma</i><pre id="id_000011" hidden>    local reg = inclua&#39;reg&#39;;
+    
+    funcao principal()
+    
+        local status, err = reg.limpe(&#39;app.conf&#39;);
+        se não status entao erro(err); fim
+        
+        poe(&#39;app.conf está vazio agora.&#39;); 
+        retorne 0;
+    fim //fim principal()
+</pre><div style=" padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="font-weight:bold;color:#b50546">local</span> reg <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;reg&#39;</span><span style="font-weight:bold;">;</span>
+    
+    <span style="font-weight:bold;color:#b50546">funcao</span> principal<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>
+    
+        <span style="font-weight:bold;color:#b50546">local</span> status, err <span style="font-weight:bold;">=</span> reg<span style="font-weight:bold;">.</span>limpe<span style="font-weight:bold;">(</span><span style="color:blue">&#39;app.conf&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+        <span style="font-weight:bold;color:#b50546">se</span> <span style="font-weight:bold;color:#b50546">não</span> status <span style="font-weight:bold;color:#b50546">entao</span> <span style="color:#b50546">erro</span><span style="font-weight:bold;">(</span>err<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span>
+        
+        <span style="color:#b50546">poe</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;app.conf está vazio agora.&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> 
+        <span style="font-weight:bold;color:#b50546">retorne</span> <span style="color:red">0</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">fim</span> <span style="color:green">//fim principal()
+</span></pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000012" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao reg.leiaArquivo(b)</h2><div class="corpo-doc">
+<p>Lê um arquivo binário para uma variável string.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > b {string} - nome do arquivo a ser lido.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {string | falso} - o conteúdo do arquivo binário ou falso em caso de erro.</span>
+</div>
+<div class="returns-doc"><span >     {string} - nulo em caso de sucesso ou mensagem em caso de erro.</span>
+</div>
+</div>
+</section>
+<a id="id_000013" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao reg.graveArquivo(b,txt)</h2><div class="corpo-doc">
+<p>Grava um conteúdo em um arquivo binário;</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > b {string} - nome do arquivo a ser gravado.</span>
+</div>
+<div class="params-doc"><span > txt {string} - string do arquivo binário para ser gravada.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     status {booleano} - verdadeiro ou falso, em caso de sucesso ou falha.</span>
+</div>
+<div class="returns-doc"><span >     err {string} - nulo em caso de sucesso e mensagem de erro em caso de falha.</span>
+</div>
+</div>
+</section>
+<h1>Variáveis</h1>
+<a id="id_000002" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">reg.ARQ_COMPILADO = 0;</h2><div class="corpo-doc">
+<p>variável {numero} - simboliza quando um arquivo conf é gravado com a função reg.compile(a).</p>
+
+</div>
+</section>
+<a id="id_000003" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">reg.ARQ_TEXTO = 1;</h2><div class="corpo-doc">
+<p>variável {numero} - simboliza quando um arquivo conf é gravado com a função reg.grave(a).</p>
+
+</div>
+</section>
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

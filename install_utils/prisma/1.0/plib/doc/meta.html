@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>meta.pris</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<nav id="id_00000E"  class="floating-menu">
+<div class="menu-button" title="Ocultar painel lateral" onclick="show_menu_flutuante(this, 'id_00000F', 'id_00000E')">&#x2630;</div>
+<div class="com-rolagem" id="id_00000F" hidden>
+<div class="caixa "><h2>Funções:</h2>
+<a href="#id_00000B">meta.__</a>
+<a href="#id_000005">meta.cp</a>
+<a href="#id_000006">meta.def</a>
+<a href="#id_00000A">meta.defmetametodo</a>
+<a href="#id_000008">meta.mescle</a>
+
+</div>
+<div class="caixa "><h2>Variáveis:</h2>
+<a href="#id_000004">meta </a>
+</div>
+
+</div>
+</nav>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> meta.pris</h1>
+<h3> Adalberto</h3>
+<h3> 24 nov 2023</h3>
+<br>
+<div>
+Biblioteca para facilitar a manipulação de metatabelas e metamétodos. 
+<a href="#id_000010"> mais...</a></div>
+<div class="caixa com-borda"><div><h2 >Funções:</h2>
+<ol>
+<li><a href="#id_00000B">meta.__</a></li>
+<li><a href="#id_000005">meta.cp</a></li>
+<li><a href="#id_000006">meta.def</a></li>
+<li><a href="#id_00000A">meta.defmetametodo</a></li>
+<li><a href="#id_000008">meta.mescle</a></li>
+</ol>
+</div>
+
+<div><h2>Variáveis:</h2>
+<ol>
+<li><a href="#id_000004">meta </a></li>
+</ol>
+</div>
+
+</div><br>
+
+<h2 id="id_000010">meta.pris</h2><div>
+Biblioteca para facilitar a manipulação de metatabelas e metamétodos. 
+</div>
+
+
+
+
+ * 
+ * <h2>Metatabela</h2>
+ * <p>
+        Metatabela é uma tabela normal Prisma, porém ela fica oculta dentro do objeto (que pode ser uma string, uma tabela, userdata etc). Essa metatabela tem campos chamados metamétodos, responsáveis por mudar o comportamento do objeto em uma operação (que pode ser aritmética, concatenação, tamanho, tipo etc);
+ * </p>
+
+
+   <h2>Metamétodos</h2>
+   <p>
+     Metamétodos são funções dentro de metatabelas, com nomes específicos de acordo com as operações e ações. É possível, por exemplo, definir um metamétodo em Prisma para somar duas tabelas, ou para mudar o nome do seu tipo.   
+   </p>
+   <b>Veja o exemplo abaixo:</b>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000002')">&#128203;</div>&nbsp;<i>ex1.prisma</i><pre id="id_000002" hidden>   
+     local mt = {}; //metatabela;
+     mt.__tipo = funcao()  //metamétodo acionado com a função tipo();
+         retorne &#39;retangulo&#39;;
+     fim
+     
+     mt.__convstring = funcao(t)
+         local s = &#39;retangulo:{comprimento=&#39; .. t.comprimento .. &#39;, largura=&#39; .. t.largura .. &#39;}&#39;;
+         retorne s;
+     fim
+     local ret = {comprimento=10, largura=20};
+     defmetatabela(ret, mt); //definindo a tabela mt como metatabela de ret;
+     
+     //só testar:
+     
+     imprima(tipo(ret) ); //--&gt; retangulo
+     imprima(ret); // --&gt; retangulo:{comprimento=10, largura=20}
+       
+   
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 14</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 15</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 16</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 17</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 18</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 19</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+   
+     <span style="font-weight:bold;color:#b50546">local</span> mt <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span> <span style="color:green">//metatabela;
+</span>     mt<span style="font-weight:bold;">.</span>__tipo <span style="font-weight:bold;">=</span> <span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>  <span style="color:green">//metamétodo acionado com a função tipo();
+</span>         <span style="font-weight:bold;color:#b50546">retorne</span> <span style="color:blue">&#39;retangulo&#39;</span><span style="font-weight:bold;">;</span>
+     <span style="font-weight:bold;color:#b50546">fim</span>
+     
+     mt<span style="font-weight:bold;">.</span>__convstring <span style="font-weight:bold;">=</span> <span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span>t<span style="font-weight:bold;">)</span>
+         <span style="font-weight:bold;color:#b50546">local</span> s <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;retangulo:{comprimento=&#39;</span> <span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> t<span style="font-weight:bold;">.</span>comprimento <span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> <span style="color:blue">&#39;, largura=&#39;</span> <span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> t<span style="font-weight:bold;">.</span>largura <span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> <span style="color:blue">&#39;}&#39;</span><span style="font-weight:bold;">;</span>
+         <span style="font-weight:bold;color:#b50546">retorne</span> s<span style="font-weight:bold;">;</span>
+     <span style="font-weight:bold;color:#b50546">fim</span>
+     <span style="font-weight:bold;color:#b50546">local</span> ret <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span>comprimento<span style="font-weight:bold;">=</span><span style="color:red">10</span>, largura<span style="font-weight:bold;">=</span><span style="color:red">20</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+     <span style="color:#b50546">defmetatabela</span><span style="font-weight:bold;">(</span>ret, mt<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//definindo a tabela mt como metatabela de ret;
+</span>     
+     <span style="color:green">//só testar:
+</span>     
+     <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:#b50546">tipo</span><span style="font-weight:bold;">(</span>ret<span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt; retangulo
+</span>     <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>ret<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">// --&gt; retangulo:{comprimento=10, largura=20}
+</span>       
+   
+</pre></div></div>
+
+</div>
+   
+    Esta lib serve para fazer o que foi feito acima, mas de um jeito mais simples.
+   
+   <b>Veja:</b>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000003')">&#128203;</div>&nbsp;<i>ex2.prisma</i><pre id="id_000003" hidden>     local meta = inclua&#39;meta&#39;;
+     
+     local ret = {comprimento=10, largura=20};
+     meta.__(&#39;tipo&#39;, ret, funcao() retorne &#39;retangulo&#39;; fim);
+     meta.__(&#39;convstring&#39;, ret, 
+     funcao(t) 
+         local s = &#39;retangulo:{comprimento=&#39; .. t.comprimento .. &#39;, largura=&#39; .. t.largura .. &#39;}&#39;;
+         retorne s;
+     fim);
+     //agora só testar
+     imprima(tipo(ret)); //--&gt; retangulo
+     imprima(ret);// --&gt; retangulo:{comprimento=10, largura=20}
+   
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+     <span style="font-weight:bold;color:#b50546">local</span> meta <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;meta&#39;</span><span style="font-weight:bold;">;</span>
+     
+     <span style="font-weight:bold;color:#b50546">local</span> ret <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span>comprimento<span style="font-weight:bold;">=</span><span style="color:red">10</span>, largura<span style="font-weight:bold;">=</span><span style="color:red">20</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+     meta<span style="font-weight:bold;">.</span>__<span style="font-weight:bold;">(</span><span style="color:blue">&#39;tipo&#39;</span>, ret, <span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;color:#b50546">retorne</span> <span style="color:blue">&#39;retangulo&#39;</span><span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+     meta<span style="font-weight:bold;">.</span>__<span style="font-weight:bold;">(</span><span style="color:blue">&#39;convstring&#39;</span>, ret, 
+     <span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span>t<span style="font-weight:bold;">)</span> 
+         <span style="font-weight:bold;color:#b50546">local</span> s <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;retangulo:{comprimento=&#39;</span> <span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> t<span style="font-weight:bold;">.</span>comprimento <span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> <span style="color:blue">&#39;, largura=&#39;</span> <span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> t<span style="font-weight:bold;">.</span>largura <span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> <span style="color:blue">&#39;}&#39;</span><span style="font-weight:bold;">;</span>
+         <span style="font-weight:bold;color:#b50546">retorne</span> s<span style="font-weight:bold;">;</span>
+     <span style="font-weight:bold;color:#b50546">fim</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+     <span style="color:green">//agora só testar
+</span>     <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:#b50546">tipo</span><span style="font-weight:bold;">(</span>ret<span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt; retangulo
+</span>     <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>ret<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">// --&gt; retangulo:{comprimento=10, largura=20}
+</span>   
+</pre></div></div>
+
+</div>
+   
+    Note que foram usados dois underlines(sublinhado) como método de meta:  meta.__
+
+   
+<h1>Funções:</h1>
+<a id="id_000005" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao meta.cp(a,b) </h2><div class="corpo-doc">
+<p>Função para copiar uma metatabela de uma tabela para outra tabela.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > a(tabela) é a tabela destino, a qual irá receber a metatabela copiada da tabela &#39;b&#39;</span>
+</div>
+<div class="params-doc"><span > b(tabela) é a tabela alvo com a metatabela a ser copiada.</span>
+</div>
+     <b>OBS.: caso não exista uma metatabela em 'b' então nada é feito.</b>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     mt(tabela) o retorno é a metatabela copiada de &#39;b&#39; para &#39;a&#39; ou nulo caso não exista.</span>
+</div>
+</div>
+</section>
+<a id="id_000006" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao meta.def(tab, mt) </h2><div class="corpo-doc">
+<p>Funcao para definir uma tabela &#39;mt&#39; como metatabela da tabela &#39;tab&#39;.</p>
+
+-     funcao meta.def(tab, mt)
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > tab(tabela)  é a tabela que receberá a metatabela &#39;mt&#39;;</span>
+</div>
+<div class="params-doc"><span > mt(tabela) é uma tabela com metamétodos definidos.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     tab(tabela) o retorno é a própria tabela passada como parâmetro.</span>
+</div>
+     <hr>
+    Veja o exemplo abaixo:
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000007')">&#128203;</div>&nbsp;<i></i><pre id="id_000007" hidden>
+    local meta = inclua&#39;meta&#39;;
+    local mt = { __add = funcao(a,b) a.val = a.val + b; retorne a.val; fim }; //meta tabela com metamétodo + definido
+    local tab = {val = 0;};
+    tab = meta.def(tab, mt);
+    imprima(tab+10); //--&gt; 10
+    imprima(tab+1); //---&gt; 11    
+
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+
+    <span style="font-weight:bold;color:#b50546">local</span> meta <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;meta&#39;</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">local</span> mt <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span> __add <span style="font-weight:bold;">=</span> <span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span>a,b<span style="font-weight:bold;">)</span> a<span style="font-weight:bold;">.</span>val <span style="font-weight:bold;">=</span> a<span style="font-weight:bold;">.</span>val <span style="font-weight:bold;">+</span> b<span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">retorne</span> a<span style="font-weight:bold;">.</span>val<span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span> <span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span> <span style="color:green">//meta tabela com metamétodo + definido
+</span>    <span style="font-weight:bold;color:#b50546">local</span> tab <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span>val <span style="font-weight:bold;">=</span> <span style="color:red">0</span><span style="font-weight:bold;">;</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+    tab <span style="font-weight:bold;">=</span> meta<span style="font-weight:bold;">.</span><span style="color:#b50546">def</span><span style="font-weight:bold;">(</span>tab, mt<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>tab<span style="font-weight:bold;">+</span><span style="color:red">10</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt; 10
+</span>    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>tab<span style="font-weight:bold;">+</span><span style="color:red">1</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//---&gt; 11    
+</span>
+</pre></div></div>
+
+</div>
+****************************
+</div>
+</section>
+<a id="id_000008" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao meta.mescle(tab, mt) </h2><div class="corpo-doc">
+<p>Funcao para mesclar uma tabela&#39;mt&#39; como metatabela da tabela &#39;tab&#39;.</p>
+
+      Se houver uma metatabela em tab ela não será apagada, apenas os metamétodos presentes em mt 
+      substituirão os já existentes na tabela original, senão serão apenas acrescentados.
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > tab(tabela)  é a tabela que receberá a metatabela &#39;mt&#39; para ser mesclada na metatabela já existente</span>
+</div>
+<div class="params-doc"><span > mt(tabela) é uma tabela com metamétodos definidos</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     tab(tabela) o retorno é a própria tabela passada como parâmetro.</span>
+</div>
+     <hr>
+
+Veja um exemplo:
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000009')">&#128203;</div>&nbsp;<i></i><pre id="id_000009" hidden>
+local tab = {n=0};
+local mt = {__add=funcao(a, n) a.n = a.n + n; retorne a.n; fim};
+local mt2 = {__sub = funcao(a, n) a.n = a.n - n; retorne a.n; fim};
+local mt3 = {__mul = funcao(a,n) a.n = a.n * n; retorne a.n; fim};
+local mt4 = {__div = funcao(a,n) a.n = a.n / n; retorne a.n; fim};
+tab = meta.def(tab, mt);
+meta.mescle(tab, mt2);
+meta.mescle(tab, mt3);
+meta.mescle(tab, mt4);
+imprima(tab + 10);
+imprima(tab - 1);
+imprima(tab * 3);
+imprima(tab / 9);
+
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 14</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 15</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+
+<span style="font-weight:bold;color:#b50546">local</span> tab <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span>n<span style="font-weight:bold;">=</span><span style="color:red">0</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> mt <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span>__add<span style="font-weight:bold;">=</span><span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span>a, n<span style="font-weight:bold;">)</span> a<span style="font-weight:bold;">.</span>n <span style="font-weight:bold;">=</span> a<span style="font-weight:bold;">.</span>n <span style="font-weight:bold;">+</span> n<span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">retorne</span> a<span style="font-weight:bold;">.</span>n<span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> mt2 <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span>__sub <span style="font-weight:bold;">=</span> <span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span>a, n<span style="font-weight:bold;">)</span> a<span style="font-weight:bold;">.</span>n <span style="font-weight:bold;">=</span> a<span style="font-weight:bold;">.</span>n <span style="font-weight:bold;">-</span> n<span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">retorne</span> a<span style="font-weight:bold;">.</span>n<span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> mt3 <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span>__mul <span style="font-weight:bold;">=</span> <span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span>a,n<span style="font-weight:bold;">)</span> a<span style="font-weight:bold;">.</span>n <span style="font-weight:bold;">=</span> a<span style="font-weight:bold;">.</span>n <span style="font-weight:bold;">*</span> n<span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">retorne</span> a<span style="font-weight:bold;">.</span>n<span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> mt4 <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span>__div <span style="font-weight:bold;">=</span> <span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span>a,n<span style="font-weight:bold;">)</span> a<span style="font-weight:bold;">.</span>n <span style="font-weight:bold;">=</span> a<span style="font-weight:bold;">.</span>n <span style="font-weight:bold;">/</span> n<span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">retorne</span> a<span style="font-weight:bold;">.</span>n<span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+tab <span style="font-weight:bold;">=</span> meta<span style="font-weight:bold;">.</span><span style="color:#b50546">def</span><span style="font-weight:bold;">(</span>tab, mt<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+meta<span style="font-weight:bold;">.</span>mescle<span style="font-weight:bold;">(</span>tab, mt2<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+meta<span style="font-weight:bold;">.</span>mescle<span style="font-weight:bold;">(</span>tab, mt3<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+meta<span style="font-weight:bold;">.</span>mescle<span style="font-weight:bold;">(</span>tab, mt4<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>tab <span style="font-weight:bold;">+</span> <span style="color:red">10</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>tab <span style="font-weight:bold;">-</span> <span style="color:red">1</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>tab <span style="font-weight:bold;">*</span> <span style="color:red">3</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>tab <span style="font-weight:bold;">/</span> <span style="color:red">9</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_00000A" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao meta.defmetametodo(meta, tab, func) </h2><div class="corpo-doc">
+
+<p>Função para facilitar a definição de metamétodos em Prisma, fazendo a sobrecarga de operadores.</p>
+
+     funcao defmetametodo( meta, tab, func)
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > meta(string) contendo o metamétodo ou operador a ser atribuído à tabela.</span>
+</div>
+      exemplo: '+' (soma), '-' (sub), '*' (mul), '&' (and bitwise) etc.
+<div class="params-doc"><span > tab(tabela) é a tabela a ser atribuído ou modificado o metamétodo. </span>
+</div>
+     Obs.: o 2nd parâmetro deve ser sempre uma tabela em Prisma
+<div class="params-doc"><span > func é a função a ser executada na operação do metamétodo. Por exemplo: </span>
+</div>
+     ao atribuir '+' em tab com a função func(), func() será chamada se fizermos a operação de adição: a+b
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     tab(tabela) o retorno é a própria tabela com os metamétodos já modificados.</span>
+</div>
+</div>
+</section>
+<a id="id_00000B" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao meta.__(meta, tab, func) </h2><div class="corpo-doc">
+<p>Esta função meta.__() é um açúcar sintático, um atalho para a função meta.defmetametodo() ficando mais curta assim.</p>
+
+      
+      veja:  
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000C')">&#128203;</div>&nbsp;<i></i><pre id="id_00000C" hidden>      meta.defmetametodo() == meta.__()
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+      meta<span style="font-weight:bold;">.</span>defmetametodo<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">=</span><span style="font-weight:bold;">=</span> meta<span style="font-weight:bold;">.</span>__<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>
+</pre></div></div>
+
+</div>
+
+     Aqui temos um exemplo de sobrecarga dos operadores de + e de -
+
+<hr>
+<div>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000D')">&#128203;</div>&nbsp;<i></i><pre id="id_00000D" hidden>local meta = inclua&#39;meta&#39;;
+local myint = Classe{val = 0};
+funcao myint:construtor(val) //funcao construtora:
+    meta.__(&#39;+&#39;, este, 
+        funcao (a,b)
+            local c = {val=0};
+            meta.cp(c,a);
+            c.val = a.val + b.val;
+            retorne c;
+    fim)
+
+    meta.__(&#39;-&#39;, este, 
+        funcao (a,b)
+            local c = {val=0};
+            meta.cp(c,a);
+            c.val = a.val - b.val;
+            retorne c;
+    fim)
+    
+    meta.__(&#39;s&#39;, este, 
+        funcao(a)
+            retorne convstring(a.val);        
+    fim)
+    este.val = val;
+fim
+
+
+
+local a = myint(1);
+local b = myint(2);
+imprima(a + b);
+imprima(a - b);
+
+meta.__(&#39;tipo&#39;, b, funcao() retorne &#39;myint&#39;; fim);
+
+imprima(tipo(b));
+
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 14</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 15</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 16</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 17</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 18</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 19</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 20</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 21</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 22</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 23</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 24</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 25</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 26</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 27</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 28</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 29</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 30</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 31</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 32</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 33</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 34</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 35</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 36</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 37</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> meta <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;meta&#39;</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> myint <span style="font-weight:bold;">=</span> <span style="color:#b50546">Classe</span><span style="font-weight:bold;">{</span>val <span style="font-weight:bold;">=</span> <span style="color:red">0</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">funcao</span> myint<span style="font-weight:bold;">:</span>construtor<span style="font-weight:bold;">(</span>val<span style="font-weight:bold;">)</span> <span style="color:green">//funcao construtora:
+</span>    meta<span style="font-weight:bold;">.</span>__<span style="font-weight:bold;">(</span><span style="color:blue">&#39;+&#39;</span>, <span style="font-weight:bold;color:#b50546">este</span>, 
+        <span style="font-weight:bold;color:#b50546">funcao</span> <span style="font-weight:bold;">(</span>a,b<span style="font-weight:bold;">)</span>
+            <span style="font-weight:bold;color:#b50546">local</span> c <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span>val<span style="font-weight:bold;">=</span><span style="color:red">0</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+            meta<span style="font-weight:bold;">.</span>cp<span style="font-weight:bold;">(</span>c,a<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+            c<span style="font-weight:bold;">.</span>val <span style="font-weight:bold;">=</span> a<span style="font-weight:bold;">.</span>val <span style="font-weight:bold;">+</span> b<span style="font-weight:bold;">.</span>val<span style="font-weight:bold;">;</span>
+            <span style="font-weight:bold;color:#b50546">retorne</span> c<span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">fim</span><span style="font-weight:bold;">)</span>
+
+    meta<span style="font-weight:bold;">.</span>__<span style="font-weight:bold;">(</span><span style="color:blue">&#39;-&#39;</span>, <span style="font-weight:bold;color:#b50546">este</span>, 
+        <span style="font-weight:bold;color:#b50546">funcao</span> <span style="font-weight:bold;">(</span>a,b<span style="font-weight:bold;">)</span>
+            <span style="font-weight:bold;color:#b50546">local</span> c <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span>val<span style="font-weight:bold;">=</span><span style="color:red">0</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+            meta<span style="font-weight:bold;">.</span>cp<span style="font-weight:bold;">(</span>c,a<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+            c<span style="font-weight:bold;">.</span>val <span style="font-weight:bold;">=</span> a<span style="font-weight:bold;">.</span>val <span style="font-weight:bold;">-</span> b<span style="font-weight:bold;">.</span>val<span style="font-weight:bold;">;</span>
+            <span style="font-weight:bold;color:#b50546">retorne</span> c<span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">fim</span><span style="font-weight:bold;">)</span>
+    
+    meta<span style="font-weight:bold;">.</span>__<span style="font-weight:bold;">(</span><span style="color:blue">&#39;s&#39;</span>, <span style="font-weight:bold;color:#b50546">este</span>, 
+        <span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span>a<span style="font-weight:bold;">)</span>
+            <span style="font-weight:bold;color:#b50546">retorne</span> <span style="color:#b50546">convstring</span><span style="font-weight:bold;">(</span>a<span style="font-weight:bold;">.</span>val<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>        
+    <span style="font-weight:bold;color:#b50546">fim</span><span style="font-weight:bold;">)</span>
+    <span style="font-weight:bold;color:#b50546">este</span><span style="font-weight:bold;">.</span>val <span style="font-weight:bold;">=</span> val<span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">fim</span>
+
+
+
+<span style="font-weight:bold;color:#b50546">local</span> a <span style="font-weight:bold;">=</span> myint<span style="font-weight:bold;">(</span><span style="color:red">1</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> b <span style="font-weight:bold;">=</span> myint<span style="font-weight:bold;">(</span><span style="color:red">2</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>a <span style="font-weight:bold;">+</span> b<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>a <span style="font-weight:bold;">-</span> b<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+meta<span style="font-weight:bold;">.</span>__<span style="font-weight:bold;">(</span><span style="color:blue">&#39;tipo&#39;</span>, b, <span style="font-weight:bold;color:#b50546">funcao</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;color:#b50546">retorne</span> <span style="color:blue">&#39;myint&#39;</span><span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:#b50546">tipo</span><span style="font-weight:bold;">(</span>b<span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+</pre></div></div>
+
+</div>
+</div>
+
+</div>
+</section>
+<h1>Variáveis</h1>
+<a id="id_000004" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">local meta = {};</h2><div class="corpo-doc">
+<p>meta é a tabela com os métodos para esta biblioteca prisma.</p>
+
+     Obs.: ela é local portanto ao usar o inclua'' deve-se atribuir o valor de retorno:
+     ex.:   local meta = inclua'meta';
+</div>
+</section>
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

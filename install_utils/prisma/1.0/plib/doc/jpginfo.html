@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Biblioteca jpginfo.pris</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<nav id="id_00000F"  class="floating-menu">
+<div class="menu-button" title="Ocultar painel lateral" onclick="show_menu_flutuante(this, 'id_000010', 'id_00000F')">&#x2630;</div>
+<div class="com-rolagem" id="id_000010" hidden>
+<div class="caixa "><h2>Funções:</h2>
+<a href="#id_00000C">jpg.erro</a>
+<a href="#id_00000D">jpg.info</a>
+<a href="#id_00000E">jpg.info_str</a>
+
+</div>
+<div class="caixa "><h2>Variáveis:</h2>
+<a href="#id_000004">jpg </a>
+<a href="#id_000007">jpg.INFO</a>
+<a href="#id_000005">jpg.VERSAO </a>
+<a href="#id_000009">ultimo_erro </a>
+</div>
+
+</div>
+</nav>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> Biblioteca jpginfo.pris </h1>
+<h3> Adalberto. dez, 2017   </h3>
+<br>
+<div>
+Biblioteca Prisma jpeginfo-0.2 - linguagemprisma@gmail.com 
+<a href="#id_000011"> mais...</a></div>
+<div class="caixa com-borda"><div><h2 >Funções:</h2>
+<ol>
+<li><a href="#id_00000C">jpg.erro</a></li>
+<li><a href="#id_00000D">jpg.info</a></li>
+<li><a href="#id_00000E">jpg.info_str</a></li>
+</ol>
+</div>
+
+<div><h2>Variáveis:</h2>
+<ol>
+<li><a href="#id_000004">jpg </a></li>
+<li><a href="#id_000007">jpg.INFO</a></li>
+<li><a href="#id_000005">jpg.VERSAO </a></li>
+<li><a href="#id_000009">ultimo_erro </a></li>
+</ol>
+</div>
+
+</div><br>
+
+<h2 id="id_000011">Biblioteca jpginfo.pris</h2><div>
+Biblioteca Prisma jpeginfo-0.2 - linguagemprisma@gmail.com 
+</div>
+
+
+
+   
+   <p>
+    Módulo Prisma básico para obter informações de uma imagem jpeg (*.jpg, *.jpeg / *.JPG, *.JPEG)
+   </p>
+    
+<h2>Prisma Linguagem de programação em portugês   </h2>
+
+    
+   
+<div><i></i>
+<pre class="bloco com-rolagem" id="id_000002"><code>    Licença: nenhuma; use como bem entender, sem pagar e sem necessidade de repetir esta informação.
+    o autor não será responsabilizado pelo uso deste software;
+</code></pre>
+</div>
+    Use:
+    
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000003')">&#128203;</div>&nbsp;<i>exemplo_info.prisma</i><pre id="id_000003" hidden>    local jpg = inclua&#39;jpginfo&#39;;
+    local info = jpg.info();
+    
+    se nao info entao imprima(jpg.erro()); sis.saia(1); fim
+    
+    imprima(info.alt,info.larg);
+    imprima(info.cs); //DeviceRGB / DeviceGray / DeviceCMYK
+    imprima(info.bpc);//bits por componente
+    imprima(info.f); //Decoder DCTDecode
+    imprima(info.id); //JFIF
+    imprima(info.tam); //tamanho em bytes da imagem
+    imprima(info.versao); //versao jpeg;
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="font-weight:bold;color:#b50546">local</span> jpg <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;jpginfo&#39;</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">local</span> info <span style="font-weight:bold;">=</span> jpg<span style="font-weight:bold;">.</span>info<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+    <span style="font-weight:bold;color:#b50546">se</span> <span style="font-weight:bold;color:#b50546">nao</span> info <span style="font-weight:bold;color:#b50546">entao</span> <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>jpg<span style="font-weight:bold;">.</span><span style="color:#b50546">erro</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:#b50546">sis</span><span style="font-weight:bold;">.</span><span style="color:#b50546">saia</span><span style="font-weight:bold;">(</span><span style="color:red">1</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="font-weight:bold;color:#b50546">fim</span>
+    
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>info<span style="font-weight:bold;">.</span>alt,info<span style="font-weight:bold;">.</span><span style="color:#b50546">larg</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>info<span style="font-weight:bold;">.</span>cs<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//DeviceRGB / DeviceGray / DeviceCMYK
+</span>    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>info<span style="font-weight:bold;">.</span>bpc<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//bits por componente
+</span>    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>info<span style="font-weight:bold;">.</span>f<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//Decoder DCTDecode
+</span>    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>info<span style="font-weight:bold;">.</span>id<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//JFIF
+</span>    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>info<span style="font-weight:bold;">.</span>tam<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//tamanho em bytes da imagem
+</span>    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>info<span style="font-weight:bold;">.</span>versao<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//versao jpeg;
+</span></pre></div></div>
+
+</div>
+
+<h1>Funções:</h1>
+<a id="id_00000C" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao jpg.erro(s)</h2><div class="corpo-doc">
+<p>Função jpg.erro(s) - define ou retorna o último erro.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > s {string ou nulo} - se string então define uma string como último erro e a retorna, se nulo retorna o último erro. </span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     {string} - o retorno é uma string contento a descrição do último erro.</span>
+</div>
+</div>
+</section>
+<a id="id_00000D" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao jpg.info(arq)</h2><div class="corpo-doc">
+<p>Obtém as informações dentro de um arquivo JPG ;    </p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span >  arq(string) - nome do arquivo JPG a ser analisado.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (tabela) contendo os seguintes campos:  </span>
+</div>
+
+<h3>Campos da tabela retornada:</h3>
+
+<ul>
+<li> alt = altura da imagem em pixels</li>
+<li> larg = largura da imagem em pixels</li>
+<li> id = identificador da imagem JFIF</li>
+<li> cs = canal de cor (DeviceRGB ou DeviceGray ou DeviceCMYK)</li>
+<li> bpc = bits por componentes;</li>
+<li> tam = tamanho do arquivo em bytes;</li>
+<li> f = decoder para pdf: DCTDecode;</li>
+<li> versao = versão do jpeg (1.01 ou 1.02)</li>
+<li> versao_maior = 1</li>
+<li> versao_menor = 1 ou 2</li>
+</ul>
+
+</div>
+</section>
+<a id="id_00000E" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao jpg.info_str(a)</h2><div class="corpo-doc">
+<p>Obtém as informações de um JPG a partir de uma string.   </p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span >  txt_img(string) - o conteúdo da imagem lida em string \[use a função es.abra(arq_jpg, &#39;leiturabin&#39;)\]</span>
+</div>
+
+<p>
+
+ Ao optar por este método, o programador fica responsável por ler a imagem de um arquivo para uma string e depois passar a string para esta função.  
+
+</p>
+
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (tabela) contendo os seguintes campos:  </span>
+</div>
+
+<ul>
+<li> alt = altura da imagem em pixels</li>
+<li> larg = largura da imagem em pixels</li>
+<li> id = identificador da imagem JFIF</li>
+<li> cs = canal de cor (DeviceRGB ou DeviceGray ou DeviceCMYK)</li>
+<li> bpc = bits por componentes;</li>
+<li> tam = tamanho do arquivo em bytes;</li>
+<li> f = decoder para pdf: DCTDecode;</li>
+<li> versao = versão do jpeg (1.01 ou 1.02)</li>
+<li> versao_maior = 1</li>
+<li> versao_menor = 1 ou 2</li>
+</ul>
+
+</div>
+</section>
+<h1>Variáveis</h1>
+<a id="id_000004" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">local jpg = {};//namespace.</h2><div class="corpo-doc">
+<p>variável tabela contendo os métodos desta lib.</p>
+
+ * Para incluir use: local jpg = inclua'jpginfo';  
+</div>
+</section>
+<a id="id_000005" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">jpg.VERSAO = '0.2';</h2><div class="corpo-doc">
+<p>variável string contendo a versão desta lib.  </p>
+
+ * 
+---
+<h3>Use:</h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000006')">&#128203;</div>&nbsp;<i></i><pre id="id_000006" hidden>     local jpg = inclua&#39;jpginfo&#39;;
+      imprima(jpg.VERSAO); //--&gt; 0.2
+     
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+     <span style="font-weight:bold;color:#b50546">local</span> jpg <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;jpginfo&#39;</span><span style="font-weight:bold;">;</span>
+      <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>jpg<span style="font-weight:bold;">.</span>VERSAO<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt; 0.2
+</span>     
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000007" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">jpg.INFO= 'jpginfo-0.2 - biblioteca para obter informações de imagens JPG';</h2><div class="corpo-doc">
+<p>variável string contendo informações sobre esta lib.  </p>
+
+   
+
+<h3>   Use:</h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000008')">&#128203;</div>&nbsp;<i></i><pre id="id_000008" hidden>     local jpg = inclua&#39;jpginfo&#39;;
+      imprima(jpg.INFO); //--&gt; jpginfo-0.2 - biblioteca para obter informações de imagens JPG
+     
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+     <span style="font-weight:bold;color:#b50546">local</span> jpg <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;jpginfo&#39;</span><span style="font-weight:bold;">;</span>
+      <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>jpg<span style="font-weight:bold;">.</span>INFO<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt; jpginfo-0.2 - biblioteca para obter informações de imagens JPG
+</span>     
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<a id="id_000009" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">local ultimo_erro = "";  </h2><div class="corpo-doc">
+<p>Variável string contendo a descrição do último erro.</p>
+
+ * Esta variável é local (private) não podendo ser acessada fora desta biblioteca.  
+ 
+<h3>Para saber o último erro use a função  </h3>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000A')">&#128203;</div>&nbsp;<i></i><pre id="id_00000A" hidden>    local txt_erro = jpg.erro();  
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="font-weight:bold;color:#b50546">local</span> txt_erro <span style="font-weight:bold;">=</span> jpg<span style="font-weight:bold;">.</span><span style="color:#b50546">erro</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>  
+</pre></div></div>
+
+</div>
+    Para definir o último erro use:  
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_00000B')">&#128203;</div>&nbsp;<i></i><pre id="id_00000B" hidden>   jpg.erro(&#39;minha mensagem de erro aqui...&#39;);  
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+   jpg<span style="font-weight:bold;">.</span><span style="color:#b50546">erro</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;minha mensagem de erro aqui...&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>  
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

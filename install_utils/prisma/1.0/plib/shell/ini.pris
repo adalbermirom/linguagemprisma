@@ -1,0 +1,72 @@
+local shell = {};
+
+shell.info = 'Lib Prisma para facilitar comandos em shell no Linux';
+shell.VERSAO = 'shell-0.1';
+
+//principal função do shell é uma metatabela.
+
+local mt = {};
+local tab_concat=funcao(tab,sp)
+    local sp = sp ou '';
+    T(tab);
+    local s = '';
+    para i=1, #tab inicio
+        s = s .. '"' .. tab[i] .. '"'.. sp;
+    fim
+    retorne s;
+fim
+
+local __index2 = funcao(k,v)
+    retorne funcao(k2, ...) 
+        local k2 = k2 ou '';
+        local cmd = v .. ' ' .. tabela.concat({...},' ') .. ' ' .. tab_concat(k2,' ') ;
+        // imprima(cmd);
+        //*
+        //sis.execute(cmd);
+        local a, err = es.pabra(cmd, 'leitura');
+        se nao a entao erro(err); fim
+        local txt = {}; //tabela para gravar os conteúdos..
+        local lin;
+        enquanto 1 inicio
+            lin = a:leia();
+            se nao lin entao quebre; fim
+            txt[#txt+1] = lin; //cada linha em um índice de tabela.
+        fim
+        a:feche();//*/
+        defmetatabela(txt, obtmetatabela(k));
+        retorne txt;
+    fim
+
+fim
+
+mt.__index = funcao(k,v)
+   // imprima(mt.__index);
+    retorne funcao(k2, ...) 
+        local k2 = k2 ou '';
+        local cmd = v ;
+        se tipo(k2)=='tabela' entao
+            cmd = cmd .. ' ' .. tabela.concat({...},' ') .. ' ' .. tab_concat(k2,' ') ;
+        senao
+            cmd = cmd .. ' ' .. k2 .. ' ' .. tabela.concat({...},' ');
+        fim
+        //imprima(cmd);
+        //sis.execute(cmd);
+        local a, err = es.pabra(cmd, 'leitura');
+        se nao a entao erro(err); fim
+        local txt = {}; //tabela para gravar os conteúdos..
+        local lin;
+        enquanto 1 inicio
+            lin = a:leia();
+            se nao lin entao quebre; fim
+            txt[#txt+1] = lin; //cada linha em um índice de tabela.
+        fim
+        defmetatabela(txt, {__index = __index2});
+        a:feche();
+        retorne txt;
+    fim
+fim
+
+defmetatabela(shell,mt);
+
+retorne shell;
+

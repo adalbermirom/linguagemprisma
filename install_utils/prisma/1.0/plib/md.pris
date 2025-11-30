@@ -1,0 +1,1223 @@
+#!/usr/bin/env lua
+/**
+ * \file md.pris
+ * \brief Biblioteca markdown Prisma - converte arquivos de markdown para html.
+ * \date nov 2023
+ * 
+ */
+//--------------------------------------------------------------------
+// Utility functions
+// Convertido para Prisma de:
+//https://github.com/mpeterv/markdown/blob/master/markdown.lua
+//--------------------------------------------------------------------
+--{
+local desempacote = tabela.desempacote ou desempacote
+
+// Returns the result of mapping the values in table t through the function f
+local funcao map(t, f)
+   local out = {}
+   para k,v em pares(t) inicio out[k] = f(v,k) fim
+   retorne out
+fim
+
+// Functional style if statement. (NOTE: no short circuit evaluation)
+local funcao iff(t, a, b) se t entao retorne a senao retorne b fim fim
+
+// Splits the text into an array of separate lines.
+local funcao split(text, sep)
+   sep = sep ou "\n"
+   local linhas = {}
+   local pos = 1
+   enquanto verdadeiro inicio
+      local b,var_e = text:procure(sep, pos)
+      se nao b entao tabela.insira(linhas, text:corte(pos)) quebre fim
+      tabela.insira(linhas, text:corte(pos, b-1))
+      pos = var_e + 1
+   fim
+   retorne linhas
+fim
+
+// Converts tabs to spaces
+local funcao detab(text)
+   local tab_width = 4
+   local funcao nconcat(separe)
+      local spaces = -separe:tamanho()
+      enquanto spaces<1 inicio spaces = spaces + tab_width fim
+      retorne separe .. string.nconcat(" ", spaces)
+   fim
+   text = text:troque("([^\n]-)\t", nconcat)
+   retorne text
+fim
+
+// Applies string.find for every pattern in the list and returns the first separe
+local funcao find_first(s, patterns, index)
+   local res = {}
+   para _,p em ipares(patterns) inicio
+      local separe = {s:procure(p, index)}
+      se #separe>0 e (#res==0 ou separe[1] < res[1]) entao res = separe fim
+   fim
+   retorne desempacote(res)
+fim
+
+// If a replacement array is specified, the range [start, stop] in the array is replaced
+// with the replacement array and the resulting array is returned. Without a replacement
+// array the section of the array between start and stop is returned.
+local funcao splice(array, start, stop, replacement)
+   se replacement entao
+      local n = stop - start + 1
+      enquanto n > 0 inicio
+         tabela.remova(array, start)
+         n = n - 1
+      fim
+      para _,v em ipares(replacement) inicio
+         tabela.insira(array, start, v)
+      fim
+      retorne array
+   senao
+      local res = {}
+      para i = start,stop inicio
+         tabela.insira(res, array[i])
+      fim
+      retorne res
+   fim
+fim
+
+// Outdents the text one step.
+local funcao outdent(text)
+   text = "\n" .. text
+   text = text:troque("\n  ? ? ?", "\n")
+   text = text:corte(2)
+   retorne text
+fim
+
+// Indents the text one step.
+local funcao indent(text)
+   text = text:troque("\n", "\n    ")
+   retorne text
+fim
+
+// Does a simple tokenization of html data. Returns the data as a list of tokens.
+// Each token is a table with a type field (which is either "tag" or "text") e
+// a text field (which contains the original token data).
+local funcao tokenize_html(html)
+   local tokens = {}
+   local pos = 1
+   enquanto verdadeiro inicio
+      local start = find_first(html, {"<!%-%-", "<[a-z/!$]", "<%?"}, pos)
+      se nao start entao
+         tabela.insira(tokens, {tipo="text", text=html:corte(pos)})
+         quebre
+      fim
+      se start <> pos entao tabela.insira(tokens, {tipo="text", text = html:corte(pos, start-1)}) fim
+
+      local _, stop
+      se html:separe("^<!%-%-", start) entao
+         _,stop = html:procure("%-%->", start)
+      senaose html:separe("^<%?", start) entao
+         _,stop = html:procure("?>", start)
+      senao
+         _,stop = html:procure("%b<>", start)
+      fim
+      se nao stop entao
+         // error("Could not match html tag " .. html:sub(start,start+30))
+         tabela.insira(tokens, {tipo="text", text=html:corte(start, start)})
+         pos = start + 1
+      senao
+         tabela.insira(tokens, {tipo="tag", text=html:corte(start, stop)})
+         pos = stop + 1
+      fim
+   fim
+   retorne tokens
+fim
+
+//--------------------------------------------------------------------
+// Hash
+//--------------------------------------------------------------------
+
+// This is used to "hash" data into alphanumeric strings that are unique
+// in the document. (Note that this is not cryptographic hash, the hash
+// function is not one-way.) The hash procedure is used to protect parts
+// of the document from further processing.
+
+local HASH = {
+   // Has the hash been inited.
+   inited = falso,
+
+   // The unique string prepended to all hash values. This is to ensure
+   // that hash values do not accidently coincide with an actual existing
+   // string in the document.
+   identifier = "",
+
+   // Counter that counts up for each new hash instance.
+   counter = 0,
+
+   // Hash table.
+   tabela = {}
+}
+
+// Inits hashing. Creates a hash_identifier that doesn't occur anywhere
+// in the text.
+local funcao init_hash(text)
+   HASH.inited = verdadeiro
+   HASH.identifier = ""
+   HASH.counter = 0
+   HASH.tabela = {}
+
+   local s = "HASH"
+   local counter = 0
+   local id
+   enquanto verdadeiro inicio
+      id  = s .. counter
+      se nao text:procure(id, 1, verdadeiro) entao quebre fim
+      counter = counter + 1
+   fim
+   HASH.identifier = id
+fim
+
+// Returns the hashed value for s.
+local funcao hash(s)
+   tente(HASH.inited)
+   se nao HASH.tabela[s] entao
+      HASH.counter = HASH.counter + 1
+      local id = HASH.identifier .. HASH.counter .. "X"
+      HASH.tabela[s] = id
+   fim
+   retorne HASH.tabela[s]
+fim
+
+//--------------------------------------------------------------------
+// Protection
+//--------------------------------------------------------------------
+
+// The protection module is used to "protect" parts of a document
+// so that they are not modified by subsequent processing steps.
+// Protected parts are saved in a table for later unprotection
+
+// Protection var_data
+local PD = {
+   // Saved blocks that have been converted
+   blocks = {},
+
+   // Block level tags that will be protected
+   tags = {"p", "div", "h1", "h2", "h3", "h4", "h5", "h6", "blockquote",
+   "pre", "tabela", "dl", "ol", "ul", "script", "noscript", "form", "fieldset",
+   "iframe", "math", "ins", "del"}
+}
+
+// Pattern for matching a block tag that begins and ends in the leftmost
+// column and may contain indented subtags, i.e.
+// <div>
+//    A nested block.
+//    <div>
+//        Nested data.
+//     </div>
+// </div>
+local funcao block_pattern(tag)
+   retorne "\n<" .. tag .. ".-\n</" .. tag .. ">[ \t]*\n"
+fim
+
+// Pattern for matching a block tag that begins and ends with a newline
+local funcao line_pattern(tag)
+   retorne "\n<" .. tag .. ".-</" .. tag .. ">[ \t]*\n"
+fim
+
+// Protects the range of characters from start to stop in the text e
+// returns the protected string.
+local funcao protect_range(text, start, stop)
+   local s = text:corte(start, stop)
+   local h = hash(s)
+   PD.blocks[h] = s
+   text = text:corte(1,start) .. h .. text:corte(stop)
+   retorne text
+fim
+
+// Protect every part of the text that matches any of the patterns. The first
+// matching pattern is protected first, etc.
+local funcao protect_matches(text, patterns)
+   enquanto verdadeiro inicio
+      local start, stop = find_first(text, patterns)
+      se nao start entao quebre fim
+      text = protect_range(text, start, stop)
+   fim
+   retorne text
+fim
+
+// Protects blocklevel tags in the specified text
+local funcao protect(text)
+   // First protect potentially nested block tags
+   text = protect_matches(text, map(PD.tags, block_pattern))
+   // Then protect block tags at the line level.
+   text = protect_matches(text, map(PD.tags, line_pattern))
+   // Protect <hr> and comment tags
+   text = protect_matches(text, {"\n<hr[^>]->[ \t]*\n"})
+   text = protect_matches(text, {"\n<!%-%-.-%-%->[ \t]*\n"})
+   retorne text
+fim
+
+// Returns true if the string s is a hash resulting from protection
+local funcao is_protected(s)
+   retorne PD.blocks[s]
+fim
+
+// Unprotects the specified text by expanding all the nonces
+local funcao unprotect(text)
+   para k,v em pares(PD.blocks) inicio
+      v = v:troque("%%", "%%%%")
+      text = text:troque(k, v)
+   fim
+   retorne text
+fim
+
+
+//--------------------------------------------------------------------
+// Block transform
+//--------------------------------------------------------------------
+
+// The block transform functions transform the text on the block level.
+// They work with the text as an array of lines rather than as individual
+// characters.
+
+// Returns true if the line is a ruler of (char) characters.
+// The line must contain at least three char characters and contain only spaces e
+// char characters.
+local funcao is_ruler_of(line, car)
+   se nao line:separe("^[ %" .. car .. "]*$") entao retorne falso fim
+   se nao line:separe("%" .. car .. ".*%" .. car .. ".*%" .. car) entao retorne falso fim
+   retorne verdadeiro
+fim
+
+// Identifies the block level formatting present in the line
+local funcao classify(line)
+   local info = {line = line, text = line}
+
+   se line:separe("^    ") entao
+      info.tipo = "indented"
+      info.outdented = line:corte(5)
+      retorne info
+   fim
+
+   para _,c em ipares({'*', '-', '_', '='}) inicio
+      se is_ruler_of(line, c) entao
+         info.tipo = "ruler"
+         info.ruler_char = c
+         retorne info
+      fim
+   fim
+
+   se line == "" entao
+      info.tipo = "blank"
+      retorne info
+   fim
+
+   se line:separe("^(#+)[ \t]*(.-)[ \t]*#*[ \t]*$") entao
+      local m1, m2 = line:separe("^(#+)[ \t]*(.-)[ \t]*#*[ \t]*$")
+      info.tipo = "header"
+      info.level = m1:tamanho()
+      info.text = m2
+      retorne info
+   fim
+
+   se line:separe("^ ? ? ?(%d+)%.[ \t]+(.+)") entao
+      local number, text = line:separe("^ ? ? ?(%d+)%.[ \t]+(.+)")
+      info.tipo = "list_item"
+      info.list_type = "numerico"
+      info.number = 0 + number
+      info.text = text
+      retorne info
+   fim
+
+   se line:separe("^ ? ? ?([%*%+%-])[ \t]+(.+)") entao
+      local bullet, text = line:separe("^ ? ? ?([%*%+%-])[ \t]+(.+)")
+      info.tipo = "list_item"
+      info.list_type = "bullet"
+      info.bullet = bullet
+      info.text= text
+      retorne info
+   fim
+
+   se line:separe("^>[ \t]?(.*)") entao
+      info.tipo = "blockquote"
+      info.text = line:separe("^>[ \t]?(.*)")
+      retorne info
+   fim
+
+   se is_protected(line) entao
+      info.tipo = "raw"
+      info.html = unprotect(line)
+      retorne info
+   fim
+
+   info.tipo = "normal"
+   retorne info
+fim
+
+// Find headers constisting of a normal line followed by a ruler and converts them to
+// header entries.
+local funcao headers(array)
+   local i = 1
+   enquanto i <= #array - 1 inicio
+      se array[i].tipo  == "normal" e array[i+1].tipo == "ruler" e
+         (array[i+1].ruler_char == "-" ou array[i+1].ruler_char == "=") entao
+         local info = {line = array[i].line}
+         info.text = info.line
+         info.tipo = "header"
+         info.level = iff(array[i+1].ruler_char == "=", 1, 2)
+         tabela.remova(array, i+1)
+         array[i] = info
+      fim
+      i = i + 1
+   fim
+   retorne array
+fim
+
+// Forward declarations
+local block_transform, span_transform, encode_code
+
+// Convert lines to html code
+local funcao blocks_to_html(linhas, no_paragraphs)
+   local out = {}
+   local i = 1
+   enquanto i <= #linhas inicio
+      local line = linhas[i]
+      se line.tipo == "ruler" entao
+         tabela.insira(out, "<hr/>")
+      senaose line.tipo == "raw" entao
+         tabela.insira(out, line.html)
+      senaose line.tipo == "normal" entao
+         local s = line.line
+
+         enquanto i+1 <= #linhas e linhas[i+1].tipo == "normal" inicio
+            i = i + 1
+            s = s .. "\n" .. linhas[i].line
+         fim
+
+         se no_paragraphs entao
+            tabela.insira(out, span_transform(s))
+         senao
+            tabela.insira(out, "<p>" .. span_transform(s) .. "</p>")
+         fim
+      senaose line.tipo == "header" entao
+         local s = "<h" .. line.level .. ">" .. span_transform(line.text) .. "</h" .. line.level .. ">"
+         tabela.insira(out, s)
+      senao
+         tabela.insira(out, line.line)
+      fim
+      i = i + 1
+   fim
+   retorne out
+fim
+
+// Find list blocks and convert them to protected data blocks
+local funcao lists(array, sublist)
+   local funcao process_list(arr)
+      local funcao any_blanks(arr)
+         para i = 1, #arr inicio
+            se arr[i].tipo == "blank" entao retorne verdadeiro fim
+         fim
+         retorne falso
+      fim
+
+      local funcao split_list_items(arr)
+         local acc = {arr[1]}
+         local res = {}
+         para i=2,#arr inicio
+            se arr[i].tipo == "list_item" entao
+               tabela.insira(res, acc)
+               acc = {arr[i]}
+            senao
+               tabela.insira(acc, arr[i])
+            fim
+         fim
+         tabela.insira(res, acc)
+         retorne res
+      fim
+
+      local funcao process_list_item(linhas, block)
+         enquanto linhas[#linhas].tipo == "blank" inicio
+            tabela.remova(linhas)
+         fim
+
+         local itemtext = linhas[1].text
+         para i=2,#linhas inicio
+            itemtext = itemtext .. "\n" .. outdent(linhas[i].line)
+         fim
+         se block entao
+            itemtext = block_transform(itemtext, verdadeiro)
+            se nao itemtext:procure("<pre>") entao itemtext = indent(itemtext) fim
+            retorne "    <li>" .. itemtext .. "</li>"
+         senao
+            local linhas = split(itemtext)
+            linhas = map(linhas, classify)
+            linhas = lists(linhas, verdadeiro)
+            linhas = blocks_to_html(linhas, verdadeiro)
+            itemtext = tabela.concat(linhas, "\n")
+            se nao itemtext:procure("<pre>") entao itemtext = indent(itemtext) fim
+            retorne "    <li>" .. itemtext .. "</li>"
+         fim
+      fim
+
+      local block_list = any_blanks(arr)
+      local items = split_list_items(arr)
+      local out = ""
+      para _, item em ipares(items) inicio
+         out = out .. process_list_item(item, block_list) .. "\n"
+      fim
+      se arr[1].list_type == "numerico" entao
+         retorne "<ol>\n" .. out .. "</ol>"
+      senao
+         retorne "<ul>\n" .. out .. "</ul>"
+      fim
+   fim
+
+   // Finds the range of lines composing the first list in the array. A list
+   // starts with (^ list_item) or (blank list_item) and ends with
+   // (blank* $) or (blank normal).
+   //
+   // A sublist can start with just (list_item) does not need a blank...
+   local funcao find_list(array, sublist)
+      local funcao find_list_start(array, sublist)
+         se array[1].tipo == "list_item" entao retorne 1 fim
+         se sublist entao
+            para i = 1,#array inicio
+               se array[i].tipo == "list_item" entao retorne i fim
+            fim
+         senao
+            para i = 1, #array-1 inicio
+               se array[i].tipo == "blank" e array[i+1].tipo == "list_item" entao
+                  retorne i+1
+               fim
+            fim
+         fim
+         retorne nulo
+      fim
+      local funcao find_list_end(array, start)
+         local pos = #array
+         para i = start, #array-1 inicio
+            se array[i].tipo == "blank" e array[i+1].tipo <> "list_item"
+               e array[i+1].tipo <> "indented" e array[i+1].tipo <> "blank" entao
+               pos = i-1
+               quebre
+            fim
+         fim
+         enquanto pos > start e array[pos].tipo == "blank" inicio
+            pos = pos - 1
+         fim
+         retorne pos
+      fim
+
+      local start = find_list_start(array, sublist)
+      se nao start entao retorne nulo fim
+      retorne start, find_list_end(array, start)
+   fim
+
+   enquanto verdadeiro inicio
+      local start, stop = find_list(array, sublist)
+      se nao start entao quebre fim
+      local text = process_list(splice(array, start, stop))
+      local info = {
+         line = text,
+         tipo = "raw",
+         html = text
+      }
+      array = splice(array, start, stop, {info})
+   fim
+
+   // Convert any remaining list items to normal
+   para _,line em ipares(array) inicio
+      se line.tipo == "list_item" entao line.tipo = "normal" fim
+   fim
+
+   retorne array
+fim
+
+// Find and convert blockquote markers.
+local funcao blockquotes(linhas)
+   local funcao find_blockquote(linhas)
+      local start
+      para i,line em ipares(linhas) inicio
+         se line.tipo == "blockquote" entao
+            start = i
+            quebre
+         fim
+      fim
+      se nao start entao retorne nulo fim
+
+      local stop = #linhas
+      para i = start+1, #linhas inicio
+         se linhas[i].tipo == "blank" ou linhas[i].tipo == "blockquote" entao
+         senaose linhas[i].tipo == "normal" entao
+            se linhas[i-1].tipo == "blank" entao stop = i-1 quebre fim
+         senao
+            stop = i-1 quebre
+         fim
+      fim
+      enquanto linhas[stop].tipo == "blank" inicio stop = stop - 1 fim
+      retorne start, stop
+   fim
+
+   local funcao process_blockquote(linhas)
+      local raw = linhas[1].text
+      para i = 2,#linhas inicio
+         raw = raw .. "\n" .. linhas[i].text
+      fim
+      local bt = block_transform(raw)
+      se nao bt:procure("<pre>") entao bt = indent(bt) fim
+      retorne "<blockquote>\n    " .. bt ..
+         "\n</blockquote>"
+   fim
+
+   enquanto verdadeiro inicio
+      local start, stop = find_blockquote(linhas)
+      se nao start entao quebre fim
+      local text = process_blockquote(splice(linhas, start, stop))
+      local info = {
+         line = text,
+         tipo = "raw",
+         html = text
+      }
+      linhas = splice(linhas, start, stop, {info})
+   fim
+   retorne linhas
+fim
+
+// Find and convert codeblocks.
+local funcao codeblocks(linhas)
+   local funcao find_codeblock(linhas)
+      local start
+      para i,line em ipares(linhas) inicio
+         se line.tipo == "indented" entao start = i quebre fim
+      fim
+      se nao start entao retorne nulo fim
+
+      local stop = #linhas
+      para i = start+1, #linhas inicio
+         se linhas[i].tipo <> "indented" e linhas[i].tipo <> "blank" entao
+            stop = i-1
+            quebre
+         fim
+      fim
+      enquanto linhas[stop].tipo == "blank" inicio stop = stop - 1 fim
+      retorne start, stop
+   fim
+
+   local funcao process_codeblock(linhas)
+      local raw = detab(encode_code(outdent(linhas[1].line)))
+      para i = 2,#linhas inicio
+         raw = raw .. "\n" .. detab(encode_code(outdent(linhas[i].line)))
+      fim
+      retorne "<pre><code>" .. raw .. "\n</code></pre>"
+   fim
+
+   enquanto verdadeiro inicio
+      local start, stop = find_codeblock(linhas)
+      se nao start entao quebre fim
+      local text = process_codeblock(splice(linhas, start, stop))
+      local info = {
+         line = text,
+         tipo = "raw",
+         html = text
+      }
+      linhas = splice(linhas, start, stop, {info})
+   fim
+   retorne linhas
+fim
+
+// Perform all the block level transforms
+funcao block_transform(text, sublist)
+   local linhas = split(text)
+   linhas = map(linhas, classify)
+   linhas = headers(linhas)
+   linhas = lists(linhas, sublist)
+   linhas = codeblocks(linhas)
+   linhas = blockquotes(linhas)
+   linhas = blocks_to_html(linhas)
+   local text = tabela.concat(linhas, "\n")
+   retorne text
+fim
+
+//--------------------------------------------------------------------
+// Span transform
+//--------------------------------------------------------------------
+
+// Functions for transforming the text at the span level.
+
+// These characters may need to be escaped because they have a special
+// meaning in markdown.
+local escape_chars = "'\\`*_{}[]()>#+-.!'"
+local escape_table = {}
+
+local funcao init_escape_table()
+   escape_table = {}
+   para i = 1,#escape_chars inicio
+      local c = escape_chars:corte(i,i)
+      escape_table[c] = hash(c)
+   fim
+fim
+
+// Adds a new escape to the escape table.
+local funcao add_escape(text)
+   se nao escape_table[text] entao
+      escape_table[text] = hash(text)
+   fim
+   retorne escape_table[text]
+fim
+
+// Encode backspace-escaped characters in the markdown source.
+local funcao encode_backslash_escapes(t)
+   para i=1,escape_chars:tamanho() inicio
+      local c = escape_chars:corte(i,i)
+      t = t:troque("\\%" .. c, escape_table[c])
+   fim
+   retorne t
+fim
+
+// Escape characters that should not be disturbed by markdown.
+local funcao escape_special_chars(text)
+   local tokens = tokenize_html(text)
+
+   local out = ""
+   para _, token em ipares(tokens) inicio
+      local t = token.text
+      se token.tipo == "tag" entao
+         // In tags, encode * and _ so they don't conflict with their use in markdown.
+         t = t:troque("%*", escape_table["*"])
+         t = t:troque("%_", escape_table["_"])
+      senao
+         t = encode_backslash_escapes(t)
+      fim
+      out = out .. t
+   fim
+   retorne out
+fim
+
+// Unescape characters that have been encoded.
+local funcao unescape_special_chars(t)
+   local tin = t
+   para k,v em pares(escape_table) inicio
+      k = k:troque("%%", "%%%%")
+      t = t:troque(v,k)
+   fim
+   se t <> tin entao t = unescape_special_chars(t) fim
+   retorne t
+fim
+
+// Encode/escape certain characters inside Markdown code runs.
+// The point is that in code, these characters are literals,
+// and lose their special Markdown meanings.
+funcao encode_code(s)
+   s = s:troque("%&", "&amp;")
+   s = s:troque("<", "&lt;")
+   s = s:troque(">", "&gt;")
+   para k,v em pares(escape_table) inicio
+      s = s:troque("%"..k, v)
+   fim
+   retorne s
+fim
+
+// Handle backtick blocks.
+local funcao code_spans(s)
+   s = s:troque("\\\\", escape_table["\\"])
+   s = s:troque("\\`", escape_table["`"])
+
+   local pos = 1
+   enquanto verdadeiro inicio
+      local start, stop = s:procure("`+", pos)
+      se nao start entao retorne s fim
+      local count = stop - start + 1
+      // Find a matching numbert of backticks
+      local estart, estop = s:procure(string.nconcat("`", count), stop+1)
+      local brstart = s:procure("\n", stop+1)
+      se estart e (nao brstart ou estart < brstart) entao
+         local code = s:corte(stop+1, estart-1)
+         code = code:troque("^[ \t]+", "")
+         code = code:troque("[ \t]+$", "")
+         code = code:troque(escape_table["\\"], escape_table["\\"] .. escape_table["\\"])
+         code = code:troque(escape_table["`"], escape_table["\\"] .. escape_table["`"])
+         code = "<code>" .. encode_code(code) .. "</code>"
+         code = add_escape(code)
+         s = s:corte(1, start-1) .. code .. s:corte(estop+1)
+         pos = start + code:tamanho()
+      senao
+         pos = stop + 1
+      fim
+   fim
+   retorne s
+fim
+
+// Encode alt text... enodes &, and ".
+local funcao encode_alt(s)
+   se nao s entao retorne s fim
+   s = s:troque('&', '&amp;')
+   s = s:troque('"', '&quot;')
+   s = s:troque('<', '&lt;')
+   retorne s
+fim
+
+// Forward declaration for link_db as returned by strip_link_definitions.
+local link_database
+
+// Handle image references
+local funcao images(text)
+   local funcao reference_link(alt, id)
+      alt = encode_alt(alt:separe("%b[]"):corte(2,-2))
+      id = id:separe("%[(.*)%]"):minuscula()
+      se id == "" entao id = text:minuscula() fim
+      link_database[id] = link_database[id] ou {}
+      se nao link_database[id].url entao retorne nulo fim
+      local url = link_database[id].url ou id
+      url = encode_alt(url)
+      local title = encode_alt(link_database[id].title)
+      se title entao title = " title=\"" .. title .. "\"" senao title = "" fim
+      retorne add_escape ('<img src="' .. url .. '" alt="' .. alt .. '"' .. title .. "/>")
+   fim
+
+   local funcao inline_link(alt, link)
+      alt = encode_alt(alt:separe("%b[]"):corte(2,-2))
+      local url, title = link:separe("%(<?(.-)>?[ \t]*['\"](.+)['\"]")
+      url = url ou link:separe("%(<?(.-)>?%)")
+      url = encode_alt(url)
+      title = encode_alt(title)
+      se title entao
+         retorne add_escape('<img src="' .. url .. '" alt="' .. alt .. '" title="' .. title .. '"/>')
+      senao
+         retorne add_escape('<img src="' .. url .. '" alt="' .. alt .. '"/>')
+      fim
+   fim
+
+   text = text:troque("!(%b[])[ \t]*\n?[ \t]*(%b[])", reference_link)
+   text = text:troque("!(%b[])(%b())", inline_link)
+   retorne text
+fim
+
+// Handle anchor references
+local funcao anchors(text)
+   local funcao reference_link(text, id)
+      text = text:separe("%b[]"):corte(2,-2)
+      id = id:separe("%b[]"):corte(2,-2):minuscula()
+      se id == "" entao id = text:minuscula() fim
+      link_database[id] = link_database[id] ou {}
+      se nao link_database[id].url entao retorne nulo fim
+      local url = link_database[id].url ou id
+      url = encode_alt(url)
+      local title = encode_alt(link_database[id].title)
+      se title entao title = " title=\"" .. title .. "\"" senao title = "" fim
+      retorne add_escape("<a href=\"" .. url .. "\"" .. title .. ">") .. text .. add_escape("</a>")
+   fim
+
+   local funcao inline_link(text, link)
+      text = text:separe("%b[]"):corte(2,-2)
+      local url, title = link:separe("%(<?(.-)>?[ \t]*['\"](.+)['\"]")
+      title = encode_alt(title)
+      url  = url ou  link:separe("%(<?(.-)>?%)") ou ""
+      url = encode_alt(url)
+      se title entao
+         retorne add_escape("<a href=\"" .. url .. "\" title=\"" .. title .. "\">") .. text .. "</a>"
+      senao
+         retorne add_escape("<a href=\"" .. url .. "\">") .. text .. add_escape("</a>")
+      fim
+   fim
+
+   text = text:troque("(%b[])[ \t]*\n?[ \t]*(%b[])", reference_link)
+   text = text:troque("(%b[])(%b())", inline_link)
+   retorne text
+fim
+
+// Handle auto links, i.e. <http://www.google.com/>.
+local funcao auto_links(text)
+   local funcao link(s)
+      retorne add_escape("<a href=\"" .. s .. "\">") .. s .. "</a>"
+   fim
+   // Encode chars as a mix of dec and hex entitites to (perhaps) fool
+   // spambots.
+   local funcao encode_email_address(s)
+      // Use a deterministic encoding to make unit testing possible.
+      // Code 45% hex, 45% dec, 10% plain.
+      local hex = {code = funcao(c) retorne "&#x" .. string.formate("%x", c:cod()) .. ";" fim, count = 1, rate = 0.45}
+      local dec = {code = funcao(c) retorne "&#" .. c:cod() .. ";" fim, count = 0, rate = 0.45}
+      local plain = {code = funcao(c) retorne c fim, count = 0, rate = 0.1}
+      local codes = {hex, dec, plain}
+      local funcao swap(t,k1,k2) local temp = t[k2] t[k2] = t[k1] t[k1] = temp fim
+
+      local out = ""
+      para i = 1,s:tamanho() inicio
+         para _,code em ipares(codes) inicio code.count = code.count + code.rate fim
+         se codes[1].count < codes[2].count entao swap(codes,1,2) fim
+         se codes[2].count < codes[3].count entao swap(codes,2,3) fim
+         se codes[1].count < codes[2].count entao swap(codes,1,2) fim
+
+         local code = codes[1]
+         local c = s:corte(i,i)
+         // Force encoding of "@" to make email address more invisible.
+         se c == "@" e code == plain entao code = codes[2] fim
+         out = out .. code.code(c)
+         code.count = code.count - 1
+      fim
+      retorne out
+   fim
+   local funcao mail(s)
+      s = unescape_special_chars(s)
+      local address = encode_email_address("mailto:" .. s)
+      local text = encode_email_address(s)
+      retorne add_escape("<a href=\"" .. address .. "\">") .. text .. "</a>"
+   fim
+   // links
+   text = text:troque("<(https?:[^'\">%s]+)>", link)
+   text = text:troque("<(ftp:[^'\">%s]+)>", link)
+
+   // mail
+   text = text:troque("<mailto:([^'\">%s]+)>", mail)
+   text = text:troque("<([-.%w]+%@[-.%w]+)>", mail)
+   retorne text
+fim
+
+// Encode free standing amps (&) and angles (<)... note that this does nao
+// encode free >.
+local funcao amps_and_angles(s)
+   // encode amps not part of &..; expression
+   local pos = 1
+   enquanto verdadeiro inicio
+      local amp = s:procure("&", pos)
+      se nao amp entao quebre fim
+      local semi = s:procure(";", amp+1)
+      local stop = s:procure("[ \t\n&]", amp+1)
+      se nao semi ou (stop e stop < semi) ou (semi - amp) > 15 entao
+         s = s:corte(1,amp-1) .. "&amp;" .. s:corte(amp+1)
+         pos = amp+1
+      senao
+         pos = amp+1
+      fim
+   fim
+
+   // encode naked <'s
+   s = s:troque("<([^a-zA-Z/?$!])", "&lt;%1")
+   s = s:troque("<$", "&lt;")
+
+   // what about >, nothing done in the original markdown source to handle them
+   retorne s
+fim
+
+// Handles emphasis markers (* and _) in the text.
+local funcao emphasis(text)
+   para _, s em ipares {"%*%*", "%_%_"} inicio
+      text = text:troque(s .. "([^%s][%*%_]?)" .. s, "<strong>%1</strong>")
+      text = text:troque(s .. "([^%s][^<>]-[^%s][%*%_]?)" .. s, "<strong>%1</strong>")
+   fim
+   para _, s em ipares {"%*", "%_"} inicio
+      text = text:troque(s .. "([^%s_])" .. s, "<em>%1</em>")
+      text = text:troque(s .. "(<strong>[^%s_]</strong>)" .. s, "<em>%1</em>")
+      text = text:troque(s .. "([^%s_][^<>_]-[^%s_])" .. s, "<em>%1</em>")
+      text = text:troque(s .. "([^<>_]-<strong>[^<>_]-</strong>[^<>_]-)" .. s, "<em>%1</em>")
+   fim
+   retorne text
+fim
+
+// Handles line break markers in the text.
+local funcao line_breaks(text)
+   retorne text:troque("  +\n", " <br/>\n")
+fim
+
+// Perform all span level transforms.
+funcao span_transform(text)
+   text = code_spans(text)
+   text = escape_special_chars(text)
+   text = images(text)
+   text = anchors(text)
+   text = auto_links(text)
+   text = amps_and_angles(text)
+   text = emphasis(text)
+   text = line_breaks(text)
+   retorne text
+fim
+
+//--------------------------------------------------------------------
+// Markdown
+//--------------------------------------------------------------------
+
+// Cleanup the text by normalizing some possible variations to make further
+// processing easier.
+local funcao cleanup(text)
+   // Standardize line endings
+   text = text:troque("\r\n", "\n")  // DOS to UNIX
+   text = text:troque("\r", "\n")    // Mac to UNIX
+
+   // Convert all tabs to spaces
+   text = detab(text)
+
+   // Strip lines with only spaces and tabs
+   enquanto verdadeiro inicio
+      local subs
+      text, subs = text:troque("\n[ \t]+\n", "\n\n")
+      se subs == 0 entao quebre fim
+   fim
+
+   retorne "\n" .. text .. "\n"
+fim
+
+// Strips link definitions from the text and stores the data in a lookup table.
+local funcao strip_link_definitions(text)
+   local linkdb = {}
+
+   local funcao link_def(id, url, title)
+      id = id:separe("%[(.+)%]"):minuscula()
+      linkdb[id] = linkdb[id] ou {}
+      linkdb[id].url = url ou linkdb[id].url
+      linkdb[id].title = title ou linkdb[id].title
+      retorne ""
+   fim
+
+   local def_no_title = "\n ? ? ?(%b[]):[ \t]*\n?[ \t]*<?([^%s>]+)>?[ \t]*"
+   local def_title1 = def_no_title .. "[ \t]+\n?[ \t]*[\"'(]([^\n]+)[\"')][ \t]*"
+   local def_title2 = def_no_title .. "[ \t]*\n[ \t]*[\"'(]([^\n]+)[\"')][ \t]*"
+   local def_title3 = def_no_title .. "[ \t]*\n?[ \t]+[\"'(]([^\n]+)[\"')][ \t]*"
+
+   text = text:troque(def_title1, link_def)
+   text = text:troque(def_title2, link_def)
+   text = text:troque(def_title3, link_def)
+   text = text:troque(def_no_title, link_def)
+   retorne text, linkdb
+fim
+
+--}
+
+/// \fn funcao markdown
+/// \brief Função markdown(text) - recebe um texto em markdown e converte para html
+/// \param text(string) - é o conteúdo em markdown para ser convertido para html
+///  text pode ser uma string em uma variável diretamente ou um arquivo lido para uma variável.
+/// \returns (string) - o retorno é uma string contendo o código html já convertido.
+// Main markdown processing funcao
+local funcao markdown(text)--{
+   init_hash(text)
+   init_escape_table()
+
+   text = cleanup(text)
+   text = protect(text)
+   text, link_database = strip_link_definitions(text)
+   text = block_transform(text)
+   text = unescape_special_chars(text)
+   retorne text
+fim
+
+//--------------------------------------------------------------------
+// End of modulo
+//--------------------------------------------------------------------
+
+// For compatibility, set markdown function as a global
+_G.markdown = markdown
+
+// Class for parsing command-line options
+local OptionParser = {}
+OptionParser.__index = OptionParser
+
+// Creates a new option parser
+funcao OptionParser:new()
+   local o = {short = {}, long = {}}
+   defmetatabela(o, este)
+   retorne o
+fim
+
+// Calls f() whenever a flag with specified short and long name is encountered
+funcao OptionParser:flag(short, long, f)
+   local info = {tipo = "flag", f = f}
+   se short entao este.short[short] = info fim
+   se long entao este.long[long] = info fim
+fim
+
+// Calls f(param) whenever a parameter flag with specified short and long name is encountered
+funcao OptionParser:param(short, long, f)
+   local info = {tipo = "param", f = f}
+   se short entao este.short[short] = info fim
+   se long entao este.long[long] = info fim
+fim
+
+// Calls f(v) for each non-flag argument
+funcao OptionParser:args(f)
+   este.args = f
+fim
+
+// Runs the option parser for the specified set of arguments. Returns true if all arguments
+// where successfully parsed and false otherwise.
+funcao OptionParser:run(var_args)
+   local pos = 1
+   enquanto pos <= #var_args inicio
+      local args = var_args[pos]
+      se args == "--" entao
+         para i=pos+1,#var_args inicio
+            se este.args entao este.args(var_args[i]) fim
+            retorne verdadeiro
+         fim
+      fim
+      se args:separe("^%-%-") entao
+         local info = este.long[args:corte(3)]
+         se nao info entao imprima("Unknown flag: " .. args) retorne falso fim
+         se info.tipo == "flag" entao
+            info.f()
+            pos = pos + 1
+         senao
+            local param = var_args[pos+1]
+            se nao param entao imprima("No parameter for flag: " .. args) retorne falso fim
+            info.f(param)
+            pos = pos+2
+         fim
+      senaose args:separe("^%-") entao
+         para i=2,args:tamanho() inicio
+            local c = args:corte(i,i)
+            local info = este.short[c]
+            se nao info entao imprima("Unknown flag: -" .. c) retorne falso fim
+            se info.tipo == "flag" entao
+               info.f()
+            senao
+               se i == args:tamanho() entao
+                  local param = var_args[pos+1]
+                  se nao param entao imprima("No parameter for flag: -" .. c) retorne falso fim
+                  info.f(param)
+                  pos = pos + 1
+               senao
+                  local param = args:corte(i+1)
+                  info.f(param)
+               fim
+               quebre
+            fim
+         fim
+         pos = pos + 1
+      senao
+         se este.args entao este.args(args) fim
+         pos = pos + 1
+      fim
+   fim
+   retorne verdadeiro
+fim
+
+local funcao read_file(plib, descr)
+   local file = es.abra(plib) ou erro("Could not open " .. descr .. " file: " .. plib)
+   local contents = file:leia("*ta") ou erro("Could not read " .. descr .. " from " .. plib)
+   file:feche()
+   retorne contents
+fim
+
+// Handles the case when markdown is run from the command line
+local funcao run_command_line(args)
+   // Generate output for input s given options
+   local funcao run(s, options)
+      s = markdown(s)
+      se nao options.wrap_header entao retorne s fim
+      local header
+      se options.header entao
+         header = read_file(options.header, "header")
+      senao
+         header = [[
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=CHARSET" />
+    <title>TITLE</title>
+    <link rel="stylesheet" tipo="text/css" href="STYLESHEET" />
+</head>
+<body>
+]]
+         local title = options.title ou s:separe("<h1>(.-)</h1>") ou s:separe("<h2>(.-)</h2>") ou
+            s:separe("<h3>(.-)</h3>") ou "Untitled"
+         header = header:troque("TITLE", title)
+         se options.inline_style entao
+            local style = read_file(options.stylesheet, "style sheet")
+            header = header:troque('<link rel="stylesheet" type="text/css" href="STYLESHEET" />',
+               "<style type=\"text/css\"><!--\n" .. style .. "\n--></style>")
+         senao
+            header = header:troque("STYLESHEET", options.stylesheet)
+         fim
+         header = header:troque("CHARSET", options.charset)
+      fim
+      local footer = "</body></html>"
+      se options.footer entao
+         footer = read_file(options.footer, "footer")
+      fim
+      retorne header .. s .. footer
+   fim
+
+   // Generate output path name from input path name given options.
+   local funcao outpath(plib, options)
+      se options.append entao retorne plib .. ".html" fim
+      local m = plib:separe("^(.+%.html)[^/\\]+$") se m entao retorne m fim
+      m = plib:separe("^(.+%.)[^/\\]*$") se m e plib <> m .. "html" entao retorne m .. "html" fim
+      retorne plib .. ".html"
+   fim
+
+   // Default commandline options
+   local options = {
+      wrap_header = verdadeiro,
+      header = nulo,
+      footer = nulo,
+      charset = "utf-8",
+      title = nulo,
+      stylesheet = "default.css",
+      inline_style = falso
+   }
+   local help = [[
+Usage: markdown.lua [OPTION] [FILE]
+Runs the markdown text markup to HTML converter on each file specified on the
+command line. If no files are specified, runs on standard entrada.
+
+No header:
+    -n, //no-wrap        Don't wrap the output in <html>... tags.
+Custom header:
+    -var_e, //header FILE    Use content of FILE for header.
+    -f, //footer FILE    Use content of FILE for footer.
+Generated header:
+    -c, //charset SET    Specifies charset (default utf-8).
+    -i, //title TITLE    Specifies title (default from first <h1> tag).
+    -s, //style STYLE    Specifies style sheet file (default default.css).
+    -l, //inline-style   Include the style sheet file inline in the header.
+Generated files:
+    -a, //append         Append .html extension (instead of replacing).
+Other options:
+    -h, //help           Print this help text.
+    -t, //test           Run the unit tests.
+]]
+
+   local run_stdin = verdadeiro
+   local op = OptionParser:new()
+   op:flag("n", "no-wrap", funcao () options.wrap_header = falso fim)
+   op:param("e", "header", funcao (x) options.header = x fim)
+   op:param("f", "footer", funcao (x) options.footer = x fim)
+   op:param("c", "charset", funcao (x) options.charset = x fim)
+   op:param("i", "title", funcao(x) options.title = x fim)
+   op:param("s", "style", funcao(x) options.stylesheet = x fim)
+   op:flag("l", "inline-style", funcao() options.inline_style = verdadeiro fim)
+   op:flag("adicao", "append", funcao() options.append = verdadeiro fim)
+   op:flag("t", "test", funcao()
+      local n = args[0]:troque("markdown%.lua", "markdown-tests.lua")
+      local f = es.abra(n)
+      se f entao
+         f:feche()
+         pacote.loaded.markdown = markdown
+         executearquivo(n)
+      senao
+         erro("Cannot find markdown-tests.lua")
+      fim
+      run_stdin = falso
+   fim)
+   op:flag("h", "help", funcao() imprima(help) run_stdin = falso fim)
+   op:args(funcao(plib)
+      local s = read_file(plib, "input")
+      s = run(s, options)
+      local file = es.abra(outpath(plib, options), "escrita") ou erro("Could not open output file: " .. outpath(plib, options))
+      file:escreva(s)
+      file:feche()
+      run_stdin = falso
+   fim
+   )
+
+   se nao op:run(args) entao
+      imprima(help)
+      run_stdin = falso
+   fim
+
+   se run_stdin entao
+      local s = es.leia("*t")
+      s = run(s, options)
+      es.escreva(s)
+   fim
+fim
+--} //esses --} e --{ são adaptações para o doxygen visto que ele aceita fontes C e não em Prisma.
+
+retorne markdown
+

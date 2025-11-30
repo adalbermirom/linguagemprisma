@@ -1,0 +1,349 @@
+
+local dir = inclua'igdir';
+/*
+funcao e_simblink(arq) //verifica se é link simbolico.
+ local a = dir.atributos(arq) 
+  local s = dir.linksimatributos(arq) 
+  retorne a e s e ( a.disp <> s.disp ou a.ino <> s.ino ) 
+fim 
+*/
+
+local dirbarra = '/'; //linux
+se sis.nome=='win' entao //se windows entao barra é diferente.
+  dirbarra = '\\';
+fim
+
+local funcao leia_arquivobin(a)
+ // se e_simblink(a) entao imprima('nao suporta links simbolico ainda') retorne nulo fim
+  
+  se tipo(a)<>'string' entao 
+    retorne falso,'Erro: espera-se <string> ao invés de '..tipo(a); 
+  fim
+  local b,err = es.abra(a,'leiturabin');
+  se b entao
+    src = b:leia('*t');
+    b:feche();
+    retorne src;
+  senao
+    retorne falso,err;
+  fim  
+fim
+
+local funcao grave_arquivobin(a,src)
+  se tipo(a)<>'string' entao 
+    retorne falso,'Erro: espera-se <string> ao invés de '..tipo(a); 
+  fim
+  local b,err = es.abra(a,'escritabin');
+  se b entao
+    b:escreva(src);
+    b:feche();
+    retorne verdadeiro;
+  senao
+    retorne falso,err;
+  fim  
+fim
+
+
+//criando a tabela principal 
+pac={};
+//assinatura e cabecalho de arquivo .pcte
+local CAB = '\027\000\001\003'
+pac.cab = CAB;
+pac.VERSAO = '0.1-Beta';
+pac.versao_code = '\001';
+pac.INFO = '\
+Biblioteca Prisma para empacotamento de arquivos em um único arquivo.\
+\
+*** \
+Não empacota pasta recursivamente, apenas uma lista de arquivos.\
+Simples, mas funcional, será aprimorada em breve. ***\
+*********************************************************\
+\
+\
+Autor: Adalberto Amorim Felipe\
+\
+adalbermirom@gmail.com\
+linguagemprisma@gmail.com\
+linguagemprisma.br4.biz\
+-------------------------------------------\
+'
+
+//redeclarar variveis como locais rapidez...
+local str_corte = string.corte;
+local str_analise = string.analise;
+local str_procure = string.procure;
+local str_formate = string.formate;
+local Convnumero = convnumero;
+
+local funcao le_cab(str)
+  local cab = str_corte(str,1,4); //cabeçalho;
+  se cab <> CAB entao 
+    retorne falso,'arquivo invalido ou corrompido';
+  senao 
+    retorne verdadeiro;
+  fim
+fim
+
+local funcao tab_para_string(tab)
+  local tmp=tab[1] ou CAB;
+  tmp=tmp .. '\n';
+  para i,v em pares(tab) inicio
+    se v<>tab[1] entao
+      cablin =  i .. '\002' ..  #v .. '\003\n';
+      tmp = tmp .. cablin .. v;
+    fim
+  fim
+  retorne(tmp);
+fim
+
+local funcao string_para_tab(str)
+  local tab={};
+  local ret, err = le_cab(str) 
+  se nao ret entao retorne falso, err fim; //arquivo corrompido ou invalido. cabacalho não bate.
+  
+ // imprima(tab[1]);  
+  local cont=6;
+  local pos=6;
+  //loop de leitura
+  enquanto 1 inicio
+    _,pos = str_procure(str,'\003\n',cont);
+    se nao pos entao quebre fim;
+    local tmp = str_corte(str,cont,pos-2);
+    local tt = str_analise(tmp,'\002');
+    //es.escreva(tt[1],' ',tt[3],' ');
+    local src = str:corte(pos+1,pos+Convnumero(tt[3]));
+    tab[tt[1]] = src;
+   // es.escreva(src,',');
+    cont=pos+1 + Convnumero(tt[3]);
+    //leia();
+  fim
+  retorne tab;    
+fim 
+
+local funcao string_para_tabnomes(str)
+  local tab={};
+  local ret, err = le_cab(str) 
+  se nao ret entao retorne falso, err fim; //arquivo corrompido ou invalido. cabacalho não bate.
+  
+ // imprima(tab[1]); 
+  local i = 1; 
+  local cont=6;
+  local pos=6;
+  //loop de leitura
+  enquanto 1 inicio
+    _, pos = str_procure(str,'\003\n',cont);
+    se nao pos entao quebre fim;
+    local tmp = str_corte(str,cont,pos-2);
+    local tt = str_analise(tmp,'\002');
+    //es.escreva(tt[1],' ',tt[3],' ');
+    //local src = str:corte(pos+1,pos+Convnumero(tt[3])+1);
+    tab[i]=tt[1];//pega o nome do arquivo inserido apenas
+    i = i + 1;//incrementa o  indice da lista de arquivos.
+   // es.escreva(src,',');
+    cont=pos+1 + Convnumero(tt[3]);
+    //leia();
+  fim
+  retorne tab;    
+fim 
+
+//obtem um indice específico sem carregar a tabela inteira;
+local funcao string_para_var(var,str)
+  local ret, err = le_cab(str) 
+  se nao ret entao retorne falso, err fim; //arquivo corrompido ou invalido. cabacalho não bate.
+  
+  local cont=6;
+  local pos=6;
+  //loop de leitura
+  enquanto 1 inicio
+    _,pos = str_procure(str,'\003\n',cont);
+    se nao pos entao quebre fim;
+    local tmp = str_corte(str,cont,pos-2);
+    local tt = str_analise(tmp,'\002');
+    //es.escreva(tt[1],' ',tt[3],' ');
+    //imprima(tt[1],var);
+    se tt[1] == var e Convnumero(tt[3]) entao
+      local src = str:corte(pos+1,pos+Convnumero(tt[3]));
+      retorne src;
+    fim
+   // es.escreva(src,',');
+    local num = Convnumero(tt[3]);
+    se nao num entao quebre fim;
+    cont=pos+1 + Convnumero(tt[3]);
+    //leia();
+  fim
+  retorne falso, 'Dado nao encontrado';
+fim
+
+//abre e retorna os metodos:
+
+local funcao arquivo_fechado(arq)
+  se arq.tab == nulo entao
+    erro"Arquivo fechado";
+  fim
+fim
+
+
+local funcao teste_e_crie_dir(arq)
+  local t = {};
+  local index=1;
+  local pos,antes=1,1;
+  
+  enquanto 1 inicio
+    pos = arq:procure(dirbarra,pos+1);
+    se pos entao
+      t[index]=arq:corte(antes,pos-1);
+      index = index+1;
+      antes=pos+1;
+    senao
+      quebre;
+    fim    
+  fim
+  local dest;
+  para i=1,#t inicio //-1 pois o ultimo é o arquivo.
+    dest = tabela.concat(t,dirbarra,1,i);  
+    imprima(dest);  
+    se nao dir.dir_existe(dest) entao
+      //dir.criedir(dest); //cria todos os diretorios 
+    fim 
+  fim  
+fim
+
+
+
+//====================== FUNÇÕES METODOS PAC ====================//
+
+funcao pac.abra(arq)
+ 
+ //   se a entao le_cab(str_corte(a,1,4)); fim;
+    local tab = {};
+    tab.str = '';
+    tab.arq = arq ou sis.nometmp();
+    tab.tab={};
+    
+   //apenas le o arquivo retornando a string bruta.
+    funcao tab:leia()
+      arquivo_fechado(este);//testa se o arquivo foi fechado.
+      local a,err = leia_arquivobin(este.arq);
+      se nao a entao retorne falso, err; 
+      senao
+        este.str = a;
+        retorne verdadeiro;
+      fim      
+    fim
+    
+    
+    funcao tab:busque(var) //metodo busca uma chave sem carregar todo o arquivo em uma tabela
+      arquivo_fechado(este);
+      se este.str == '' entao este:leia(); fim //carrega a str caso nao tenha lido o arquivo ainda.
+      retorne string_para_var(var,este.str);
+    fim
+    
+    //carrega o arquivo para ser explorado.
+    funcao tab:carregue()
+      arquivo_fechado(este);
+      este:leia();//le o arquivo e guarda em este.str para ser convertido em tabela prisma.
+      local tab = string_para_tab(este.str); 
+      este.tab = tab ou {}; 
+      retorne tab;
+    fim
+    
+    funcao tab:liste_arquivos()
+      se este.str == '' entao este:leia() ; fim //carrega a str caso nao tenha lido o arquivo ainda.
+      arquivo_fechado(este);
+      retorne string_para_tabnomes(este.str);
+    fim
+    
+    //insere arquivo na tabela para ser gravado com a função tab:grave();
+    funcao tab:insira(var,arq)
+      arquivo_fechado(este);
+      se tipo(var)=='string' entao
+        local a = leia_arquivobin(arq);
+        se nao a entao retorne falso,string.formate('Erro: arquivo: `%s\'!' , arq); fim
+        se este.str<>'' entao este:carregue(); fim;//carrega a string para nao perder os dados caso ja existam
+        este.tab[var]=a;//sobreescreve uma var se ja houver.
+      fim
+      //caso seja nulo o primeiro parametro entao, so grava a tabela existente:      
+      local s = tab_para_string(este.tab);
+      retorne grave_arquivobin(este.arq,s); //sobreescreve se ja existir um.      
+    fim
+    
+    //criando uma função para salvar os arquivos inseridos.
+    funcao tab:grave()
+      local s = tab_para_string(este.tab);
+      retorne grave_arquivobin(este.arq,s);
+    fim
+    
+    funcao tab:empacote(...)
+      local a = {...};
+      local bin; 
+      local err='Arquivos nao encontrados:'
+      local ret=verdadeiro;
+      local tmp_ret;
+      para i=1,#a inicio
+        bin = leia_arquivobin(a[i]);
+        se bin entao 
+          tmp_ret=verdadeiro;
+          este.tab[a[i]]=bin;
+        senao
+          ret = falso;
+          err = err .. '\n' .. a[i] 
+        fim
+      fim 
+      se ret entao err = falso; fim;
+      se tmp_ret entao //se ao menos um dado foi lido entao:
+        este:grave(); //grava a tabela.
+        ret = verdadeiro;      
+      fim;//retorna verdadeiro se pelo menos um arquivo é lido.
+      retorne ret,err; 
+    fim    
+    
+    funcao tab:desempacote(var,nome)
+      se tipo(var)=='string' entao
+        local src = este:busque(var);
+        se src entao
+          se tipo(nome)=='string' entao var=nome fim; //se passar o nome como var.
+          local ret,err= grave_arquivobin(var,src);
+          retorne ret,err;
+        senao
+          retorne falso,'Item não arquivado';
+        fim
+      senaose nao var entao //se var == nulo ou == a falso;
+        local tab = este:carregue();
+        local tmp_ret,ret,err=nulo,verdadeiro,'ERRO: ';
+        para c,v em pares(tab) inicio
+          se c <> 1 entao
+            tmp_ret,err=grave_arquivobin(c,v);
+          fim
+          se nao tmp_ret entao ret=falso; err =  err .. c .. ', '; fim
+        fim
+        se nao ret entao retorne falso, err; 
+        senao retorne verdadeiro fim;
+      senao
+        retorne falso, str_formate('Erro: espera-se <<string>> ao inves de %s',tipo(var));  
+      fim  
+        
+    fim
+    tab.extraia=tab.desempacote; //compat
+    
+    funcao tab:feche()
+      arquivo_fechado(este);
+      este.tab = nulo;
+      este = nulo;
+    fim
+    retorne tab;
+fim
+
+pac.le_cab = le_cab; //testa se o cabecalho é íntegro.
+pac.string_para_tab = string_para_tab; //tab = string_para_tab(str);
+pac.tab_para_string = tab_para_string; //str = tab_para_string(tab);
+pac.string_para_var = string_para_var; //src = string_para_var(str);//obtem o valor de uma chave
+pac.string_para_tabnomes = string_para_tabnomes;//retorna uma tabela dos nomes de todos os arquivos embutidos.
+
+
+pac.empacote = _empacote; // empacote(nome, arq1, arq2, ...);
+pac.desempacote = _desmpacote;//desmpacote(arq.pac, pasta_destino [,nome]); Se nome for omitido entao desempacote tudo.
+
+
+retorne pac;
+ 
+ 

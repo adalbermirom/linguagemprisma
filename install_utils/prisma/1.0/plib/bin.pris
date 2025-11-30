@@ -1,0 +1,167 @@
+
+/*@doc 
+ 
+  @fonte bin.pris
+  @autor Adalberto
+  @data 25 nov 2023
+  
+  @resumo Uma biblioteca simples que converte binário(base2) para decimal(base10)...
+  
+ 
+  @inicio_codigo Veja o exemplo:
+      local bin = inclua'bin';
+      local b1 = 100111000; //312 em binário.
+      local d1 = bin.bin_para_dec(b1);
+      imprima(d1); //--> 312   
+      
+      //podemos converter uma frase ou texto inteiro para binário:
+      local txt_bin =  bin.str_para_bin('ola tudo bem com você?');
+      imprima(txt_bin);
+      
+      //podemos desfazer a conversão e reaver a frase ou texto:
+      imprima(bin.bin_para_str(txt_bin) );//desfaz a conversão.  
+      
+  @fim_codigo
+*/
+
+
+local string_corte, emnumero, emstring = string.corte,convnumero,convstring;
+local tipo = tipo;
+local mat = mat; local string = string;
+
+
+/**
+       \fn bin.bin_para_dec;
+       \brief Função bin.bin_para_dec(b) - converte um número em base 2 para base 10.
+       Um número em base binária como: 100111000, pode ser convertido para seu valor decimal 312.
+       \param b(numero) - número em base binário (base 2) - somente zeros e uns, ex.: 100111000
+       \returns (numero) - o retorno é o número convertido para base decimal.
+*/
+local funcao bin_para_dec(b)
+  local b = emstring(b);
+  se nao b entao retorne nulo fim;
+  local valor = 0;
+  local cont=0;
+  para i = #b, 1, -1 inicio    
+    local c = string_corte(b,i,i);
+    local n = emnumero(c);
+    valor = valor + ( n * (2^cont) );
+    cont = cont + 1;
+  fim
+  retorne valor;  
+fim
+
+/**
+       \fn bin.dec_para_bin;
+       \brief Função bin.dec_para_bin(d) - converte um número em base 10 para base 2.
+       Um número em base decimal como: 312 pode ser convertido para seu valor em base binária  100111000.
+       \param d(numero) - número em base decimal (base 10).
+       \returns (numero) - o retorno é o número convertido para base binária.
+*/
+local funcao dec_para_bin(d)
+  se tipo(d) <> 'numero' entao
+    retorne nulo;
+  fim
+  se d == 0 ou d == 1 entao retorne convstring(d); fim
+  local mat_corte = mat.corte; //dentro de loops é aconselhável usar variáveis locais
+                               //para mais rapidez;
+  local result,resto,valor = 0,0,'';
+  local tmp = d;
+  enquanto result <> 1 inicio
+    result = mat.corte(tmp/2);//tirando a parte fracionaria com o mat.corte
+    resto = tmp%2;
+    tmp = result;
+    valor = resto .. valor
+  fim
+  valor = 1 .. valor;//o ultimo 1 tem de colocar agora pois o laço é interrompido nele.
+  retorne valor;  
+fim 
+
+
+/**
+       \fn bin.letra_para_bin;
+       \brief Função bin.dec_para_bin(l) - converte o código ASCII de um caractere para seu valor em base binária(base2)
+       Por exemplo a letra 'a' pode ser convertida para seu valor binário: 01100001
+       \param l(string) - o caractere para ser convertido 
+       <p><i>(Obs. em Prisma só existe string, então um caractere entre apas é uma string);</i></p>
+       \returns (string) - o retorno é a string do número convertido para base binária.
+*/
+local funcao letra_para_bin(l) 
+  local asc = string.cod(l);
+  local bin = dec_para_bin(asc);
+  local valor = string.formate("%08d",bin);
+  retorne (valor);
+fim 
+
+/**
+       \fn bin.bin_para_letra;
+       \brief Função bin.bin_para_letra(bin) - converte um número binário para o caractere ASCII equivalente.
+       \param bin(numero) - número binário (uns e zeros) para ser convertido para caractere ASCII
+       <p><i>(Obs. em Prisma só existe string, então um caractere entre apas é uma string);</i></p>
+       \returns (string) - o retorno é a string com o caractere já convertido.
+*/
+local funcao bin_para_letra(bin)
+  local c = bin_para_dec(bin);
+  retorne string.car(c);
+fim
+
+
+/**
+       \fn bin.str_para_bin;
+       \brief Função bin.str_para_bin(str) - converte uma sequência de caracteres (string:texto) em código binário (base 2)
+       \param str(string) - string/texto para ser convertida em código binário(base 2);
+       \returns (string) - o retorno é a string com o código binário.
+*/
+local funcao str_para_bin(str)
+  S(str);
+  local valor,c = '';
+  para i=1,#str inicio
+    valor = valor .. letra_para_bin(str:corte(i,i));
+  fim  
+  retorne valor;
+fim
+
+/**    
+       \fn bin.bin_para_str
+       \brief Função bin.bin_para_str(bin) - converte um texto em código binário(base 2) para string (texto ASCII);
+       \param bin(string) - string/texto para ser convertida de código binário(base 2) para texto ASCII;
+       \returns (string) - o retorno é a string com o texto decifrado de binário para ASCII
+       <p>Veja um exemplo:</p>
+    \inicio_codigo ex3.prisma
+    
+       local bin = inclua'bin';
+        local txt_bin = '01101111011011001100001110100001';
+        local txt = bin.bin_para_str(txt_bin);
+        imprima(txt); //--> olá
+        
+    \fim_codigo
+*/
+local funcao bin_para_str(bin)
+  se nao bin entao retorne nulo fim;
+  local bin = emstring(bin);
+  local comeco,valor = 1,'';
+  local final = comeco + 7;
+  local tmp = '';
+  enquanto final <= #bin inicio
+    tmp = bin:corte(comeco,final);
+    valor = valor .. bin_para_letra(tmp);
+    comeco = final + 1;
+    final = comeco + 7;
+  fim
+  retorne valor;
+fim 
+
+
+//retornando as funções em uma tabela:
+retorne {
+	bin_para_dec = bin_para_dec,   //de binário para decimal
+	dec_para_bin = dec_para_bin,   //de decimal para binário
+	letra_para_bin = letra_para_bin, //caractere para binário
+	bin_para_letra = bin_para_letra, //binário para caractere
+	str_para_bin = str_para_bin,  //string para binário
+	bin_para_str = bin_para_str   //binário para string
+}
+
+
+
+

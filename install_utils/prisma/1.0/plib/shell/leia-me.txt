@@ -1,0 +1,89 @@
+
+
+::::::::::::::::::::  shell lib prisma :::::::::::::::::::
+
+::::: para instalação veja no final:::::::
+
+Essa biblioteca serve para facilitar chamadas do terminal direto de prisma, como se fosse uma função
+Prisma.
+
+exemplo, em um arquivo shell (.sh) ou diretamente no terminal poderíamos usar o comando
+abaixo para criar uma pasta:
+
+    mkdir  'minha_pasta'
+
+Com a biblioteca shell em Prisma ficaria:
+
+    local shell = inclua'shell'; //incluindo a lib
+    local ret = shell.mkdir('minha_pasta');
+    imprima( tabela.concat(ret, '\n') ); //o retorno é uma tabela com as linhas impressas pelo comando shell.
+ 
+
+
+::: Basta colocar o comando do jeito que é feito no terminal após o ponto::::
+___
+   |  ping =   shell.ping();  
+   |  ls   =   shell.ls();
+   |  grep =   shell.grep();  
+   
+::: para comandos aninhados, use ':' ou '->' a partir do segundo comando:::
+_____
+     |  ret = shell.ls('.'):grep('pdf');  
+     |  ret = shell.ls('.')->grep('pdf');//esta forma também é aceita em Prisma
+     
+     
+
+ ------------ Mais exemplos -------------
+ 
+   Copiando um arquivo:
+       shell.cp('arquivo_orig', 'arquivo_dest');
+   
+   Listando os arquivos de uma pasta:
+      ret = shell.find('.');
+      para i=1, #ret inicio
+          imprima(i, ret[i]); //imprimido a tabela com os arquivos
+      fim
+   
+   Podemos combinar dois comandos shell em sequência, veja:
+   
+   Compactando arquivos de um diretório:
+   
+       ret = shell.find('.'):zip('zz.zip'); //pega todos os arquivos listados e compacta em zz.zip
+       imprima(tabela.concat(ret,'\n'));
+       
+   Mundando as permissões de um arquivo:
+   
+       ret = shell.chmod('+x','meu_arq');
+       
+   Apagando um arquivo:
+       ret = shell.rm('arquivo');
+       
+   Diretório atual:
+       ret = shell.pwd();
+       imprima(ret[1]);
+       
+::::::::::::::::::::::  Instalação ::::::::::::::::::::::
+
+Basta você copiar esta pasta para o caminho de libs Prisma:
+
+Em linux:  /usr/local/share/prisma/1.0/plib
+
+Em Win : C:\\Prisma\\1.0\\bin\\plibs
+
+Ou na mesma pasta do seu projeto, pode copiar apenas o arquivo ini.pris para pasta do seu projeto
+trocando o nome para shell.pris, caso contrário terá que incluir assim: shell = inclua'shell.ini';
+
+É possível alterar o path de busca de libs usando o comando Prisma abaixo:
+
+pacote.plib = pacote.plib .. ';?/ini.pris;'  (o ? é substituído pelo nome da lib na busca)
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

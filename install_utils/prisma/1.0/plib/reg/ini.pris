@@ -1,0 +1,475 @@
+//biblioteca para salvar e acessar configurações:
+//autor Adalberto Amorim Felipe, licença livre para copiar, usar, modificar, sem responsabilizar o autor pelo uso.
+//data: 7/01/2016; qui 16:40
+
+//13/04/2016 -- correção nos comandos reg.graveArquivo() e reg.leiaArquivo() 
+//estava corrompendo arquivos binários, como fotos, .exe, pdf etc.
+
+
+
+/**
+ \file reg.pris
+ \author Adalberto Amorim Felipe
+ \date 07/01/2016; qui 16:40
+ \brief Biblioteca reg (registro) para salvar e acessar configurações de forma simples.
+  
+  <p>
+  Esta biblioteca Prisma tem a função de salvar variáveis em um arquivo e, posteriormente, ler estas variáveis novamente, como um mini banco de dados, mas para configuração.
+  </p>
+  
+  <p>
+   \obs Atenção! Cuidado ao modificar este arquivo, qualquer erro pode comprometer o funcionamento. Mas, mexa a vontade se quiser, especialmente se for fazer aprimoramentos.
+   </p>
+   <p>
+    E caso os aprimoramentos sejam úteis aos demais poste em:
+    
+   <a href="http://linguagemprisma.br4.biz/prisma_forum/index.php?board=5.0" target="_blank">http://linguagemprisma.br4.biz/prisma_forum/index.php?board=5.0</a>
+   <p>
+   
+   \h3 Links úteis:
+   <a href="http://linguagemprisma.br4.biz/" target="_blank">Site oficial</a>
+   <a href="http://linguagemprisma.br4.biz/prisma_forum" target="_blank">Fórum oficial</a>
+   
+*/
+
+
+local reg = {};
+
+reg.VERSAO = '1.3';
+reg.AUTOR = 'Adalberto - linguagemprisma.br4.biz'
+
+//ao redeclarar uma variavel como local aumenta a performance do programa especialmente em loops.
+local string = string
+local es = es;
+local stringcompile = string.compile;
+local stringformate = string.formate;
+
+local REG_ASS =  '#reg-1\n';
+
+
+/**
+ \var reg.ARQ_COMPILADO
+  \brief variável {numero} - simboliza quando um arquivo conf é gravado com a função reg.compile(a).
+*/
+reg.ARQ_COMPILADO = 0;
+/**
+ \var reg.ARQ_TEXTO
+  \brief variável {numero} - simboliza quando um arquivo conf é gravado com a função reg.grave(a).
+*/
+reg.ARQ_TEXTO = 1;
+
+
+//todo: criar uma assinatura de cabeçalho para os arquivos conf.
+/**
+   \fn reg.teste_reg
+   \resumo Testa se um arquivo é do tipo reg, ou seja, se foi criado usando a lib reg;
+   \param nome_arq {string} - nome do arquivo a ser testado.
+   \retorno {numero|booleano} - reg.ARQ_COMPILADO ou reg.ARQ_TEXTO, ou se inválido falso.
+   \retorno {nulo|string} - mensagem de erro se arquivo for inválido ou nulo caso contrário.
+   
+   \codigo teste_reg.prisma
+   local reg = inclua'reg';
+   
+   funcao principal()
+       local teste, txt = reg.teste_reg('app.conf');
+       se nao teste entao erro(txt); fim
+       se teste == reg.ARQ_COMPILADO entao
+           imprima('Arquivo reg no formato binário compilado');
+       senaose teste == reg.ARQ_TEXTO entao
+           imprima('Arquivo reg no formato texto.');
+       fim
+       
+       retorne 0;
+   fim
+   \codigo--
+   
+*/
+funcao reg.teste_reg(nome_arq)
+    local cab = REG_ASS 
+    local ass_compilado = '\027Pri';
+    local tam_cab = #cab;
+    local a, err = es.abra(nome_arq,'leitura');
+    se nao a entao retorne falso, err; fim
+    local txt_ass = a:leia(tam_cab); //lê os primeiros bytes correspondentes ao cabeçalho.
+    se txt_ass <> cab entao
+        a:feche();
+        retorne falso, 'Arquivo reg inválido.';
+    fim
+    local txt_compilado = a:leia(4); // \27Pri
+    a:feche();
+    se txt_compilado == ass_compilado entao
+        retorne reg.ARQ_COMPILADO;
+    fim
+    retorne reg.ARQ_TEXTO;
+fim
+
+//funcao para compilar em prisma mesmo, sem usar o prismac
+funcao reg_arq_compile(sa,en,d)
+    local d = d ou 1;
+    local f, err = carreguearquivo(en);//carrega o arquivo em uma função.
+    se nao f entao retorne falso, err; fim //caso tenha erro no parser, retorna falso.
+    //agora vamos compilar a função em uma string:
+    local cstr = stringcompile(f,d); //1 para resumir a string compilada sem dados de debug
+    local a, err = es.abra(sa,'escritabin');//abrindo o arquivo para gravar o resultado.
+    se nao a entao retorne falso, err; fim
+    a:escreva(REG_ASS);
+    a:escreva(cstr);//escreve a string compilada
+    a:feche(); //fecha o objeto de gravação de arquivos.
+    retorne verdadeiro; //operação com sucesso            
+fim
+
+
+funcao def_tabela( f, chave , tab)
+  se tipo(chave) == 'numero' entao
+     f:escreva( '{' );
+  senao
+     f:escreva( chave , '={');
+  fim
+ 
+  para c , v em pares(tab) inicio
+  
+     se tipo(v) == 'string' entao
+         v = stringformate('%q' , v);
+     senaose v == falso entao 
+         v = 'falso'
+     senaose v == verdadeiro entao 
+         v = 'verdadeiro' 
+     senaose tipo(v) == 'tabela' entao
+           def_tabela( f , c , v );
+     fim
+     
+     se tipo(c) == 'numero' entao
+         f:escreva( v , ',' );
+     senao 
+         f:escreva( c , '=' , v , ',');
+     fim 
+  fim//fim para c, v
+  
+  f:escreva('};');
+ 
+fim //fim funcao def_tabela
+
+/**
+   \fn reg.grave
+   \brief Grava a tabela de variáveis no arquivo.
+   \param a {string} - nome do arquivo a ser gravado (caminho absoluto ou relativo).
+   \param tab {tabela} - a tabela contendo os valores a serem gravados.
+   \retorno status {booleano} - verdadeiro em caso de sucesso, ou falso em caso de falha.
+   \retorno msg_err {string} - nulo se status for verdadeiro e mensagem de erro se status for falso.
+   
+   \codigo ex1.prisma
+   local reg = inclua'reg'
+   
+   local status, msg_err = reg.grave('app.conf', {cor='azul', largura=120, altura=220});
+   
+   \codigo--
+   
+   \obs - esta função apaga toda informação se já houver um arquivo salvo. Portanto é necessário fazer essa verificação, obter os dados, acrescentar os dados na tabela e regravá-la caso queira algo mais persistente.
+
+*/
+funcao reg.grave( a, tab )
+   S(a); T(tab);
+   
+   local f, err = es.abra( a , 'escrita'); //abrindo o arquivo para escrita;
+   se nao f entao retorne falso, err; fim
+   f:escreva(REG_ASS);
+          //abrindo a tabela e gravando:
+          para c , v em pares(tab) inicio
+              
+              se tipo (v) == 'string' entao
+                 v = stringformate("%q",v);
+              fim
+              
+              se v == falso entao
+                   v = 'falso';
+              senaose v == verdadeiro entao
+                   v = 'verdadeiro';              
+              fim
+              
+              se tipo(v) == 'tabela' entao
+                 def_tabela( f , c, v );
+                 f:escreva('\n');
+              senao
+                 se tipo(c) == 'numero' entao
+                 f:escreva( v , ';\n');
+                 senao
+                 f:escreva(c ,'=', v , ';\n');
+                 fim
+              fim
+          
+          fim //fim para;
+          
+          f:feche();
+          retorne verdadeiro;          
+fim //fim funcao reg.grave()
+
+
+//leitura:
+
+/**
+\fn reg.leia
+\resumo Lê um arquivo de configuração retornando uma tabela com os valores.
+\param a {string} - nome do arquivo de configuração.
+\retorno status {booleano} - verdadeiro ou falso, em caso de sucesso ou falha.
+\retorno err {string} - nulo em caso de sucesso e mensagem de erro em caso de falha.
+
+\codigo ex2_leia.prisma
+    local reg = inclua'reg';
+    
+    funcao principal()
+    
+        local conf, err = reg.leia('app.conf');
+        se nao conf entao erro(err); fim //tratamento de erro, termina o programa em caso de erro, com a mensagem na tela.
+        imprima(conf.cor);
+        imprima(conf.largura);
+        imprima(conf.altura);
+    
+        retorne 0;
+    fim //fim principal()
+\codigo--
+*/
+funcao reg.leia( a )
+
+    S(a);
+    local test, err = reg.teste_reg(a);
+    se nao test entao retorne falso, err; fim
+
+    local f, err = es.abra(a , 'leitura');
+    se nao f entao retorne falso, err; fim
+    
+    local str = f:leia('*t');
+    
+    f:feche();
+      
+    se nao str entao retorne falso, 'conteúdo inválido na leitura do arquivo: '..a; fim
+    str = str:corte(str:procure('\n',1,1)+1);
+    local load = stringformate("retorne{%s}" , str);
+         
+    local obt_tab_conf, err = carregue( load );
+    se nao obt_tab_conf entao retorne falso, err; fim
+    retorne obt_tab_conf();   
+
+fim //fim funcao reg.leia
+
+
+/**
+\fn reg.adicione
+\resumo Adiciona valores ao arquivo de configuração.
+\param a {string} - nome do arquivo a ser adicionado.
+\param tab {tabela} - a tabela com valores.
+\retorno status {booleano} - verdadeiro ou falso, em caso de sucesso ou falha.
+\retorno err {string} - nulo em caso de sucesso e mensagem de erro em caso de falha.
+
+\obs em caso de chaves repetidas a última sobreescreve as anteriores.
+
+\codigo ex3_adicione.prisma
+    local reg = inclua'reg';
+    
+    funcao principal()
+    
+        local status, err = reg.adicione('app.conf', {cor_fundo='Branco', pontos = 10});
+        se nao status entao erro(err); fim //tratamento de erro, termina o programa em caso de erro, com a mensagem na tela.
+        retorne 0;
+    fim //fim principal()
+    
+\codigo--
+*/
+
+funcao reg.adicione( a, tab )
+    S(a); T(tab);
+    
+    local test, err = reg.teste_reg(a);
+    se nao test entao retorne falso, err; fim
+
+    
+    local f, err = es.abra( a , 'adicao'); //abrindo o arquivo para escrita;
+    se nao f entao retorne err; fim
+   
+    local tam_tab = #tab;
+    para i=1, tam_tab inicio
+        local v = tab[i];
+       
+        se tipo (v) == 'string' entao
+            v = stringformate("%q",v);
+        senaose v == falso entao
+            v = 'falso';
+        senaose v == verdadeiro entao
+            v = 'verdadeiro';              
+        senaose tipo(v) == 'tabela' entao
+            def_tabela( f ,c, v );
+            f:escreva('\n');
+        senao
+            f:escreva(c ,'=', v , ';\n');
+        fim          
+    fim //fim para;
+          
+    f:feche();
+    retorne verdadeiro;       
+fim //fim funcao reg.adicione
+
+
+/**
+\fn reg.compile
+\resumo Compila em códigos bytes os valores e grava no arquivo de configuração, substituindo todo conteúdo anterior.
+\param a {string} - nome do arquivo a ser gravado.
+\param tab {tabela} - a tabela com valores.
+\retorno status {booleano} - verdadeiro ou falso, em caso de sucesso ou falha.
+\retorno err {string} - nulo em caso de sucesso e mensagem de erro em caso de falha.
+
+
+\codigo ex4_compile.prisma
+    local reg = inclua'reg';
+    
+    funcao principal()
+    
+        local status, err = reg.compile('app.conf', {tam_tela="600x800", max_jogadores=20});
+        se nao status entao erro(err); fim //tratamento de erro, termina o programa em caso de erro, com a mensagem na tela.
+        
+        //para ler é preciso usar reg.carregue(); 
+        local conf, err = reg.carregue('app.conf');
+        se nao conf entao erro(err); fim //tratamento de erro, termina o programa em caso de erro, com a mensagem na tela.
+        imprima(conf.tam_tela);
+        imprima(cont.max_jogadores);
+            
+        retorne 0;
+    fim //fim principal()
+    
+\codigo--
+*/
+funcao reg.compile( a, tab )
+
+   S(a); T(tab);
+   
+   local f, err = es.abra( a , 'escrita'); //abrindo o arquivo para escrita;
+   se nao f entao retorne falso, err; fim
+   f:escreva(REG_ASS);
+   f:escreva('retorne{');
+      
+          //abrindo a tabela e gravando:
+          para c , v em pares(tab) inicio
+              
+              se tipo (v) == 'string' entao
+                 v = stringformate("%q",v);
+              fim
+              
+              se v == falso entao
+                   v = 'falso';
+              senaose v == verdadeiro entao
+                   v = 'verdadeiro';              
+              fim
+              
+              se tipo(v) == 'tabela' entao
+                 def_tabela( f , c, v );
+                 f:escreva('\n');
+              senao
+                 se tipo(c) == 'numero' entao
+                 f:escreva( v , ';\n');
+                 senao
+                 f:escreva(c ,'=', v , ';\n');
+                 fim
+              fim
+          
+          fim //fim para;
+          f:escreva('}');
+          f:feche();
+          reg_arq_compile(a,a); //esta função compila o arquivo de configuração sem precisar do prismac
+          retorne verdadeiro;     
+fim //fim funcao reg.compile()
+
+
+/**
+\fn reg.carregue
+\resumo Carrega valores do arquivo de configuração compilado.
+\param a {string} - nome do arquivo a ser adicionado.
+\retorno status {booleano} - verdadeiro ou falso, em caso de sucesso ou falha.
+\retorno err {string} - nulo em caso de sucesso e mensagem de erro em caso de falha.
+
+\codigo ex5_carrege.prisma
+    local reg = inclua'reg';
+    
+    funcao principal()
+        //usado apenas se o arquivo foi gravado com reg.compile(a);
+        local conf = reg.carregue('app.conf');
+        imprima(conf.cor);
+        imprima(conf.largura);
+        imprima(conf.altura);
+    
+        retorne 0;
+    fim //fim principal()
+\codigo--
+*/
+funcao reg.carregue( a )
+     local func, err = carreguearquivo( a );
+     se nao func entao retorne falso, err; fim
+     local status, ret = pchame(func);
+     se nao status entao retorne falso, ret; fim
+     retorne ret;
+fim
+
+
+/**
+\fn reg.limpe
+\resumo Limpa valores do arquivo de configuração.
+\param a {string} - nome do arquivo a ser limpado.
+\retorno status {booleano} - verdadeiro ou falso, em caso de sucesso ou falha.
+\retorno err {string} - nulo em caso de sucesso e mensagem de erro em caso de falha.
+
+\codigo ex6_limpe.prisma
+    local reg = inclua'reg';
+    
+    funcao principal()
+    
+        local status, err = reg.limpe('app.conf');
+        se não status entao erro(err); fim
+        
+        poe('app.conf está vazio agora.'); 
+        retorne 0;
+    fim //fim principal()
+\codigo--
+*/
+funcao reg.limpe(a)   
+   local f, err = es.abra(a,'escrita');
+   se nao f entao retorne falso, err; fim
+   f:escreva('');
+   f:feche();
+   retorne verdadeiro;
+fim
+
+
+/**
+\fn reg.leiaArquivo
+\resumo Lê um arquivo binário para uma variável string.
+\param b {string} - nome do arquivo a ser lido.
+\retorno {string | falso} - o conteúdo do arquivo binário ou falso em caso de erro.
+\retorno {string} - nulo em caso de sucesso ou mensagem em caso de erro.
+*/
+funcao reg.leiaArquivo(b)
+    local a, err = es.abra(b,'leiturabin');
+    se nao a entao retorne falso, err; fim
+    local txt = a:leia'*t';
+    a:feche();
+    retorne txt;         
+fim
+
+/**
+\fn reg.graveArquivo
+\resumo Grava um conteúdo em um arquivo binário;
+\param b {string} - nome do arquivo a ser gravado.
+\param txt {string} - string do arquivo binário para ser gravada.
+\retorno status {booleano} - verdadeiro ou falso, em caso de sucesso ou falha.
+\retorno err {string} - nulo em caso de sucesso e mensagem de erro em caso de falha.
+*/
+funcao reg.graveArquivo(b,txt)
+         local a = es.abra(b,'escritabin');
+         se a entao
+                    a:escreva(txt);
+                    a:feche();
+                    retorne verdadeiro;
+         senao
+                    retorne falso, 'erro ao tentar abrir arquivo';
+         fim
+fim
+
+retorne reg;
+
+

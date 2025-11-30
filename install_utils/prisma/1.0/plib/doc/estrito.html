@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>estrito.pris</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<nav id="id_000008"  class="floating-menu">
+<div class="menu-button" title="Ocultar painel lateral" onclick="show_menu_flutuante(this, 'id_000009', 'id_000008')">&#x2630;</div>
+<div class="com-rolagem" id="id_000009" hidden>
+<div class="caixa "><h2>Funções:</h2>
+<a href="#id_000007">estrito.desative</a>
+<a href="#id_000005">estrito.modo_const</a>
+<a href="#id_000004">estrito.modo_global</a>
+<a href="#id_000006">estrito.modo_local</a>
+
+</div>
+</div>
+</nav>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> estrito.pris</h1>
+<h3> Adalberto</h3>
+<h3> 25 nov 2023</h3>
+<br>
+<div>
+Uma biblioteca simples para definir o modo estrito global, const ou local
+<a href="#id_00000A"> mais...</a></div>
+<div class="caixa com-borda"><div><h2 >Funções:</h2>
+<ol>
+<li><a href="#id_000007">estrito.desative</a></li>
+<li><a href="#id_000005">estrito.modo_const</a></li>
+<li><a href="#id_000004">estrito.modo_global</a></li>
+<li><a href="#id_000006">estrito.modo_local</a></li>
+</ol>
+</div>
+
+</div><br>
+
+<h2 id="id_00000A">estrito.pris</h2><div>
+Uma biblioteca simples para definir o modo estrito global, const ou local
+</div>
+
+
+
+  
+
+  
+  Esta biblioteca permite ativar:
+ 
+  Modo global:
+  Toda variável global ou campo de uma tabela terá seu tipo fixo, ou seja, o primeiro valor atribuído definirá seu tipo não
+  podendo mais ser alterado. Assim, se uma variável for do tipo número, não é possível atribuir uma string
+  a ela, por exemplo.
+<p><i>Obs. qualquer tentativa de obter o valor de uma variável global não declarada dará erro.</p></i>
+#### Modo const: ####
+  Neste modo toda variável global ou campo de uma tabela será imutável, ou seja, depois de atribuir um valor
+  não será possível mudar de valor.
+<p><i>Obs. qualquer tentativa de obter o valor de uma variável global não declarada dará erro.</i></p>
+#### Modo local: ####
+  Neste modo só é permitido o uso de variáveis locais, qualquer tentativa de atribuir uma global dará erro.
+  Em caso de tabela, não será possível atribuir novos campos.
+  <hr>
+## Exemplos: ##
+
+#### Modo global ####
+  <pre>
+      //funciona apenas com variáveis globais ou valores de tabela.
+      
+      local estrito = inclua'estrito';
+      estrito.modo_global();
+      a = 1;
+      imprima(a);
+      //estrito.desative(); //podemos desativar o modo global e dará certo a atribuição de valor diferente.
+      a = 'A';  //--> erro no modo estrito global, tentativa de atribuir um valor string em uma variável número.
+      imprima(a);
+      local n = 1;
+      n = 'olá'; //-- ok, pois em variável local é permitido a troca de valores de tipos diferentes.
+      imprima(n);
+      
+  </pre>
+  
+  <br>
+  <hr>
+#### Modo estrito const ####
+  Toda variável local é imutável, o primeiro valor atribuído é fixado não podendo mais trocar de valor.
+  <pre>      
+      local estrito = inclua'estrito';
+      estrito.modo_const();
+      PI = 3.14;
+      PI = 1; //--> Erro ao atribuir novo valor em uma variável global em modo const.
+      imprima(PI);
+      
+      local n = 1; 
+      n = 2; //--> ok, pois em modo local é permitido.
+  </pre>
+  
+  <br>
+  
+  <hr>
+#### Modo local ####
+<i>O modo local força o programador usar somente variáveis locais, veja:</i>
+  <pre>
+      local estrito = inclua'estrito';
+      estrito.modo_local();
+      local a = 1;
+      local b = 2;
+      
+      c = 3; //->erro em modo local, tentativa de atribuição de variável global;
+      
+  </pre>
+ 
+ #### Modo global, const e local em tabelas: ####
+<i>O modo local força o programador usar somente variáveis locais, veja:</i>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000002')">&#128203;</div>&nbsp;<i>ex1.prisma</i><pre id="id_000002" hidden>local estrito = inclua&#39;estrito&#39;;
+local t = {};
+estrito.modo_global(t);
+
+t.s = &#39;algo&#39;;
+//t.s = 3; //--&gt; erro ao atribuir um valor número em um campo de tabela do tipo string.
+estrito.desative(t);
+t.s = 3; //após a desativação do modo é possível alterar o tipo dos valores dos campos.
+
+local c = {};
+estrito.modo_const(c);
+c.s = &#39;c.s: algo&#39;;
+//c.s = &#39;c.s: algum&#39;; //--&gt; erro ao trocar uma valor de campo de tabela em modo const.
+estrito.desative(c);
+c.s = &#39;c.s: outro&#39;; //após a desativação do modo é possível alterar os campos.
+
+local l = {a=1, b=2};
+estrito.modo_local(l);
+
+//l.s = &#39;ola&#39;; //--&gt; erro, pois não é permitido adicionar novos campos na tabela em modo local.
+l.a = 10; //para os campos da tabela definidos antes do modo local é permitido a mudança de valores.
+l.b = 20; //para os campos da tabela definidos antes do modo local é permitido a troca de valores.
+estrito.desative(l);
+l.s = &#39;ola&#39;; //após a desativação do modo é possível acrescentar novos campos.
+
+
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 14</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 15</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 16</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 17</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 18</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 19</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 20</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 21</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 22</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 23</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 24</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 25</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 26</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+<span style="font-weight:bold;color:#b50546">local</span> estrito <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;estrito&#39;</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">local</span> t <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+estrito<span style="font-weight:bold;">.</span>modo_global<span style="font-weight:bold;">(</span>t<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+t<span style="font-weight:bold;">.</span>s <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;algo&#39;</span><span style="font-weight:bold;">;</span>
+<span style="color:green">//t.s = 3; //--&gt; erro ao atribuir um valor número em um campo de tabela do tipo string.
+</span>estrito<span style="font-weight:bold;">.</span>desative<span style="font-weight:bold;">(</span>t<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+t<span style="font-weight:bold;">.</span>s <span style="font-weight:bold;">=</span> <span style="color:red">3</span><span style="font-weight:bold;">;</span> <span style="color:green">//após a desativação do modo é possível alterar o tipo dos valores dos campos.
+</span>
+<span style="font-weight:bold;color:#b50546">local</span> c <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+estrito<span style="font-weight:bold;">.</span>modo_const<span style="font-weight:bold;">(</span>c<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+c<span style="font-weight:bold;">.</span>s <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;c.s: algo&#39;</span><span style="font-weight:bold;">;</span>
+<span style="color:green">//c.s = &#39;c.s: algum&#39;; //--&gt; erro ao trocar uma valor de campo de tabela em modo const.
+</span>estrito<span style="font-weight:bold;">.</span>desative<span style="font-weight:bold;">(</span>c<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+c<span style="font-weight:bold;">.</span>s <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;c.s: outro&#39;</span><span style="font-weight:bold;">;</span> <span style="color:green">//após a desativação do modo é possível alterar os campos.
+</span>
+<span style="font-weight:bold;color:#b50546">local</span> l <span style="font-weight:bold;">=</span> <span style="font-weight:bold;">{</span>a<span style="font-weight:bold;">=</span><span style="color:red">1</span>, b<span style="font-weight:bold;">=</span><span style="color:red">2</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+estrito<span style="font-weight:bold;">.</span>modo_local<span style="font-weight:bold;">(</span>l<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+<span style="color:green">//l.s = &#39;ola&#39;; //--&gt; erro, pois não é permitido adicionar novos campos na tabela em modo local.
+</span>l<span style="font-weight:bold;">.</span>a <span style="font-weight:bold;">=</span> <span style="color:red">10</span><span style="font-weight:bold;">;</span> <span style="color:green">//para os campos da tabela definidos antes do modo local é permitido a mudança de valores.
+</span>l<span style="font-weight:bold;">.</span>b <span style="font-weight:bold;">=</span> <span style="color:red">20</span><span style="font-weight:bold;">;</span> <span style="color:green">//para os campos da tabela definidos antes do modo local é permitido a troca de valores.
+</span>estrito<span style="font-weight:bold;">.</span>desative<span style="font-weight:bold;">(</span>l<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+l<span style="font-weight:bold;">.</span>s <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;ola&#39;</span><span style="font-weight:bold;">;</span> <span style="color:green">//após a desativação do modo é possível acrescentar novos campos.
+</span>
+
+</pre></div></div>
+
+</div>
+
+## Observações ##
+
+Ao desativar o modo global ou const, as variáveis e campos já não serão mais acessíveis.
+####Exemplo:####
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000003')">&#128203;</div>&nbsp;<i>ex2.prisma</i><pre id="id_000003" hidden>    local estrito = inclua&#39;estrito&#39;;
+    estrito.modo_global();
+    s = &#39;ola&#39;;
+    imprima(s);//--&gt; ola
+    estrito.desative();
+    imprima(s);// --&gt;nulo; 
+    
+    //os valores ficam na metatabela .__self   para global   e   .__const   para const.
+    local mt1 = obtmetatabela(_G);
+    se mt1 entao
+        imprima( mt1.__self.s); //--&gt; ola;
+    fim
+    
+    estrito.modo_const();
+    
+    __S__ = &#39;minha var const&#39;;
+    imprima(__S__);//--&gt; minha var const
+    estrito.desative();
+    imprimma(__S__); //--&gt; nulo;
+    local mt2 = obtmetatabela(_G);
+    se mt2 entao
+        imprima(mt2.__const.__S__);//--&gt; minha var const
+    fim
+    
+
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 14</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 15</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 16</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 17</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 18</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 19</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 20</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 21</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 22</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 23</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 24</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 25</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="font-weight:bold;color:#b50546">local</span> estrito <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;estrito&#39;</span><span style="font-weight:bold;">;</span>
+    estrito<span style="font-weight:bold;">.</span>modo_global<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    s <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;ola&#39;</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>s<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//--&gt; ola
+</span>    estrito<span style="font-weight:bold;">.</span>desative<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>s<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">// --&gt;nulo; 
+</span>    
+    <span style="color:green">//os valores ficam na metatabela .__self   para global   e   .__const   para const.
+</span>    <span style="font-weight:bold;color:#b50546">local</span> mt1 <span style="font-weight:bold;">=</span> <span style="color:#b50546">obtmetatabela</span><span style="font-weight:bold;">(</span><span style="color:#b50546">_G</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">se</span> mt1 <span style="font-weight:bold;color:#b50546">entao</span>
+        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> mt1<span style="font-weight:bold;">.</span>__self<span style="font-weight:bold;">.</span>s<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt; ola;
+</span>    <span style="font-weight:bold;color:#b50546">fim</span>
+    
+    estrito<span style="font-weight:bold;">.</span>modo_const<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+    __S__ <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;minha var const&#39;</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>__S__<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//--&gt; minha var const
+</span>    estrito<span style="font-weight:bold;">.</span>desative<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    imprimma<span style="font-weight:bold;">(</span>__S__<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt; nulo;
+</span>    <span style="font-weight:bold;color:#b50546">local</span> mt2 <span style="font-weight:bold;">=</span> <span style="color:#b50546">obtmetatabela</span><span style="font-weight:bold;">(</span><span style="color:#b50546">_G</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">se</span> mt2 <span style="font-weight:bold;color:#b50546">entao</span>
+        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>mt2<span style="font-weight:bold;">.</span>__const<span style="font-weight:bold;">.</span>__S__<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//--&gt; minha var const
+</span>    <span style="font-weight:bold;color:#b50546">fim</span>
+    
+
+</pre></div></div>
+
+</div>
+ 
+ 
+<h1>Funções:</h1>
+<a id="id_000004" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao estrito.modo_global(t)</h2><div class="corpo-doc">
+<p>Função que define o modo estrito global, isto significa que não será possível mudar o tipo de uma variável</p>
+
+      <br>Ao definir o modo estrito global, variáveis globais serão aceitas, mas não será possível mudar o tipo do
+      valor de uma variável. Portanto, o primeiro valor atribuído a uma variável será fixado como o tipo dela.
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > t(tabela ou nulo) - este parâmetro pode ser omitido e o padrão será a tabela global Prisma (_G);</span>
+</div>
+       caso seja uma tabela os seus métodos e chaves terão tipagem fixa.
+      <hr><i>OBS.: não é possível usar o modo estrito global ao mesmo tempo que o modo estrito local com a mesma tabela.<i>
+      Mas com tabelas diferentes é possível, lembrando que a tabela _G guarda as variáveis globais.
+      Com o modo global ativado não é possível atribuir nulo a uma variável ou membro de tabela.
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (tabela) - o retorno é a propria tabela a ser ativada.</span>
+</div>
+</div>
+</section>
+<a id="id_000005" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao estrito.modo_const(t) --{</h2><div class="corpo-doc">
+<p>Função que define o modo estrito const, não é possível alterar o valor já atribuído.</p>
+
+      Também não é possível usar uma variável antes dela estar declarada.
+      <br>Ao definir o modo estrito const, variáveis globais serão aceitas, mas não será possível mudar o
+      valor de uma variável. Portanto, o primeiro valor atribuído a uma variável será fixado como constante.
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > t(tabela ou nulo) - este parâmetro pode ser omitido e o padrão será a tabela global Prisma (_G);</span>
+</div>
+       caso seja uma tabela os seus métodos e chaves terão tipagem fixa.
+      <hr><i>OBS.: não é possível usar o modo estrito const ao mesmo tempo que o modo estrito local com a mesma tabela.<i>
+      Mas com tabelas diferentes é possível, lembrando que a tabela _G guarda as variáveis globais.
+      Com o modo const ativado não é possível atribuir nulo a uma variável ou membro de tabela.
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (tabela) - o retorno é a propria tabela a ser ativada.</span>
+</div>
+</div>
+</section>
+<a id="id_000006" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao estrito.modo_local(t) --{</h2><div class="corpo-doc">
+<p>Função estrito.modo_local(t) - ativa o modo estrito local, variáveis globais não serão permitidas.</p>
+
+     Esta função força o programador a usar somente variáveis locais, caso tente atribuir uma variável global
+     ocorrerá um erro e o programa será finalizado com a mensagem de erro.
+     <br><i>OBS.: só não é possível atribuir novas variáveis globais, mas obter os valores de variáveis globais
+     já atribuídas antes de modo local é totalmente possível.<i>
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > t(tabela ou nulo) - a tabela para ativar o modo estrito local ou nulo. Caso seja nulo, nenhum valor passado,</span>
+</div>
+     então o padrão será _G, não faz sentido atribuir uma tabela normal no modo local, entao deixe sempre vazio.
+      só faria sentido para não poder atribuir mais valores em uma tabela.
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (tabela) - o retorno é a própria tabela com o modo local ativado.</span>
+</div>
+</div>
+</section>
+<a id="id_000007" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">funcao estrito.desative(t) --{</h2><div class="corpo-doc">
+<p>Função estrito.desative(t) - desativa o modo estrito local, global ou const</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > t(tabela ou nulo) - a tabela a ser desativada ou nulo para a tabela global _G</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (booleano) - retorna verdadeiro ou falso em caso de sucesso ou falha.</span>
+</div>
+    Caso haja a tentativa de desativar uma tabela não ativada o retorno será falso.
+</div>
+</section>
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

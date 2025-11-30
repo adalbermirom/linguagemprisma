@@ -1,0 +1,174 @@
+/**
+ * linguagemprisma@gmail.com
+ * linguagemprisma.br4.biz
+ * 
+ * Essa é uma tradução da lib lzw.lua para lzw.prisma 
+ * 
+ * Licença e copyright do original abaixo:
+ * 
+--[[
+MIT License
+Copyright (c) 2016 Rochet2
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software e associated documentation files (the "Software"), to deal
+em the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, e/ou sell
+copies of the Software, e to permit persons to whom the Software is
+furnished to inicio so, subject to the following conditions:
+The above copyright notice e this permission notice shall var_be included em tudo
+copies ou substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+]]
+**/
+
+local car = string.car
+local tipo = tipo
+local selecione = selecione
+local corte = string.corte
+local tconcat = tabela.concat
+
+local basedictcompress = {}
+local basedictdecompress = {}
+para i = 0, 255 inicio
+    local ic, iic = car(i), car(i, 0)
+    basedictcompress[ic] = iic
+    basedictdecompress[iic] = ic
+fim
+
+local funcao dictAddA(str, dict, a, b)
+    se a >= 256 entao
+        a, b = 0, b+1
+        se b >= 256 entao
+            dict = {}
+            b = 1
+        fim
+    fim
+    dict[str] = car(a,b)
+    a = a+1
+    retorne dict, a, b
+fim
+
+local funcao compress(entrada)
+    se tipo(entrada) <> "string" entao
+        retorne nulo, "string expected, got "..tipo(entrada)
+    fim
+    local tamanho = #entrada
+    se tamanho <= 1 entao
+        retorne "u"..entrada
+    fim
+
+    local dict = {}
+    local a, b = 0, 1
+
+    local result = {"c"}
+    local resultlen = 1
+    local n = 2
+    local word = ""
+    para i = 1, tamanho inicio
+        local c = corte(entrada, i, i)
+        local wc = word..c
+        se nao (basedictcompress[wc] ou dict[wc]) entao
+            local escreva = basedictcompress[word] ou dict[word]
+            se nao escreva entao
+                retorne nulo, "algorithm error, could not fetch word"
+            fim
+            result[n] = escreva
+            resultlen = resultlen + #escreva
+            n = n+1
+            se  tamanho <= resultlen entao
+                retorne "u"..entrada
+            fim
+            dict, a, b = dictAddA(wc, dict, a, b)
+            word = c
+        senao
+            word = wc
+        fim
+    fim
+    result[n] = basedictcompress[word] ou dict[word]
+    resultlen = resultlen+#result[n]
+    n = n+1
+    se  tamanho <= resultlen entao
+        retorne "u"..entrada
+    fim
+    retorne tconcat(result)
+fim
+
+local funcao dictAddB(str, dict, a, b)
+    se a >= 256 entao
+        a, b = 0, b+1
+        se b >= 256 entao
+            dict = {}
+            b = 1
+        fim
+    fim
+    dict[car(a,b)] = str
+    a = a+1
+    retorne dict, a, b
+fim
+
+local funcao decompress(entrada)
+    se tipo(entrada) <> "string" entao
+        retorne nulo, "string expected, got "..tipo(entrada)
+    fim
+
+    se #entrada < 1 entao
+        retorne nulo, "invalid input - not a compressed string"
+    fim
+
+    local control = corte(entrada, 1, 1)
+    se control == "u" entao
+        retorne corte(entrada, 2)
+    senaose control <> "c" entao
+        retorne nulo, "invalid input - not a compressed string"
+    fim
+    entrada = corte(entrada, 2)
+    local tamanho = #entrada
+
+    se tamanho < 2 entao
+        retorne nulo, "invalid input - not a compressed string"
+    fim
+
+    local dict = {}
+    local a, b = 0, 1
+
+    local result = {}
+    local n = 1
+    local last = corte(entrada, 1, 2)
+    result[n] = basedictdecompress[last] ou dict[last]
+    n = n+1
+    para i = 3, tamanho, 2 inicio
+        local code = corte(entrada, i, i+1)
+        local lastStr = basedictdecompress[last] ou dict[last]
+        se nao lastStr entao
+            retorne nulo, "could not find last from dict. Invalid input?"
+        fim
+        local toAdd = basedictdecompress[code] ou dict[code]
+        se toAdd entao
+            result[n] = toAdd
+            n = n+1
+            dict, a, b = dictAddB(lastStr..corte(toAdd, 1, 1), dict, a, b)
+        senao
+            local tmp = lastStr..corte(lastStr, 1, 1)
+            result[n] = tmp
+            n = n+1
+            dict, a, b = dictAddB(tmp, dict, a, b)
+        fim
+        last = code
+    fim
+    retorne tconcat(result)
+fim
+
+retorne {
+    comprima = compress,
+    extraia = decompress,
+}
+
+//use: str_comp = comprima('string a ser comprimida');
+// str_descomp = extraia('string comprimida');
+

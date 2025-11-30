@@ -1,0 +1,671 @@
+/**
+ *  Bibioteca igbr, na verdade chama a igpbr que contem as funções de C para Prisma.
+ * 
+ *    Esta lib serve para criar CONSTANTS e funções mais fáceis.
+ * 
+ *    Livre e gratuita para usar como bem entender e ou modificar
+ *     
+ *    O autor não será responsabilizado pelo uso desta lib
+ *    
+ *    By Adalberto Amorim Felipe  <linguagemprisma@gmail.com>
+ *    
+ *    www.linguagemprisma.br4.biz* 
+ * **///
+//funcoes de rede (servidor,cliente socket)
+local ig=inclua'igpbr'
+ig.rede=inclua'igrede';
+ig.negrito='bold';
+ig.italico='italic';
+//tipos de janela //compatibilidade, desde a versão prisma 1.0.96, use agora: ig.JANELA_SEMBORDA e ig.JANELA_COMBORDA
+ig.janela_comborda=ig.JANELA_COMBORDA;
+ig.janela_semborda=ig.JANELA_SEMBORDA;   
+local modify_font=ig.componente_modifique_fonte;
+ig.componente_modifique_fonte=funcao ( wid , ... )
+ local a={...};
+ local font;
+ se tipo( a[1] ) <> 'userdata' entao
+  local tmp='';
+  se a[2] <> nulo entao
+   tmp=a[1] .. ',';
+   para i=2 , #a inicio
+    tmp=tmp .. a[i] .. ' ';
+   fim
+   font=tmp;
+  senao
+   font=a[1];
+  fim //fim se a[2]
+  modify_font(wid,tmp);
+ senao
+  modify_font(wid,a[1]);
+ fim //fim se tipo(a[1])
+fim //fim funcao
+//===  dialogo sair ===
+funcao ig.msg_sair(janela_ , evento, dado )
+ local titulo_=dado[1] ou "Atenção";
+ local msg_=dado[2] ou "Deseja sair do programa?"
+ local dialog=ig.dialogo_mensagem( janela_ , titulo_ , msg_ ,ig.msg_questao,ig.botao_sim_nao);
+ ig.janela_def_posicao(dialog, ig.JANELA_POS_CENTRO);
+ local ret=ig.dialogo_execute(dialog);
+ ig.componente_destrua(dialog);
+ se ret == ig.ret_sim entao
+  retorne falso;
+ senaose ret == ig.ret_nao entao
+  retorne  verdadeiro;
+ senaose ret == ig.ret_cancelar entao
+   retorne verdadeiro;
+ senaose ret==ig.ret_fechar entao
+  retorne verdadeiro;
+ fim
+fim //fim funcao MSG_dialogo_sair
+funcao ig.dialogo_sair(jan_,titulo_,msg_)
+ ig.conecte_funcao( jan_ ,ig['evento_delete'],ig.msg_sair,{titulo_,msg_});
+fim
+//=== fim dialogo sair ==  
+//=== DIALOGO SALVAR SIMPLES == 
+funcao ig.dialogo_salvar(jan,titulo_dialogo,path_dialogo_salvar)
+ local titulo_dialogo_salvar=titulo_dialogo ou "Salvar arquivo";
+ local dialogo_salvar=ig.seletor_arquivo_dialogo(
+  titulo_dialogo_salvar,
+  jan ,
+  ig.seletor_arquivo_acao_salvar,
+  ig.estoque_cancelar,
+  ig.ret_cancelar,
+  ig.estoque_salvar,
+  ig.ret_aceitar
+); //fim argumentos funcao dialogo
+//perguntar "deseja substituir'
+ig.seletor_arquivo_def_confirmacao_sobreescrita ( dialogo_salvar , verdadeiro ) ;
+se tipo(path_dialogo_salvar)=="string" entao
+ ig.seletor_arquivo_def_pasta_atual(dialogo_salvar,path_dialogo_salvar);
+fim
+ig.janela_def_posicao(dialogo_salvar,ig.JANELA_POS_CENTRO);
+local retorno=ig.dialogo_execute(dialogo_salvar);
+se retorno == ig.ret_aceitar entao
+ arq=ig.seletor_arquivo_obt_nome_arquivo( dialogo_salvar) ou "";
+ ig.componente_destrua(dialogo_salvar);
+ retorne arq;
+fim
+ig.componente_destrua( dialogo_salvar );           
+retorne retorno;
+fim//fim funcao
+//=== FIM DIALOGO SALVAR ====
+
+//==== FUNCAO PARA ABRIR ==
+local defFiltros=funcao(dialog,tab_filtro)
+ local Apare=string.apare;
+ //criando filtros:
+ se tipo(tab_filtro)=='tabela' entao
+  local filtro=ig.filtro_arquivo ();
+  //definindo quais arquivos poderão ser visualizados (filtrados)
+  para i=1,#tab_filtro inicio
+   se string.corte(tab_filtro[i],1,2) == '*.' entao
+	ig.filtro_arquivo_ad_modelo ( filtro , Apare(tab_filtro[i]) );
+   fim
+  fim      
+  //colocando o filtro no dialogo:      
+  ig.seletor_arquivo_def_filtro ( dialog , filtro );
+ fim//fim filtro 
+fim
+
+local Analise_filtros=funcao(str)
+ local str=str ou '*.*';
+ se string.corte(str,1,2)=='*.' entao
+  retorne {str};
+ senao
+  local tab=string.analise(str,'(),;/|[]');
+  se tipo(tab)=='tabela' entao
+   retorne tab;
+  senao
+   retorne {'*.*'}
+  fim
+ fim
+fim
+
+funcao ig.dialogo_abrir(jan,titulo_dialogo,path_dialogo,filter_dialogo)
+ local titulo_dialogo=titulo_dialogo ou "Abrir arquivo(s)";
+ local filter_dialogo=filter_dialogo ou {'Todo tipo (*.*)'};
+ local dialogo_abrir=ig.seletor_arquivo_dialogo(
+  titulo_dialogo,jan,
+  ig.seletor_arquivo_acao_abrir,
+  ig.estoque_cancelar,-6,ig.estoque_abrir,-3
+ );                
+ ig.seletor_arquivo_def_selecao_multipla( dialogo_abrir, verdadeiro );//selecionar varios arquivos
+ se path_dialogo entao
+  ig.seletor_arquivo_def_pasta_atual(dialogo_abrir,path_dialogo);
+ fim      
+///== criando um componente extra para colocar no dialogo =====
+ local caixav=ig.caixavertical();//caixa vertical para colocar os componentes extras:
+ local caixa_h=ig.caixahorizontal(falso,0);//criando caixa horizontal
+ ig.caixa_ad(caixav,caixa_h,falso,falso,1);
+ local rotulo=ig.rotulo(" Arquivo(s): ");
+ ig.caixa_ad(caixa_h,rotulo,falso,falso,0);
+ local texto_in=ig.texto();//criando um texto para por na caixa
+ ig.caixa_ad(caixa_h,texto_in,verdadeiro,verdadeiro,0);//adicionando o texto na caixa
+ local funcao selecione_nome()//função call back para atualizar os nomes dos arquivos no texto
+  local arquivos=ig.seletor_arquivo_obt_nomes_arquivos(dialogo_abrir);
+  local arqs='';
+  para i=1,#arquivos inicio
+   arqs=arqs .. '\"' .. arquivos[i] .. '\" ';//unindo os nomes
+  fim
+  arqs=arqs .. ' ';
+  ig.texto_def_texto(texto_in,arqs);
+ fim
+ //tipos de arquivo:
+ local caixah=ig.caixahorizontal();
+ local rotfiltros=ig.rotulo' Tipos de arquivo: ';
+ ig.caixa_ad(caixah,rotfiltros,falso,falso,0);
+ local Combo=ig.caixa_combo();
+ se tipo(filter_dialogo)=='tabela'entao
+  para i=1, #filter_dialogo inicio
+	ig.caixa_combo_anexe_texto(Combo,filter_dialogo[i]);
+  fim
+  ig.caixa_combo_def_ativo( Combo, 1 );
+  ig.ad( caixah, Combo );
+ fim
+ defFiltros(dialogo_abrir,Analise_filtros(filter_dialogo[1]));
+ //criando um função para ser chamada ao alterar a caixa combo:
+ local funcao combo_ex(comp,dado)//o primeiro parametro é o proprio componente conectado, o segundo é o dado extra do usuário.
+  local texto_comb=ig.caixa_combo_obt_texto_ativo(comp);
+  defFiltros(dado,Analise_filtros(texto_comb));
+ fim
+ //para que a função acima seja chamada pelo clique no combo, devemos conecta-la ao combo:
+ ig.conecte_funcao(Combo,ig.modificado,combo_ex,dialogo_abrir );
+ //args: o proprio combo, o tipo de acao (evento) , a função, e um segundo parametro para a função
+ ig.caixa_ad(caixav,caixah,falso,falso,1);
+ //conectando a função acima no evento selecao mudada do dialogo
+ ig.conecte_funcao(dialogo_abrir,'selection-changed',selecione_nome);
+ //necessário mostrar a caixa e todos seus componentes antes de adicionar no dialogo
+ ig.componente_mostre_todos(caixav);
+ //adicionando o componente extra caixa_h no dialogo abrir.
+ ig.seletor_arquivo_def_extra_componente(dialogo_abrir,caixav);
+ //==== fim componente extra
+ ig.janela_def_posicao(dialogo_abrir,ig.JANELA_POS_CENTRO);
+ local retorno=ig.dialogo_execute(dialogo_abrir);
+ se retorno == -3 entao
+  local arquivos=ig.seletor_arquivo_obt_nomes_arquivos(dialogo_abrir);
+  local arqs='';
+  para i=1,#arquivos inicio
+   arqs=arqs .. string.formate(" %q ",arquivos[i])
+  fim
+  ig.componente_destrua(dialogo_abrir );
+  retorne arqs, arquivos;
+ fim
+ ig.componente_destrua(dialogo_abrir);
+ retorne retorno;
+fim//==== FIM  DIALOGO ABRIR ====
+
+//===== FUNCAO PARA ABRIR PASTA ===
+funcao ig.dialogo_pasta(jan,titulo_dialogo,path_dialogo,filter_dialogo)
+ local titulo_dialogo=titulo_dialogo ou  "Abrir pasta";
+ local dialogo_abrir=ig.seletor_arquivo_dialogo(
+  titulo_dialogo,jan,
+  ig.seletor_arquivo_acao_pasta,
+  ig.estoque_cancelar,-6,
+  ig.estoque_abrir , -3
+ );                
+ //definindo como permitido selecionar mais de um arquivo:
+ ig.seletor_arquivo_def_selecao_multipla(dialogo_abrir,verdadeiro);
+ //definindo pasta padrao do dialogo abrir
+ se path_dialogo entao
+  ig.seletor_arquivo_def_pasta_atual( dialogo_abrir , path_dialogo );
+ fim      
+ //== criando um componente extra para colocar no dialogo =====
+ local caixa_h=ig.caixahorizontal(falso,0);//criando caixa horizontal
+ local rotulo=ig.rotulo("   Pasta(s): ");
+ ig.caixa_ad(caixa_h,rotulo,falso,falso,0);
+ local texto_in=ig.texto(); //criando um texto para por na caixa
+ ig.caixa_ad(caixa_h,texto_in,verdadeiro,verdadeiro,0);//adicionando o texto na caixa
+ local funcao selecione_nome() //função call back para atualizar os nomes dos arquivos no texto
+  local arquivos=ig.seletor_arquivo_obt_nomes_arquivos(dialogo_abrir);
+  local arqs=' '
+  para i=1,#arquivos inicio
+   arqs=arqs .. ' \"' .. arquivos [i] .. '\" '; //unindo os nomes                             
+  fim
+  arqs=arqs .. ' ' ;
+  ig.texto_def_texto(texto_in,arqs);
+ fim//fim funcao selecione_nome
+ //conectando a função acima no evento selecao mudada do dialogo
+ ig.conecte_funcao(dialogo_abrir,'selection-changed',selecione_nome);
+ //necessário mostrar a caixa e todos seus componentes antes de adicionar no dialogo
+ ig.componente_mostre_todos( caixa_h);
+ //adicionando o componente extra caixa_h no dialogo abrir.
+ ig.seletor_arquivo_def_extra_componente( dialogo_abrir , caixa_h );
+ //==== fim componente extra
+ ig.janela_def_posicao(dialogo_abrir,ig.JANELA_POS_CENTRO);
+ local retorno=ig.dialogo_execute(dialogo_abrir);
+ se retorno==-3 entao
+  local arquivos=ig.seletor_arquivo_obt_nomes_arquivos ( dialogo_abrir );
+  local arqs=' ';
+  para i=1,#arquivos inicio
+   arqs=arqs .. ' \"' .. arquivos[i] .. '\" ';//unindo os nomes
+  fim
+  arqs=arqs .. ' ';
+  ig.componente_destrua(dialogo_abrir);
+  retorne arqs, arquivos;
+ fim
+ ig.componente_destrua( dialogo_abrir );
+ retorne retorno;
+fim//====== FIM  DIALOGO PASTA ==
+
+
+//fonte descricao com argumenos variados.
+local font_description_from_string=ig.fonte_descricao_string;
+funcao ig.fonte_descricao_string(...)
+ local a={...};
+ local font_retorno;
+ se a[2] == nulo entao
+  font_retorno=a[1];
+ senao
+  local tmp=' ';
+  tmp=a[1] .. ',';
+  para i=2 , #a inicio
+   tmp=tmp .. a[i] .. ' ';
+  fim
+  font_retorno=tmp;
+ fim
+ retorne  font_description_from_string( font_retorno );
+fim
+//fonte descricao com argumenos variados.
+funcao ig.fonte_analise(...)
+ local a={...};
+ local font_retorno;
+ se a[2] == nulo entao
+  font_retorno=a[1];
+ senao
+  local tmp=' ';
+  tmp=a[1] .. ',';
+  para i=2 , #a inicio
+   tmp=tmp .. a[i] .. ' ';
+  fim
+  font_retorno=tmp;
+ fim
+ retorne  font_retorno;
+fim
+//== funcoes para facilitar insercao e obtencao de texto
+funcao ig.texto_area_def_texto(_texto,conteudo)
+ local buff=ig.texto_area_obt_buffer(_texto);
+ ig.texto_buffer_def_texto(buff,conteudo,#conteudo);
+fim
+
+funcao ig.texto_area_obt_texto(_texto)
+ local buffer=ig.texto_area_obt_buffer( _texto )
+ local Inicio_txt , Fim_txt=ig.texto_buffer_obt_limites ( buffer);
+ local text=ig.texto_iter_obt_texto( Inicio_txt, Fim_txt );
+ retorne text;       
+fim
+
+ig.texto_area_crie_tag=ig.texto_buffer_crie_tag; //compat com prismacod
+
+//facilidades para criar menu:
+funcao ig.crie_menu(barra,str)
+ local menu=ig.menu (); //criando o menu
+ local menu_item=ig.menu_item (str); //criando o item principal
+ ig.def_menu ( menu_item , menu  ); //definindo o item principal
+ ig.menu_shell_anexe ( barra , menu_item );
+ retorne menu;
+fim
+ig.menu_ad=ig.menu_anexe;
+//--------------- EVENTOS PARA CONECTAR A FUNÇÕES
+ig.empilhe=ig.clamp
+ig.clique='clicked';
+ig.ativado='activate';
+ig.modificado='changed';
+ig.destruido='destroy';
+ig.marcado="toggled";
+ig.clique_linha="select_row";
+ig.pressionado='pressed' ;
+ig.solto='released' ;
+ig.dentro='enter';
+ig.fora='leave';
+ig.botao_evento_pressionado="button-press-event"
+ig.evento_delete='delete-event';
+ig.evento_configure='configure-event';
+ig.tecla_evento_pressionada='key-press-event';
+ig.marque_texto='mark-set';
+ig.janela_evento_estado='window-state-event';
+ig.realize='realize';
+ig.valor_mudado='value-changed'
+ig.formate_valor='format-value'; //para scales
+ig.valor_formatado='format-value'; //idem o de cima.
+ig.fechado="close"; //para info bar barra_info
+ig.retorno='response'; //para info bar barra_info. quando um botao do info é acionado.
+ig.selecao_mudada='selection-changed'; //para dialogo de abrir arquivo, pasta ou salvar.
+
+//------ para calendario
+ig.mes_mudado='month_changed'  ; 
+ig.dia_selecionado='day_selected';
+ig.dia_selecionado_duplo_clique='day_selected_double_click' ;
+ig.proximo_mes='next_month';
+ig.anterior_mes='prev_month';
+ig.proximo_ano='next_year';
+ig.anterior_ano='prev_year';
+
+//------ para igrede
+ig.recebido="incoming"
+
+
+//area de transferencia texto:
+ig.copiado = 'copy-clipboard';
+ig.recortado = 'cut-clipboard';
+ig.deletado_no_cursor = 'delete-from-cursor';
+ig.icone_pressionado = 'icon-press';
+ig.icone_solto = 'icon-release';
+
+//função que conecta 
+ig.conecte = funcao(wid,signal,func,extra)
+  local signal = ig[signal] ou signal;
+  retorne ig.conecte_funcao(wid,signal,func,extra);//retorna o id da conexao (numero);
+fim
+
+//ig.conecte_funcao = ig.conecte;
+
+local cor_analise_tmp = ig.cor_analise;
+ig.cor_analise = funcao (cor)
+  local Cor = ig[cor] ou cor; //ex.: local cor_azul = ig.cor_analise("azul");
+  retorne cor_analise_tmp(Cor,'*t');
+fim
+
+
+
+//---- CORES PARA A FUNCAO ig.cor_analise("nomecor");
+ig['branco']='white';
+ig['vermelho']='red';
+ig.vermelhoescuro='darkred';
+ig.vermelhoclaro='lightred';
+ig['azul']='blue';
+ig.azulescuro='darkblue';
+ig.azulclaro='lightblue';
+ig['amarelo']='yellow' ;
+ig.verde='green';
+ig.verdeescuro='darkgreen';
+ig.verdeclaro='lightgreen';
+ig.cinza='gray' ;
+ig.preto='black';
+ig.prata='silver';
+ig.ouro='gold';
+ig.marrom='brown';
+ig.rosa='pink';
+ig.turquesa='turquoise'
+ig.ciano='cyan';
+ig.magenta='magenta';
+ig.violeta='violet';
+ig.roxo='purple';
+ig.laranja='orange';
+escuro='dark';
+claro='light';
+celeste='sky';
+marinho='sea';
+aco='steel';
+profundo='deep';
+primavera='Spring';
+ig.aguamarinha='aquamarine';
+ig.oliva='olivedrab';
+
+//----------------------------- funcao para resolucao tela:
+funcao ig.largura_tela()
+ local dis=ig.display_obt_padrao ();
+ local tela=ig.display_obt_tela_padrao(dis); //obtenha a tela padrao a partir do display (dis)
+ local larg=ig.tela_obt_largura(tela); //obtendo a largura da tela
+ retorne larg;
+fim
+
+funcao ig.altura_tela()
+// primeiro obtenha o display (ecra)
+ local dis=ig.display_obt_padrao ();
+ local tela=ig.display_obt_tela_padrao ( dis ); //obtenha a tela padrao a partir do display (dis)
+ local alt=ig.tela_obt_altura ( tela ); //obtendo a altura da tela
+ retorne alt;
+fim
+ig.componente_def_corfundo=ig.componente_modifique_corfundo;
+ig.componente_def_corletra=ig.componente_modifique_corletra;
+//compatibilidade com as letras:
+ig_a=ig.c_a;
+ig_b=ig.c_b;
+ig_c=ig.c_c;
+ig_d=ig.c_d;
+ig_e=ig.c_e;
+ig_f=ig.c_f;
+ig_g=ig.c_g;
+ig_h=ig.c_h;
+ig_i=ig.c_i;
+ig_j=ig.c_j;
+ig_k=ig.c_k;
+ig_l=ig.c_l;
+ig_m=ig.c_m;
+ig_n=ig.c_n;
+ig_o=ig.c_o;
+ig_p=ig.c_p;
+ig_q=ig.c_q;
+ig_r=ig.c_r;
+ig_s=ig.c_s;
+ig_t=ig.c_t;
+ig_u=ig.c_u;
+ig_v=ig.c_v;
+ig_w=ig.c_w;
+ig_x=ig.c_x;
+ig_y=ig.c_y;
+ig_z=ig.c_z;
+ig_A=ig.c_A;
+ig_B=ig.c_B;
+ig_C=ig.c_C;
+ig_D=ig.c_D;
+ig_E=ig.c_E;
+ig_F=ig.c_F;
+ig_G=ig.c_G;
+ig_H=ig.c_H;
+ig_I=ig.c_I;
+ig_J=ig.c_J;
+ig_K=ig.c_K;
+ig_L=ig.c_L;
+ig_M=ig.c_M;
+ig_N=ig.c_N;
+ig_O=ig.c_O;
+ig_P=ig.c_P;
+ig_Q=ig.c_Q;
+ig_R=ig.c_R;
+ig_S=ig.c_S;
+ig_T=ig.c_T;
+ig_U=ig.c_U;
+ig_V=ig.c_V;
+ig_W=ig.c_W;
+ig_X=ig.c_X;
+ig_Y=ig.c_Y;
+ig_Z=ig.c_Z;
+
+
+//============================ DIALOGO COM PREVISUALISACAO IMAGEM SE COMPATIVEL COM GDK PIX
+
+funcao ig.dialogo_abrir_img(jan,titulo_dialogo,path_dialogo,filter_dialogo)
+ 
+ local titulo_dialogo=titulo_dialogo ou "Abrir arquivo(s)";
+ local filter_dialogo=filter_dialogo ou {'Todo tipo (*.*)'};
+ local dialogo_abrir=ig.seletor_arquivo_dialogo(
+  titulo_dialogo,jan,
+  ig.seletor_arquivo_acao_abrir,
+  ig.estoque_cancelar,-6,ig.estoque_abrir,-3
+ );      
+ ig.componente_def_tamanho(dialogo_abrir,300,300);
+ local pix = ig.pixbuf_arquivo(logo_img);//veja em conf.prisma essa variável global.
+ se pix entao
+   ig.janela_def_icone_pixbuf(dialogo_abrir,pix);
+   ig.objeto_desref(pix);
+ fim 
+          
+ ig.seletor_arquivo_def_selecao_multipla( dialogo_abrir, verdadeiro );//selecionar varios arquivos
+ se path_dialogo entao
+  ig.seletor_arquivo_def_pasta_atual(dialogo_abrir,path_dialogo);
+ fim      
+///== criando um componente extra para colocar no dialogo =====
+ local caixav=ig.caixavertical();//caixa vertical para colocar o painel duplo:
+ 
+ local painel_duplo = ig.painelh();
+ ig.caixa_ad(caixav,painel_duplo,falso,falso,1);
+ local img_preview = ig.imagem();
+ ig.painel_ad1(painel_duplo, img_preview);
+ local cv_painel = ig.caixavertical();
+ ig.painel_ad2(painel_duplo,cv_painel);
+  
+ local caixa_h=ig.caixahorizontal(falso,0);//criando caixa horizontal
+ ig.caixa_ad(cv_painel,caixa_h,falso,falso,1);
+ local rotulo=ig.rotulo('Arquivo(s): ');
+ ig.caixa_ad(caixa_h,rotulo,falso,falso,0);
+ local texto_in=ig.texto();//criando um texto para por na caixa
+ ig.caixa_ad(caixa_h,texto_in,verdadeiro,verdadeiro,0);//adicionando o texto na caixa
+ 
+ local PIX=falso;
+ local funcao selecione_nome(comp,dado)//função call back para atualizar os nomes dos arquivos no texto
+  local arq=ig.seletor_arquivo_obt_nome_arquivo(dialogo_abrir); //retorna tabela com nomes selecionados
+  arq = arq ou '';
+  ig.texto_def_texto(texto_in,arq);//aqui só vamos ocupar o primeiro nome.
+  local pix = ig.pixbuf_arquivo(arq,128,128);
+  se pix entao
+    se PIX entao
+      ig.objeto_desref(PIX);//deve-se fazer isso senao o programa só vai gastando mais memória.
+      PIX = nulo;
+    fim
+    ig.imagem_def_pixbuf(dado,pix);
+    PIX = pix;    
+  fim
+ fim
+ //tipos de arquivo:
+ 
+ local caixah=ig.caixahorizontal();
+ local rotfiltros=ig.rotulo('Filtros: ');
+ ig.caixa_ad(caixah,rotfiltros,falso,falso,0);
+ local Combo=ig.caixa_combo();
+ se tipo(filter_dialogo)=='tabela'entao
+  para i=1, #filter_dialogo inicio
+	ig.caixa_combo_anexe_texto(Combo,filter_dialogo[i]);
+  fim
+  ig.caixa_combo_def_ativo( Combo, 1 );
+  ig.ad( caixah, Combo );
+ fim
+ defFiltros(dialogo_abrir,Analise_filtros(filter_dialogo[1]));
+ //criando um função para ser chamada ao alterar a caixa combo:
+ local funcao combo_ex(comp,dado)//o primeiro parametro é o proprio componente conectado, o segundo é o dado extra do usuário.
+  local texto_comb=ig.caixa_combo_obt_texto_ativo(comp);
+  defFiltros(dado,Analise_filtros(texto_comb));
+ fim
+ //para que a função acima seja chamada pelo clique no combo, devemos conecta-la ao combo:
+ ig.conecte_funcao(Combo,ig.modificado,combo_ex,dialogo_abrir );
+ //args: o proprio combo, o tipo de acao (evento) , a função, e um segundo parametro para a função
+ ig.caixa_ad(cv_painel, caixah,falso,falso,1);
+ 
+ //conectando a função acima no evento selecao mudada do dialogo
+ ig.conecte_funcao(dialogo_abrir,'selection-changed',selecione_nome,img_preview);
+ //necessário mostrar a caixa e todos seus componentes antes de adicionar no dialogo
+ ig.componente_mostre_todos(caixav);
+ //adicionando o componente extra caixa_h no dialogo abrir.
+ ig.seletor_arquivo_def_extra_componente(dialogo_abrir,caixav);
+ //==== fim componente extra
+ ig.janela_def_posicao(dialogo_abrir,ig.JANELA_POS_CENTRO);
+ local retorno=ig.dialogo_execute(dialogo_abrir);
+ se retorno == -3 entao
+  local arquivos=ig.seletor_arquivo_obt_nomes_arquivos(dialogo_abrir);
+  local arqs='';
+  para i=1,#arquivos inicio
+   arqs=arqs .. string.formate(" %q ",arquivos[i])
+  fim
+  ig.componente_destrua(dialogo_abrir );
+  retorne arqs, arquivos;
+ fim
+ ig.componente_destrua(dialogo_abrir);
+ retorne retorno;
+fim//==== FIM  DIALOGO ABRIR ====
+
+
+
+//=========================== DIALAOGO SALVAR IMAGEM
+
+funcao ig.dialogo_salvar_img(jan,titulo_dialogo,path_dialogo,filter_dialogo)
+ 
+ local titulo_dialogo=titulo_dialogo ou "Salvar como";
+ local filter_dialogo=filter_dialogo ou {'Todo tipo (*.*)'};
+ local dialogo_salvar=ig.seletor_arquivo_dialogo(
+  titulo_dialogo,jan,
+  ig.seletor_arquivo_acao_salvar,
+  ig.estoque_cancelar,-6,ig.estoque_salvar,-3
+ ); 
+ ig.componente_def_tamanho(dialogo_salvar,200,200);   
+ ig.seletor_arquivo_def_confirmacao_sobreescrita ( dialogo_salvar , verdadeiro ) ;            
+ //ig.seletor_arquivo_def_selecao_multipla( dialogo_salvar, verdadeiro );//selecionar varios arquivos
+ se path_dialogo entao
+  ig.seletor_arquivo_def_pasta_atual(dialogo_salvar,path_dialogo);
+ fim      
+///== criando um componente extra para colocar no dialogo =====
+ local caixav=ig.caixavertical();//caixa vertical para colocar o painel duplo:
+ 
+ local painel_duplo = ig.painelh();
+ ig.caixa_ad(caixav,painel_duplo,falso,falso,1);
+ local img_preview = ig.imagem();
+ ig.painel_ad1(painel_duplo, img_preview);
+ local cv_painel = ig.caixavertical();
+ ig.painel_ad2(painel_duplo,cv_painel);
+  
+ 
+ local PIX=falso;
+ local funcao selecione_nome(comp,dado)//função call back para atualizar os nomes dos arquivos no texto
+  local arq=ig.seletor_arquivo_obt_nome_arquivo(dialogo_salvar); //retorna tabela com nomes selecionados
+  arq = arq ou '';
+  ig.janela_def_titulo(comp,arq);
+  local pix = ig.pixbuf_arquivo(arq,128,128);
+  se pix entao
+    se PIX entao
+      ig.objeto_desref(PIX);//deve-se fazer isso senao o programa só vai gastando mais memória.
+      PIX = nulo;
+    fim
+    ig.imagem_def_pixbuf(dado,pix);
+    PIX = pix;    
+  fim
+ fim
+ //tipos de arquivo:
+ 
+ local caixah=ig.caixahorizontal();
+ local rotfiltros=ig.rotulo('Filtros: ');
+ ig.caixa_ad(caixah,rotfiltros,falso,falso,0);
+ local Combo=ig.caixa_combo();
+ se tipo(filter_dialogo)=='tabela'entao
+  para i=1, #filter_dialogo inicio
+	ig.caixa_combo_anexe_texto(Combo,filter_dialogo[i]);
+  fim
+  ig.caixa_combo_def_ativo( Combo, 1 );
+  ig.ad( caixah, Combo );
+ fim
+ defFiltros(dialogo_salvar,Analise_filtros(filter_dialogo[1]));
+ //criando um função para ser chamada ao alterar a caixa combo:
+ local funcao combo_ex(comp,dado)//o primeiro parametro é o proprio componente conectado, o segundo é o dado extra do usuário.
+  local texto_comb=ig.caixa_combo_obt_texto_ativo(comp);
+  defFiltros(dado,Analise_filtros(texto_comb));
+ fim
+ //para que a função acima seja chamada pelo clique no combo, devemos conecta-la ao combo:
+ ig.conecte_funcao(Combo,ig.modificado,combo_ex,dialogo_salvar );
+ //args: o proprio combo, o tipo de acao (evento) , a função, e um segundo parametro para a função
+ ig.caixa_ad(cv_painel, caixah,falso,falso,1);
+ 
+ //conectando a função acima no evento selecao mudada do dialogo
+ ig.conecte_funcao(dialogo_salvar,'selection-changed',selecione_nome,img_preview);
+ //necessário mostrar a caixa e todos seus componentes antes de adicionar no dialogo
+ ig.componente_mostre_todos(caixav);
+ //adicionando o componente extra caixa_h no dialogo abrir.
+ ig.seletor_arquivo_def_extra_componente(dialogo_salvar,caixav);
+ //==== fim componente extra
+ ig.janela_def_posicao(dialogo_salvar,ig.JANELA_POS_CENTRO);
+ local retorno=ig.dialogo_execute(dialogo_salvar);
+ se retorno == -3 entao
+  local arquivos=ig.seletor_arquivo_obt_nomes_arquivos(dialogo_salvar);
+  local arqs='';
+  para i=1,#arquivos inicio
+   arqs=arqs .. string.formate(" %q ",arquivos[i])
+  fim
+  ig.componente_destrua(dialogo_salvar );
+  retorne arqs, arquivos;
+ fim
+ ig.componente_destrua(dialogo_salvar);
+ retorne retorno;
+fim//==== FIM  DIALOGO ABRIR ====
+
+
+
+
+
+retorne ig;

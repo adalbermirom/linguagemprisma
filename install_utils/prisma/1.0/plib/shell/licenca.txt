@@ -1,0 +1,25 @@
+                  LICENÇA MIT             
+                                                       
+  A permissão é concedida, a título gratuito, a
+  qualquer pessoa que obtenha uma cópia deste        
+  software e arquivos de documentação associados       
+  (o "Software"), para negociar o Software sem         
+  restrição, incluindo, sem limitação, os direitos     
+  para usar, copiar, modificar, mesclar, publicar,     
+  distribuir, sublicenciar e / ou vender cópias do     
+  Software, e permitir que as pessoas a quem o        
+  Software é fornecido o façam, sujeito às seguintes   
+  condições:                                           
+  O aviso de autoria acima e este aviso de permissão   
+  devem ser incluídos em todas as cópias ou partes     
+  substanciais do Software.                            
+  O SOFTWARE É FORNECIDO \"COMO ESTÁ\", SEM GARANTIA     
+  DE QUALQUER TIPO, EXPRESSA OU IMPLÍCITA, INCLUINDO,  
+  SEM LIMITAÇÃO, AS GARANTIAS DE COMERCIALIZAÇÃO,      
+  ADEQUAÇÃO A UM DETERMINADO FIM E NÃO VIOLAÇÃO. EM    
+  NENHUMA HIPÓTESE OS AUTORES OU DETENTORES DE DIREITOS
+  AUTORAIS SERÃO RESPONSÁVEIS POR QUALQUER RECLAMAÇÃO, 
+  DANOS OU OUTRAS RESPONSABILIDADES, SEJA EM UMA AÇÃO  
+  DE CUMPRIMENTO DE CONTRATO OU QUALQUER OUTRO MEIO, OU
+  EM CONEXÃO COM O SOFTWARE OU O USO OU OUTRAS FUNÇÕES 
+  DO SOFTWARE.                                         

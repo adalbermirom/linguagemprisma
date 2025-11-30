@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>bin.pris</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<nav id="id_00000A"  class="floating-menu">
+<div class="menu-button" title="Ocultar painel lateral" onclick="show_menu_flutuante(this, 'id_00000B', 'id_00000A')">&#x2630;</div>
+<div class="com-rolagem" id="id_00000B" hidden>
+<div class="caixa "><h2>Funções:</h2>
+<a href="#id_000003">bin_para_dec</a>
+<a href="#id_000006">bin_para_letra</a>
+<a href="#id_000008">bin_para_str</a>
+<a href="#id_000004">dec_para_bin</a>
+<a href="#id_000005">letra_para_bin</a>
+<a href="#id_000007">str_para_bin</a>
+
+</div>
+</div>
+</nav>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> bin.pris</h1>
+<h3> Adalberto</h3>
+<h3> 25 nov 2023</h3>
+<br>
+<div>
+Uma biblioteca simples que converte binário(base2) para decimal(base10)...
+<a href="#id_00000C"> mais...</a></div>
+<div class="caixa com-borda"><div><h2 >Funções:</h2>
+<ol>
+<li><a href="#id_000003">bin_para_dec</a></li>
+<li><a href="#id_000006">bin_para_letra</a></li>
+<li><a href="#id_000008">bin_para_str</a></li>
+<li><a href="#id_000004">dec_para_bin</a></li>
+<li><a href="#id_000005">letra_para_bin</a></li>
+<li><a href="#id_000007">str_para_bin</a></li>
+</ol>
+</div>
+
+</div><br>
+
+<h2 id="id_00000C">bin.pris</h2><div>
+Uma biblioteca simples que converte binário(base2) para decimal(base10)...
+</div>
+
+
+
+  
+
+  
+ 
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000002')">&#128203;</div>&nbsp;<i>Veja o exemplo:</i><pre id="id_000002" hidden>      local bin = inclua&#39;bin&#39;;
+      local b1 = 100111000; //312 em binário.
+      local d1 = bin.bin_para_dec(b1);
+      imprima(d1); //--&gt; 312   
+      
+      //podemos converter uma frase ou texto inteiro para binário:
+      local txt_bin =  bin.str_para_bin(&#39;ola tudo bem com você?&#39;);
+      imprima(txt_bin);
+      
+      //podemos desfazer a conversão e reaver a frase ou texto:
+      imprima(bin.bin_para_str(txt_bin) );//desfaz a conversão.  
+      
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+      <span style="font-weight:bold;color:#b50546">local</span> bin <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;bin&#39;</span><span style="font-weight:bold;">;</span>
+      <span style="font-weight:bold;color:#b50546">local</span> b1 <span style="font-weight:bold;">=</span> <span style="color:red">100111000</span><span style="font-weight:bold;">;</span> <span style="color:green">//312 em binário.
+</span>      <span style="font-weight:bold;color:#b50546">local</span> d1 <span style="font-weight:bold;">=</span> bin<span style="font-weight:bold;">.</span>bin_para_dec<span style="font-weight:bold;">(</span>b1<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+      <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>d1<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt; 312   
+</span>      
+      <span style="color:green">//podemos converter uma frase ou texto inteiro para binário:
+</span>      <span style="font-weight:bold;color:#b50546">local</span> txt_bin <span style="font-weight:bold;">=</span>  bin<span style="font-weight:bold;">.</span>str_para_bin<span style="font-weight:bold;">(</span><span style="color:blue">&#39;ola tudo bem com você?&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+      <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>txt_bin<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+      
+      <span style="color:green">//podemos desfazer a conversão e reaver a frase ou texto:
+</span>      <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>bin<span style="font-weight:bold;">.</span>bin_para_str<span style="font-weight:bold;">(</span>txt_bin<span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//desfaz a conversão.  
+</span>      
+</pre></div></div>
+
+</div>
+<h1>Funções:</h1>
+<a id="id_000003" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">local funcao bin_para_dec(b)</h2><div class="corpo-doc">
+<p>Função bin.bin_para_dec(b) - converte um número em base 2 para base 10.</p>
+
+       Um número em base binária como: 100111000, pode ser convertido para seu valor decimal 312.
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > b(numero) - número em base binário (base 2) - somente zeros e uns, ex.: 100111000</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (numero) - o retorno é o número convertido para base decimal.</span>
+</div>
+</div>
+</section>
+<a id="id_000004" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">local funcao dec_para_bin(d)</h2><div class="corpo-doc">
+<p>Função bin.dec_para_bin(d) - converte um número em base 10 para base 2.</p>
+
+       Um número em base decimal como: 312 pode ser convertido para seu valor em base binária  100111000.
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > d(numero) - número em base decimal (base 10).</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (numero) - o retorno é o número convertido para base binária.</span>
+</div>
+</div>
+</section>
+<a id="id_000005" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">local funcao letra_para_bin(l) </h2><div class="corpo-doc">
+<p>Função bin.dec_para_bin(l) - converte o código ASCII de um caractere para seu valor em base binária(base2)</p>
+
+       Por exemplo a letra 'a' pode ser convertida para seu valor binário: 01100001
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > l(string) - o caractere para ser convertido </span>
+</div>
+       <p><i>(Obs. em Prisma só existe string, então um caractere entre apas é uma string);</i></p>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - o retorno é a string do número convertido para base binária.</span>
+</div>
+</div>
+</section>
+<a id="id_000006" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">local funcao bin_para_letra(bin)</h2><div class="corpo-doc">
+<p>Função bin.bin_para_letra(bin) - converte um número binário para o caractere ASCII equivalente.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > bin(numero) - número binário (uns e zeros) para ser convertido para caractere ASCII</span>
+</div>
+       <p><i>(Obs. em Prisma só existe string, então um caractere entre apas é uma string);</i></p>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - o retorno é a string com o caractere já convertido.</span>
+</div>
+</div>
+</section>
+<a id="id_000007" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">local funcao str_para_bin(str)</h2><div class="corpo-doc">
+<p>Função bin.str_para_bin(str) - converte uma sequência de caracteres (string:texto) em código binário (base 2)</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > str(string) - string/texto para ser convertida em código binário(base 2);</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - o retorno é a string com o código binário.</span>
+</div>
+</div>
+</section>
+<a id="id_000008" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">local funcao bin_para_str(bin)</h2><div class="corpo-doc">
+<p>Função bin.bin_para_str(bin) - converte um texto em código binário(base 2) para string (texto ASCII);</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > bin(string) - string/texto para ser convertida de código binário(base 2) para texto ASCII;</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (string) - o retorno é a string com o texto decifrado de binário para ASCII</span>
+</div>
+       <p>Veja um exemplo:</p>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000009')">&#128203;</div>&nbsp;<i>ex3.prisma</i><pre id="id_000009" hidden>    
+       local bin = inclua&#39;bin&#39;;
+        local txt_bin = &#39;01101111011011001100001110100001&#39;;
+        local txt = bin.bin_para_str(txt_bin);
+        imprima(txt); //--&gt; olá
+        
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    
+       <span style="font-weight:bold;color:#b50546">local</span> bin <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;bin&#39;</span><span style="font-weight:bold;">;</span>
+        <span style="font-weight:bold;color:#b50546">local</span> txt_bin <span style="font-weight:bold;">=</span> <span style="color:blue">&#39;01101111011011001100001110100001&#39;</span><span style="font-weight:bold;">;</span>
+        <span style="font-weight:bold;color:#b50546">local</span> txt <span style="font-weight:bold;">=</span> bin<span style="font-weight:bold;">.</span>bin_para_str<span style="font-weight:bold;">(</span>txt_bin<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+        <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>txt<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//--&gt; olá
+</span>        
+</pre></div></div>
+
+</div>
+</div>
+</section>
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

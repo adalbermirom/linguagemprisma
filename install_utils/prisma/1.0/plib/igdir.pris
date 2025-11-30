@@ -1,0 +1,4 @@
+
+//compatibilidade apenas
+local dir = inclua'dir'
+retorne dir;

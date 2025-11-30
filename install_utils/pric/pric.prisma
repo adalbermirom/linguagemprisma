@@ -1,0 +1,565 @@
+
+/*@doc
+ \fonte pric - compilador prisma alternativo
+ \h3 Compila arquivos fontes Prisma para executável (prog.exe em Win ou prog em Linux);
+ \inicio
+  Este programa serve para compilar programas Prisma gerando um 'auto' interpretador,
+assim não será necessário ter o interpretador prisma instalado no computador alvo da instalação.
+ \fim
+ \obs Em sistema Windows é necessário a dll prisma tanto para o intepretador quanto para executáveis compilados com pric. A dll prisma correta será disponibilizada junto com o pric para windows.
+ \h3 Use:
+ \bloco
+  [no Windows] C:\\Prisma\\1.0\\bin\\pric.exe -o prog.exe prog.prisma
+  [no Linux]   pric -o prog prog.prisma
+  
+  é possível passar mais de um fonte (arquivo.prisma):
+  pric -o prog fonte1.prisma fonte2.prisma fonte3.prisma fonteprincipal.prisma
+ \fim_bloco
+ 
+ \h3 pric possui várias opções, veja:
+ \lista
+  [ -o file_out ] - Compila os fontes com a saída file_out (especifique a extensão apropriada - em Windows: .exe | em Linux não precisa de extensão).
+  [ -c file_out ] - Une os fontes em um só com a saída file_out (especifique a extensão apropriada).
+  [ -p file_out ] - Compila os fontes para byte-code necessitando do interpratador prisma instalado
+  [ -a file_out ] - gera um executável sem compilar o fonte prisma. (aceita apenas um fonte).
+  [ -d ] - define o modo como debug, o source é anexado ao arquivo compilado para informações extras.
+  [ -r ] - define o modo como release, o source não é anexado. (o padrão é release);
+  [ -l ] - (letra 'L' minúscula) define uma biblioteca prisma para ligar ao arquivo compilado, exemplo: -l /home/myuser/libs/mylib.pris
+  [ -s ] - define o caminho do auto-interpretador, exemplo: -s /pasta/srprisma
+  [ -v ] - imprime a versão deste programa.
+  [ -h ] - imprime esta mensagem.
+  [ -z ] - define (shebang) um caminho para o interpretador, exemplo: -z /usr/local/bin/prisma
+ \lista--
+ <br>
+ \subtitulo Veja abaixo algumas opções detalhadas:
+ 
+ \h3 [ -c ] - Opção para unir os fontes em um único arquivo sem compilar:
+ \obs Deixe no final o arquivo principal, aquele que usa funções que estão nos outros fontes.
+ \bloco
+     pric -c progfinal.prisma fontes1.prisma fontes2.prisma fontes3.prisma 
+ \bloco--
+ 
+  \h3 [ -p ] - Opção apenas compila para byte-codes sem gerar um 'auto interpretador'
+  \bloco
+     pric -p prog.pbrexe fontes1.prisma fontes2.prisma fontes3.prisma 
+  \bloco--
+\h3 [ -a ] - Opção gera um executável sem compilar para byte-codes
+\obs Essa opção é útil para gerar um executável a partir de um arquivo já compilado em byte-codes.
+\obs Essa opção aceita apenas um fonte.
+\bloco
+    pric -a prog.out prog.prisma
+\bloco--
+
+\h3 [ -d ] - Opção gera um executável com informações para debug
+\bloco
+    pric -d -o prog.out prog.prisma
+\bloco--
+
+\h3 [ -r ] - Opção gera um executável em modo release.
+\obs Esta opção é padrão, então nem precisa usá-la, a menos que queira deixar explícita a escolha em um arquivo make, por exemplo.
+\bloco
+    pric -r -o prog.out prog.prisma
+\bloco--
+
+
+\h3 [ -l ] - ('L' minúsculo) Opção para ligar uma biblioteca prisma ao programa
+\obs Esta opção aceita somente bibliotecas feitas em puro prisma, texto fonte prisma sem compilar.
+\obs O programa não precisa mais da lib, pois ela fica embutida no executável final.
+\bloco
+    pric -r -o prog.out prog.prisma -l pasta/mylib.pris
+\bloco--
+ *pasta pode ser um caminho absoluto ou relativo.<br>
+ *é possível passar mais de uma biblioteca para ser ligada, mas para cada uma é necessário a opção -l.
+ \bloco
+    pric -o prog.out prog.prisma -l pasta/minhalib.pris -l pasta/outralib.pris ...
+ \bloco--
+ 
+ \h3 [ -s ] - Define outro caminho para do auto interpretador a ser usado
+ 
+ \obs Muito útil para cross compilação, ligar um executável Win em ambiente Línux, vice-versa.
+ \obs O padrão é o próprio auto interpretador embutido no pric.
+ \h4 Em sistema Win você pode querer um programa com interface gráfica sem aparecer a janela preta do cmd.
+ \inicio
+ Para isso basta usar o auto interpretador igsrprisma.exe para gerar um executável com somente interface gráfica.
+ \fim
+ \bloco
+     pric.exe -o prog.exe prog.prisma -s C:\Prisma\1.0\bin\igsrprisma.exe
+ \bloco--
+ \obs Troque o caminho de acordo com sua instalação Prisma.
+
+\h3 [ -z ] - Define (shebang) um caminho para o interpretador, exemplo: -z /usr/local/bin/prisma
+\inicio
+   Para quem usa linux e está familiarizado com terminal, com certeza já deve ter visto ou até mesmo usado.
+   Shebang é aquela primeira linha em scripts Linux, iniciando pelos caracteres #! e que indicam o caminho
+   para o interpretador daquele script.
+\fim
+\h4 Um exemplo de início de um script bash:
+\bloco
+   #!/bin/bash
+   echo Iniciando processo!
+   ...
+\bloco--
+
+\h4 Outro exemplo, usando Prisma como interpretador
+\bloco
+   #!/usr/local/bin/prisma
+   imprima("Iniciando o processo!");
+   ...
+\bloco--
+
+\h4 Caso esteja usando Linux, ou Prisma cgi, esse recurso se torna muito útil:
+ \bloco
+      pric -p  prog.cgi prog.prisma -z /usr/local/bin/prisma
+ \bloco--
+ 
+ \obs Logicamente só faz sentido usando a opção -p para criar um arquivo em byte code, pois se gerar um executável ele não precisa de shebang, já é um executável compilado em C.
+ 
+ \obs Ao utilizar a opção -p o compilador já adiciona a shebang por padrão, logo use a opção -z apenas se mudar o caminho do interpretador da shebang.
+*/
+//além dos diretórios padrao de busca, pric busca libs 
+//criando caminho customizado para o programa compilado:
+local path_libs = [[
+local pric_plib = '/usr/local/share/%s/plib/';
+local pric_clib = '/usr/local/share/%s/clib/';
+pacote.plib = string.junte(pric_plib,'?_pris.so;',pric_plib,'?.pris;',pric_plib,'?/ini.pris',pacote.plib);
+pacote.clib = string.junte(pric_clib,'?.so;',pric_clib, 'lib?1.0.so;',pric_clib,'?/ini.pris;', pacote.clib);
+]]
+
+//imprima(prismadir..'pric');
+
+
+local pric_versao = 'pric-1.0.108'; //o mesmo que prisma.
+//local estrito = inclua'estrito';
+//estrito.modo_global();
+local n1, n2, n3 = string.separe(_VERSAO, '(%d+)%.(%d+)%.(%d+)');
+//imprima(n1,n2,n3);
+local vers = convnumero(n1..n2..n3);
+//imprima(vers);
+se vers < 10107 entao
+    erro('Versão prisma incompatível, requer 1.0.107 ou maior');
+fim
+
+
+/*
+   \var Glue
+   \resumo variável tabela(classe) contendo as informações de sinal e tamanho dos arquivos mesclados.
+*/
+local Glue = Classe{
+	sig="%%PRISMA";  /*esse símbolo pode mudar de acordo com a versão! Verifique em srprisma*/
+	size1=0; 
+	size2=0
+};
+
+local srprisma='';
+local file_out_padrao='pric.out';
+local path_srprisma = prismadir..'/pric';//o proprio pric irá copiar seu auto interpretador + o file_out.
+local funcao chmod(file)
+    sis.execute('chmod +x '..file); //torna o arquivo executável.
+fim
+local shebang_padrao = '#!/usr/local/bin/prisma';
+
+//caso o sistema seja Windows, mudamos algumas variáveis:
+se sis.nome:procure'win' entao
+  path_libs = ''; //em win não precisa pois o caminho será a pasta do executável automaticamente + plibs ou clibs.
+  path_srprisma = prismadir..'\\pric.exe'; //o proprio pric irá copiar seu auto interpretador + o file_out.
+  shebang_padrao = 'C:\\Prisma\\1.0\\bin\\prisma.exe';
+  chmod = funcao() fim;//em win não faz nada
+  file_out_padrao='pric_out.exe';
+fim
+
+/*prototipos das funções: elas podem ser acessadas em principal() mesmo definidas depois.*/
+local funcao copie(ptrfile, file1, file2, bloco_tam) fim;
+local funcao escreva_glue(a, glue) fim;
+local funcao leia_glue(file) fim; //lê um programa compilado por pric (glue) e retorna os dados t.sig, t.size1, t.size2;
+local funcao leia_arquivo(file, n) fim;
+local funcao grave_arquivo(file, txt) fim;
+local funcao copie_arquivo(orig, dest) fim;
+local funcao use() fim;
+
+local funcao conv_numbytesle(n) fim;
+local funcao obt_args(args)fim;
+local modos={bt='degug';b='realease'};
+
+/*####################  	PRINCIPAL()          ###################*/
+função principal(args)
+ 
+ local t = Glue:novo();
+ local targs = obt_args(args);//lê e processa os argumentos.
+ se nao args[1] entao 
+     use();
+     sis.saia(1);
+ fim
+ local file_out = targs.file_out ou file_out_padrao; //arquivo de saída padrão pric_out.exe ou file.out
+ local file_srprisma = targs.srprisma ou path_srprisma; //talvez mais tarde será encodado no final em base 64;
+ 
+  //  copy   file_srprisma + script_prisma + Glue_info;
+ local script_prisma = pric(targs);//compila todos os sources passados e retorna a string compilada.
+ 
+ local glue_pric = leia_glue(file_srprisma);//--> lê do proprio pric
+ local txt_srprisma='';
+ se glue_pric.sig==t.sig entao //Neste caso é o proprio glue de pric, caso contrário temos um targ.srprisma
+     txt_srprisma = leia_arquivo(file_srprisma, glue_pric.size1);
+ senao //Neste caso não é o proprio pric, temos um targ.srprisma para ler
+     txt_srprisma = leia_arquivo(file_srprisma);//lê todo o arquivo;
+ fim
+ t.size1, t.size2 = #txt_srprisma, #script_prisma;
+ 
+ local a, erroa = es.abra(file_out, 'eb');//escrita binária
+ se nao a entao erro(erroa); fim
+ a:escreva(txt_srprisma); //escrevendo o auto interpretador primeiro
+ a:escreva(script_prisma);//anexando o script compilado.
+ escreva_glue(a, t);
+ a:feche();
+ chmod(file_out);//tornando o arquivo saída executável em Linux.
+ se sis.nome:procure('win') entao //copia prisma1.0.dll
+     local pasta_dest = sis.nome_arquivo(file_out);
+     pasta_dest = pasta_dest ? pasta_dest ou '';
+     copie_arquivo(prismadir..'\\prisma1.0.dll', pasta_dest..'prisma1.0.dll');
+ fim
+ retorne 0;
+fim
+
+funcao use()
+  imprima(   ':::::::::::::::::::::::::::::::::::::::::::::::::::::::::');
+  es.escreva("::      Use: pric -o prog.exe prog.prisma (win)        ::\n");
+  es.escreva("::      Use: pric -o prog prog.prisma (linux)          ::\n");
+  imprima(':::::::::::::::::::::::::::::::::::::::::::::::::::::::::');
+  imprima([[
+  
+  Opções:
+  
+  [ -o file_out ] - Compila os fontes com a saída file_out (especifique a extensão apropriada - em Windows: file_out.exe).
+  [ -c file_out ] - Une os fontes em um só com a saída file_out (especifique a extensão apropriada).
+  [ -p file_out ] - Compila os fontes para byte-code necessitando do interpratador prisma instalado
+  [ -a file_out ] - gera um executável sem compilar o fonte prisma. (aceita apenas um fonte).
+  [ -d ] - define o modo como debug, o source é anexado ao arquivo compilado para informações extras.
+  [ -r ] - define o modo como release, o source não é anexado. (o padrão é release);
+  [ -l ] - ('L' minúscula) define uma biblioteca prisma para ligar ao arquivo compilado, exemplo: -l /home/myuser/libs/mylib.pris
+  [ -s ] - define o caminho do auto-interpretador, exemplo: -s /pasta/srprisma
+  [ -v ] - imprime a versão deste programa.
+  [ -h ] - imprime esta mensagem.
+  [ -z ] - define (shebang) um caminho para o interpretador, exemplo: -z /usr/local/bin/prisma
+  ]]);
+fim
+
+funcao leia_arquivo(file, n)
+    S(file);
+    local n = n ou '*t';
+    local a, err = es.abra(file, 'lb');
+    se nao a entao erro(err); fim
+    local txt = a:leia(n);
+    a:feche();
+    retorne S(txt);
+fim
+
+funcao grave_arquivo(file, txt)
+    S(file, txt);
+    local a, err = es.abra(file, 'eb');
+    se nao a entao erro(err); fim
+    local txt = a:escreva(txt);
+    a:feche();
+fim
+
+funcao copie_arquivo(orig, dest, tam)
+    S(orig, dest);
+    local tmp = dest .. 'temp_'.. convstring(sis.tempo()); //evita um bug se orig e dest estiverem na mesma pasta
+    local tam = tam ou 1024; //tamanho do buffer de cópia.
+    local a, b, err, bloco;
+    a, err = es.abra(orig,'leiturabin');
+    se não a entao erro(err); fim
+    b, err = es.abra(tmp, 'escritabin');
+    se nao b entao erro(err); fim
+    enquanto 1 início
+        bloco = a:leia(tam);
+        se nao bloco entao quebre; fim
+        b:escreva(bloco);
+    fim
+    a:feche();
+    b:feche();
+    
+   //se linux copiando as permissões, vamos usar o comando ls -l arquivo:
+   se sis.nome:procure('linux') então
+       local cmd = 'ls -l '..orig;
+       local p, err = es.pabra(cmd,'leitura');
+       se não p então erro(err); fim
+       local txt = p->leia('*t');
+       p->feche();
+       se txt[1]<>'-' entao
+           erro('copie_arquivo(orig, dest) -> orig não é um arquivo válido: ' .. orig);
+       fim                    //-rwxrwxr-x
+       local u, g, o = txt:corte(2,4):troque('-',''), txt:corte(5,7):troque('-',''), txt:corte(8,10):troque('-','');
+       cmd = 'chmod u=' .. u..',g='.. g ..',o=' .. o .. ' ' .. dest;
+       sis.renomeie(tmp, dest);
+       sis.execute(cmd);
+       retorne verdadeiro;
+   fim
+   //agora só renomear
+    sis.renomeie(tmp, dest);
+    sis.remova(tmp);
+    
+    retorne verdadeiro;
+fim
+
+local funcao obt_path_libs(t)
+    se nao t.file_out entao 
+       retorne '';
+    fim
+    local __, file_name = sis.nome_arquivo(t.file_out);
+    local ret = string.formate(path_libs, file_name, file_name);
+    retorne ret;
+fim
+
+local funcao teste(fonte)
+    local f, err = carreguearquivo(fonte);
+    se nao f entao retorne falso, err; fim
+    retorne verdadeiro;
+fim
+
+
+local funcao lib_em_uso(libs, v, start, flag)
+   local start = start ou 1;
+   local ini1, fini1 = libs:procure('inclua%s*[%(]?%s*["\']%s*'..v..'["\']%s*[%)]?%s*[;\n ]?', start, flag)
+   se ini1 entao retorne ini1, fini1; fim
+  retorne libs:procure('inclua%s*[%(]?%s*%[[=]*%['..v..'%][=]*%]%s*[%)]?%s*[;\n ]', start, flag);
+fim
+
+local funcao lib_ja_embutida(libs, v)
+//pacote.carregado["tab_util"] = (funcao()
+    retorne libs:procure('pacote%.carregado%["'.. v .. '"%] = %(funcao%(%)');
+fim
+
+funcao pric(t)
+    local t = T(t);
+    local s = '';
+    local libs = '';
+    local str_compilada='';
+    para i=1, #t.fontes inicio
+        local content = leia_arquivo(t.fontes[i]);
+        se content:corte(1, 4)=='\027Pri' e t.modo_saida <> 'a' entao
+            erro('Não é possível compilar com o pric um script prisma já compilado: '..t.fontes[i]);
+        fim
+        local a, err = teste(t.fontes[i]); //testando arquivo a ser compilado.
+        se nao a entao erro(err); fim
+        
+        se content[1]=='#' entao //shebang?
+            content = '//' .. content;//o shebang fica comentado.
+        fim
+        s = s..'\n/* ------------ Fonte: ' .. t.fontes[i] .. ' ---------*/\n' .. content;
+    fim
+    
+    s =  obt_path_libs(t) .. s;//acrescentando os paths do prog.
+    
+    se t.libs[1] entao //há libs para serem linkadas:
+    //  'pacote.carregado[nome] = (funcao()..leia_lib() .. fim)()'
+        libs = '';
+        para i,v em ipares(t.libs) inicio
+            local pasta, nome, ext = sis.nome_arquivo(v);
+            //só copia a biblioteca linkada se for em texto fonte prisma: (não aceita lib C nem Prisma compilado);
+            local a, err = teste(v);
+            se nao a entao erro(err); fim
+            local f, err = carreguearquivo(v);
+            se tipo( f )=='funcao' e leia_arquivo(v,4)<>'\027Pri' entao //ok temos uma lib para inserir
+            
+                 //inclua'tabela'
+                 se lib_em_uso(libs, nome) e nao lib_ja_embutida(libs, nome) entao //lib está incluída em outra lib, devemos cola-la no topo
+                     libs = '\n/*------------ Pric libs: ' .. nome .. '-----*/\n'..
+                   'pacote.carregado["'.. nome .. '"] = (funcao()\n'..leia_arquivo(v):apare() ..'\nfim)()\n'
+                   .. libs;
+                 senaose nao lib_ja_embutida(libs, nome)  entao //caso contrario coloca no final mesmo.
+                      libs = libs .. '\n/*------------ Pric libs: ' .. nome .. '-----*/\n'..
+                   'pacote.carregado["'.. nome .. '"] = (funcao()\n'..leia_arquivo(v):apare() ..'\nfim)()\n';
+                 
+                 senao
+                      libs = libs .. '\n/*------------ Pric libs: ' .. nome .. ' já foi incluida acima -----*/\n';
+                 fim
+            senao
+                 aviso('Erro em lib ' .. nome .. ': ' .. err);
+                 aviso('Não foi possível ligar: "' .. nome .. '", não é um texto fonte Prisma válido. Fontes prisma compilados também não são aceitos para ligar ao executável.\n\n');
+                 libs = libs .. '\n/* Não foi possível ligar: "' .. nome .. '", não é um texto fonte Prisma válido. Fontes prisma compilados também não são aceitos para ligar ao executável.*/\n\n'
+            fim
+                   
+        fim  
+        s = '\n/* ------------ Libs linkadas ------------- */\n' .. libs .. '\n/* ------------ Fim libs linkadas ------------- */\n' .. s; 
+    fim
+    
+    
+    se t.modo_saida == 'c' entao //apenas junta os fontes.
+        grave_arquivo( t.file_out, s);
+        sis.saia(0);
+    senãose t.modo_saida == 'p' entao //compila para byte code prisma apenas.
+        local str_func, err = carregue(s, t.modo);
+        se nao str_func entao erro(err); fim
+        local str_out = string.compile(str_func);
+        local shebang = t.shebang ou shebang_padrao;
+        local str_out = shebang ..'\n'.. str_out;
+        grave_arquivo(t.file_out, str_out);
+        chmod(t.file_out ou file_out_padrao);
+        sis.saia(0);
+    senãose t.modo_saida=='o' entao //compila os fontes;
+       local str_func, err = carregue(s,t.modo);//carrega todos os sources lidos em texto para uma função Prisma.
+       se nao str_func entao erro(err); fim
+       str_compilada = string.compile(str_func);
+    senãose t.modo_saida=='a' entao
+       se #t.fontes>1 entao 
+          aviso('cuidado! Esta opção \'-a\' aceita apenas um fonte, e foram encontradas mais de um! Os demais serão ignorados!');
+       fim
+       str_compilada = leia_arquivo(t.fontes[1]);
+       //carrega o arquivo sem compilar, útil para embutir fonte já compiladas pelo prismac.
+       //ex.: prismac -o teste.pbrexe teste.prisma && pric -a teste.exe teste.pbrexe;
+    senão
+       use();
+       sis.saia(1);
+    fim
+    retorne str_compilada;
+fim
+
+/*assumindo que n é um unsigned longo com 8 bytes*/
+/* Esta função converte um unsigned longo em uma sequência de bytes - endianess independente, grava sempre em LE */
+funcao llu_to_bytesLE(n)
+    //imprima('-->>>',n);
+    local n = N(n);
+    local s = '';
+    para i=0, 7 inicio
+        s = s .. car((n >> (i * 8)) & 0xFF)
+    fim
+    retorne S(s);
+fim
+função bytes_to_lluLE(s)
+    local s = S(s);
+    se sis.tamanho'be' entao s = s:inverta(); fim
+    local n=0;
+    local d = 0;
+    para i=0, 7 início
+        //n = n | ( string.cod(s[i+1]) << (i*8) );
+        n = n | ( string.cod(s[i+1]) << (i<<3) );
+    fim
+    retorne n;
+fim
+
+funcao escreva_glue(a, glue)
+    V('arquivo', a);T(glue);
+    a:escreva(glue.sig);
+    a:escreva( llu_to_bytesLE(glue.size1) );
+    a:escreva( llu_to_bytesLE(glue.size2) );
+fim
+
+funcao leia_glue(file)
+    local a, err = es.abra(file,'lb');
+    se nao a entao erro(err); fim
+    local txt = a:leia'*t';
+    a:feche();
+    local sig = txt:corte(-24,-17);
+    local size1 = bytes_to_lluLE( txt:corte(-16,-9));
+    local size2 = bytes_to_lluLE(txt:corte(-8,-1));
+    retorne {sig=sig, size1=size1, size2=size2};
+fim
+
+/*
+ * ptffile - arquivo aberto para escrita
+ * file1 - nome do arquivo a ser escrito primeiro
+ * str_file2 - a string do segundo arquivo já lido a ser copiada.
+ * bloco_tam - tamanho do buffer de leitura e escrita;
+*/
+funcao copie(ptrfile, file1, str_file2, bloco_tam)
+    V('arquivo', ptrfile);
+    S(file1, str_file2);
+    local bloco_tam = bloco_tam ou 1024;
+    local a, err = es.abra(file1, 'lb');
+    se nao a entao erro(err); fim
+    //gravando file1;
+    enquanto 1 inicio
+        local bloco = a:leia(bloco_tam);
+        se nao bloco entao quebre; fim
+        ptrfile:escreva(bloco);
+    fim
+    //gravando file2;
+    ptrfile:escreva(str_file2);
+    a:feche();
+fim
+
+funcao obt_args(args)
+    local i = 1;
+    local t={modo='b';} //modo padrao é release;
+    t.libs={}
+    t.fontes={};
+    funcao t.libs:insira(txt)
+        este[#este+1] = txt;
+    fim
+    enquanto i<=#args inicio
+        local for = escolha(args[i]:corte(1,2));
+        se for('-o') entao //compila um output  -o file_out fontes.prisma...
+            t.modo_saida = 'o';
+            t.file_out = args[i+1];
+            i = i + 1;
+        senaose for('-c') entao //une arquivos fontes -c out.prisma fontes.prisma...
+            t.modo_saida = 'c';
+            t.file_out = args[i+1];
+            i = i + 1;
+        senaose for('-p') entao //não gera o executavel, apenas o arquivo com byte codes (o mesmo que prismac)
+            t.modo_saida = 'p';
+            t.file_out = args[i+1];
+            i = i + 1;
+        senaose for('-a') entao //gera o executável a partir de um arquivo já compilado, aceita só um arquivo.
+            t.modo_saida = 'a';
+            t.file_out = args[i+1];
+            i = i + 1;
+        senaose for('-d') entao //modo debug, os fontes ficam anexados ao arquivo bytecodes para debug.
+            t.modo=nulo;
+        senaose for('-r') entao //release, os fontes não ficam anexados.(difícil fazer debug);
+            t.modo='b';
+        senaose for('-l') entao //ligando uma lib .pris:   -l /path/para/lib.pris, a lib é copiada inteira para dentro 
+                                //do arquivo gerado, fazendo automaticamente as adaptações de chamadas.
+            se #args[i]>2 entao //-l/path/para/lib.pris
+                t.libs:insira(args[i]:corte(3,-1));
+            senao //-l /path/para/lib.pris
+                t.libs:insira(args[i+1]);
+                i=i+1; //pula o path da lib;
+            fim
+        senaose for('-s') entao //define outro caminho para o source srprisma para fazer a ligação. Ideal para cross compilação. (win <-> linux);
+            se #args[i]>2 entao //-s/path/para/srprisma
+                t.srprisma = args[i]:corte(3,-1);
+            senao //-s /path/para/srprisma
+                t.srprisma = args[i+1];
+                i=i+1; //pula o path;
+            fim 
+        senaose for('-v') entao //imprime a versão:
+            imprima( pric_versao );
+            sis.saia(0);
+        senaose for('-h') então //imprime a mensagem use()
+            use();
+            sis.saia(0);   
+        senaose for('-z') entao //shebang? define uma shebang, útil com a opção p
+            //imprima('tem shebang!!!');
+            aviso('cuidado - Shebang detectada, verifique se o caminho do interpretador está correto!');
+            se #args[i]>2 entao //   -z/path/interpretador
+                t.shebang = '#!' .. args[i]:corte(3,-1);
+            senao //  -z /path/interpretador -->aqui tem um espaço entre a opção e o caminho do interpretador.
+                t.shebang = '#!'.. args[i+1]; 
+                i = i + 1;
+            fim
+            
+        senao
+            t.fontes[#t.fontes+1] = args[i];
+        fim
+        
+        i=i+1;
+    fim
+   // imprima(t);
+    retorne t;
+fim
+
+funcao aviso(txt)
+    local txt = '\n\t*Aviso: '..S(txt);
+    se sis.nome:procure'win' entao
+        local win = inclua'win';
+        txt = conv_c(txt);
+    fim
+    imprima(txt);
+fim
+
+
+
+
+
+
+

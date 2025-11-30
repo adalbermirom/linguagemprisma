@@ -1,0 +1,770 @@
+/**
+ * \fonte colorize.pris
+ * \autor Adalberto
+ * \data nov 2023
+ * \resumo Converte um texto para html e coloriza as palavras para destaque. (semelhante aos editores de codigo fonte)  
+ * Esta biblioteca converte um texto fonte Prisma gerando um html com as palavras chaves destacadas.
+ * \logo prisma.png
+   \h3 Veja o exemplo de saída abaixo:
+   @inicio_codigo Exemplo:
+   
+   local s = [[
+   //comentário de linha única
+   --comentário de linha única estilo Lua funciona em Prisma
+   funcao soma(a,b)
+        retorne a+b;
+    fim
+    
+    imprima('olá mundo.');
+    imprima(soma(1,2) );
+
+]]
+
+  
+
+ --[[
+    Comentário
+    multilinha 
+    estilo Lua
+    também funciona em Prisma
+    ]]
+
+    local color = inclua'colorize';
+    local tab = color.colorize(s);
+    local str = '<pre>';
+    para i,v em ipares(tab) inicio
+        str = str .. v;    
+    fim
+    str = str .. '\n</pre>';
+    
+    //agora só fazer algo com a str html, usar em cgi web, por exemplo.
+    //esta área de código foi feita usando a lib colorize.pris a partir do programa minidoc
+    //um gerador de documentação, muito básico e simples, mas que funciona, feito em Prisma-1.0.107
+   
+   @fim_codigo 
+ 
+ 
+ */
+ 
+
+
+//convertendo para local as funções melhorar a eficiencia da lib.
+local Thre=Thre; local Num=Num; local inclua=inclua; local _VERSAO=_VERSAO; local obtmetatabela=obtmetatabela; 	
+local Func=Func; local pares=pares; local convnumero=convnumero; local defmetatabela=defmetatabela; 
+local executearquivo=executearquivo; 	
+local N=N; local carregue=carregue; local ipares=ipares; local S=S; local T=T; 
+local U=U; local V=V; local es=es; local tabela=tabela; local Bool=Bool; 	
+local erro=erro; local executestring=executestring; local cod=cod; local coletelixo=coletelixo; local poe=poe; 	
+local Udat=Udat; local mat=mat; local bit32=bit32; local xpchame=xpchame; local compile=compile; 	
+local Classe=Classe; local Tab=Tab; local tamanho=tamanho; local tipo=tipo; local proximo=proximo; 	
+local desempacote=desempacote; local imprima=imprima; local _INFO=_INFO; local corotina=corotina; local imprimaf=imprimaf; 	
+local string=string; local obt=obt; local _G=_G; local prismadir=prismadir; local contador=contador; 	
+local Str=Str; local args=args; local selecione=selecione; local def=def; local utf8=utf8; 	
+local debug=debug; local Val=Val; local igual=igual; local carreguearquivo=carreguearquivo; local modulo=modulo; 	
+local car=car; local sis=sis; local pchame=pchame; local convstring=convstring; local B=B; 	
+local leia=leia; local F=F; local escolha=escolha; local pacote=pacote; local tente=tente; 
+
+
+
+local hl = {}; ///< Variável tabela com os métodos desta biblioteca.
+
+
+
+/*@doc
+   \var hl.lista_prisma
+   \brief (tabela) - variável tabela com as definições de estilo para a colorização dos fontes Prisma.
+   
+   Obs.: é possível alterar os valores desta tabela e customizar o estilo de seu highlighting.
+   basta analisar e modificar aquilo que quiser nela.
+   \h3 Veja:
+   \inicio_codigo lista_prisma
+   
+    
+hl.lista_prisma = { //estilo padrão da área código:
+	               // pad 2, cor texto: preto, cor fundo: branco; tamanho fonte: 16pixels
+	               //altura linha: 16px; borda de 1px cor: #d5d5d5; rolagem: auto; altura máxima 400px; 
+	area_codigo = {estilo=' padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ';
+	    num_linhas = {
+	        cor_letra = 'black';  //na contagem de linhas essa cor é o padrão dos números.
+	        cor_letra_par = 'black';
+	        cor_fundo = '#ffffff'; //padrão cor de fundo (branco); (impar);
+	        cor_fundo_par = '#ddd'; //cor par, alternância de cores (impar, par);
+    };
+		
+		
+	};
+	comentario={
+		['//']='color:green';
+		['/*'] = 'color:green';
+		['--'] = 'color:grey';
+		['--[[']='color:grey'; 
+    };
+    strings = {
+		['"'] = 'color:blue'; //strings
+		['\''] = 'color:blue'; //strings
+		['[['] = 'color:blue';//string mult linha
+	};
+	
+	numeros = { 
+	    estilo='color:red';
+	};
+	simbolos = {
+		estilo='font-weight:bold;';
+		'[',']','{','}','(',')', '+','-','/','*','%','>','<','=','.',';','#','?',':',
+		'^','~','&','|','\\'
+	};
+	
+    comandos = { estilo='font-weight:bold;color:#b50546'; //defina o estilo html aqui.{
+    "e", "quebre", "inicio", "início", "senao", "senão", "senaose","senãose",
+    "fim", "falso", "para", "funcao","função", "vapara", "se",
+    "em", "local", "nulo", "nao","não", "ou", "repita",
+    "retorne", "entao","então", "verdadeiro", "ate","até", "enquanto",
+    "..", "...", "==", ">=", "<=", "<>","<<", ">>", "::", "<eof>",
+    "<numero>", "<nome>", "<string>","este", "vapara"
+    };
+	base = { estilo='color:#b50546';
+        "erro", "compile", "convnumero", "cod", 	
+        "string", "pchame", "U", "V", "convstring", 	
+        "mat", "S", "T", "N", "_VERSAO", 	
+        "proximo", "F", "B", "_INFO", "contador", 	
+        "corotina", "tabela", "tipo", "modulo", "carregue", 	
+        "prismadir", "imprimaf", "Tab", "executestring", "Bool", 	
+        "args", "igual", "executearquivo", "debug", "defmetatabela", 	
+        "poe", "desempacote", "bit32", "escolha", "inclua", 	
+        "tente", "leia", "Num", "ipares", "obt", 	
+        "coletelixo", "Thre", "pares", "Func", "obtmetatabela", 	
+        "car", "sis", "es", "carreguearquivo", "pacote", 	
+        "_G", "imprima", "def", "Classe", "xpchame", 	
+        "Udat", "utf8", "Val", "selecione", "Str", 	
+        "tamanho"
+	};
+	
+	es={ estilo='color:#b50546';
+	    "tipo", "saida", "erro", "escreva", 	
+        "abra", "linhas", "leia", "tmparquivo", "feche", 	
+        "leitura", "escrita", "entrada", "pabra", "esvazie"			
+	};
+	mat={ estilo='color:#b50546';
+		"log", "log10", "arcoseno", "pi", 	
+        "exp", "senoh", "separe", "minimo", "arredondeabaixo", 	
+        "arredonde", "arcotangente", "aleatorio", "seno", "arcocosseno", 	
+        "frexp", "absoluto", "arredondeacima", "arcotangente2", "corte", 	
+        "raiz", "tangenteh", "maximo", "xaleatorio", "cossenoh", 	
+        "raizquad", "ldexp", "elevado", "infinito", "hipot", 	
+        "emGrau", "raizcubica", "tangente", "cosseno", "cmodulo", 	
+        "xrandonico", "randonico", "emRadianos"		
+	};
+	sis={ estilo='color:#b50546';
+		"durma", "execute", "tamanho", "obtvarambiente", 	
+        "data", "tempo", "defvarambiente", "diftempo", "saia", 	
+        "nome", "nome_arquivo", "deflocal", "nometmp", "relogio", 	
+        "renomeie", "caminho_absoluto", "remova", "delvarambiente"		
+	};
+	string={ estilo='color:#b50546';
+		"separe", "capte", "inverta", "car", 	
+        "cod", "base64", "substring", "minuscula", "byte", 	
+        "tamanho", "hex", "dec_hex", "corte", "compile", 	
+        "procure", "entrecar", "formate", "junte", "apare", 	
+        "maiuscula", "troque", "dec_base64", "sub", "nconcat", 	
+        "analise"
+	};
+	tabela={ estilo='color:red';
+		"empacote", "ordene", "maxn", "concat", 	
+        "insira", "remova", "desempacote"
+	};
+	corotina={ estilo='color:#b50546';
+		"estado", "exec", "yield", "wrap", 	
+        "executando", "crie"
+	};
+	utf8 = { estilo='color:#b50546';
+		"largindex", "offset", "ncasecmp", "tamanho", 	
+        "remova", "fold", "titulo", "insira", "cod", 	
+        "inverta", "troque", "corte", "maiuscula", "cods", 	
+        "separe", "charpattern", "capte", "procure", "larg", 	
+        "proximo", "carpos", "car", "escape", "pontocod", 	
+        "minuscula", "byte"
+	};
+	bit32={ estilo='color:#b50546';
+		"rrotate", "bou", "bteste", "arshift", 	
+        "be", "lrotate", "lshift", "bnao", "rshift", 	
+        "bxou", "extract", "replace"
+   };
+	
+}
+
+
+  \fim_codigo
+
+*/
+
+hl.lista_prisma = { //estilo padrão da área código:
+	               // pad 2, cor texto: preto, cor fundo: branco; tamanho fonte: 16pixels
+	               //altura linha: 16px; borda de 1px cor: #d5d5d5; rolagem: auto; altura máxima 400px; 
+	area_codigo = {estilo=' line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ';
+	    num_linhas = {
+	        cor_letra = 'black';  //na contagem de linhas essa cor é o padrão dos números.
+	        cor_letra_par = 'black';
+	        cor_fundo = '#ffffff'; //padrão cor de fundo (branco); (impar);
+	        cor_fundo_par = '#ddd'; //cor par, alternância de cores (impar, par);
+    };
+		
+		
+	};
+	comentario={
+		['//']='color:green';
+		['/*'] = 'color:green';
+		['--'] = 'color:grey';
+		['--[[']='color:grey'; 
+    };
+    strings = {
+		['"'] = 'color:blue'; //strings
+		['\''] = 'color:blue'; //strings
+		['[['] = 'color:blue';//string mult linha
+	};
+	
+	numeros = { 
+	    estilo='color:red';
+	};
+	
+	shebang = { estilo='font-weight:bold;font-style:italic;color:green';
+    };
+	simbolos = {
+		estilo='font-weight:bold;';
+		'[',']','{','}','(',')', '+','-','/','*','%','>','<','=','.',';','#','?',':',
+		'^','~','&','|','\\'
+	};
+	
+    comandos = { estilo='font-weight:bold;color:#b50546'; //defina o estilo html aqui.{
+    "e", "quebre", "inicio", "início", "senao", "senão", "senaose","senãose",
+    "fim", "falso", "para", "funcao","função", "vapara", "se",
+    "em", "local", "nulo", "nao","não", "ou", "repita",
+    "retorne", "entao","então", "verdadeiro", "ate","até", "enquanto",
+    "..", "...", "==", ">=", "<=", "<>","<<", ">>", "::", "<eof>",
+    "<numero>", "<nome>", "<string>","este", "vapara"
+    };
+	base = { estilo='color:#b50546';
+        "erro", "compile", "convnumero", "cod", 	
+        "string", "pchame", "U", "V", "convstring", 	
+        "mat", "S", "T", "N", "_VERSAO", 	
+        "proximo", "F", "B", "_INFO", "contador", 	
+        "corotina", "tabela", "tipo", "modulo", "carregue", 	
+        "prismadir", "imprimaf", "Tab", "executestring", "Bool", 	
+        "args", "igual", "executearquivo", "debug", "defmetatabela", 	
+        "poe", "desempacote", "bit32", "escolha", "inclua", 	
+        "tente", "leia", "Num", "ipares", "obt", 	
+        "coletelixo", "Thre", "pares", "Func", "obtmetatabela", 	
+        "car", "sis", "es", "carreguearquivo", "pacote", 	
+        "_G", "imprima", "def", "Classe", "xpchame", 	
+        "Udat", "utf8", "Val", "selecione", "Str", 	
+        "tamanho"
+	};
+	
+	es={ estilo='color:#b50546';
+	    "tipo", "saida", "erro", "escreva", 	
+        "abra", "linhas", "leia", "tmparquivo", "feche", 	
+        "leitura", "escrita", "entrada", "pabra", "esvazie"			
+	};
+	mat={ estilo='color:#b50546';
+		"log", "log10", "arcoseno", "pi", 	
+        "exp", "senoh", "separe", "minimo", "arredondeabaixo", 	
+        "arredonde", "arcotangente", "aleatorio", "seno", "arcocosseno", 	
+        "frexp", "absoluto", "arredondeacima", "arcotangente2", "corte", 	
+        "raiz", "tangenteh", "maximo", "xaleatorio", "cossenoh", 	
+        "raizquad", "ldexp", "elevado", "infinito", "hipot", 	
+        "emGrau", "raizcubica", "tangente", "cosseno", "cmodulo", 	
+        "xrandonico", "randonico", "emRadianos"		
+	};
+	sis={ estilo='color:#b50546';
+		"durma", "execute", "tamanho", "obtvarambiente", 	
+        "data", "tempo", "defvarambiente", "diftempo", "saia", 	
+        "nome", "nome_arquivo", "deflocal", "nometmp", "relogio", 	
+        "renomeie", "caminho_absoluto", "remova", "delvarambiente"		
+	};
+	string={ estilo='color:#b50546';
+		"separe", "capte", "inverta", "car", 	
+        "cod", "base64", "substring", "minuscula", "byte", 	
+        "tamanho", "hex", "dec_hex", "corte", "compile", 	
+        "procure", "entrecar", "formate", "junte", "apare", 	
+        "maiuscula", "troque", "dec_base64", "sub", "nconcat", 	
+        "analise"
+	};
+	tabela={ estilo='color:red';
+		"empacote", "ordene", "maxn", "concat", 	
+        "insira", "remova", "desempacote"
+	};
+	corotina={ estilo='color:#b50546';
+		"estado", "exec", "yield", "wrap", 	
+        "executando", "crie"
+	};
+	utf8 = { estilo='color:#b50546';
+		"largindex", "offset", "ncasecmp", "tamanho", 	
+        "remova", "fold", "titulo", "insira", "cod", 	
+        "inverta", "troque", "corte", "maiuscula", "cods", 	
+        "separe", "charpattern", "capte", "procure", "larg", 	
+        "proximo", "carpos", "car", "escape", "pontocod", 	
+        "minuscula", "byte"
+	};
+	bit32={ estilo='color:#b50546';
+		"rrotate", "bou", "bteste", "arshift", 	
+        "be", "lrotate", "lshift", "bnao", "rshift", 	
+        "bxou", "extract", "replace"
+   };
+	
+}
+
+//pula a primeira linha se tiver um shebang.
+local funcao jump_shebang(t,tout)
+    T(t,tout);
+    local str = '';
+    local i = 1;
+    se t[i]=='#' e t[i+1] == '!' entao
+        enquanto verdadeiro inicio
+            se t[i]=='\n' entao quebre; fim
+            str = str .. t[i];
+            i = i + 1;
+        fim
+    fim
+    tout:insira(str);
+    retorne i;
+fim
+
+
+local funcao tok(txt, tkcars)
+    S(txt,tkcars);
+    local t = string.analise(txt,tkcars);
+    t = t ou {txt};
+    local tret = {};
+    funcao tret:insira(txt)
+        este[#este+1]=txt;
+    fim
+    local tcont=0;
+    local fecha_str=falso;
+    local tmp = '';
+    local i = 1;
+    
+    i = jump_shebang(t, tret);
+    
+    enquanto i<=#t inicio
+       se t[i]== '"' ou t[i]=="'" entao //abre string linha encontrada.
+           fecha_str = t[i];
+           tret[#tret+1]='';//string vazia para concatenação!
+           enquanto 1 inicio
+               //imprima(t[i]);
+               tret[#tret] = tret[#tret] .. t[i];   //   '\\'
+               i = i+1;
+               se t[i]=='\\' entao //se encontar uma barra de escape então pula o próximo item.
+                   tret[#tret] = tret[#tret] .. t[i];
+                   i = i + 1;              
+               senaose t[i]==fecha_str entao 
+                   //imprima('string fechada', t[i-2]..t[i-1]..t[i]);
+                   tret[#tret] = tret[#tret] .. t[i];
+                   i = i+1; 
+                   quebre; 
+               fim
+           fim
+       senaose t[i] == '[' e t[i+1]=='[' entao//longa string.
+           tret[#tret+1]='';//string vazia para concatenação!
+           enquanto 1 inicio
+               //imprima(t[i]);
+               tret[#tret] = tret[#tret] .. t[i];
+               i = i+1;
+               se t[i]==']' e t[i-1]==']' entao 
+                   tret[#tret] = tret[#tret] .. t[i];
+                   i = i+1; 
+                   quebre; 
+               fim
+           fim
+           
+       senaose t[i] == '/' e t[i+1]=='*' entao//comentário longo estilo C 
+           tret[#tret+1]='';//string vazia para concatenação!
+           enquanto 1 inicio
+               //imprima('------------------>', t[i]);
+               tret[#tret] = tret[#tret] .. t[i];
+               i = i+1;
+               se t[i]=='/' e t[i-1]=='*' entao 
+                   //imprima('----saida econtranda ---->', t[i]);
+                   tret[#tret] = tret[#tret] .. t[i];
+                   i = i+1; 
+                   quebre; 
+               fim
+           fim
+       senaose t[i] == '-' e t[i+1]=='-' e t[i+2]=='[' e t[i+3]=='[' entao//comentário longo estilo Lua --[[  .... ]]
+           tret[#tret+1]='';//string vazia para concatenação!
+           enquanto 1 inicio
+               //imprima(t[i]);
+               tret[#tret] = tret[#tret] .. t[i];
+               i = i+1;
+               se t[i]==']' e t[i-1]==']' entao 
+                   tret[#tret] = tret[#tret] .. t[i];
+                   i = i+1; 
+                   quebre; 
+               fim
+           fim
+       senaose t[i] == '/' e t[i+1]=='/' ou t[i] == '-' e t[i+1]=='-' entao//comentário curto estilo C e Lua
+           tret[#tret+1]='';//string vazia para concatenação!
+           enquanto 1 inicio
+               //imprima(t[i]);
+               tret[#tret] = tret[#tret] .. t[i];
+               i = i+1;
+               se t[i]=='\n' entao 
+                   tret[#tret] = tret[#tret] .. t[i];
+                   i = i+1; 
+                   quebre; 
+               fim
+           fim
+       senao
+           tret[#tret+1] = t[i];
+           i = i + 1;
+       fim
+    fim
+    retorne tret;
+fim
+
+local funcao escape(txt)
+    retorne txt:troque('&', '&amp;'):troque('<', '&lt;'):troque('>', '&gt;'):troque("'", '&#39;'):troque('"', '&quot;');
+fim
+
+local funcao escape_md(txt)
+   // \ ` * _ { } [ ] ( ) # + - . !
+   local ret = txt:troque('.', funcao(c)
+       local caso = escolha(c);
+       se caso('\\','`', '*', '_','{','}','[',']','(',')','#','+','-','.','!') entao
+           retorne '\\' .. c;
+       fim
+   fim)
+   retorne ret;
+fim
+
+
+local funcao tira_repetidos(s)
+    S(s);
+    local t = {};
+    s:troque('.', funcao(c)
+        t[c] = c;
+    fim)
+    local ret='';
+    para k,v em pares(t) inicio
+        ret = ret..v;
+    fim
+    retorne ret;
+fim
+
+local funcao procure_em_tab(tab, str)
+    T(tab); S(str);
+    para k, v em pares(tab) inicio
+        para i, s em ipares(v) inicio
+           se s==str entao retorne verdadeiro, v.estilo ou 'font-weight:bold'; fim
+        fim
+    fim
+    retorne falso;
+fim
+
+
+local funcao teste_comentario(list, str)
+    T(list);S(str);
+    se tipo(list.comentario)<>'tabela' entao
+        retorne falso;    
+    fim
+    
+    para k, v em pares(list.comentario) inicio
+       se str:corte(1,#k)==k entao
+           retorne B(verdadeiro), S(list.comentario[k]);
+       fim
+    fim
+    retorne falso;
+fim
+
+
+local funcao teste_strings(list, str)
+    T(list);S(str);
+    se tipo(list.strings)<>'tabela' entao
+        retorne falso;    
+    fim
+    
+    para k, v em pares(list.strings) inicio
+       se str:corte(1,#k)==k entao
+           retorne B(verdadeiro), S(list.strings[k]);
+       fim
+    fim
+    retorne falso;
+fim
+
+local funcao teste_numero(list, v)
+    T(list); S(v);
+    se tipo(list.numeros)<>'tabela' entao
+        retorne falso;
+    fim
+    se convnumero(v) entao //é um número válido! Então retorna o estilo.
+        retorne B(verdadeiro), list.numeros.estilo;
+    fim
+    retorne falso;
+fim
+
+
+local funcao processe_tab(tab, list)
+//<span style="color:red">test</span>
+    T(tab);
+    local find=falso;
+    local estilo;
+    para i,v em ipares(tab) inicio
+        //imprima(i,v);
+        se i == 1 e v:corte(1,2)=='#!' entao  //shebang
+            tab[i]='<span style="'.. (list.shebang.estilo ou 'color:red')..'">' .. escape(v) .. '</span>';
+            vapara continue;
+        fim
+        
+        find, estilo = procure_em_tab(list, v);
+        se find entao
+           // poe'encontrado';
+            tab[i] = '<span style="'..estilo..'">' .. escape(v) .. '</span>';
+            vapara continue;
+        fim
+        
+        find, estilo = teste_comentario(list, v);
+        se find entao
+            tab[i] = '<span style="'..estilo..'">' .. escape(v) .. '</span>';
+            vapara continue;
+        fim
+        
+        find, estilo = teste_numero(list, v);
+        se find entao
+            tab[i] = '<span style="'..estilo..'">' .. escape(v) .. '</span>';
+            vapara continue;
+        fim
+        
+        find, estilo = teste_strings(list, v);
+        se find entao
+            tab[i] = '<span style="'..estilo..'">' .. escape(v) .. '</span>';
+            vapara continue;
+        fim
+        
+        tab[i] = escape(v);//senao o padrão é devolver o valor feito o escape em html
+            
+            
+        ::continue::        
+    fim
+    retorne tab;
+fim
+
+
+local funcao processe_tab_md(tab, list)
+//<span style="color:red">test</span>
+    T(tab);
+    local find=falso;
+    local estilo;
+    para i,v em ipares(tab) inicio
+        //imprima(i,v); //md: {c:#B81365}texto colorido com hexadecimal{/c}
+        find, estilo = procure_em_tab(list, v);
+        se find entao
+           local cor = estilo:separe('(color:%w+)');
+           se nao cor entao cor = 'color:red'; fim
+           local bold = estilo:separe'font%-weight:(%w+)';
+           se bold <> 'bold' entao
+               bold = '';
+           senao 
+               bold = '**'
+           fim
+           // poe'encontrado';
+            tab[i] = bold .. '<span style="'.. cor .. '">' .. escape(escape_md(v)) .. '</span>' .. bold;
+            vapara continue;
+        fim
+        
+        find, estilo = teste_comentario(list, v);
+        se find entao
+           local cor = estilo:separe('(color:%w+)');
+           se nao cor entao cor = 'color:red'; fim
+           local bold = estilo:separe'font%-weight:(%w+)';
+           se bold <> 'bold' entao
+               bold = '';
+           senao 
+               bold = '**'
+           fim
+           // poe'encontrado';
+            tab[i] = bold .. '<span style="'..cor .. '">' .. escape(escape_md(v)) .. '</span>' .. bold;
+            vapara continue;
+        fim
+        
+        find, estilo = teste_strings(list, v);
+        se find entao
+           local cor = estilo:separe('(color:%w+)');
+           se nao cor entao cor = 'color:red'; fim
+           local bold = estilo:separe'font%-weight:(%w+)';
+           se bold <> 'bold' entao
+               bold = '';
+           senao 
+               bold = '**'
+           fim
+           // poe'encontrado';
+            tab[i] = bold .. '<span style="'..cor .. '">' .. escape(escape_md(v)).. '</span>' .. bold;
+            vapara continue;
+        fim
+        
+        tab[i] = escape_md(v);//senao o padrão é devolver o valor feito o escape em html            
+        ::continue::   
+        
+        
+        se tab[i] == ' ' entao
+           tab[i]='&nbsp;';
+        fim
+        
+        tab[i] = tab[i]:troque('\n','  \n');
+        
+    fim
+    retorne tab;
+fim
+
+
+/**
+\fn hl.colorize
+\resumo Função hl.colorize(txt, list) - recebe uma string txt e retorna uma string com destaque palavras em html de acordo com as configurações da tabela list.
+\param txt(string) - é o texto com o código fonte Prisma para ser convertido para md com destaque (highlighting);
+\param list(tabela) - é a tabela contendo as definições e palavras chave Prisma, use hl.lista_prisma;
+\retorno t(tabela) - retorna uma tabela contendo todo o texto html com destaque da linguagem Prisma.
+*/
+
+funcao hl.colorize(txt, list)
+    S(txt); T(list);
+    local t = tok(txt, tira_repetidos'\\"\'^<>(){}.;|,[]%#?:-~=+-* /\n\t\v\f\r');
+    t = processe_tab(t, list);
+    retorne T(t);
+fim
+
+
+/**
+\fn hl.colorize_md
+\resumo Função hl.colorize_md(txt, list) - mesma função, praticamente, mas com escape para caracteres markdown.
+*A saída pode ser lida por um leitor de pdf compatível, como o okular, por exemplo.
+\param txt(string) - é o texto com o código fonte Prisma para ser convertido para md com destaque (highlighting);
+\param list(tabela) - é a tabela contendo as definições e palavras chave Prisma, use hl.lista_prisma;
+\retorno t(tabela) - retorna uma tabela contendo todo o texto html com destaque da linguagem Prisma.
+*/
+
+funcao hl.colorize_md(txt, list)
+	S(txt); T(list);
+    local t = tok(txt, tira_repetidos'\\"\'^<>(){}.;|,[]%#?:-~=+-* /\n\t\v\f\r');
+    t = processe_tab_md(t, list);
+    retorne T(t);
+fim
+
+/*@doc
+\fn hl.colorize_str
+\resumo Função hl.colorize_str(txt, list) - coloriza o fonte Prisma e já retorna uma string preparada para embutir no html.
+\param txt(string) - é o texto com o código fonte Prisma para ser convertido para md com destaque (highlighting);
+\param list(tabela) - é a tabela contendo as definições e palavras chave Prisma, use hl.lista_prisma;
+<p>Para customizar as definições da área de código (como cor da fonte, cor de fundo, tamanho etc.) veja o exemplo acima, a tabela hl.lista_prisma e modifique o quanto quiser!</p>
+\retorno (string) - retorna uma string já com tag <pre> totalmente configurada para embutir no corpo html.
+
+\obs A string retornada já está preparada com a tag <pre> com contagem de números de linhas e highlighting.
+\h3 Veja o exemplo abaixo:
+\codigo
+
+local cl = inclua'colorize';
+local s = [[
+    imprima("olá mundo");
+    para i=1, 10 inicio 
+        imprima(i);
+    fim
+]]
+
+local txt = cl.colorize_str(s);
+
+txt = '<html><head><title>Teste colorize</title></head><body>\n<h1>Teste colorize</h1>\n' .. txt .. '</body></html>\n';
+local a, err = es.abra('teste_colorize.html', 'escrita');
+se nao a entao erro(err); fim
+a:escreva(txt);
+a:feche();
+
+\codigo--
+
+*/
+funcao hl.colorize_str(txt, list)
+    S(txt); 
+    list = list ou hl.lista_prisma;
+    local t = hl.colorize(txt, list);
+    /*
+    tab-size: 4;
+    		counter-reset: linecounter;
+    		padding: 0;
+    		color: #0;
+    		background-color: #ffffff;
+    		font-size: 16px;
+    		line-height: 16px;
+    		white-space: pre-wrap; 
+            word-break: break-word;
+            border: 1px solid #d5d5d5;
+    */
+    local pre_style = list.area_codigo.estilo; //'style="' .. ' padding:2; color: #0;background-color: #ffffff; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; '  .. '"';
+    local res = ''; // '<pre style="' .. pre_style .. '">\n';
+    local cont = 1;
+    para i , v em ipares(t) inicio
+                res = res .. v;
+    fim
+    //res = res .. '\n</pre>';
+    local t = string.analise(res,'\n');
+    res = '';
+    
+    local span_style = 'display: inline-block; border-right: 1px solid #ccc; text-align: right;'
+        local tmp_style = span_style;
+        local alin = list.area_codigo.num_linhas ou {
+	        cor_letra = 'black';  //na contagem de linhas essa cor é o padrão dos números.
+	        cor_letra_par = 'red';
+	        cor_fundo = '#ffffff'; //padrão cor de fundo (branco); (impar);
+	        cor_fundo_par = '#ddd'; //cor par, alternância de cores (impar, par);
+		};
+		alin.cor_letra = alin.cor_letra ou 'black';
+		alin.cor_letra_par = alin.cor_letra_par ou 'black';
+		alin.cor_fundo = alin.cor_fundo ou '#ffffff';
+		alin.cor_fundo_par = alin.cor_fundo_par ou '#ddd';
+    local nlin, src='','';
+    para i, v em ipares(t) inicio
+    /* width: 30px;
+    		display: inline-block;
+    		border-right: 1px solid #ccc;
+    		padding-right: 3px;
+    		margin-right: 5px;
+    		text-align: right;
+    		font-size: 11px;
+    		line-height: 16px;
+    */
+       
+        //local tmp = '';
+        se v=='\n' entao
+            se cont % 2 == 0 entao
+                tmp_style = span_style .. 'background-color: '.. alin.cor_fundo_par .. '; color: '.. alin.cor_letra_par; //'background-color: #ddd;'
+                //tmp = 'background-color: #ddd;'
+            senao   // color: blue;
+                tmp_style = span_style .. ' background-color: ' .. alin.cor_fundo .. '; color: '.. alin.cor_letra;
+                //tmp = '';
+            fim
+            nlin = nlin .. '<span style="'.. tmp_style .. ';">' .. string.formate('% 3d', cont) .. '</span>\n';
+            src = src .. '\n';
+            cont = cont + 1;
+        senao
+            src = src .. v;
+        fim
+    fim
+    res = '<div style="'.. pre_style .. ';display: flex;"><div><pre style="text-align: right;">\n' .. nlin .. '</pre></div>\n' ..
+          '<div style="padding-left: 10px;flex-grow: 1"><pre>\n' .. src .. '</pre></div></div>\n';
+          //style="' .. pre_style .. '">\n';
+    
+    retorne res;//retorna a string colorizada...
+fim //fim função colorize_str();
+
+
+/*
+local dir = inclua'dir';
+local txt = dir.leia_arquivobin('dir.pris');
+
+local res = hl.colorize_str(txt);
+
+dir.grave_arquivobin('dir.html', res);
+// */
+retorne hl;
+
+
+
+
+
+
+
+

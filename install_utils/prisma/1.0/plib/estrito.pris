@@ -1,0 +1,472 @@
+/**
+  
+  @file estrito.pris
+  @author Adalberto
+  @date 25 nov 2023
+  
+  @brief Uma biblioteca simples para definir o modo estrito global, const ou local
+  
+  Esta biblioteca permite ativar:
+ 
+  Modo global:
+  Toda variável global ou campo de uma tabela terá seu tipo fixo, ou seja, o primeiro valor atribuído definirá seu tipo não
+  podendo mais ser alterado. Assim, se uma variável for do tipo número, não é possível atribuir uma string
+  a ela, por exemplo.
+<p><i>Obs. qualquer tentativa de obter o valor de uma variável global não declarada dará erro.</p></i>
+#### Modo const: ####
+  Neste modo toda variável global ou campo de uma tabela será imutável, ou seja, depois de atribuir um valor
+  não será possível mudar de valor.
+<p><i>Obs. qualquer tentativa de obter o valor de uma variável global não declarada dará erro.</i></p>
+#### Modo local: ####
+  Neste modo só é permitido o uso de variáveis locais, qualquer tentativa de atribuir uma global dará erro.
+  Em caso de tabela, não será possível atribuir novos campos.
+  <hr>
+## Exemplos: ##
+
+#### Modo global ####
+  <pre>
+      //funciona apenas com variáveis globais ou valores de tabela.
+      
+      local estrito = inclua'estrito';
+      estrito.modo_global();
+      a = 1;
+      imprima(a);
+      //estrito.desative(); //podemos desativar o modo global e dará certo a atribuição de valor diferente.
+      a = 'A';  //--> erro no modo estrito global, tentativa de atribuir um valor string em uma variável número.
+      imprima(a);
+      local n = 1;
+      n = 'olá'; //-- ok, pois em variável local é permitido a troca de valores de tipos diferentes.
+      imprima(n);
+      
+  </pre>
+  
+  <br>
+  <hr>
+#### Modo estrito const ####
+  Toda variável local é imutável, o primeiro valor atribuído é fixado não podendo mais trocar de valor.
+  <pre>      
+      local estrito = inclua'estrito';
+      estrito.modo_const();
+      PI = 3.14;
+      PI = 1; //--> Erro ao atribuir novo valor em uma variável global em modo const.
+      imprima(PI);
+      
+      local n = 1; 
+      n = 2; //--> ok, pois em modo local é permitido.
+  </pre>
+  
+  <br>
+  
+  <hr>
+#### Modo local ####
+<i>O modo local força o programador usar somente variáveis locais, veja:</i>
+  <pre>
+      local estrito = inclua'estrito';
+      estrito.modo_local();
+      local a = 1;
+      local b = 2;
+      
+      c = 3; //->erro em modo local, tentativa de atribuição de variável global;
+      
+  </pre>
+ 
+ #### Modo global, const e local em tabelas: ####
+<i>O modo local força o programador usar somente variáveis locais, veja:</i>
+
+\inicio_codigo ex1.prisma    
+local estrito = inclua'estrito';
+local t = {};
+estrito.modo_global(t);
+
+t.s = 'algo';
+//t.s = 3; //--> erro ao atribuir um valor número em um campo de tabela do tipo string.
+estrito.desative(t);
+t.s = 3; //após a desativação do modo é possível alterar o tipo dos valores dos campos.
+
+local c = {};
+estrito.modo_const(c);
+c.s = 'c.s: algo';
+//c.s = 'c.s: algum'; //--> erro ao trocar uma valor de campo de tabela em modo const.
+estrito.desative(c);
+c.s = 'c.s: outro'; //após a desativação do modo é possível alterar os campos.
+
+local l = {a=1, b=2};
+estrito.modo_local(l);
+
+//l.s = 'ola'; //--> erro, pois não é permitido adicionar novos campos na tabela em modo local.
+l.a = 10; //para os campos da tabela definidos antes do modo local é permitido a mudança de valores.
+l.b = 20; //para os campos da tabela definidos antes do modo local é permitido a troca de valores.
+estrito.desative(l);
+l.s = 'ola'; //após a desativação do modo é possível acrescentar novos campos.
+
+
+\fim_codigo
+
+## Observações ##
+
+Ao desativar o modo global ou const, as variáveis e campos já não serão mais acessíveis.
+####Exemplo:####
+
+\inicio_codigo ex2.prisma
+    local estrito = inclua'estrito';
+    estrito.modo_global();
+    s = 'ola';
+    imprima(s);//--> ola
+    estrito.desative();
+    imprima(s);// -->nulo; 
+    
+    //os valores ficam na metatabela .__self   para global   e   .__const   para const.
+    local mt1 = obtmetatabela(_G);
+    se mt1 entao
+        imprima( mt1.__self.s); //--> ola;
+    fim
+    
+    estrito.modo_const();
+    
+    __S__ = 'minha var const';
+    imprima(__S__);//--> minha var const
+    estrito.desative();
+    imprimma(__S__); //--> nulo;
+    local mt2 = obtmetatabela(_G);
+    se mt2 entao
+        imprima(mt2.__const.__S__);//--> minha var const
+    fim
+    
+
+\fim_codigo
+ 
+ 
+*/
+
+
+
+--/// \brief estrito(tabela) - variável que contém os métodos desta biblioteca.
+--/// Podemos incluir usando o comando est = inclua'estrito';
+--/// e depois podemos usar os métodos:  est.modo_global(); ou est.modo_local();
+local estrito = {};
+se nao conv_c entao conv_c = funcao(...) retorne ... fim; fim
+local def = def;
+local obt = obt;
+local funcao processe_tipo_val(val)
+        se tipo(val) == 'string' entao
+            se #val > 20 entao
+                retorne '"'..val:corte(1,20)..'..."';
+            senao 
+                retorne '"'..val..'"';
+            fim
+        senaose tipo(val)=='numero' entao
+            retorne convstring(val);
+        senaose tipo(val)=='booleando' entao
+            retorne convstring(val); 
+        senaose tipo(val)=='funcao' entao
+            retorne 'funcao () ... fim';
+        senaose tipo(val)=='tabela' entao
+            retorne ' {}';
+        senao
+            retorne '<'..tipo(val) ..'>';
+        fim
+fim
+
+/*@doc
+     \fn estrito.modo_global
+     \brief Função que define o modo estrito global, isto significa que não será possível mudar o tipo de uma variável
+      <br>Ao definir o modo estrito global, variáveis globais serão aceitas, mas não será possível mudar o tipo do
+      valor de uma variável. Portanto, o primeiro valor atribuído a uma variável será fixado como o tipo dela.
+      \param t(tabela ou nulo) - este parâmetro pode ser omitido e o padrão será a tabela global Prisma (_G);
+       caso seja uma tabela os seus métodos e chaves terão tipagem fixa.
+      <hr><i>OBS.: não é possível usar o modo estrito global ao mesmo tempo que o modo estrito local com a mesma tabela.<i>
+      Mas com tabelas diferentes é possível, lembrando que a tabela _G guarda as variáveis globais.
+      Com o modo global ativado não é possível atribuir nulo a uma variável ou membro de tabela.
+      \returns (tabela) - o retorno é a propria tabela a ser ativada.
+*/
+funcao estrito.modo_global(t)
+    local t = t ou _G; //uma tabela específica ou _G caso não seja passado nenhum param.
+    T(t);
+    estrito.desative(t);
+    principal = principal ou funcao() fim; //evitar um bugg 
+    local mt = obtmetatabela(t);
+    se nao mt entao
+        mt = {};
+        defmetatabela(t,mt);
+    fim
+    
+    se mt entao
+        mt.__old_newindex = mt.__newindex;
+        mt.__old_index = mt.__index;
+    fim
+    mt.__newindex = funcao(self, k, val) 
+       // imprima(self,k,val);
+        se val == nulo entao
+           estrito.desative(self);
+           erro(conv_c('\n\n\tModo global ativado!'
+              ..'\n\t--------------------'
+              ..'\n\n\tNão é permitido atribuir nulo'
+              ..'\n\ta uma variável global ou campo de tabela'
+              ..'\n\t com o modo global ativado'
+              .. '\n\n\t--> .' .. k .. ' = <valor nulo> \n\n'),
+              2
+              );
+        fim
+        local mt2 = obtmetatabela(self);
+        se nao mt2.__self entao
+            mt2.__self = {};
+        fim
+        se mt2.__self[k] == nulo entao
+            def(mt2.__self,k,val);
+            retorne;
+        fim
+        se tipo(mt2.__self[k]) <> tipo(val) entao
+            estrito.desative(self);
+            local val_anterior = obt(mt2.__self, k);
+            se tipo(val_anterior) == 'string' entao
+                se #val_anterior > 20 entao
+                    val_anterior = '"' .. val_anterior:corte(1,20)..'..."';
+                senao
+                    val_anterior = '"' .. val_anterior .. '"';
+                fim
+            senaose tipo(val_anterior)=='numero' entao
+                val_anterior = convstring(val_anterior);
+            senaose tipo(val_anterior)=='booleando' entao
+                val_anterior = convstring(val_anterior); 
+            senao
+                val_anterior = '<'..tipo(val_anterior) ..'>';
+            fim   
+            
+            local tipo_val = tipo(val);
+            
+            se tipo(val) == 'string' entao
+                se #val > 20 entao
+                    val = '"'..val:corte(1,20)..'..."';
+                senao 
+                    val = '"'..val..'"';
+                fim
+            senaose tipo(val)=='numero' entao
+                val = convstring(val);
+            senaose tipo(val)=='booleando' entao
+                val = convstring(val); 
+            senao
+                val = '<'..tipo(val) ..'>';
+            fim
+                erro(
+                conv_c('\n\n\tModo estrito global ativado!'
+                ..'\n\t----------------------------'
+                .. '\n\tTentando atribuir um valor do tipo `' .. tipo_val
+                .. '\'\n\tem uma variável ou campo de tabela do tipo `' .. tipo(mt2.__self[k]) 
+                ..'\'\n\n\t--> ( .' .. k .. ' = ' .. val .. ')'
+                ..'\n\t--> valor anterior: ' .. val_anterior .. '\n\n'),
+                2
+               );   
+        fim
+        def(mt2.__self, k, val);
+    fim 
+    
+    //---------------------------------------------------
+    //poe'-------------------';
+    mt.__index = funcao(self,k)
+        //imprima(self,k);
+        local mt2 = obtmetatabela(self);
+        se nao mt2.__self entao
+            mt2.__self = {};
+        fim
+        se obt(mt2.__self,k)==nulo entao           
+            estrito.desative(self);
+            erro(conv_c('\n\n\tModo global ativado'
+                 ..'\n\t------------------'
+                 ..'\n\tVariável global ou campo de tabela não declarado --> ['..k..']\n\n'),
+                 2        
+            );
+        fim
+        retorne obt(mt2.__self, k);
+    fim
+    retorne T(t);
+fim 
+
+
+
+/*@doc
+     \fn estrito.modo_const
+     \brief Função que define o modo estrito const, não é possível alterar o valor já atribuído.
+      Também não é possível usar uma variável antes dela estar declarada.
+      <br>Ao definir o modo estrito const, variáveis globais serão aceitas, mas não será possível mudar o
+      valor de uma variável. Portanto, o primeiro valor atribuído a uma variável será fixado como constante.
+      \param t(tabela ou nulo) - este parâmetro pode ser omitido e o padrão será a tabela global Prisma (_G);
+       caso seja uma tabela os seus métodos e chaves terão tipagem fixa.
+      <hr><i>OBS.: não é possível usar o modo estrito const ao mesmo tempo que o modo estrito local com a mesma tabela.<i>
+      Mas com tabelas diferentes é possível, lembrando que a tabela _G guarda as variáveis globais.
+      Com o modo const ativado não é possível atribuir nulo a uma variável ou membro de tabela.
+      \returns (tabela) - o retorno é a propria tabela a ser ativada.
+ */
+funcao estrito.modo_const(t) --{
+    local t = t ou _G; //uma tabela específica ou _G caso não seja passado nenhum param.
+    T(t);
+    estrito.desative(t);
+    principal = principal ou funcao() fim; //evitar um bugg 
+    local mt = obtmetatabela(t);
+    se nao mt entao
+        mt = {};
+        defmetatabela(t,mt);
+    fim
+    
+    se mt entao
+        mt.__old_newindex = mt.__newindex;
+        mt.__old_index = mt.__index;
+    fim
+    mt.__newindex = funcao(self, k, val)
+       // imprima(self,k,val);
+        se val == nulo entao
+            estrito.desative(self);
+            erro(convo_c('\n\n\tModo estrito const ativado'
+                 ..'\n\t--------------------------'
+                 ..'\n\n\tNão é permitido atribuir um valor nulo em modo const' 
+                 .. '\n\n\t--> .' .. k .. ' = <valor nulo> \n\n'),
+                 2
+                 );
+        fim
+        local mt2 = obtmetatabela(self);
+        se nao mt2.__const entao
+            mt2.__const = {};
+        fim
+        se obt(mt2.__const, k) == nulo entao //tem que ser 'nulo' pois senao não seria possível atribuir falso por exemplo.
+            def(mt2.__const,k,val);
+            retorne;
+        senao //se o valor já existir não é possível alterá-lo, pois é uma constante.
+            estrito.desative(self);
+            local val_anterior = obt(mt2.__const, k);
+            se tipo(val_anterior) == 'string' entao
+                se #val_anterior > 20 entao
+                    val_anterior = '"' .. val_anterior:corte(1,20)..'..."';
+                senao
+                    val_anterior = '"' .. val_anterior .. '"';
+                fim
+            senaose tipo(val_anterior)=='numero' entao
+                val_anterior = convstring(val_anterior);
+            senaose tipo(val_anterior)=='booleando' entao
+                val_anterior = convstring(val_anterior); 
+            senao
+                val_anterior = '<'..tipo(val_anterior) ..'>';
+            fim
+            se tipo(val) == 'string' entao
+                se #val > 20 entao
+                    val = '"'..val:corte(1,20)..'..."';
+                senao 
+                    val = '"'..val..'"';
+                fim
+            senaose tipo(val)=='numero' entao
+                val = convstring(val);
+            senaose tipo(val)=='booleando' entao
+                val = convstring(val); 
+            senao
+                val = '<'..tipo(val) ..'>';
+            fim
+            erro(conv_c('\n\n\tModo estrito const ativado'
+                 ..'\n\t--------------------------'
+                 ..'\n\n\tNão é permitido mudar o valor' 
+                 ..'\n\tde uma variável global ou campo de tabela em modo const'
+                 .. '\n\n\t--> .' .. k .. ' = ' .. val  
+                 .. '\n\n\t--> valor anterior: .' .. k .. ' = ' .. val_anterior .. '\n\n'),
+                 2      
+                )
+        fim    
+    fim 
+    
+    //---------------------------------------------------
+    //poe'-------------------';
+    mt.__index = funcao(self,k)
+        //imprima(self,k);
+        local mt2 = obtmetatabela(self);
+        se nao mt2.__const entao
+            mt2.__const = {};
+        fim
+        se obt(mt2.__const,k)==nulo entao
+            estrito.desative(self);
+            erro(conv_c('\n\n\tModo const ativado'
+                 ..'\n\t------------------'
+                 ..'\n\tVariável global ou campo de tabela não declarado --> ['..k..']\n\n'),
+                 2       
+            );
+        fim
+        retorne obt(mt2.__const, k);
+    fim
+    retorne T(t);
+fim --}
+
+/*@doc
+     \fn estrito.modo_local
+     \brief Função estrito.modo_local(t) - ativa o modo estrito local, variáveis globais não serão permitidas.
+     Esta função força o programador a usar somente variáveis locais, caso tente atribuir uma variável global
+     ocorrerá um erro e o programa será finalizado com a mensagem de erro.
+     <br><i>OBS.: só não é possível atribuir novas variáveis globais, mas obter os valores de variáveis globais
+     já atribuídas antes de modo local é totalmente possível.<i>
+     \param t(tabela ou nulo) - a tabela para ativar o modo estrito local ou nulo. Caso seja nulo, nenhum valor passado,
+     então o padrão será _G, não faz sentido atribuir uma tabela normal no modo local, entao deixe sempre vazio.
+      só faria sentido para não poder atribuir mais valores em uma tabela.
+     \returns (tabela) - o retorno é a própria tabela com o modo local ativado.
+*/
+funcao estrito.modo_local(t) --{
+    local t =  t ou _G;
+    T(t);
+    estrito.desative(t);
+    local mt = obtmetatabela(t);
+    se nao mt entao
+        mt = {};
+        defmetatabela(t,mt);
+    fim
+    se mt entao
+        mt.__old_newindex = mt.__newindex;
+        mt.__old_index = mt.__index;
+    fim
+    
+    mt.__newindex = funcao(self, k, val) //--{
+        local val = processe_tipo_val(val);
+        se tipo(self._G)=='tabela' entao
+            se k=='principal' entao
+                def(self,k,val);
+                retorne;
+            fim
+            estrito.desative(self);
+            erro( conv_c('\n\n\tModo estrito local ativado!'
+                  ..'\n\t---------------------------'
+                  .. '\n\n\tUso de variável global não é permitido --> ' .. k .. ' = ' .. val
+                  .. '\n\tDeclare como local --> local ' .. k .. ' = ' .. val .. ';\n\n'                 
+                  ),2);
+        senao
+            estrito.desative(self);
+            erro( conv_c('\n\n\tModo estrito local ativado!'
+                  ..'\n\t---------------------------'
+                  ..'\n\tNão é permitido atribuir uma'
+                  ..'\n\tnova chave ou índice nesta tabela'
+                  .. '\n\tem modo estrito local.'
+                  .. '\n\n\t--> .' .. k .. ' = ' .. val .. '\n\n'),
+                  2              
+                  );
+        fim
+    fim // --}
+    retorne T(t);
+fim --}
+
+/**
+    \fn estrito.desative
+    \brief Função estrito.desative(t) - desativa o modo estrito local, global ou const
+    \param t(tabela ou nulo) - a tabela a ser desativada ou nulo para a tabela global _G
+    \returns (booleano) - retorna verdadeiro ou falso em caso de sucesso ou falha.
+    Caso haja a tentativa de desativar uma tabela não ativada o retorno será falso.
+*/
+funcao estrito.desative(t) --{
+    local t = t ou _G;
+    T(t);
+    local mt = obtmetatabela(t);
+    se mt entao
+        mt.__newindex = mt.__old_newindex;
+        mt.__index = mt.__old_index;
+        retorne B(verdadeiro);
+    fim
+    retorne B(falso);
+fim --}
+
+
+retorne estrito;
+
+
+
+
+

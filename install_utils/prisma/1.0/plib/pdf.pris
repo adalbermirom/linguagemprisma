@@ -1,0 +1,580 @@
+
+PDF = {}
+
+tabela.tam = funcao(tab)
+  retorne #tab
+fim
+
+PDF.novo = funcao()
+	local pdf = {}		// instance variable
+	local page = {}		// array of page descriptors
+	local object = {}	// array of object contents
+	local xref_tabela_offset	// byte offset of xref tabela
+
+	local catalog_obj	// global catalog object
+	local pages_obj		// global pages object
+	local procset_obj	// global procset object
+
+	//
+	// Private funcaos.
+	//
+
+	local ad = funcao(obj)
+		tabela.insira(object, obj)
+		obj.number = tabela.tam(object)
+		retorne obj
+	fim
+
+	local get_ref = funcao(obj)
+		retorne string.formate("%d 0 R", obj.number)
+	fim
+
+	local escreva_object
+	local escreva_direct_object
+	local escreva_indirect_object
+
+	escreva_object = funcao(fh, obj)
+		se tipo(obj) == "tabela" e obj.datatipo == "stream" entao
+			escreva_indirect_object(fh, obj)
+		senao
+			escreva_direct_object(fh, obj)
+		fim
+	fim
+
+	escreva_direct_object = funcao(fh, obj)
+		se tipo(obj) ~= "tabela" entao
+			fh:escreva(obj .. "\n")
+		senaose obj.datatipo == "dictionary" entao
+			local k, v
+
+			fh:escreva("<<\n")
+			para k, v em pares(obj.contents) inicio
+				fh:escreva(string.formate("/%s ", k))
+				escreva_object(fh, v)
+			fim
+			fh:escreva(">>\n")
+		senaose obj.datatipo == "array" entao
+			local v
+
+			fh:escreva("[\n")
+			para _, v em ipares(obj.contents) inicio 
+				escreva_object(fh, v)
+			fim
+			fh:escreva("]\n")
+		senaose obj.datatipo == "stream" entao
+			local len = 0
+
+			se tipo(obj.contents) == "string" entao
+				len = string.tamanho(obj.contents)
+			senao // assume array
+				local i, str
+				
+				para i, str em ipares(obj.contents) inicio 
+					len = len + string.tamanho(str) + 1
+				fim
+			fim
+
+			fh:escreva(string.formate("<< /Length %d >>\n", len))
+			fh:escreva("stream\n")
+
+			se tipo(obj.contents) == "string" entao
+				fh:escreva(obj.contents)
+			senao // assume array
+				local i, str
+				
+				para i, str em ipares(obj.contents) inicio 
+					fh:escreva(str)
+					fh:escreva("\n")
+				fim
+			fim
+
+			fh:escreva("endstream\n")
+		fim
+	fim
+
+	escreva_indirect_object = funcao(fh, obj)
+		obj.offset = fh:busque('final')
+		fh:escreva(string.formate("%d %d obj\n", obj.number, 0))
+		escreva_direct_object(fh, obj)
+		fh:escreva("endobj\n")
+	fim
+
+	local escreva_header = funcao(fh)
+		fh:escreva("%PDF-1.0\n")
+	fim
+
+	local escreva_body = funcao(fh)
+		local i, obj
+		
+		para i, obj em ipares(object) inicio 
+			escreva_indirect_object(fh, obj)
+		fim
+	fim
+
+	local escreva_xref_tabela = funcao(fh)
+		local i, obj
+
+		xref_tabela_offset = fh:busque('final');//busca fim do arquivo
+		fh:escreva("xref\n")
+		fh:escreva(string.formate("%d %d\n", 1, tabela.tam(object)))
+		para i, obj em ipares(object) inicio 
+			fh:escreva(
+			    string.formate("%010d %05d n \n", obj.offset, 0)
+			)
+		fim
+	fim
+
+	local escreva_trailer = funcao(fh)
+		fh:escreva("trailer\n")
+		fh:escreva("<<\n")
+		fh:escreva(string.formate("/Size %d\n", tabela.tam(object)))
+		fh:escreva("/Root " .. get_ref(catalog_obj) .. "\n")
+		fh:escreva(">>\n")
+		fh:escreva("startxref\n")
+		fh:escreva(string.formate("%d\n", xref_tabela_offset))
+		fh:escreva("%%EOF\n")
+	fim
+
+	//
+	// Instance methods.
+	//
+	
+	
+
+	pdf.nova_fonte = funcao(pdf, tab)
+		local subtipo = tab.subtipo ou "Type1"
+		local name = tab.nome ou "Helvetica"
+		local font_obj = ad {
+			datatipo = "dictionary",
+			contents = {
+				Type = "/Font",
+				Subtype = "/" .. subtipo,
+				BaseFont = "/" .. name,
+			}
+		}
+		retorne font_obj
+	fim
+
+	pdf.nova_pagina = funcao(pdf)
+		local pg = {}		// instance variable
+		local contents = {}	// array of operation strings
+		local used_font = {}	// fonts used on this page
+
+		//
+		// Private funcaos.
+		//
+
+		local use_font = funcao(font_obj)
+			local i, f
+			
+			para i, f em ipares(used_font) inicio 
+				se font_obj == f entao
+					retorne "/F" .. i
+				fim
+			fim
+			
+			tabela.insira(used_font, font_obj)
+			retorne "/F" .. tabela.tam(used_font)
+		fim
+
+		//
+		// Instance methods.
+		//
+
+		//
+		// Text funcaos.
+		//
+		
+		
+
+		pg.inicio_texto = funcao(pg)
+			tabela.insira(contents, "BT")
+		fim
+
+		pg.fim_texto = funcao(pg)
+			tabela.insira(contents, "ET")
+		fim
+
+		pg.def_fonte = funcao(pg, font_obj, size)
+			tabela.insira(contents,
+			    string.formate("%s %f Tf",
+			        use_font(font_obj), size)
+			)
+		fim
+		
+		pg.def_estilo = funcao(pg, est )
+		    se est < 1 ou est > 7 ou est == 4 entao est = 5 fim
+			tabela.insira(contents,
+			    string.formate("%d Tr", est)
+			)
+		fim
+
+		pg.def_texto_pos = funcao(pg, x, y)
+		    se y < 0 entao  y = 793 + y fim;
+			tabela.insira(contents,
+			    string.formate("%f %f Td", x, y)
+			)
+		fim
+		
+
+		pg.mostre = funcao(pg, str)
+			tabela.insira(contents,
+			    string.formate("(%s) Tj", str)
+			)
+		fim
+		
+		
+local funcao to_hex(str)
+     local hex = '';
+     para i = 1, #str  inicio 
+          local c = str:corte(i,i);
+          hex = hex .. string.formate("%x", cod(c) );
+     fim
+     retorne hex ;
+fim
+		pg.mostre_hex = funcao(pg,str)
+		    tabela.insira(contents,
+		        string.formate("T*\n<%s> Tj", to_hex(str) )
+		    )
+		fim
+
+		pg.def_car_espacamento = funcao(pg, spc)
+			tabela.insira(contents,
+			    string.formate("%f Tc", spc)
+			)
+		fim
+
+		//
+		// Graphics - path drawing funcaos.
+		//
+
+		pg.movapara = funcao(pg, x, y)
+		    se y < 0 entao y = 793 + y fim;
+			tabela.insira(contents,
+			    string.formate("%f %f m", x, y)
+			)
+		fim
+		
+		
+		pg.circulo = funcao(p, x, y, r)
+	  local k = 0.5522847498 * r
+	  se y < 0  entao y = 793 + y fim
+
+	  p:movapara(x - r, y)
+	  p:curvapara(x - r, y + k, x - k, y + r, x, y + r)
+	  p:curvapara(x + k, y + r, x + r, y + k, x + r, y)
+	  p:curvapara(x + r, y - k, x + k, y - r, x, y - r)
+	  p:curvapara(x - k, y - r, x - r, y - k, x - r, y)
+	
+     fim
+
+
+		pg.linhapara = funcao(pg, x, y)
+			tabela.insira(contents,
+			    string.formate("%f %f l", x, y)
+			)
+		fim
+		
+		pg.linhorizontal = funcao(pg,x,y,tam)
+		    se y < 0 entao y = 793 + y fim;
+		    tabela.insira(contents,	string.formate("%f %f m", x, y) );
+		    tam = tam + x; //tam = tamanho + coluna.
+		    tabela.insira(contents, string.formate("%f %f l", tam, y) );
+        fim
+        
+        pg.linvertical = funcao(pg,x,y,tam)
+		    se y < 0 entao y = 793 + y fim;
+		    tabela.insira(contents,	string.formate("%f %f m", x, y) );
+		    tam = tam + y; //tam = tamanho + coluna.
+		    tabela.insira(contents, string.formate("%f %f l", x, tam) );
+        fim
+          
+          
+		pg.curvapara = funcao(pg, x1, y1, x2, y2, x3, y3)
+			local str
+
+			se x3 e y3 entao
+				str = string.formate("%f %f %f %f %f %f c",
+				x1, y1, x2, y2, x3, y3)
+			senao
+				str = string.formate("%f %f %f %f v",
+				x1, y1, x2, y2)
+			fim
+			
+			tabela.insira(contents, str)
+		fim
+
+		pg.retangulo = funcao(pg, x, y, w, h)
+			tabela.insira(contents,
+			    string.formate("%f %f %f %f re",
+			    x, y, w, h)
+			)
+		fim
+		
+		pg.quadrado = funcao(pg, x, y,L)
+			tabela.insira(contents,
+			    string.formate("%f %f %f %f re",
+			    x, y, L, L)
+			)
+		fim
+
+		//
+		// Graphics - colours.
+		//
+
+		pg.defcinza = funcao(pg, which, gray)
+			tente(which == "fill" ou which == "stroke")
+			tente(gray >= 0 e gray <= 1)
+			se which == "fill" entao
+				tabela.insira(contents,
+				    string.formate("%d g", gray)
+				)
+			senao
+				tabela.insira(contents,
+				    string.formate("%d G", gray)
+				)
+			fim
+		fim
+		
+		pg.CORLETRA = 'fill';
+		pg.CORTRACO = 'stroke';
+		pg.CORPREENCH = 'fill';
+
+		pg.defrgbcor = funcao(pg, which, r, g, b)
+			tente(which == "fill" ou which == "stroke")
+			tente(r >= 0 e r <= 1)
+			tente(g >= 0 e g <= 1)
+			tente(b >= 0 e b <= 1)
+			se which == "fill" entao
+				tabela.insira(contents,
+				    string.formate("%f %f %f rg", r, g, b)
+				)
+			senao
+				tabela.insira(contents,
+				    string.formate("%f %f %f RG", r, g, b)
+				)
+			fim
+		fim
+
+		pg.defcmykcor = funcao(pg, which, c, m, y, k)
+			tente(which == "fill" ou which == "stroke")
+			tente(c >= 0 e c <= 1)
+			tente(m >= 0 e m <= 1)
+			tente(y >= 0 e y <= 1)
+			tente(k >= 0 e k <= 1)
+			se which == "fill" entao
+				tabela.insira(contents,
+				    string.formate("%f %f %f %f k", c, m, y, k)
+				)
+			senao
+				tabela.insira(contents,
+				    string.formate("%f %f %f %f K", c, m, y, k)
+				)
+			fim
+		fim
+
+		//
+		// Graphics - line options.
+		//
+
+		pg.defespessura = funcao(pg, i)
+			tente(i >= 0 e i <= 100)
+			tabela.insira(contents,
+			    string.formate("%d i", i)
+			)
+		fim
+
+		pg.deflinhacap = funcao(pg, j)
+			tente(j == 0 ou j == 1 ou j == 2)
+			tabela.insira(contents,
+			    string.formate("%d J", j)
+			)
+		fim
+
+		pg.deflinhajuncao = funcao(pg, j)
+			tente(j == 0 ou j == 1 ou j == 2)
+			tabela.insira(contents,
+			    string.formate("%d j", j)
+			)
+		fim
+
+		pg.deflinhalargura = funcao(pg, w)
+			tabela.insira(contents,
+			    string.formate("%d w", w)
+			)
+		fim
+
+		pg.setmitralimite = funcao(pg, m)
+			tente(m >= 1)
+			tabela.insira(contents,
+			    string.formate("%d M", m)
+			)
+		fim
+
+		pg.deftraco = funcao(pg, array, phase)
+			local str = ""
+			local v
+			
+			para _, v em ipares(array) inicio 
+				str = str .. v .. " "
+			fim
+
+			tabela.insira(contents,
+			    string.formate("[%s] %d d", str, phase)
+			)
+		fim
+
+		//
+		// Graphics - path-terminating funcaos.
+		//
+
+		pg.desenhe = funcao(pg)
+			tabela.insira(contents, "S")
+		fim
+
+		pg.fechecaminho = funcao(pg)
+			tabela.insira(contents, "h")
+		fim
+
+		pg.preencha = funcao(pg)
+			tabela.insira(contents, "f")
+		fim
+
+		pg.novocaminho = funcao(pg)
+			tabela.insira(contents, "n")
+		fim
+
+		pg.clip = funcao(pg) // no effect until next newpath
+			tabela.insira(contents, "W")
+		fim
+
+		//
+		// Graphics - state save/restore.
+		//
+
+		pg.salve = funcao(pg)
+			tabela.insira(contents, "q")
+		fim
+
+		pg.restaure = funcao(pg)
+			tabela.insira(contents, "Q")
+		fim
+
+		//
+		// Graphics - CTM funcaos.
+		//
+		pg.transparam = funcao(pg, a, b, c, d, E , f) // aka concat
+			tabela.insira(contents,
+			    string.formate("%f %f %f %f %f %f cm",
+			        a, b, c, d, E , f)
+			)		
+		fim
+
+		pg.converta = funcao(pg, x, y)
+			pg:transparam(1, 0, 0, 1, x, y)
+		fim
+
+		pg.escala = funcao(pg, x, y)
+			se nao y entao y = x fim
+			pg:transparam(x, 0, 0, y, 0, 0)
+		fim
+
+		pg.rotacione = funcao(pg, theta)
+			local c, s = mat.cosseno(theta), mat.seno(theta)
+			pg:transparam(c, s, -1 * s, c, 0, 0)
+		fim
+
+		pg.incline = funcao(pg, tha, thb)
+			local tana, tanb = mat.tangente(tha), mat.tangente(thb)
+			pg:transparam(1, tana, tanb, 1, 0, 0)
+		fim
+
+		pg.ad = funcao(pg)
+			local contents_obj, this_obj, resources
+			local i, font_obj
+
+			contents_obj = ad {
+				datatipo = "stream",
+				contents = contents
+			}
+
+			resources = {
+				datatipo = "dictionary",
+				contents = {
+					Font = {
+						datatipo = "dictionary",
+						contents = {}
+					},
+					ProcSet = get_ref(procset_obj)
+				}
+			}
+
+			para i, font_obj em ipares(used_font) inicio 
+				resources.contents.Font.contents["F" .. i] =
+				    get_ref(font_obj)
+			fim
+
+			this_obj = ad {
+				datatipo = "dictionary",
+				contents = {
+					Type = "/Page",
+					Parent = get_ref(pages_obj),
+					Contents = get_ref(contents_obj),
+					Resources = resources
+				}
+			}
+			
+			tabela.insira(pages_obj.contents.Kids.contents,
+			    get_ref(this_obj))
+			pages_obj.contents.Count = pages_obj.contents.Count + 1
+		fim
+
+		tabela.insira(page, pg)
+		retorne pg
+	fim
+
+	pdf.escreva = funcao(pdf, file)
+		local fh
+
+		se tipo(file) == "string" entao
+			fh = tente(es.abra(file, "escrita"))
+		senao
+			fh = file
+		fim
+
+		escreva_header(fh)
+		escreva_body(fh)
+		escreva_xref_tabela(fh)
+		escreva_trailer(fh)
+
+		fh:feche()
+	fim
+
+	// initialize... ad a few objects that we know will exist.
+	pages_obj = ad {
+		datatipo = "dictionary",
+		contents = {
+			Type = "/Pages",
+			Kids = {
+				datatipo = "array",
+				contents = {}
+			},
+			Count = 0
+		}
+	}
+
+	catalog_obj = ad {
+		datatipo = "dictionary",
+		contents = {
+			Type = "/Catalog",
+			Pages = get_ref(pages_obj)
+		}
+	}
+
+	procset_obj = ad {
+		datatipo = "array",
+		contents = { "/PDF", "/Text" }
+	}
+
+	retorne pdf
+fim

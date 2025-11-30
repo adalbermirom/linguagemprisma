@@ -1,0 +1,68 @@
+/**desp-1.0
+
+
+Esta é uma biblioteca prisma 1.0  com a classe despertador para criar funções de marcação de datas e horários para execução de tarefas.
+
+**/
+
+//primeiro devemos incluir a biblioteca assim:
+
+local desp = inclua'desp'; //com isso o programa prisma procura a pasta desp e carrega o arquivo ini.pris dentro dela.
+
+//agora crie um novo objeto despertador:
+
+local despertador = desp:novo(); //note os dois pontos para acessar o metodo novo();
+
+//crie uma tabela com os dados para novo alarme:
+
+alarme1 = { nome = 'Novo Alarme', dia=5, mes=6, hora=22, minuto=1, ano=2016} //despertará em 12/01/16 às 6h20min
+/**
+crie uma função para ser executada no momento em que o alarme for disparado,
+com a condição de que seu nome deva ser func(a) com um único parâmetro, sendo campo da tabela criada acima:   **/
+
+funcao alarme1.func(a)
+  imprima'ALARME DISPARADO:\n\n';
+  imprima('nome: ', a.nome , 'Horário:', a.hora ..':'..a.minuto );
+  
+  imprima('\nAgora: ' .. sis.data() );
+ //se quiser pode definir uma soneca:
+  despertador:defSoneca(a, 6, 3); 
+  //temos no alarme disparado 'a' uma soneca de 6 min por 3 vezes será repetida.
+
+fim
+
+//defina a tabela alarme1 como um alarme como abaixo:
+despertador:defAlarme { nome = 'TESTE ALARME', dia=5, mes=6, hora=22, minuto=11, ano=2016} 
+
+despertador:defAlarme( alarme1 );
+
+
+
+//pronto,
+//basta criar um laço de repetição enquanto, ou repita,
+//ou ate mesmo um temporizador se voce estiver usando a biblioteca
+//grafica 'igbr' para criar um alarme visual.
+//e testar os alarmes com a funcao :testeAlarmes();
+
+//aqui vou usar o enquanto:
+
+
+enquanto 1 inicio
+  //cada vez que testeAlarmes() é chamada, todos os alarmes definidos são testados e disparados se o tempo bater.
+         local ret = despertador:testeAlarmes();   
+          imprima( sis.data()  , ret );
+          se ret entao leia(); fim
+          sis.durma(1000); //espera um segundo
+          
+         se sis.nome == 'linux' entao 
+              sis.execute'clear'; //limpa tela no linux
+         senao 
+              sis.execute'cls'; //limpa tela no win.
+         fim
+fim
+
+
+
+//aqui criei apenas um alarmes, mas esta lib funciona com sistema 
+//multialarmes, ou seja basta criar mais tabelas como a alarme1 acima
+// usar a funcao despertador:defAlarme(alarme) para cada alarme.

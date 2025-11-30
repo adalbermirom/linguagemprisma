@@ -1,0 +1,1012 @@
+/**
+    \file dir.pris
+    \author Adalberto Amorim Felipe
+    \date agosto 2017
+    \brief Biblioteca com facilidades de arquivos e pasta, multiplataforma.
+    <p>
+    Esta biblioteca oferece funções para simplificar o acesso e manipulação de arquivos
+    e pastas. Podemos, por exemplo, criar pastas, listar aquivos dentro de pastas etc.
+    </p>
+    
+    Veja:
+    <pre>
+        local dir = inclua'dir';
+        local txt, err = dir.leia_arquivo('arq.txt');
+        se nao txt entao erro(err); fim
+        imprima(txt);
+        poe'';
+        poe'Enter para continuar...';
+        leia();
+        local t = dir.liste_todos('.'); //lista arquivos e pastas, recursivamente dentro de subpastas.
+        para i,v em ipares(t) inicio
+            imprima(i,v);
+        fim
+    </pre>
+    (Esta lib usa funções de baixo nível em C que foram retiradas da biblioteca lfs em Lua);
+ */
+--{
+local dir = inclua"pdiretorio";//incluindo o módulo C baixo nível 
+/*para k,v em pares(dir) inicio
+    se tipo(v) == 'funcao' entao
+        imprima('///  \\fn ' .. k .. '\n/// \\brief Função ' .. k .. '\n--funcao ' .. k .. '();');
+    fim
+fim
+leia();
+--*/
+
+//variaveis locais deixam o programa mais rapido:
+local tab_remova,tab_insira,tab_concat = tabela.remova,tabela.insira,tabela.concat;
+local local_pchame = pchame;
+local es_abra = es.abra;
+
+local BARRA = '/'
+se sis.nome:procure('win') entao
+    BARRA = '\\';
+fim
+--}
+
+--/// \var dir.BARRA
+--/// \brief variável dir.BARRA - guarda o tipo de barra do sistema, em Win: \\ em Linux: /
+dir.BARRA = BARRA;
+
+
+///  \fn dir
+/// \brief Função dir
+--funcao dir();
+///  \fn desbloqueio
+/// \brief Função desbloqueio
+--funcao desbloqueio();
+///  \fn bloqueio_dir
+/// \brief Função bloqueio_dir
+--funcao bloqueio_dir();
+///  \fn localdir
+/// \brief Função localdir
+--funcao localdir();
+///  \fn def_permissao
+/// \brief Função def_permissao
+--funcao def_permissao();
+///  \fn removadir
+/// \brief Função removadir
+--funcao removadir();
+///  \fn linksimatributos
+/// \brief Função linksimatributos
+--funcao linksimatributos();
+///  \fn mudedir
+/// \brief Função mudedir
+--funcao mudedir();
+///  \fn atributos
+/// \brief Função atributos
+--funcao atributos();
+///  \fn link
+/// \brief Função link
+--funcao link();
+///  \fn toque
+/// \brief Função toque
+--funcao toque();
+///  \fn defmodo
+/// \brief Função defmodo
+--funcao defmodo();
+///  \fn bloqueio
+/// \brief Função bloqueio
+--funcao bloqueio();
+///  \fn criedir
+/// \brief Função criedir
+--funcao criedir();
+
+
+//============= IMPLEMENTAÇÃO FUNÇÕES DE ALTO NÍVEL ============
+
+///lista arquivos e pastas de 'pasta'
+funcao dir.liste_arquivos (pasta)--{
+   local pasta = pasta ou '.';
+  // local index = 1;
+   local tab = {};
+    local ret, err, list = pchame(dir.dir,pasta);
+    se nao ret entao retorne falso, err; fim  
+    ret = list:proximo();  
+    enquanto ret inicio
+      tab[#tab+1] = ret;
+      //index = index + 1;
+      ret = list:proximo();//pega proximo arquivo ou pasta.
+    fim//fim enquanto;
+    retorne tab
+fim --}//fim funcao
+
+///listando somente arquivos:
+
+funcao dir.liste_somente_arquivos (pasta) --{
+   local pasta = pasta ou '.';
+  // local index = 1;
+   local tab = {};
+   local atributo;
+   local ret, err, list = pchame(dir.dir,pasta);
+    se nao ret entao retorne falso, err; fim  
+    ret = list:proximo();  
+    enquanto ret inicio 
+     // se nao ret entao quebre; fim //sai do laço 
+      atributo = dir.atributos (pasta .. BARRA .. ret)
+      se (tipo(atributo) == "tabela") entao            
+        se atributo.modo == 'arquivo' entao
+               tab[#tab+1] = ret;
+       fim //fim se atributo.modo ==
+      fim //fim se (tipo(atributo) == 
+      ret = list:proximo();
+    fim//fim enquanto
+    retorne tab;
+fim --}//fim funcao
+
+
+///listando somente pastas:
+
+funcao dir.liste_somente_pastas (pastas) --{
+   local pasta = '.';
+   se tipo(pastas) == 'string' entao pasta = pastas fim;
+   local index = 1;
+   local tab = {};
+   local atributo;
+   local ret, err, list = pchame(dir.dir,pasta);
+    se nao ret entao retorne falso, err; fim  
+    ret = list:proximo();  
+    enquanto ret inicio  
+      //se (nao ret) entao quebre; fim //sai do laço 
+
+          atributo = dir.atributos (pasta .. BARRA .. ret)
+          se (tipo(atributo) == "tabela") entao
+              
+             se (atributo.modo:procure'diretorio') entao
+               tab[#tab+1] = ret;
+               //index = index + 1;
+             fim //fim se atributo.modo ==
+          fim //fim se (tipo(atributo) ==  **///
+      ret = list:proximo();
+    fim//fim enquanto
+    retorne tab;
+fim --}//fim funcao
+
+
+///listando os arquivos e pastas de um diretorio e subdiretorios usando o comando 'para' com dir.dir()
+funcao dir.liste_todos(diretorio_in)
+
+    local n_pasta = 0;
+    local n_arq= 0;
+    local index = 1;
+    local tab = {};
+    
+  local funcao Liste_todos(pasta)
+    se pasta == '' ou pasta == nulo entao pasta = '.' fim
+    
+    local ret, err, list = pchame(dir.dir,pasta);
+    se nao ret entao retorne falso, err; fim 
+    ret = list:proximo();   
+    enquanto ret inicio  
+      //se nao ret entao 
+        //quebre
+      //fim //sai do laço   
+      se  ret <> "." e ret <> ".." entao
+            local f = pasta.. BARRA .. ret;  
+            local atributo = dir.atributos (f)
+        se (tipo(atributo) == "tabela") entao
+            
+            se atributo.modo == 'arquivo' entao
+                        tab[#tab+1] = f;             
+            senaose atributo.modo == "diretorio" entao
+                n_pasta = n_pasta + 1;
+                Liste_todos (f)
+            senao                
+                             
+            fim
+          fim //fim se (tipo(atributo) == 
+        fim//fim se dir.~= 
+       ret = list:proximo();
+    fim//fim enquanto
+    retorne verdadeiro;  
+  fim  
+
+  local ret,err = Liste_todos(diretorio_in);
+  se nao ret entao retorne falso,-1,-1,err; fim
+  retorne tab,#tab, n_pasta;
+fim --}//fim funcao
+
+
+funcao dir.procure(direct, str_busca_in) 
+   local str_busca = string.analise(str_busca_in,' ,;');
+   se nao str_busca entao str_busca = { str_busca_in }; fim
+    
+    local strproc = string.procure;
+    local index = 1;
+    local tab = {};
+    
+    local funcao Liste_todos(pasta)
+    se pasta == '' ou pasta == nulo entao pasta = '.' fim
+    
+    local ret, err, list = pchame(dir.dir,pasta);
+    se nao ret entao retorne falso, err; fim 
+    ret = list:proximo();   
+    enquanto ret inicio  
+      se  ret <> "." e ret <> ".." entao
+            local f = pasta.. BARRA .. ret;  
+            local atributo = dir.atributos (f)
+        se (tipo(atributo) == "tabela") entao
+            
+            se atributo.modo == 'arquivo' entao
+               para k,v em ipares(str_busca) inicio
+                   se v <> ' ' e v <> ',' e v <> ';' entao
+                    se strproc(ret,v) entao
+                        tab[index] = f;
+                        index = index + 1;
+                    fim
+                   fim//fim se v
+               fim                
+            senaose atributo.modo == "diretorio" entao
+                para k,v em ipares(str_busca) inicio
+                   se v <> ' ' e v <> ',' e v <> ';' entao
+                    se strproc(ret,v) entao
+                        tab[#tab+1] = f;
+                        //index = index + 1;
+                    fim
+                   fim//fim se v
+                fim //fim para k, v
+                Liste_todos (f)
+            senao                
+                             
+            fim
+          fim //fim se (tipo(atributo) == 
+        fim//fim se dir.~= 
+        ret = list:proximo();//tem que ficar no fim pois para o enquanto se falso antes de usar o valor.
+    fim//fim enquanto
+    retorne verdadeiro;  
+  fim
+  
+  local ret, err = Liste_todos(direct);
+  se nao ret entao retorne falso, err; fim
+  retorne tab;
+fim --}//fim funcao
+
+--{
+//apagar arquivos e pastas
+dir.remova = sis.remova; //remove pastas e arquivos.
+dir.renomeie = sis.renomeie;
+--}
+
+////========================== inclusao das funcoes dir.criadas anteriormente....
+
+funcao dir.crie_arquivo(name, str ) //cria arquivo se nao existir, se já existir será sobre escrito.
+  local a = es.abra(name, 'escrita');
+  se a entao
+    se str e tipo(str) == 'string' ou tipo(str) == 'numero' entao
+      a:escreva(str);
+    fim
+    a:feche()
+    retorne verdadeiro;
+  senao
+    retorne falso;
+  fim   
+fim --}
+
+
+//dir.graveArquivo("teste.txt", "um\n" , "dois\n", "três\n", "quarta linha\n");
+funcao dir.grave_arquivo(name, ... ) --{
+   local txt = {...}; //pega os parametros variados e transforma em tabela
+   local a = es.abra(name, 'escrita');
+   se a entao
+     para i = 1 , #txt inicio
+       a:escreva(txt[i]); //grava cada item passado como parametro
+     fim
+     a:feche();
+     retorne verdadeiro;
+   senao
+     retorne falso, 'nao foi possivel abrir o arquivo para gravacao';
+   fim
+fim 
+
+funcao dir.grave_arquivobin(name, ... ) 
+   local txt = {...}; //pega os parametros variados e transforma em tabela
+   local a = es.abra(name, 'escritabin');
+   se a entao
+     para i = 1 , #txt inicio
+       a:escreva(txt[i]); //grava cada item passado como parametro
+     fim
+     a:feche();
+     retorne verdadeiro;
+   senao
+     retorne falso, 'nao foi possivel abrir o arquivo para gravacao';
+   fim
+fim 
+
+//funcao criada em 25-09-2017
+funcao dir.adicione_arquivobin(name, ...)
+   local txt = {...}; //pega os parametros variados e transforma em tabela
+   local a,b,err,txt_orig;
+   a,err = es.abra(name,'leiturabin');
+   se a entao
+     txt_orig = a:leia'*t';
+     a:feche();
+   fim
+   b,err = es.abra(name, 'escritabin');
+   se b entao
+     se txt_orig entao b:escreva(txt_orig); fim
+     para i = 1 , #txt inicio
+       b:escreva(txt[i]); //grava cada item passado como parametro
+     fim
+     b:feche();
+     retorne verdadeiro;
+   senao
+     retorne falso, ('nao foi possivel abrir o arquivo para gravacao: %q'):formate(err);
+   fim
+fim
+
+//dir.adicione_arquivo("teste.txt", "Ola" , " " , "Mundo em ", "Prisma" );
+funcao dir.adicione_arquivo(name,...) 
+  local txt = {...}; //pega os parametros variados e transforma em tabela
+   local a = es.abra(name, 'adicao');
+   se a entao
+     para i = 1 , #txt inicio
+       a:escreva(txt[i]); //grava cada item passado como parametro
+     fim
+     a:feche();
+     retorne verdadeiro;
+   senao
+     retorne falso,('nao foi possivel abrir o arquivo para gravacao: %q'):formate(err);
+   fim
+fim 
+
+//txt = dir.leia_arquivo("teste.txt");
+funcao dir.leia_arquivo(name)
+   local a = es.abra(name, 'leitura');
+   se a entao
+     local txt = a:leia("*t"); //le tudo
+     a:feche();
+     retorne txt
+   senao
+     retorne falso, ('nao foi possivel abrir o arquivo para leitura: `%s\''):formate(err);
+   fim
+fim 
+
+//txt = dir.leiaArquivoBin("teste.txt");
+funcao dir.leia_arquivobin(name) 
+   local a, err = es.abra(name, 'leiturabin');
+   se a entao
+     local txt = a:leia("*t"); //le tudo
+     a:feche();
+     retorne txt
+   senao
+     retorne falso, ('nao foi possivel abrir o arquivo para leitura: %q'):formate(err);
+   fim
+fim 
+
+//=========================== FIM LEITURA E GRAVACAO
+
+//============================ UTILITARIO DE SISTEMA DE ARQUIVOS:
+
+// Arquivo Existe? ret = falso ou verdadeiro
+
+funcao dir.arquivo_existe(name) 
+  se tipo(name)<>'string' entao erro('\n\n Em arg #1: espera-se string ao invés de ' .. tipo(name)); fim
+   local ret,err = dir.atributos(name);
+   se ret entao
+     ret = verdadeiro;
+   senao
+     ret = falso;
+   fim
+   retorne ret, err;
+fim  
+
+funcao dir.dir_existe(name)
+   se tipo(name)<>'string' entao erro('\n\n Em arg #1: espera-se string ao invés de ' .. tipo(name)); fim
+   local ret,err = dir.atributos(name);
+   se ret entao
+     ret = verdadeiro;
+   senao
+     ret = falso;
+   fim
+   retorne ret, err;
+fim 
+
+//quantos bytes tem o arquivo?
+funcao dir.tamanho_arquivo(nome_arq) 
+   local a,err = es.abra(nome_arq,'leiturabin');
+   se a entao
+      local tam = a:busque('final');//move a posicao de leitura para o final e retorna posicao
+      a:feche();//fechando o arquivo.
+      retorne tam;//retornando o numero de bytes ( para converter: tam/1000 = kb, tam/1000000 = Mb.);
+   senao
+     retorne falso, err;
+   fim
+fim
+
+//tamanho em bytes de todos os arquivos na pasta e subpastas:
+funcao dir.tamanho_pasta(direct)
+    local n_pasta = 0;
+    local n_arq= 0;
+    local tam = 0;
+    
+  local funcao Liste_todos(pasta)
+    se pasta == '' ou pasta == nulo entao pasta = '.' fim
+    
+    local ret, err, list = pchame(dir.dir,pasta);
+    se nao ret entao retorne falso, err; fim 
+    ret = list:proximo();   
+    enquanto ret inicio  
+      //se nao ret entao 
+        //quebre
+      //fim //sai do laço   
+      se  ret <> "." e ret <> ".." entao
+            local f = pasta.. BARRA .. ret;  
+            local atributo = dir.atributos (f)
+        se (tipo(atributo) == "tabela") entao
+            
+            se atributo.modo == 'arquivo' entao
+                tam = tam + dir.tamanho_arquivo(f); 
+                n_arq = n_arq + 1;       
+            senaose atributo.modo == "diretorio" entao
+                n_pasta = n_pasta + 1;
+                Liste_todos (f)
+            senao                
+                             
+            fim
+          fim //fim se (tipo(atributo) == 
+        fim//fim se dir.~= 
+       ret = list:proximo();
+    fim//fim enquanto
+    retorne verdadeiro;  
+  fim  
+
+  Liste_todos(direct);
+  retorne tam, n_arq, n_pasta;
+fim 
+
+
+//copiar arquivo
+funcao dir.copie_arquivo(orig,dest) 
+  local a, err = es.abra(orig,'leiturabin');
+  se a entao
+    local conteudo = a:leia'*t';
+    a:feche();
+    local b, err = es.abra(dest,'escritabin');
+    se b entao
+      b:escreva(conteudo);
+      b:feche();
+      retorne verdadeiro;
+    senao
+      retorne falso, err;
+    fim
+  senao
+    retorne falso, err;
+  fim
+fim 
+
+//executa uma copia e no final apaga o arquivo original.
+funcao dir.mova_arquivo(orig,dest) 
+  local a, err = es.abra(orig,'leiturabin');
+  se a entao
+    local conteudo = a:leia'*t';
+    a:feche();
+    local b, err= es.abra(dest,'escritabin');
+    se b entao
+      b:escreva(conteudo);
+      b:feche();
+      sis.remova(orig);
+      retorne verdadeiro;
+    senao
+      retorne falso, err;
+    fim
+  senao
+    retorne falso, err;
+  fim
+fim 
+
+//dividir arquivos (orig,dest,numero_de_divisoes);
+funcao dir.divida(alvo,dest,n)
+  se nao dest entao erro'falta argumento na funcao Divida: dest' fim
+  local n = n ou 5;
+  local txt = dir.leia_arquivobin(alvo);
+  se nao txt entao retorne falso, ('Erro ao tentar abrir arquivo: ' .. alvo); fim
+  local tam = #txt;
+  local parte = mat.corte( tam/n );
+  se parte == 0 entao retorne falso, 'Quantidade de partes ultrapassou o limite para este arquivo' fim
+  local in = 1;
+  local fin = 0;
+  para i = 1 , n inicio
+  
+    se i == n entao
+      fin = tam;
+    senao
+      fin = fin + parte;    
+    fim
+    
+    local tmp = string.corte(txt, in,fin);
+    se tmp entao 
+      local b = dir.grave_arquivo( dest .. i , tmp )
+      se nao b entao retorne falso, ('erro ao gravar arquivo ' .. dest) fim
+    senao
+      retorne falso, 'Erro ao dividir arquivo';
+    fim    
+    in = fin + 1;    
+  fim //para  
+  retorne verdadeiro, 'Processo terminado com sucesso';
+fim 
+
+//oposto da funcao acima unir arquivo
+funcao dir.junte(orig,dest, n ) --{
+  se nao dest entao erro'falta argumento na funcao Junte: nome do arquivo' fim
+  se nao orig entao orig = dest fim;
+  local tab = {};
+  local sucesso = falso;
+  local i = 1;
+  local b = es.abra(dest,'escritabin');
+  se b entao
+    enquanto 1 inicio
+      local tmp = orig .. i;
+      local a = dir.leia_arquivobin(tmp);
+      
+      se a entao
+        sucesso = verdadeiro;
+        b:escreva( a );
+        se n entao
+          se i == n entao quebre fim
+        fim
+      senao
+        quebre;
+      fim  
+      i = i + 1;  
+    fim
+    b:feche();
+  senao
+    retorne falso , 'nao foi possivel abrir arquivo destino';
+  fim  
+  retorne sucesso; 
+fim 
+
+funcao dir.remova_dir_re(direct)  //remove pasta recursivamente.
+    local n_pasta = 0;
+    local n_arq= 0;
+    local index = 1;
+    local tab = {};
+    
+    local funcao remove_todos(pasta)
+    se pasta == '' ou pasta == nulo entao pasta = '.' fim
+    
+    local ret, err, list = pchame(dir.dir,pasta);
+    se nao ret entao retorne falso, err; fim 
+    ret = list:proximo();   
+    enquanto ret inicio  
+        ret = list:proximo();
+        //se nao arq entao quebre; fim
+        se ret <> "." e ret <> ".." entao
+            local f = pasta.. BARRA .. ret
+           
+            local atributo = dir.atributos (f)
+        se (tipo(atributo) == "tabela") entao            
+            se atributo.modo == 'arquivo' entao
+               sis.remova( f );
+            senaose atributo.modo == "diretorio" entao
+                n_pasta = n_pasta + 1;
+                 remove_todos (f)
+                sis.remova( f );
+            senao                
+                             
+            fim
+          fim //fim se (tipo(atributo) == 
+        fim//fim se dir.~= 
+    fim//fim para
+    retorne verdadeiro;
+  fim
+  
+  retorne remove_todos(direct);
+fim //fim funcao
+
+//funcao para copia em modo callback, a funcao é chamada varias vezes até completar a cópia.
+funcao dir.copie_assinc(orig,dest,func,dado,n_bytes) 
+ 
+  se nao dest entao erro'falta argumentos na função copie_assinc()'; fim
+  local n_bytes = n_bytes ou 1024842;
+  local func = func ou funcao() fim;
+  local _Orig,err = es.abra(orig,'leiturabin');
+  local _Dest,err = es.abra(dest, 'escritabin');
+  
+  se nao _Orig entao
+    retorne falso, err;
+  senaose nao _Dest entao
+    retorne falso, err;
+  fim
+  
+  local tab = {};
+  local _Progress = 0;
+  
+  //caso seja aberto os arquivo entao cria-se a funcao e retorna a tabela.
+  local tam_arquivo = dir.tamanho_arquivo;
+  local tam = tam_arquivo(orig);
+  tab.tam = tam ou 0;
+  se tab.tam <= n_bytes entao n_bytes = mat.corte(n_bytes /10) ; fim;
+  
+  funcao tab:exec()
+    se nao _Orig entao retorne falso, 'arquivo invalido' fim;
+    local txt_orig = _Orig:leia(n_bytes);
+    se txt_orig entao
+      _Progress = _Progress + n_bytes;
+      se _Progress > tam entao _Progress = tam; fim;
+      _Dest:escreva(txt_orig); 
+      func( _Progress, tam,dado); //executa call back;
+      retorne verdadeiro, 'copia em andamento';
+    senao//senao fecha os arquivos
+      _Orig:feche();
+      _Dest:feche();
+      retorne falso, '<fim de arquivo>';
+    fim   
+  fim //fim dir.copie_assinc() 
+  
+  retorne tab;
+fim 
+
+
+
+//#########################################################################################//
+
+
+//===================================== acrescentado: julho/2017=============================//
+
+
+funcao dir.liste_arquivos_assinc(past,func,dado) 
+  local past = past ou '.';
+  local epasta,err = dir.dir_existe(past);
+  se nao epasta entao retorne falso, err fim;//se nao existir retorna falso e mensagem de erro;
+  local t = {};
+  t.dir = past;//guarda o diretorio inicial de pesquisa.
+  t.arquivos={};
+  t.fechado = falso;
+   local ret, err,list= pchame(dir.dir,past);
+   se nao ret entao retorne falso, err; fim
+  t.list = list;
+  
+  se tipo(func)=='funcao' entao //caso haja uma funcao callback ela será executada.
+    funcao t:exec()
+     se  este.fechado == verdadeiro entao 
+       t.msg_erro='diretório fechado';
+       retorne falso,'diretório fechado'; 
+     fim
+     ret = este.list:proximo();
+     se nao ret entao 
+       este.list:feche();
+       t.fechado = verdadeiro;
+       t.msg_erro='final';
+       retorne falso,'final';  
+     senao
+       se ret<>'.' e ret<>'..' entao 
+          func(ret,dado); //chama a callback e passa o arquivo com o dado extra.
+          t.arquivos[#t.arquivos+1]=ret;
+       fim
+       retorne ret;    
+     fim
+   fim  //fim função 
+  
+  senao//se nao houver uma função callback não precisamos executá-la.
+   funcao t:exec()
+     se  este.fechado == verdadeiro entao 
+       t.msg_erro='diretório fechado';
+       retorne falso,'diretório fechado'; 
+     fim
+     local ret = este.list:proximo();
+     se nao ret entao 
+       este.list:feche();
+       t.fechado = verdadeiro;
+       t.msg_erro='final';
+       retorne falso,'final';  
+     senao
+       se ret<>'.' e ret<>'..' entao 
+          t.arquivos[#t.arquivos+1]=ret;
+       fim
+       retorne ret;    
+     fim
+   fim  //fim função 
+  fim 
+  
+  //metodo para obter a última mensagem de erro:
+  funcao t:obt_erro()
+    retorne este.msg_erro;
+  fim
+  
+  retorne t;
+fim 
+
+//listando até sub diretorios (apenas arquivos);
+funcao dir.liste_todos_assinc(past,func,dado) 
+  local past = past ou '.';
+  local ret,err = dir.dir_existe(past);
+  se nao ret entao retorne falso, err; fim;
+   
+  local t = {};
+  t.dir = past;
+  t.dir_atual=past;
+  t.pastas={};//lista de pastas a serem abertas.
+  t.arquivos={};//lista com arquivos;
+  
+  local ret,err,list= pchame(dir.dir, past); //abre o primeiro arquivo.
+  se nao ret entao retorne falso, err; fim
+  t.list=list;
+    
+  funcao t:abra_dir()
+    ::inicio_abra_dir:: //rotulo para reabrir uma nova pasta em caso de erro.
+    local dir_alvo = este.pastas[1];
+    local ret,err = dir.dir_existe(dir_alvo);
+    
+    se nao ret entao
+       tab_remova(este.pastas,1);//remove a pasta lida da tabela.
+       este.msg_erro = err;
+       retorne falso, err; 
+    senao
+      ret, err,list= local_pchame(dir.dir, este.pastas[1]); //se a pasta estiver com restricao de permissão, o erro é tratado.
+      se nao ret entao
+        tab_remova(este.pastas,1);//remove a pasta lida da tabela.
+        este.msg_erro = err;
+        vapara inicio_abra_dir;
+      fim;
+    fim
+    
+    este.list=list;
+    este.dir_atual=dir_alvo;
+    tab_remova(este.pastas,1);//remove a pasta lida 
+    este.msg_erro = nulo; //não há mensagem.
+    retorne verdadeiro;
+  fim  
+  
+  se tipo(func)=='funcao' entao //há função callback, entao criamos uma funcao exec() que também executa a callback
+    funcao t:exec()
+      local ret = este.list:proximo();//lista o proximo arquivo da pasta. ou nulo se não houver mais.
+      se ret entao
+        local att,err = dir.atributos(este.dir_atual .. BARRA .. ret);
+        //imprima(este.dir_atual..BARRA .. ret);
+        
+        se nao att entao //imprima(err, ret); 
+         este.msg_erro = err;
+         retorne verdadeiro 
+       fim
+       
+       este.msg_erro = nulo;//pop last error message.
+        
+        se att.modo=='diretorio' entao //se for diretorio coloca na lista para ler depois.
+          //poe'dentro';
+          //imprima(ret);
+          se ret <> '.' e ret <> '..' entao
+            //imprima(este.dir_atual .. BARRA .. ret);
+            este.pastas[#este.pastas+1]=este.dir_atual .. BARRA .. ret;
+            //tab_insira(este.pastas,1,este.dir_atual .. BARRA .. ret);
+          fim
+        senao  //senao é arquivo é anexado na lista de arquivos. 
+          este.arquivos[#este.arquivos + 1]= este.dir_atual .. BARRA .. ret;
+          func(este.dir_atual .. BARRA .. ret,dado);//executa a callback
+          
+            //imprima(este.arquivos[#este.arquivos]);
+        fim
+      senaose nao ret e nao este.pastas[1] entao //caso nao haja retorno e não haja mais pastas a serem abertas
+        este.list:feche();
+        este.msg_erro = 'final';
+        retorne falso, 'final';
+      senaose nao ret entao
+        este.list:feche();//fecha para abrir outro diretorio de busca.
+        este:abra_dir(); 
+      fim 
+      retorne verdadeiro;     
+    fim  //fim exec();
+      
+  senao //se não houver funcao call back então não precisamos executá-la:
+  
+    funcao t:exec()
+      local ret = este.list:proximo();//lista o proximo arquivo da pasta. ou nulo se não houver mais.
+      se ret entao
+        local att,err = dir.atributos(este.dir_atual .. BARRA .. ret);
+        //imprima(este.dir_atual..BARRA .. ret);
+       se nao att entao //imprima(err, ret); 
+         este.msg_erro = err;
+         retorne verdadeiro 
+       fim
+       este.msg_erro = nulo;
+        se att.modo=='diretorio' entao //se for diretorio coloca na lista para ler depois.
+          //poe'dentro';
+          //imprima(este.dir_atual..BARRA .. ret);
+          se ret <> '.' e ret <> '..' entao
+            este.pastas[#este.pastas+1]=este.dir_atual .. BARRA .. ret;
+            //imprima(este.pastas[#este.pastas]);
+            //tab_insira(este.pastas,1,este.dir_atual .. BARRA .. ret);
+          fim
+        senao  //senao é arquivo e é anexado na lista de arquivos. 
+          este.arquivos[#este.arquivos + 1]= este.dir_atual .. BARRA .. ret;
+            //imprima(este.arquivos[#este.arquivos]);
+        fim
+      senaose nao ret e nao este.pastas[1] entao //caso nao haja retorno e não haja mais pastas a serem abertas
+        este.list:feche();
+        este.msg_erro = 'final';
+        retorne falso, 'final';
+      senaose nao ret entao
+        este.list:feche();//fecha para abrir outro diretorio de busca.
+        //imprima(este.pastas[#este.pastas]);
+        este:abra_dir();  // se der erro tenta abrir o próximo diretorio.
+      fim 
+      retorne verdadeiro;     
+    fim  //fim exec();
+  fim //fim se tipo(func)...;
+  
+  retorne t;//retornando a tabela;
+fim 
+
+
+//listando até sub diretorios (todas as pastas e subpastas);
+funcao dir.liste_pastas_assinc(past,func,dado) 
+  local past = past ou '.';
+  local ret,err = dir.dir_existe(past);
+  se nao ret entao retorne falso, err; fim;
+   
+  local t = {};
+  t.dir = past;
+  t.dir_atual=past;
+  t.pastas={};//lista de pastas a serem abertas.
+  t.diretorios={};//lista com arquivos;
+  
+  local ret,err,list= pchame(dir.dir, past); //abre o primeiro arquivo.
+  se nao ret entao retorne falso, err; fim
+  t.list=list;
+    
+  funcao t:abra_dir()
+    ::inicio_abra_dir:: //rotulo para reabrir uma nova pasta em caso de erro.
+    local dir_alvo = este.pastas[1];
+    local ret,err = dir.dir_existe(dir_alvo);
+    
+    se nao ret entao
+       tab_remova(este.pastas,1);//remove a pasta lida da tabela.
+       este.msg_erro = err;
+       retorne falso, err; 
+    senao
+      ret, err,list= local_pchame(dir.dir, este.pastas[1]); //se a pasta estiver com restricao de permissão, o erro é tratado.
+      se nao ret entao
+        tab_remova(este.pastas,1);//remove a pasta lida da tabela.
+        este.msg_erro = err;
+        vapara inicio_abra_dir;
+      fim;
+    fim
+    
+    este.list=list;
+    este.dir_atual=dir_alvo;
+    tab_remova(este.pastas,1);//remove a pasta lida 
+    este.msg_erro = nulo; //não há mensagem.
+    retorne verdadeiro;
+  fim  
+  
+  se tipo(func)=='funcao' entao //há função callback, entao criamos uma funcao exec() que também executa a callback
+    funcao t:exec()
+      local ret = este.list:proximo();//lista o proximo arquivo da pasta. ou nulo se não houver mais.
+      se ret entao
+        local att,err = dir.atributos(este.dir_atual .. BARRA .. ret);
+        //imprima(este.dir_atual..BARRA .. ret);
+        
+        se nao att entao //imprima(err, ret); 
+         este.msg_erro = err;
+         retorne verdadeiro 
+       fim
+       
+       este.msg_erro = nulo;//pop last error message.
+        
+        se att.modo=='diretorio' entao //se for diretorio coloca na lista para ler depois.
+          //poe'dentro';
+          //imprima(ret);
+          se ret <> '.' e ret <> '..' entao
+            //imprima(este.dir_atual .. BARRA .. ret);
+            este.pastas[#este.pastas+1]=este.dir_atual .. BARRA .. ret;
+            //tab_insira(este.pastas,1,este.dir_atual .. BARRA .. ret);
+          fim
+          este.diretorios[#este.diretorios + 1]= este.dir_atual .. BARRA .. ret .. BARRA;
+          func(este.dir_atual .. BARRA .. ret .. BARRA,dado);//executa a callback
+        fim
+      senaose nao ret e nao este.pastas[1] entao //caso nao haja retorno e não haja mais pastas a serem abertas
+        este.list:feche();
+        este.msg_erro = 'final';
+        retorne falso, 'final';
+      senaose nao ret entao
+        este.list:feche();//fecha para abrir outro diretorio de busca.
+        este:abra_dir(); 
+      fim 
+      retorne verdadeiro;     
+    fim  //fim exec();
+      
+  senao //se não houver funcao call back então não precisamos executá-la:
+  
+    funcao t:exec()
+      local ret = este.list:proximo();//lista o proximo arquivo da pasta. ou nulo se não houver mais.
+      se ret entao
+        local att,err = dir.atributos(este.dir_atual .. BARRA .. ret);
+        //imprima(este.dir_atual..BARRA .. ret);
+       se nao att entao //imprima(err, ret); 
+         este.msg_erro = err;
+         retorne verdadeiro 
+       fim
+       este.msg_erro = nulo;
+        se att.modo=='diretorio' entao //se for diretorio coloca na lista para ler depois.
+          se ret <> '.' e ret <> '..' entao
+            este.pastas[#este.pastas+1]=este.dir_atual .. BARRA .. ret;
+          fim
+          este.diretorios[#este.diretorios + 1]= este.dir_atual .. BARRA .. ret .. BARRA;
+        fim
+      senaose nao ret e nao este.pastas[1] entao //caso nao haja retorno e não haja mais pastas a serem abertas
+        este.list:feche();
+        este.msg_erro = 'final';
+        retorne falso, 'final';
+      senaose nao ret entao
+        este.list:feche();//fecha para abrir outro diretorio de busca.
+        //imprima(este.pastas[#este.pastas]);
+        este:abra_dir();  // se der erro tenta abrir o próximo diretorio.
+      fim 
+      retorne verdadeiro;     
+    fim  //fim exec();
+  fim //fim se tipo(func)...;
+  
+  retorne t;//retornando a tabela;
+fim 
+
+
+//esta funcao cria todo o caminho de diretórios de uma só vez: (ex.: '/home/user/a/b/c/d/e');
+funcao dir.crie_subdir(str) 
+  se tipo(str)<>'string' entao erro('Arg #1: Espera-se `string\' ao invés de '..tipo(str)); fim
+  local dir_criedir = dir.criedir;
+  local t = str:analise(BARRA);
+  local ret,err;
+  local tmp = '';
+  para i=1,#t inicio
+    tmp = tmp .. t[i];
+    se t[i] <> BARRA entao
+      ret,err = dir_criedir(tmp);
+      se nao ret entao retorne ret, err; fim
+    fim
+  fim
+  retorne ret,err;
+fim 
+
+//converte a barra de diretorio automaticamente de acordo com o sistema (linux(unix like) ou win).
+funcao dir.convbarra(str,so) 
+  S(str);
+  local so = so ou sis.nome;
+  local ret='';
+  se so:procure('win') entao
+    retorne str:troque('/','\\');
+  senao
+    retorne str:troque('\\','/');
+  fim
+fim 
+
+//retorna o diretorio real, eliminando os '.' e '..' seguidos (ex.: /home/user/a/b/c/../../../d');
+funcao dir.resolva_dir(str) --{
+  S(str);
+  se str == '.' ou str == './' entao
+    retorne dir.localdir(); 
+  senaose str:corte(1,2) == '..' 
+    ou str:corte(2,2)<>':' //windows ex.: C:\  D:\ 
+    e str:corte(1,1)<> '/' //para o Linux a barra no inicio é o diretorio raiz
+  entao
+    str = dir.localdir() .. BARRA .. str;
+  fim
+  
+  local tmp='';
+  local t = str:analise(BARRA);
+  se nao t entao retorne str fim;
+  local i = 1;
+  enquanto i<=#t inicio
+    se t[i]=='..' entao
+      se i -2 < 1 entao retorne falso,"Caminho mal-formado! há muitos `..' para resolver"; fim
+      tab_remova(t,i-2);
+      tab_remova(t,i-2);
+      tab_remova(t,i-2);
+      tab_remova(t,i-2);
+      i = i-3;
+    senaose t[i]=='.' entao
+      tab_remova(t,i-1);
+      tab_remova(t,i-1);
+      i = i - 2;
+    senaose t[i]==BARRA e t[i+1]==BARRA entao
+      tab_remova(t,i);
+      i = i -1;
+    fim
+    i=i+1;
+  fim
+  se t[#t]==BARRA entao tab_remova(t); fim
+  retorne tab_concat(t,'');
+fim 
+
+
+retorne dir;

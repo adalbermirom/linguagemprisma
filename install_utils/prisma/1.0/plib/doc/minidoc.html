@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Documentação - minidoc.pris</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<div>
+
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> Documentação - minidoc.pris</h1>
+<h3> Adalberto </h3>
+<h3>  05/12/2023</h3>
+<br>
+<div>
+ Simples bilioteca para gerar documentação a partir de fontes (scripts) Prisma.
+<a href="#id_000002"> mais...</a></div>
+<div class="caixa com-borda"></div><br>
+
+<h2 id="id_000002">Documentação - minidoc.pris</h2>
+<div>
+<p> Simples bilioteca para gerar documentação a partir de fontes (scripts) Prisma.</p>
+
+</div>
+
+
+
+      * <p>Esta lib l&ecirc; um arquivo Prisma em busca de marca&ccedil;&otilde;es de documenta&ccedil;&atilde;o para gerar um arquivo html com toda a documenta&ccedil;&atilde;o extra&iacute;da.</p>
+<h1>Especifica&ccedil;&otilde;es:</h1>
+<h2>Coment&aacute;rios</h2>
+<p>A documenta&ccedil;&atilde;o &eacute; gerada a partir de marca&ccedil;&otilde;es nos coment&aacute;rios de fontes da linguagem Prisma.</p>
+<p>Todo coment&aacute;rio de documenta&ccedil;&atilde;o deve iniciar por /** ou por /*@ e ser finalizado por um * /</p>
+<h2>Tags</h2>
+<p>A marca&ccedil;&atilde;o &eacute; feita por meio de tags que iniciam com o caractere \ ou @ e cada tag tem um significado e fun&ccedil;&atilde;o para o minidoc.</p>
+<p>Exemplos de tags:</p>
+<pre class="caixa">\fonte md5.pris<br />\autor Adalberto<br />\versao 0.2<br />\data nov/21<br />\resumo Biblioteca para gera hashs md5.</pre>
+<h2>A tag que n&atilde;o pode faltar: fonte (ou file)</h2>
+<p>Todo arquivo que se pretende gerar uma documenta&ccedil;&atilde;o com o minidoc precisa de uma tag fonte caso contr&aacute;rio o arquivo &eacute; descartado, mesmo tendo outras tags.</p>
+<p>Veja o exemplo:</p>
+<pre class="caixa">\fonte md5.pris</pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2>Estrutura</h2>
+<h3>Cabe&ccedil;alho (header)</h3>
+<p>O primeiro bloco de coment&aacute;rio deve conter algumas informa&ccedil;&otilde;es necess&aacute;rias para o cabe&ccedil;alho da document&ccedil;&atilde;o: nome do arquivo, autor, data, resumo, imagem e texto.</p>
+<p>A tag fonte &eacute; indispens&aacute;vel, as outras podem faltar. Tudo o que estiver fora de uma tag seja de uma linha ou multinha ser&aacute; considerado um texto html, por isso podemos usar a codifica&ccedil;&atilde;o html a vontade nas explica&ccedil;&otilde;es dos coment&aacute;rios.</p>
+<p>Podemos usar ainda as tags de bloco e de c&oacute;digo, para gerar uma sa&iacute;da html com exibi&ccedil;&atilde;o de c&oacute;digos fontes Prisma.</p>
+<p>Veja um exemplo de estrutura header completa:</p>
+<pre class="caixa com-rolagem">/&#42;&#42;
+   \fonte meu_fonte.prisma
+   \autor Nome do Autor
+   \versao 0.2
+   \data nov 2023
+   \resumo Este programa serve como exemplo para esta documentação ... 
+
+  &lt;p&gt;Escreva mais sobre o que desejar nas pr&oacute;ximas linhas usando &lt;b&gt;código html&lt;/b&gt;&lt;/p&gt;
+  
+  \inicio_codigo Exemplo:
+    //entre essas tags você pode colocar comandos Prisma e ele será apresentado com destaque na documentação.
+    imprima("apenas um exemplo!");
+    para i = 1, 10 inicio
+        imprima(i, 'olá mundo!');
+    fim    
+  \fim_codigo
+ &#42;/
+</pre>
+<br><div class="box"><img src="prisma.png" alt="Prisma logo" width="50">
+<div class="footer">powered by minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div></div></body>
+</html>

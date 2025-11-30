@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>enun.pris</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<nav id="id_000008"  class="floating-menu">
+<div class="menu-button" title="Ocultar painel lateral" onclick="show_menu_flutuante(this, 'id_000009', 'id_000008')">&#x2630;</div>
+<div class="com-rolagem" id="id_000009" hidden>
+<div class="caixa "><h2>Funções:</h2>
+<a href="#id_000006">enum</a>
+
+</div>
+</div>
+</nav>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> enun.pris</h1>
+<h3> Adalberto</h3>
+<h3> 04/12/2023</h3>
+<br>
+<div>
+Simples lib para simular o tipo enum da linguagm C.
+<a href="#id_00000A"> mais...</a></div>
+<div class="caixa com-borda"><div><h2 >Funções:</h2>
+<ol>
+<li><a href="#id_000006">enum</a></li>
+</ol>
+</div>
+
+</div><br>
+
+<h2 id="id_00000A">enun.pris</h2><div>
+Simples lib para simular o tipo enum da linguagm C.
+</div>
+
+
+
+
+
+ * <div>
+   <p>
+    Esta lib tem o propósito de criar o tipo enum em Prisma. Enuns são sequências de números inteiros sem sinal muito usadas em linguagens como C, C++, C# e outras.
+   </p>
+   <b>Veja um exemplo de enum em C:</b>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000002')">&#128203;</div>&nbsp;<i>ex_enum.c</i><pre id="id_000002" hidden>    enum Level {
+                 LOW,
+                 MEDIUM,
+                 HIGH
+               };
+    //este enum (enumeration) acima atribui ao primeiro item da lista o valor 0, ao segundo 1 e assim por diante.
+    //poderíamos determinar o valor inicial, ou de qualquer parte dos itens do enum.
+    
+    if(LOW==0) puts(&#39;LOW = 0&#39;);
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    enum Level <span style="font-weight:bold;">{</span>
+                 LOW,
+                 MEDIUM,
+                 HIGH
+               <span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+    <span style="color:green">//este enum (enumeration) acima atribui ao primeiro item da lista o valor 0, ao segundo 1 e assim por diante.
+</span>    <span style="color:green">//poderíamos determinar o valor inicial, ou de qualquer parte dos itens do enum.
+</span>    
+    if<span style="font-weight:bold;">(</span>LOW<span style="font-weight:bold;">=</span><span style="font-weight:bold;">=</span><span style="color:red">0</span><span style="font-weight:bold;">)</span> puts<span style="font-weight:bold;">(</span><span style="color:blue">&#39;LOW = 0&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+</pre></div></div>
+
+</div>
+ * </div>
+   <p>Em Prisma ficaria:</p>
+   
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000003')">&#128203;</div>&nbsp;<i>ex1.prisma</i><pre id="id_000003" hidden>
+    local enum = inclua&#39;enum&#39;; //o retorno é uma única função.
+    local Level = enum(0); //parâmetro valor inicial, o padrão é 1 caso não seja definido.
+    local LOW = Level.LOW, Level.MEDIUM, Level.HIGH;//primeira forma    
+    imprima(&#39;Primeira forma:&#39;, Level.LOW, Level.MEDIUM, Level.HIGH);
+    
+    se Level.LOW == 0 entao 
+        poe(&#39;LOW = 0&#39;);
+    fim
+    
+    local LOW, MEDIUM, HIGH = Level(100,102); //segunda forma - range com inicio em 100 até 102 (100,101,102);
+    imprima(&#39;Segunda forma:&#39;, LOW, MEDIUM, HIGH);
+    
+    local LOW, MEDIUM, HIGH = Level({10,30,50});//cada valor da tabela é passado para cada variável do lado esquerdo.
+    imprima(&#39;Terceira forma:&#39;, LOW, MEDIUM, HIGH);
+    
+    //no caso de tabela (terceira forma) os parênteses podem ser omitidos:
+    local LOW, MEDIUM, HIGH = Level{10,30,50};
+    imprima(&#39;Omitindo parênteses:&#39;, LOW, MEDIUM, HIGH);
+    
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 14</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 15</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 16</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 17</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 18</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 19</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 20</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+
+    <span style="font-weight:bold;color:#b50546">local</span> enum <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;enum&#39;</span><span style="font-weight:bold;">;</span> <span style="color:green">//o retorno é uma única função.
+</span>    <span style="font-weight:bold;color:#b50546">local</span> Level <span style="font-weight:bold;">=</span> enum<span style="font-weight:bold;">(</span><span style="color:red">0</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//parâmetro valor inicial, o padrão é 1 caso não seja definido.
+</span>    <span style="font-weight:bold;color:#b50546">local</span> LOW <span style="font-weight:bold;">=</span> Level<span style="font-weight:bold;">.</span>LOW, Level<span style="font-weight:bold;">.</span>MEDIUM, Level<span style="font-weight:bold;">.</span>HIGH<span style="font-weight:bold;">;</span><span style="color:green">//primeira forma    
+</span>    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Primeira forma:&#39;</span>, Level<span style="font-weight:bold;">.</span>LOW, Level<span style="font-weight:bold;">.</span>MEDIUM, Level<span style="font-weight:bold;">.</span>HIGH<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+    <span style="font-weight:bold;color:#b50546">se</span> Level<span style="font-weight:bold;">.</span>LOW <span style="font-weight:bold;">=</span><span style="font-weight:bold;">=</span> <span style="color:red">0</span> <span style="font-weight:bold;color:#b50546">entao</span> 
+        <span style="color:#b50546">poe</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;LOW = 0&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="font-weight:bold;color:#b50546">fim</span>
+    
+    <span style="font-weight:bold;color:#b50546">local</span> LOW, MEDIUM, HIGH <span style="font-weight:bold;">=</span> Level<span style="font-weight:bold;">(</span><span style="color:red">100</span>,<span style="color:red">102</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//segunda forma - range com inicio em 100 até 102 (100,101,102);
+</span>    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Segunda forma:&#39;</span>, LOW, MEDIUM, HIGH<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+    <span style="font-weight:bold;color:#b50546">local</span> LOW, MEDIUM, HIGH <span style="font-weight:bold;">=</span> Level<span style="font-weight:bold;">(</span><span style="font-weight:bold;">{</span><span style="color:red">10</span>,<span style="color:red">30</span>,<span style="color:red">50</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//cada valor da tabela é passado para cada variável do lado esquerdo.
+</span>    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Terceira forma:&#39;</span>, LOW, MEDIUM, HIGH<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+    <span style="color:green">//no caso de tabela (terceira forma) os parênteses podem ser omitidos:
+</span>    <span style="font-weight:bold;color:#b50546">local</span> LOW, MEDIUM, HIGH <span style="font-weight:bold;">=</span> Level<span style="font-weight:bold;">{</span><span style="color:red">10</span>,<span style="color:red">30</span>,<span style="color:red">50</span><span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Omitindo parênteses:&#39;</span>, LOW, MEDIUM, HIGH<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+</pre></div></div>
+
+</div>
+    
+<p><i><b>Obs.: </b>Outra forma que fica bem semelhante ao C:</i></p>
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000004')">&#128203;</div>&nbsp;<i>ex2.prisma</i><pre id="id_000004" hidden>    local enum = inclua&#39;enum&#39;;
+    
+    level = enum(0);//primeiro devemos criar o objeto enum(); o parâmetro opcional é o valor inicial.
+    enum{ //depois com a própria função enum, podemos enumerar quaisquer chaves e o valor será uma sequência;
+	     level.LOW; 
+	     level.MEDIUM;
+	     level.HIGH;
+	}
+    imprima(&#39;Quarta forma:&#39;, level.LOW, level.MEDIUM, level.HIGH );
+    
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="font-weight:bold;color:#b50546">local</span> enum <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;enum&#39;</span><span style="font-weight:bold;">;</span>
+    
+    level <span style="font-weight:bold;">=</span> enum<span style="font-weight:bold;">(</span><span style="color:red">0</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//primeiro devemos criar o objeto enum(); o parâmetro opcional é o valor inicial.
+</span>    enum<span style="font-weight:bold;">{</span> <span style="color:green">//depois com a própria função enum, podemos enumerar quaisquer chaves e o valor será uma sequência;
+</span>	     level<span style="font-weight:bold;">.</span>LOW<span style="font-weight:bold;">;</span> 
+	     level<span style="font-weight:bold;">.</span>MEDIUM<span style="font-weight:bold;">;</span>
+	     level<span style="font-weight:bold;">.</span>HIGH<span style="font-weight:bold;">;</span>
+	<span style="font-weight:bold;">}</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;Quarta forma:&#39;</span>, level<span style="font-weight:bold;">.</span>LOW, level<span style="font-weight:bold;">.</span>MEDIUM, level<span style="font-weight:bold;">.</span>HIGH <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+</pre></div></div>
+
+</div>
+  
+<p><i><b>Obs.: </b>Poderíamos mudar a sequência:</i></p>
+  
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000005')">&#128203;</div>&nbsp;<i>ex3.prisma</i><pre id="id_000005" hidden>    local enum = inclua&#39;enum&#39;;
+    pos = enum();
+    
+    pos.CENTRO = 0; //definimos um valor inicial
+    enum{ pos.DIREITA_TOPO, pos.ESQUERDA_TOPO; }
+    //mudando a sequência:
+    pos.DIREITA_BASE = 100;
+    enum{ pos.ESQUERDA_BASE, pos.ALEATORIO, pos.LOCAL_MOUSE, pos.LOCAL_ANTERIOR; }
+    
+    imprima( pos.CENTRO, pos.DIREITA_TOPO, pos.ESQUERDA_TOPO, pos.DIREITA_BASE, pos.ESQUERDA_BASE, pos.ALEATORIO, pos.LOCAL_MOUSE, pos.LOCAL_ANTERIOR );
+    
+    //--&gt; saída: 0	1	2	100	101	102	103	104
+
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+    <span style="font-weight:bold;color:#b50546">local</span> enum <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;enum&#39;</span><span style="font-weight:bold;">;</span>
+    pos <span style="font-weight:bold;">=</span> enum<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+    pos<span style="font-weight:bold;">.</span>CENTRO <span style="font-weight:bold;">=</span> <span style="color:red">0</span><span style="font-weight:bold;">;</span> <span style="color:green">//definimos um valor inicial
+</span>    enum<span style="font-weight:bold;">{</span> pos<span style="font-weight:bold;">.</span>DIREITA_TOPO, pos<span style="font-weight:bold;">.</span>ESQUERDA_TOPO<span style="font-weight:bold;">;</span> <span style="font-weight:bold;">}</span>
+    <span style="color:green">//mudando a sequência:
+</span>    pos<span style="font-weight:bold;">.</span>DIREITA_BASE <span style="font-weight:bold;">=</span> <span style="color:red">100</span><span style="font-weight:bold;">;</span>
+    enum<span style="font-weight:bold;">{</span> pos<span style="font-weight:bold;">.</span>ESQUERDA_BASE, pos<span style="font-weight:bold;">.</span>ALEATORIO, pos<span style="font-weight:bold;">.</span>LOCAL_MOUSE, pos<span style="font-weight:bold;">.</span>LOCAL_ANTERIOR<span style="font-weight:bold;">;</span> <span style="font-weight:bold;">}</span>
+    
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> pos<span style="font-weight:bold;">.</span>CENTRO, pos<span style="font-weight:bold;">.</span>DIREITA_TOPO, pos<span style="font-weight:bold;">.</span>ESQUERDA_TOPO, pos<span style="font-weight:bold;">.</span>DIREITA_BASE, pos<span style="font-weight:bold;">.</span>ESQUERDA_BASE, pos<span style="font-weight:bold;">.</span>ALEATORIO, pos<span style="font-weight:bold;">.</span>LOCAL_MOUSE, pos<span style="font-weight:bold;">.</span>LOCAL_ANTERIOR <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+    <span style="color:green">//--&gt; saída: 0	1	2	100	101	102	103	104
+</span>
+</pre></div></div>
+
+</div>
+
+ 
+<h1>Funções:</h1>
+<a id="id_000006" hiden></a>
+<section class="caixa-doc">
+<span class="float-right-top" ><a href="#" title="Voltar ao menu funções.">Voltar ao início  </a></span><h2 class="subtitulo-doc">local funcao enum(ini)</h2><div class="corpo-doc">
+<p>Esta função enum() simula o tipo enum do C, gerando uma enumeração contínua.</p>
+
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > ini(numero) - número inicial do enum.</span>
+</div>
+
+<div class="titulo-returns"><h3>Retornos:</h3></div><div class="returns-doc"><span >     (tabela) - tabela enum.</span>
+</div>
+
+<p><i><b>Obs.: </b>Ao chamar a função enum passando uma tabela, podemos simular a criação de um enum no estilo C, veja o exemplo abaixo:</i></p>
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000007')">&#128203;</div>&nbsp;<i>ex4.prisma</i><pre id="id_000007" hidden>
+     local enum = inclua&#39;enum&#39;; //retorna uma única função ao incluir esta lib.
+     local Level = enum(); //construtor da enum, sem valor inicial, o padrão é 1;
+     Level.LOW=0; //definindo o valor inicial;
+     enum{Level.MEDIUM, Level.HIGH}; //quarta maneira.
+     imprima(&quot;Levels:&quot;, Level.LOW, Level.MEDIUM, Level.HIGH);
+     imprima(Level); // 
+     imprima(&#39;tipo: &#39;, tipo(Level)); // --&gt; &quot;enum&quot; (a partir de Prisma-1.0.107, o metamétodo __tipo foi definido.)
+     
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+
+     <span style="font-weight:bold;color:#b50546">local</span> enum <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;enum&#39;</span><span style="font-weight:bold;">;</span> <span style="color:green">//retorna uma única função ao incluir esta lib.
+</span>     <span style="font-weight:bold;color:#b50546">local</span> Level <span style="font-weight:bold;">=</span> enum<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">//construtor da enum, sem valor inicial, o padrão é 1;
+</span>     Level<span style="font-weight:bold;">.</span>LOW<span style="font-weight:bold;">=</span><span style="color:red">0</span><span style="font-weight:bold;">;</span> <span style="color:green">//definindo o valor inicial;
+</span>     enum<span style="font-weight:bold;">{</span>Level<span style="font-weight:bold;">.</span>MEDIUM, Level<span style="font-weight:bold;">.</span>HIGH<span style="font-weight:bold;">}</span><span style="font-weight:bold;">;</span> <span style="color:green">//quarta maneira.
+</span>     <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&quot;Levels:&quot;</span>, Level<span style="font-weight:bold;">.</span>LOW, Level<span style="font-weight:bold;">.</span>MEDIUM, Level<span style="font-weight:bold;">.</span>HIGH<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+     <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>Level<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">// 
+</span>     <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:blue">&#39;tipo: &#39;</span>, <span style="color:#b50546">tipo</span><span style="font-weight:bold;">(</span>Level<span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span> <span style="color:green">// --&gt; &quot;enum&quot; (a partir de Prisma-1.0.107, o metamétodo __tipo foi definido.)
+</span>     
+</pre></div></div>
+
+</div>
+
+</div>
+</section>
+<footer class="footer">
+
+ * Feito com minidoc-0.1 linguagem prisma
+</footer>
+</body>
+</html>

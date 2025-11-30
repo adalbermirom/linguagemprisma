@@ -1,0 +1,217 @@
+/**
+
+ * @file
+ * @file json.pris
+ * @author Domínio publico
+ * @date 24 nov 2023
+ * @brief Biblioteca json permite converter os dados de json para tabela Prisma, vice-versa;
+ * 
+*/
+
+--/// \fn json.cod(tab);
+--/// \brief Função json.cod(tab) - codifica uma tabela Prisma para json.
+--/// \param tab - uma tabela para ser convertida para json;
+--/// \returns (string) - retorna a string com json codificado, ou nulo + mensagem de erro.
+-- funcao json.cod(tab) {
+--};
+
+
+--/// \fn json.decod(str_json);
+--/// \brief Função json.decod(str_json) - decodifica uma tabela Prisma para json.
+--/// \param str_json - uma string contendo uma codificação json.
+--/// \returns (tabela) - retorna a tabela contendo os dados decodificados do json.
+-- funcao json.decod(str_json) {
+--};
+
+--/// \fn json.decod_arquivo(arq)
+--/// \brief Função json.decod_arquivo(arq) - decodifica um json diretamente de um arquivo *.json
+--/// \param arq(string) - o nome do arquivo a ser decodificado.
+--/// \returns (tabela) - a tabela com dos dados do json decodificado.
+-- funcao json.decod_arquivo(arq) {
+--}
+
+--/// \fn json.cod_arquivo(arq, tab)
+--/// \brief  Função json.cod_arquivo(arq, tab) - codifica uma tabela para um arquivo *.json
+--/// \param arq(string) - o nome do arquivo a ser decodificado.
+--/// \param tab(tabela) - a tabela com os dados a serem codificados para json.
+--/// \returns (boleano) - verdadeiro ou falso + erro em caso de sucesso ou falha;
+--funcao json.cod_arquivo(arq, tab){
+--}
+
+
+
+/**
+    \brief json(tabela) - é a tabela que contém os métodos desta lib.
+*/
+local json = {}
+
+// Internal functions.
+--{
+local funcao kind_of(obj)
+  se tipo(obj) <> 'tabela' entao retorne tipo(obj) fim
+  local i = 1
+  para _ em pares(obj) inicio
+    se obj[i] <> nulo entao i = i + 1 senao retorne 'tabela' fim
+  fim
+  se i == 1 entao retorne 'tabela' senao retorne 'array' fim
+fim
+
+local funcao escape_str(s)
+  local in_char  = {'\\', '"', '/', '\b', '\f', '\n', '\r', '\t'}
+  local out_char = {'\\', '"', '/',  'b',  'f',  'n',  'r',  't'}
+  para i, c em ipares(in_char) inicio
+    s = s:troque(c, '\\' .. out_char[i])
+  fim
+  retorne s
+fim
+
+// Returns pos, did_find; there are two cases:
+// 1. Delimiter found: pos = pos after leading space + delim; did_find = verdadeiro.
+// 2. Delimiter not found: pos = pos after leading space;     did_find = falso.
+// This throws an error if err_if_missing is true and the delim is not found.
+local funcao skip_delim(str, pos, delim, err_if_missing)
+  pos = pos + #str:separe('^%s*', pos)
+  se str:corte(pos, pos) <> delim entao
+    se err_if_missing entao
+      retorne falso, ('Esperado ' .. delim .. ' próximo da posição ' .. pos)
+    fim
+    retorne pos, falso
+  fim
+  retorne pos + 1, verdadeiro
+fim
+
+// Expects the given pos to be the first character after the opening quote.
+// Returns val, pos; the returned pos is after the closing quote character.
+local funcao parse_str_val(str, pos, val)
+  val = val ou ''
+  local early_end_error = 'Fim de input encontrado durante a análise da string.'
+  se pos > #str entao retorne falso, (early_end_error) fim
+  local c = str:corte(pos, pos)
+  se c == '"'  entao retorne val, pos + 1 fim
+  se c <> '\\' entao retorne parse_str_val(str, pos + 1, val .. c) fim
+  // We must have a \ character.
+  local esc_map = {b = '\b', f = '\f', n = '\n', r = '\r', t = '\t'}
+  local nextc = str:corte(pos + 1, pos + 1)
+  se nao nextc entao retorne falso, (early_end_error) fim
+  retorne parse_str_val(str, pos + 2, val .. (esc_map[nextc] ou nextc))
+fim
+
+// Returns val, pos; the returned pos is after the number's final character.
+local funcao parse_num_val(str, pos)
+  local num_str = str:separe('^-?%d+%.?%d*[eE]?[+-]?%d*', pos)
+  local val = convnumero(num_str)
+  se nao val entao retorne falso, ('Erro ao analisar numero na posição ' .. pos .. '.') fim
+  retorne val, pos + #num_str
+fim
+--}
+
+// Public values and functions.
+
+
+
+funcao json.cod(obj, as_key)--{
+  local s = {}  // We'll build the string as an array of strings to be concatenated.
+  local kind = kind_of(obj)  // This is 'array' if it's an array or type(obj) otherwise.
+  se kind == 'array' entao
+    se as_key entao retorne falso, ('Não é possível codificar uma matriz como uma chave.') fim
+    s[#s + 1] = '['
+    para i, val em ipares(obj) inicio
+      se i > 1 entao s[#s + 1] = ', ' fim
+      s[#s + 1] = json.cod(val)
+    fim
+    s[#s + 1] = ']'
+  senaose kind == 'tabela' entao
+    se as_key entao retorne falso, ('Não é possível codificar tabela como uma chave.') fim
+    s[#s + 1] = '{'
+    para k, v em pares(obj) inicio
+      se #s > 1 entao s[#s + 1] = ', ' fim
+      s[#s + 1] = json.cod(k, verdadeiro)
+      s[#s + 1] = ':'
+      s[#s + 1] = json.cod(v)
+    fim
+    s[#s + 1] = '}'
+  senaose kind == 'string' entao
+    retorne '"' .. escape_str(obj) .. '"'
+  senaose kind == 'numero' entao
+    se as_key entao retorne '"' .. convstring(obj) .. '"' fim
+    retorne convstring(obj)
+  senaose kind == 'booleano' entao
+    retorne convstring(obj)
+  senaose kind == 'nulo' entao
+    retorne 'null'
+  senao
+    retorne falso, ('Tipo não compatível com json: ' .. kind .. '.')
+  fim
+  retorne tabela.concat(s)
+fim 
+
+json.null = {}  // This is a one-off tabela to represent the null value.
+--}
+funcao json.decod(str, pos, end_delim) --{ 
+  pos = pos ou 1
+  se pos > #str entao retorne falso , ('Fim inesperado de input') fim
+  local pos = pos + #str:separe('^%s*', pos)  // Skip whitespace.
+  local first = str:corte(pos, pos)
+  se first == '{' entao  // Parse an object.
+    local obj, key, delim_found = {}, verdadeiro, verdadeiro
+    pos = pos + 1
+    enquanto verdadeiro inicio
+      key, pos = json.decod(str, pos, '}')
+      se key == nulo entao retorne obj, pos fim
+      se nao delim_found entao retorne falso, ('Falta vírgula entre itens objetos.') fim
+      pos = skip_delim(str, pos, ':', verdadeiro)  // true -> error if missing.
+      obj[key], pos = json.decod(str, pos)
+      pos, delim_found = skip_delim(str, pos, ',')
+    fim
+  senaose first == '[' entao  // Parse an array.
+    local arr, val, delim_found = {}, verdadeiro, verdadeiro
+    pos = pos + 1
+    enquanto verdadeiro inicio
+      val, pos = json.decod(str, pos, ']')
+      se val == nulo entao retorne arr, pos fim
+      se nao delim_found entao retorne falso, ('Falta vírgula separando itens da matriz.') fim
+      arr[#arr + 1] = val
+      pos, delim_found = skip_delim(str, pos, ',')
+    fim
+  senaose first == '"' entao  // Parse a string.
+    retorne parse_str_val(str, pos + 1)
+  senaose first == '-' ou first:separe('%d') entao  // Parse a number.
+    retorne parse_num_val(str, pos)
+  senaose first == end_delim entao  // End of an object or array.
+    retorne nulo, pos + 1
+  senao  // Parse true, false, or null.
+    local literals = {['true'] = verdadeiro, ['false'] = falso, ['null'] = json.NULO}
+    para lit_str, lit_val em pares(literals) inicio
+      local lit_end = pos + #lit_str - 1
+      se str:corte(pos, lit_end) == lit_str entao retorne lit_val, lit_end + 1 fim
+    fim
+    local pos_info_str = 'posição ' .. pos .. ': ' .. str:corte(pos, pos + 10)
+     retorne falso, 'Sintaxe json inválida em ' .. pos_info_str
+  fim
+fim 
+
+local es_abra = es.abra;
+
+
+funcao json.decod_arquivo(arq) 
+  local a, err = es_abra(arq,'leitura');
+  se nao a entao retorne falso, err fim
+  local str = a:leia'*t'; //lê todo o arquivo.
+  a:feche();
+  
+  retorne json.decod(str); //retorna a tabela.  
+fim
+
+funcao json.cod_arquivo(arq, tab)
+  se tipo(tab)<> 'tabela' entao
+    retorne falso, ('\n\nErro arg #2, espera-se tabela ao invés de ' .. tipo(tab) .. '\n\n'); 
+  fim
+  local str = json.cod(tab);
+  local a, err = es_abra(arq,'escrita');
+  se nao a entao retorne falso, err fim
+  a:escreva(str);
+  a:feche();
+  retorne verdadeiro;
+fim 
+
+retorne json;

@@ -1,0 +1,5 @@
+//modulo de compatibilidade programas prisma antigos que chamam 'ig' em ingles
+
+ig = inclua 'igbr'
+
+retorne ig

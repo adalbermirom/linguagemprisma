@@ -1,0 +1,105 @@
+
+/*
+ * Esta lib se tornou obsoleta graças a função string.analise() da biblioteca string.
+ */
+local analise = {};
+
+local string = string;
+
+
+funcao analise.separe( str , str_car, modo ) //modo = omita para ser de tras p/ frente
+  
+                                       // ou de qualquer valor para ser do inicio parao final. como 1 por exemplo.
+  local cont  = 0;
+  se str == nulo entao imprima( 'atencao para o parametro 1 da funcao .separe() invalido' ) ; retorne nulo  fim;
+  se str_car == nulo entao imprima( 'atencao para o parametro 2 da funcao .separe() invalido' ) ; retorne nulo  fim;                           
+  se modo == nulo entao
+     para i = #str , 1 , -1 inicio
+           tmp_str = string.corte( str , i , i);
+           se tmp_str == str_car entao cont = i ; quebre fim
+           cont = i;
+     fim
+     
+     se cont <> 1 entao
+     
+     local ret_1 =  string.corte ( str , 1 , cont -1 ); 
+     local ret_2 = string.corte( str , cont + 1 , #str);
+     
+     retorne ret_1 , ret_2;
+     
+     senao
+            retorne nulo ;
+     fim
+     
+  senaose modo entao
+  
+   para i = 1 ,  #str inicio
+           tmp_str = string.corte( str , i , i);
+           se tmp_str == str_car entao cont = i ; quebre fim
+           cont = i;
+     fim
+     
+     
+     se cont <> #str entao
+     
+     local ret_1 = string.corte ( str , 1 , cont -1 ); 
+     local ret_2 =  string.corte( str , cont + 1 , #str);
+     
+     retorne ret_1 , ret_2;
+     
+     senao
+            retorne nulo ;
+     fim
+  
+  fim //senaose modo ...
+
+fim 
+
+funcao analise.separe_tudo( str , tok )
+
+  se str == nulo entao imprima('argumento 1 da funcao .separe_tudo() invalido') retorne nulo fim;
+  se tok == nulo entao imprima('argumento 2 da funcao .separe_tudo() invalido') retorne nulo fim; 
+  
+  local teste = verdadeiro
+  local i = 0;
+  local t = {};
+  local tmp = str;
+ 
+  repita 
+     i = i + 1;
+    
+     tmp_2 = tmp; //guarda o anterior no tmp_2 caso não haja mais retornos de tokens 
+     t[i] , tmp = s.separe( tmp , tok , 1 );
+     
+     se tmp == nulo entao t[i] = tmp_2; teste = falso fim
+
+  ate teste == falso;
+    
+    retorne t;
+
+fim //fim funcao
+
+//duas funcos uteis:
+
+//separe( str , token , modo ); modo = nulo o corte sai no ultimo token
+//modo = qualquer valor: o corte sai no primeiro token
+
+//separe_tudo ( str , token ) --> tabela contendo os indices de cada separacao
+
+
+//colocando estas funcoes na lib string por atribuicao
+
+
+retorne analise;
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,38 @@
+local reg = inclua'ini';
+
+
+local conf = {
+	nome = 'Fileex',
+	versao = '1.0';
+	deps = {
+		'libgui',
+		'libweb',
+		'libsession'
+	}
+}
+
+
+local status, err = reg.grave('app.conf', conf);
+se nao status entao erro(err); fim
+
+local conf2, err = reg.leia('app.conf');
+
+se nao conf2 entao erro(err); fim
+
+imprima(conf2.nome, conf2.versao);
+para i, v em ipares(conf2.deps) inicio
+    imprima(i, v);
+fim
+
+//compilando o conf
+local status, err = reg.compile('app_compilado.conf', conf);
+se nao status entao erro(err); fim
+
+
+local teste, err = reg.teste_reg('app_compilado.confa');
+se nao teste entao erro(err); fim
+se teste == reg.ARQ_COMPILADO entao
+    imprima('Arquivo é compilado');
+senao
+    imprima('Arquivo não é compilado');
+fim

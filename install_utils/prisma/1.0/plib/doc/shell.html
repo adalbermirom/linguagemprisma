@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+
+<meta name="generator" content="minidoc.prisma 0.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>shell.pris</title>
+<LINK id="tema_css" REL="stylesheet" TYPE="text/css" href="" />
+<script src="temas_itens.json"></script>
+<script src="index.js"></script>
+
+</head>
+<body>
+<div>
+<label class="titulo" for="combo_tema">Tema:</label>
+<select class="titulo" name="combo_tema" id="combo_tema" title="Mude o tema html aqui!" onchange="mude_tema(this);" >
+<option value="tema_padrao.css">Padrão</option>
+</select>
+</div>
+<h1 id="id_000001"> shell.pris</h1>
+<h3> Adalberto</h3>
+<h3> 24 nov 2023</h3>
+<br>
+<div>
+Biblioteca shell permite comandos shell (ou cmd) como se fossem funções em Prisma.
+<a href="#id_000003"> mais...</a></div>
+
+<h2 id="id_000003">shell.pris</h2><div>
+Biblioteca shell permite comandos shell (ou cmd) como se fossem funções em Prisma.
+</div>
+
+
+
+
+
+ 
+ 
+ * Ex.:   shell.clear(); //no linux <br>
+ *        shell.cls();   //no win
+ *   
+ *        Qualquer comando do terminal ou cmd pode ser executado como método de shell.
+ *        
+ *        Veja:
+ *               shell.ls('.');<br>
+ *               shell.cp('a.txt', '/path/destino/');
+ * 
+ * <hr>
+<p>
+
+ * Esta biblioteca utiliza o metamétodo __index para simular as funções e a função es.pabra() para executar 
+ * os comandos, sendo assim é possível pegar o retorno de tudo que foi impresso pelo comando em uma tabela. E
+ * qualquer comando shell ou cmd pode ser usado após o nome shell.
+
+</p>
+
+<h3>Veja os exemplos:</h3>
+
+
+<div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000002')">&#128203;</div>&nbsp;<i>Exemplo.</i><pre id="id_000002" hidden> //teste da lib shell
+
+local shell = inclua&#39;shell&#39;
+
+imprima(shell.info);
+imprima(shell.VERSAO);
+
+funcao principal()
+    local ret;
+    ret = shell.uname(&#39;-a&#39;);
+    imprima(tabela.concat(ret,&#39;\n&#39;));
+    
+    poe&#39;Apagando zz.zip e zz.tar se houver&#39;;
+    shell.rm(&#39;zz.zip&#39;, &#39;zz.tar&#39;);
+    leia();
+    
+    poe&#39;\n\n------------------------------&#39;
+      // Diretório atual:
+    ret = shell.pwd();
+    imprima(ret[1]);
+    //usando o retorno do diretório atual para listar e arquivar em um zip:
+    ret = shell.ls(ret[1]):zip(&#39;zz.zip&#39;);//o retorno é uma tabela indexada ([1],[2]...);
+    imprima(tabela.concat(ret,&#39;\n&#39;));
+    leia();
+    ret = shell.cat(args[0]);
+    poe&#39;\n\n------------------------------&#39;;
+    imprima( tabela.concat(ret,&#39;\n&#39;));
+    
+    poe&#39;\n\n------------------------------&#39;
+    ret = shell.grep(&#39;reto&#39;.. &#39;rne&#39;, args[0]);
+    imprima(tabela.concat(ret,&#39;\n&#39;));
+    
+    
+    
+    poe&#39;\n\n------------------------------&#39;
+      // Espaço em disco em MB:
+    ret = shell.df(&#39;-m&#39;);
+    imprima(tabela.concat(ret,&#39;\n&#39;));
+    
+    poe&#39;\n\n------------------------------&#39;
+      // comando TAR:   tar -cvf arquivo.tar   pasta_ou_arquivo_alvo
+    ret = shell.tar(&#39;-cvf&#39;, &#39;zz.tar&#39;, &#39;.&#39;);
+    imprima(tabela.concat(ret,&#39;\n&#39;));
+    
+    poe&#39;\n\n------------------------------&#39;
+      // comando ps
+    ret = shell.ps(&#39;-e&#39;);
+    imprima(tabela.concat(ret,&#39;\n&#39;) );
+    
+    //qualquer comando linux terminal que você souber poderá ser usado assim:  shell.seucomando(args...);
+    
+    
+    retorne 0;
+fim
+
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  4</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  5</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  6</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  7</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  8</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  9</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 10</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 11</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 12</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 13</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 14</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 15</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 16</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 17</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 18</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 19</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 20</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 21</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 22</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 23</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 24</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 25</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 26</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 27</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 28</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 29</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 30</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 31</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 32</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 33</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 34</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 35</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 36</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 37</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 38</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 39</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 40</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 41</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 42</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 43</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 44</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 45</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 46</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 47</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 48</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 49</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 50</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 51</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 52</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 53</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;"> 54</span>
+<span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;"> 55</span>
+</pre></div>
+<div style="padding-left: 10px;flex-grow: 1"><pre>
+ <span style="color:green">//teste da lib shell
+</span>
+<span style="font-weight:bold;color:#b50546">local</span> shell <span style="font-weight:bold;">=</span> <span style="color:#b50546">inclua</span><span style="color:blue">&#39;shell&#39;</span>
+
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>shell<span style="font-weight:bold;">.</span>info<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+<span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>shell<span style="font-weight:bold;">.</span>VERSAO<span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+
+<span style="font-weight:bold;color:#b50546">funcao</span> principal<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span>
+    <span style="font-weight:bold;color:#b50546">local</span> ret<span style="font-weight:bold;">;</span>
+    ret <span style="font-weight:bold;">=</span> shell<span style="font-weight:bold;">.</span>uname<span style="font-weight:bold;">(</span><span style="color:blue">&#39;-a&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:#b50546">tabela</span><span style="font-weight:bold;">.</span><span style="color:red">concat</span><span style="font-weight:bold;">(</span>ret,<span style="color:blue">&#39;\n&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+    <span style="color:#b50546">poe</span><span style="color:blue">&#39;Apagando zz.zip e zz.tar se houver&#39;</span><span style="font-weight:bold;">;</span>
+    shell<span style="font-weight:bold;">.</span>rm<span style="font-weight:bold;">(</span><span style="color:blue">&#39;zz.zip&#39;</span>, <span style="color:blue">&#39;zz.tar&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">leia</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+    <span style="color:#b50546">poe</span><span style="color:blue">&#39;\n\n------------------------------&#39;</span>
+      <span style="color:green">// Diretório atual:
+</span>    ret <span style="font-weight:bold;">=</span> shell<span style="font-weight:bold;">.</span>pwd<span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span>ret<span style="font-weight:bold;">[</span><span style="color:red">1</span><span style="font-weight:bold;">]</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="color:green">//usando o retorno do diretório atual para listar e arquivar em um zip:
+</span>    ret <span style="font-weight:bold;">=</span> shell<span style="font-weight:bold;">.</span>ls<span style="font-weight:bold;">(</span>ret<span style="font-weight:bold;">[</span><span style="color:red">1</span><span style="font-weight:bold;">]</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">:</span>zip<span style="font-weight:bold;">(</span><span style="color:blue">&#39;zz.zip&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span><span style="color:green">//o retorno é uma tabela indexada ([1],[2]...);
+</span>    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:#b50546">tabela</span><span style="font-weight:bold;">.</span><span style="color:red">concat</span><span style="font-weight:bold;">(</span>ret,<span style="color:blue">&#39;\n&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">leia</span><span style="font-weight:bold;">(</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    ret <span style="font-weight:bold;">=</span> shell<span style="font-weight:bold;">.</span>cat<span style="font-weight:bold;">(</span><span style="color:#b50546">args</span><span style="font-weight:bold;">[</span><span style="color:red">0</span><span style="font-weight:bold;">]</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">poe</span><span style="color:blue">&#39;\n\n------------------------------&#39;</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span> <span style="color:#b50546">tabela</span><span style="font-weight:bold;">.</span><span style="color:red">concat</span><span style="font-weight:bold;">(</span>ret,<span style="color:blue">&#39;\n&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+    <span style="color:#b50546">poe</span><span style="color:blue">&#39;\n\n------------------------------&#39;</span>
+    ret <span style="font-weight:bold;">=</span> shell<span style="font-weight:bold;">.</span>grep<span style="font-weight:bold;">(</span><span style="color:blue">&#39;reto&#39;</span><span style="font-weight:bold;">.</span><span style="font-weight:bold;">.</span> <span style="color:blue">&#39;rne&#39;</span>, <span style="color:#b50546">args</span><span style="font-weight:bold;">[</span><span style="color:red">0</span><span style="font-weight:bold;">]</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:#b50546">tabela</span><span style="font-weight:bold;">.</span><span style="color:red">concat</span><span style="font-weight:bold;">(</span>ret,<span style="color:blue">&#39;\n&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+    
+    
+    <span style="color:#b50546">poe</span><span style="color:blue">&#39;\n\n------------------------------&#39;</span>
+      <span style="color:green">// Espaço em disco em MB:
+</span>    ret <span style="font-weight:bold;">=</span> shell<span style="font-weight:bold;">.</span>df<span style="font-weight:bold;">(</span><span style="color:blue">&#39;-m&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:#b50546">tabela</span><span style="font-weight:bold;">.</span><span style="color:red">concat</span><span style="font-weight:bold;">(</span>ret,<span style="color:blue">&#39;\n&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+    <span style="color:#b50546">poe</span><span style="color:blue">&#39;\n\n------------------------------&#39;</span>
+      <span style="color:green">// comando TAR:   tar -cvf arquivo.tar   pasta_ou_arquivo_alvo
+</span>    ret <span style="font-weight:bold;">=</span> shell<span style="font-weight:bold;">.</span>tar<span style="font-weight:bold;">(</span><span style="color:blue">&#39;-cvf&#39;</span>, <span style="color:blue">&#39;zz.tar&#39;</span>, <span style="color:blue">&#39;.&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:#b50546">tabela</span><span style="font-weight:bold;">.</span><span style="color:red">concat</span><span style="font-weight:bold;">(</span>ret,<span style="color:blue">&#39;\n&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+    <span style="color:#b50546">poe</span><span style="color:blue">&#39;\n\n------------------------------&#39;</span>
+      <span style="color:green">// comando ps
+</span>    ret <span style="font-weight:bold;">=</span> shell<span style="font-weight:bold;">.</span>ps<span style="font-weight:bold;">(</span><span style="color:blue">&#39;-e&#39;</span><span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    <span style="color:#b50546">imprima</span><span style="font-weight:bold;">(</span><span style="color:#b50546">tabela</span><span style="font-weight:bold;">.</span><span style="color:red">concat</span><span style="font-weight:bold;">(</span>ret,<span style="color:blue">&#39;\n&#39;</span><span style="font-weight:bold;">)</span> <span style="font-weight:bold;">)</span><span style="font-weight:bold;">;</span>
+    
+    <span style="color:green">//qualquer comando linux terminal que você souber poderá ser usado assim:  shell.seucomando(args...);
+</span>    
+    
+    <span style="font-weight:bold;color:#b50546">retorne</span> <span style="color:red">0</span><span style="font-weight:bold;">;</span>
+<span style="font-weight:bold;color:#b50546">fim</span>
+
+</pre></div></div>
+
+</div>
+
+<div class="footer"><img src="prisma.png" alt="Prisma logo" width="50"><br>Feito com minidoc-0.1
+<a href="https://linguagemprisma.br4.biz/blog">Linguagem Prisma</a></div>
+</body>
+</html>

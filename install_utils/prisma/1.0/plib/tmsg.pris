@@ -1,0 +1,743 @@
+/**
+ \fonte tmsg.pris
+ \resumo Prisma Lib para gerar diálogos simples no terminal.
+
+
+*/
+//inclua'estrito'.modo_global();
+
+local utf8 = utf8;
+local t = {};
+
+//Determina se o terminal tem suporte ao modo 256 cores.
+//retorna falso ou verdadeiro
+funcao suporte_256cores()
+    // Linux, macOS, Windows Terminal, Git Bash
+    local term = sis.obtvarambiente("TERM")
+    se term entao
+        // xterm-256color, screen-256color, etc
+        se term:procure("256color") entao
+            retorne verdadeiro
+        fim
+    fim
+
+    // Windows CMD clássico (NÃO suporta 256 cores)
+    local comspec = sis.obtvarambiente("COMSPEC")
+    se comspec e comspec:procure("cmd.exe") entao
+        retorne falso
+    fim
+
+    // PowerShell (em Windows 11 normalmente suporta ANSI 24-bit)
+    local ps = sis.obtvarambiente("POWERSHELL_DISTRIBUTION_CHANNEL")
+    se ps entao
+        -- PowerShell moderno suporta cores 24-bit desde Windows 10 build 16257+
+        retorne verdadeiro
+    fim
+
+    // Microsoft Windows Terminal (define WT_SESSION)
+    local wt = sis.obtvarambiente("WT_SESSION")
+    se wt entao
+        retorne verdadeiro
+    fim
+
+    // Última verificação: COLORTERM
+    local colorterm = sis.obtvarambiente("COLORTERM")
+    se colorterm e colorterm:procure("truecolor") entao
+        retorne verdadeiro  -- suporta 24-bit, logo também suporta 256
+    fim
+
+    // Caso nada identifique, assume que NÃO tem 256 cores
+    retorne falso
+fim
+
+
+//já fazemos um cache do resultado, para não chamar várias vezes a mesma função.
+/**
+\var t.SUPORTE_256CORES
+\resumo {booleano} - se verdadeiro, há suporte a 256cores, caso contrário não.
+*/
+t.SUPORTE_256CORES = suporte_256cores();
+
+//Determina se o terminal tem suporte ao modo escape vt100
+local funcao suporte_vt100 ()
+    se sis.nome:procure'win' entao
+        se t.SUPORTE_256CORES entao
+            retorne verdadeiro;
+        fim
+        retorne falso;
+    fim
+    
+    //posix:
+    local TERM = sis.obtvarambiente('TERM');
+    se TERM:procure'256color' entao
+        retorne verdadeiro;
+    fim
+    
+    //outro teste posix:
+    
+    local cmd = "printf '\\033[31mTESTE\\033[0m'";
+    local a, err = es.pabra(cmd, 'leitura');
+    se nao a entao retorne falso; fim
+    local out = a:leia('*t');
+    a:feche();
+    se out:cod(1) <> 27 entao
+        retorne verdadeiro;
+    fim
+    
+    retorne falso;
+fim
+
+
+/**
+   \var t.SUPORTE_VT100
+   \resumo {booleano} - se verdadeiro apresenta suporte ao sistema de escape vt100.
+*/
+t.SUPORTE_VT100 = suporte_vt100()
+
+
+//limpa a tela e posiciona o cursor no início.
+local funcao limpe_tela()
+    se t.SUPORTE_VT100 entao
+        es.escreva('\27[2J\27[H')
+    senaose sis.nome:procure'win' entao
+        sis.execute('cls')
+    senao
+        sis.execute('clear')
+    fim
+fim
+
+t.limpe_tela = limpe_tela;
+
+//Uso interno, passa cada item de um array, vendo o comprimento (utf8) das strings, retornando o maior.
+local funcao utf8_obt_tam(t)
+    T(t);
+    local tam = 0;
+    local tamanho = utf8.tamanho;
+    local tam_t = #t;
+    para i = 1, tam_t inicio
+        local tam_v = tamanho(t[i]);
+        tam = tam > tam_v ? tam ou tam_v;//se for maior que tam_v continua, senao pegue o valor de tam_v 
+    fim
+    retorne tam;
+fim
+
+//alinha uma string no centro dado um comprimento 'tam';
+//retorna a string alinhada
+local funcao utf8_alin_centro(str, tam)
+    S(str); N(tam);
+    local diferenca = tam - utf8.tamanho(str);
+    local metade = diferenca /. 2; //divisão inteira, não há casas decimais, é truncado para inteiro.
+    local resto = tam % 2; //pegamos o resto para adicionar depois.
+    local str_anexo = string.nconcat(' ', metade);//concatenamos o espaco o numero da metade.
+    //anexamos a metade de espacoes antes e depois da string, juntamente com o resto, se houver.
+    local result = str_anexo .. str .. str_anexo .. string.nconcat(' ', resto);
+    retorne result;    
+fim
+
+//uso interno, escreve o titulo de um diálogo já alinhado no centro.
+local funcao escreva_titulo(titulo, tam)
+    imprima('', ('='):nconcat(tam));
+    imprima('', utf8_alin_centro(titulo, tam));
+    imprima('', ('¨'):nconcat(tam));
+fim
+
+//uso interno escreve cada item de um array (string) alinhado na esquerda.
+//param t (tabela) - a lista de itens a serem escritos na tela.
+//param tam (numero) - o tamanho da lista (numero de itens)
+//param ini (numero) - por qual indice começar.
+//param fini (numero) - por qual indice terminar. (se acima do numero de itens, então o padrão é o num. itens
+//param mostre_num (booleano) - mostrar ou não o número de cada item impreso.
+local funcao escreva_linhas(t, tam, ini, fini, mostre_num)
+    T(t); N(tam, ini, fini);
+    local tam_t = #t;
+    local fini = fini > tam_t ? tam_t ou fini;
+    para i = ini, fini inicio
+        local pref = mostre_num ? (i .. ' -> ') ou  '';
+        imprima('', pref .. t[i]);
+    fim
+fim
+
+//dado um range ini até fini, gera um prompt que aguarda o usuário digitar e valida se o número está 
+//dentro do range, retornando o número ou falso em caso de erro, imprimindo a mensagem tente novamente.
+local funcao obt_escolha(ini, fini)
+    es.escreva('\t', '? ');es.esvazie();
+    local op = convnumero(leia());
+    se nao op ou op > fini ou op < ini entao
+        sis.execute('clear');
+        imprima('*Opção errada. Tente novamente, escolha um número válido.');
+        retorne falso;
+    fim
+    retorne op;
+fim
+
+
+//tabela de cores, se estiver disponível no seu terminal, poderão ser usadas.
+t.cor = {
+        preto = 0,
+        vermelho = 1,
+        verde = 2,
+        amarelo = 3,
+        azul = 4,
+        magenta = 5,
+        ciano = 6,
+        branco = 7,
+       
+        cinza = 8,
+        vermelho_claro = 9,
+        verde_claro = 10,
+        amarelo_claro = 11,
+        azul_claro = 12,
+        magenta_claro = 13,
+        ciano_claro = 14,
+        branco_brilhante = 15
+}
+
+t.cor256 = {
+    preto = 0,
+    vermelho = 1,
+    verde = 2,
+    amarelo = 3,
+    azul = 4,
+    magenta = 5,
+    ciano = 6,
+    branco = 7,
+    cinza_escuro = 8,
+    vermelho_claro = 9,
+    verde_claro = 10,
+    amarelo_claro = 11,
+    azul_claro = 12,
+    magenta_claro = 13,
+    ciano_claro = 14,
+    branco_brilhante = 15,
+
+    cinza_00 = 232,
+    cinza_01 = 233,
+    cinza_02 = 234,
+    cinza_03 = 235,
+    cinza_04 = 236,
+    cinza_05 = 237,
+    cinza_06 = 238,
+    cinza_07 = 239,
+    cinza_08 = 240,
+    cinza_09 = 241,
+    cinza_10 = 242,
+    cinza_11 = 243,
+    cinza_12 = 244,
+    cinza_13 = 245,
+    cinza_14 = 246,
+    cinza_15 = 247,
+    cinza_16 = 248,
+    cinza_17 = 249,
+    cinza_18 = 250,
+    cinza_19 = 251,
+    cinza_20 = 252,
+    cinza_21 = 253,
+    cinza_22 = 254,
+    cinza_23 = 255,
+}
+
+se t.SUPORTE_256CORES entao
+    t.cor = t.cor256;
+fim
+
+
+/**
+   \fn t.cor.rgb
+   \resumo Em terminais com suporte a '256color' esta função retorna um número da cor a partir da combinação rgb de 0-5.
+   \param r {numero} - um número de 0 a 5 para red (vermelho)
+   \param g {numero} - um número de 0 a 5 para green (verde)
+   \param b {numero} - um número de 0 a 5 para blue (azul)
+   
+   \retorno ret {numero} - Um número correspondente ao código da cor 256.
+   
+   \obs Esta função só pode ser usada em terminais com suporte a 256color. Para isso faça o teste: se t.SUPORTE_256COLOR entao ... fim
+   
+*/
+funcao t.cor.rgb(r, g, b)
+    N(r, g, b); // garante número
+    se r < 0 ou r > 5 ou g < 0 ou g > 5 ou b < 0 ou b > 5 entao
+        erro("t.cor.rgb: valores devem estar entre 0 e 5");
+    fim
+    local codigo = 16 + (r * 36) + (g * 6) + b;
+    
+    se nao t.SUPORTE_256CORES entao
+        codigo = r + g + b;
+    fim
+    retorne codigo;
+fim
+
+
+/**
+\fn t.mude_cor
+\resumo Muda a cor da letra e do fundo no terminal. 
+\param fgcode {numero} - Código da cor da letra.
+\param bgcode {numero} - Código da cor do fundo.
+
+\h3 exemplo:
+\codigo 
+  local t = inclua'tmsg';
+  t.mude_cor(t.cor.vermelho, t.cor.verde_claro);
+  imprima("Cor de fundo verde claro e da letra vermelho.");
+  t.cor_normal(); //volta ao padrao
+\codigo--
+
+*/    
+funcao t.mude_cor(fgcode, bgcode)
+  se t.SUPORTE_VT100 entao
+    se tipo(fgcode)=='string' entao
+        fgcode = t.cor[fgcode];
+    fim
+    
+    se tipo(bgcode)=='string' entao
+        bgcode = t.cor[bgcode];
+    fim
+    
+    se fgcode entao
+        se fgcode > 7 entao
+            fgcode = fgcode + 60 - 8;
+        fim
+        es.escreva("\27[" .. fgcode + 30 .. "m")
+    fim
+
+    se bgcode entao
+        se bgcode > 7 entao
+            bgcode = bgcode + 60 - 8;
+        fim
+        es.escreva("\27[" .. (bgcode + 40) .. "m")
+    fim
+  fim
+fim
+
+//a mesma função acima, mas para cores 256.
+funcao t.mude_cor256(fgcode, bgcode)
+    se t.SUPORTE_VT100 entao
+        se tipo(fgcode)=='string' entao
+            fgcode = t.cor[fgcode];
+        fim
+    
+        se tipo(bgcode)=='string' entao
+            bgcode = t.cor[bgcode];
+        fim
+        se fgcode entao
+            es.escreva("\27[38;5;" .. fgcode .. "m")
+        fim
+
+        se bgcode entao
+            es.escreva("\27[48;5;" .. (bgcode) .. "m")
+        fim
+    fim
+fim
+
+//automaticamente a função de cor256 é definida como a principal caso tenha suporte.
+se t.SUPORTE_256CORES entao
+    t.mude_cor = t.mude_cor256;
+fim
+
+/**
+\fn t.cor_normal
+\resumo Redefina as cores para o padrão.
+*/
+funcao t.cor_normal()
+    es.escreva("\27[0m")
+fim
+
+/**
+   \fn t.rotulo
+   \resumo imprime um texto usando cores de letra e de fundo caso haja suporte.
+   \param txt {string} - o texto a ser impresso.
+   \param corletra {numero} - o número do código da cor da letra.
+   \param corfundo {numero} - o número do código da cor de fundo.
+*/
+funcao t.rotulo(txt, corletra, corfundo)
+    S(txt);
+    se t.SUPORTE_VT100 entao
+        t.mude_cor(corletra, corfundo); 
+    fim
+    es.escreva(txt);es.esvazie();
+    
+    se t.SUPORTE_VT100 entao
+        t.cor_normal();
+    fim
+fim
+
+/**
+  \fn t.aguarde.
+  \resumo Cria uma mensagem padrão e espera o usuário pressionar Enter para sair.
+  \param txt {string} - o texto a ser impresso na mensagem.
+*/
+funcao t.aguarde(txt)
+    S(txt);
+    t.rotulo(txt, 'preto', 'amarelo_claro');
+    leia();
+fim
+
+/**
+ \fn t.info
+ \resumo Cria uma mensagem info com cores preto (letra) e azul-claro (fundo)
+ \param txt {string} - o texto a ser impresso na mensagem.
+*/
+funcao t.info(txt)
+    S(txt);
+    t.rotulo(txt, 'preto', 'azul_claro');
+    leia();
+fim
+
+/**
+ \fn t.atencao
+ \resumo Cria uma mensagem de atenção com cores branco-brilhante (letra) e amarelo (fundo)
+ \param txt {string} - o texto a ser impresso na mensagem.
+*/
+funcao t.atencao(txt)
+    S(txt);
+    t.rotulo(txt, 'branco_brilhante', 'amarelo');
+    leia();
+fim
+
+/**
+ \fn t.erro
+ \resumo Cria uma mensagem de erro com cores branco-brilhante (letra) e vermelho (fundo)
+ \param txt {string} - o texto a ser impresso na mensagem.
+*/
+funcao t.erro(txt)
+    S(txt);
+    t.rotulo(txt, 'branco_brilhante', 'vermelho');
+    leia();
+fim
+
+/**
+ \fn t.ok
+ \resumo Cria uma mensagem de ok (sucesso) com cores branco-brilhante (letra) e verde (fundo)
+ \param txt {string} - o texto a ser impresso na mensagem.
+*/
+funcao t.ok(txt)
+    S(txt);
+    t.rotulo(txt,  'branco_brilhante', 'verde');
+    leia();
+fim
+
+/**
+ \fn t.escolha
+ \resumo Cria um diálogo com opções para se escolher.
+ \param ... {variado - strings} - primeiro: título, os demais são as opções.
+ \retorno op {numero} - O número da opção escolhida.
+ \retorno txt {string} - O rótulo da opção escolhida.
+ 
+ \h3 Exemplo:
+ \codigo prisma
+ local tm = inclua'tmsg';
+
+ local op, rot = tm.escolha('O que quer fazer?', 'Desligar', 'Reiniciar', 'Suspender');
+ imprima(op, rot);// op = rot --> 1 = Desligar, 2 = Reiniciar, 3 = Suspender.
+ \codigo--
+*/
+funcao t.escolha(...)
+    local t = {...};
+    local tam = utf8_obt_tam(t) + 10;//espaço extra para os números!
+    local titulo = t[1];
+    tabela.remova(t, 1);
+::inicio_escolha::
+    escreva_titulo(titulo, tam);
+    escreva_linhas(t, tam, 1, #t, verdadeiro);
+    imprima('', string.nconcat('_', tam) );
+    
+    local op = obt_escolha(1, #t);
+    
+    se nao op entao
+        vapara inicio_escolha;
+    fim
+    retorne op, t[op];
+fim
+
+
+/**
+\fn t.confirme
+\resumo Cria um diálogo de Sim ou Não (Ok, Cancel).
+\param titulo {string} - O título do diálogo.
+\param Sim {string} - O rótulo equivalente a verdadeiro no retorno.
+\param Nao {string} - O rótulo equivalente a falso no retorno.
+
+\h3 Exemplo:
+\codigo prisma
+local tm = inclua'tmsg';
+
+local op = tm.confirme('Deseja continuar?', 'Ok', 'Cancelar');
+imprima(op);
+\codigo--
+*/
+funcao t.confirme(titulo, Sim, Nao)
+    local titulo, Sim, Nao = titulo ou 'Atenção', Sim ou 'Sim', Nao ou "Não";
+    local op = t.escolha(titulo, Sim, Nao);
+    retorne op == 1;    
+fim
+
+
+/**
+\fn t.alerta
+\resumo Cria uma mensagem de aviso.
+\param ... {variados- string} - Cada argumento é uma linha da mensagem.
+
+*/
+funcao t.alerta(...)
+    local t = {...};
+    local tam = utf8_obt_tam(t);
+    local titulo = t[1];
+    escreva_titulo(titulo, tam);
+                 //(tab, tam, inicial, final, mostre_num);
+    escreva_linhas(t, tam, 2, #t, falso);
+    
+    imprima('', string.nconcat('_', tam) );
+    es.escreva('Enter para continuar...');es.esvazie();
+    leia();
+fim
+
+
+/**
+\fn t.form
+\resumo cria um formulário simplificado modo texto.
+\param titulo {string} - O título do formulário.
+\retorno form {tabela} - O objeto formulário contendo métodos.
+*/
+funcao t.form(titulo)
+    local titulo = titulo ou 'Form';
+    local f = {titulo = titulo};
+    f.valores = {};
+/**
+  \fn f:ad_campos
+  \resumo método do objeto formulário para adicionar campos. 
+  \param ... {variados-string | tabela<string>} - Cada argumento é um campo que poderá ser preenchido. Caso seja uma tabela, cada item da tabela será um campo a ser preenchido.
+*/
+    funcao f:ad_campos(...)
+        local tmp = {...};
+        se tipo(tmp[1])=='tabela' entao
+            tmp = tmp[1];
+        fim
+        este.campos = tmp;        
+    fim
+/**
+\fn f:mostre
+\resumo Método do objeto formulário - ativa o formulário na tela para ser preenchido ou alterado.
+
+*/
+    funcao f:mostre()
+        local tam_titulo = utf8.tamanho(este.titulo);
+        local tam = utf8_obt_tam(este.campos);
+        tam = tam > tam_titulo ? tam ou tam_titulo;
+        este.tam = tam + 20;
+::inicio_escolha::
+        escreva_titulo(este.titulo, este.tam);
+        imprimaf('\t%s >>', '0 - ' .. (este.campos[0] ou 'Confirmar'));
+        imprima('', (''):nconcat(este.tam));
+        para i, v em ipares(este.campos) inicio
+            local v = v:apare();
+            local tam_v = utf8.tamanho(v);
+            se v:corte(-1,-1) == ':' entao v = v:corte(1, -2); fim
+            imprima('', i .. ' - ' .. v .. ': ' .. (este[v] ou ('_'):nconcat(este.tam - tam_v -6)));
+        fim
+        imprima('', string.nconcat('', este.tam));
+        es.escreva('\t', 'Escolha um número de campo para alterar.\n\tUse o \'0\' para confirmar e sair.\n');
+        
+        local op = obt_escolha(0, #este.campos);
+        se nao op entao
+            leia();
+            limpe_tela();
+            vapara inicio_escolha;
+        fim
+        se op == 0 entao
+            retorne
+        fim
+        es.escreva('\t', ('_'):nconcat(este.tam) .. '\r');es.esvazie();
+        
+        este.campos[op] = este.campos[op]:apare();
+        se este.campos[op]:corte(-1,-1) == ':' entao
+            este.campos[op] = este.campos[op]:apare():corte(1, -2);
+        fim
+        imprimaf('\t%s: ', este.campos[op]); es.esvazie();
+        local valor = leia();
+        este[este.campos[op]] = valor;
+        limpe_tela();
+        vapara inicio_escolha;
+        
+    fim
+
+/**
+\fn f:ad_campo
+\resumo Método do objeto formulário - adiciona um campo a ser preenchido.
+\param rotulo {string} - campo que será preenchido.
+*/
+    funcao f:ad_campo(rotulo)
+        tabela.adicione(este.campos, rotulo);
+    fim
+
+/**
+\fn f:ad_confirmar
+\resumo Método do objeto formulário - adiciona uma opção de submit para sair do formulário.
+
+*/ 
+    funcao f:ad_confirmar(rotulo)
+        este.campos[0] = rotulo;
+    fim
+    retorne f;
+fim
+
+//uso interno, permite digitar a senha sem aparecer na tela.
+funcao leia_senha()
+    se sis.nome:procure'win' entao
+        // PowerShell lê senha sem eco
+        local cmd = "powershell -Command \"Read-Host '' -AsSecureString | ConvertFrom-SecureString -AsPlainText\""
+        local a, err = es.pabra(cmd, 'leitura');
+        se nao a entao retorne nulo, err; fim
+        local senha = a:leia('*t');
+        a:feche();
+        retorne senha
+    senao
+        // Linux/macOS usam stty
+        sis.execute("stty -echo")
+        local senha = leia()
+        sis.execute("stty echo")
+        es.escreva("\n")
+        retorne senha
+    fim
+fim
+
+/**
+\fn t.login
+\resumo Cria um diálogo de login, com usuário e senha.
+\param titulo {string} - título do diálogo.
+\param txt_user {string} - texto correspondente ao rótulo 'User', permitindo customização.
+\param txt_pass {string} - texto correstondente ao rótulo 'Password'.
+\retorno user {string} - O que foi digitado no usuário.
+\retorno senha {string} - O que foi digitado na senha.
+\h3 Exemplo:
+\codigo prisma
+local tm = inclua'tmsg';
+
+local user, senha = tm.login('Faça o login', 'Usuário', 'Senha');
+imprima(user, senha);
+
+leia();
+\codigo--
+
+ \obs Esta função apenas cria o diálogo, não lida com a confirmação, autenticação.
+*/
+funcao t.login (titulo, txt_user, txt_pass)
+    local titulo = titulo ou 'Login';
+    local txt_user = txt_user ou 'Usuário';
+    txt_user = txt_user .. ': ';
+    local txt_pass = txt_pass ou 'Senha';
+    txt_pass = txt_pass .. ': '
+    local tam_ti, tam_user, tam_pass = #titulo, #txt_user, #txt_pass;
+    local tam = tam_ti > tam_user ? tam_ti ou tam_user;
+    tam = tam > tam_pass ? tam ou tam_pass;
+    tam = tam > 30 ? tam ou 30;
+    
+    limpe_tela();
+    poe'';    
+    escreva_titulo(titulo, tam);
+    es.escreva('\t', txt_user);
+    local user = leia();
+    es.escreva('\t', txt_pass);
+    local pass = leia_senha();
+    retorne user, pass;
+fim
+
+
+t.dialogo_cor256 = funcao(txt)
+    local txt = txt ou 'Cores:';
+::incio_escolha::
+limpe_tela();
+    imprima(('_'):nconcat(utf8.tamanho(txt)));
+    imprima(txt);
+    poe'';
+    para i = 0, 255 inicio 
+        se i >= 248 entao
+             cor_letra = 0;
+         senao
+             cor_letra = i+11;
+         fim   
+         t.mude_cor256(cor_letra, i);
+             imprimaf(' %3d ', i);  
+         t.cor_normal();
+         se (i+1) % 16 == 0 entao
+             poe'';
+         fim
+    fim
+    imprima('', 'Escolha um número da cor de fundo.');
+    local op = obt_escolha(0, 255);
+    se nao op entao
+        leia();
+        vapara incio_escolha;
+    fim
+    retorne op;
+fim
+
+
+
+/**
+ \fn t.dialogo_cor
+ \resumo Cria um diálogo para selecionar uma cor.
+ \param txt {string} - A mensagem que aparece acima do diálogo.
+ \retorno cor {numero} - O código correspondente à cor escolhida.
+ \obs Para terminais sem suporte a vt100 e cores, esta função não terá efeito.
+ \obs Para terminais com suporte a 256color, há mais cores além das 16 básicas.
+*/
+
+t.dialogo_cor = funcao(txt)
+    local txt = txt ou 'Cores:';
+    imprima(('_'):nconcat(utf8.tamanho(txt)));
+::inicio_escolha::
+limpe_tela();
+    imprima(txt);
+    poe'';
+    local letra;
+    local cont = 0;
+    
+    para i = 0, 15 inicio 
+         t.mude_cor(0, i);
+             imprimaf('    ');  
+         cont = cont + 1;
+         t.cor_normal();
+    fim
+    
+    poe'';
+    
+    para i = 0, 15 inicio 
+         se i == 7 ou i == 15 entao letra = 0; fim
+         t.mude_cor(letra, i);
+             imprimaf(' %2d ', i);  
+         t.cor_normal();
+         cont = cont + 1;
+    fim
+    poe'';
+    para i = 0, 15 inicio 
+         se i == 37 entao letra = 30; fim
+         t.mude_cor(letra, i);
+             imprimaf('    ');  
+         t.cor_normal();
+         cont = cont + 1;
+    fim
+  
+    poe'';
+    imprima('', 'Escolha um número da cor de fundo.');
+    local op = obt_escolha(0,15);
+    se nao op entao
+        leia();
+        vapara inicio_escolha;
+    fim
+    retorne op;
+fim
+
+se t.SUPORTE_256CORES entao
+    t.dialogo_cor = t.dialogo_cor256;
+fim
+retorne t;
+
+
+
+
+
+
+
+
+
+
+
