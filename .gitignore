@@ -1,10 +1,13 @@
 # Binários e Executáveis
-bin/
-prisma
-prismac
-prismaterm
-pric
-srprisma
+bin/prisma
+bin/prismac
+bin/prismaterm
+bin/pric
+bin/srprisma
+
+src/prisma
+src/prismac
+src/srprisma
 
 # Arquivos Objeto e Temporários
 **/*.o
