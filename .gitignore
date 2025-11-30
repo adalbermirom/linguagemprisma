@@ -9,6 +9,8 @@ src/prisma
 src/prismac
 src/srprisma
 
+#install_utils/prisma/1.0/plib/doc
+
 # Arquivos Objeto e Temporários
 **/*.o
 **/*.a
