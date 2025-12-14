@@ -166,7 +166,7 @@ static int luaB_collectgarbage (lua_State *L) {
     "cont", "step", "setpause", "setstepmul",\
     "setmajorinc", "isrunning", "generational", "incremental", NULL}; */
     {"parar", "reiniciar", "coletar",
-    "cont","estapa","pausar","setstepmul",
+    "cont","etapa","pausar","setstepmul",
     "setmajorinc","executando","generational","incremental", NULL};
   static const int optsnum[] = {LUA_GCSTOP, LUA_GCRESTART, LUA_GCCOLLECT,
     LUA_GCCOUNT, LUA_GCSTEP, LUA_GCSETPAUSE, LUA_GCSETSTEPMUL,

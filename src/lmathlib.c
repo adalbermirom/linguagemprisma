@@ -315,14 +315,14 @@ static int math_hypot(lua_State*L){
 static const luaL_Reg mathlib[] = {
   {"absoluto",   math_abs}, /*/ (x) absoluto*/
   {"arcocosseno",  math_acos}, /*/ (x) arco co-seno radianos*/
-  {"arcoseno",  math_asin}, /*/(x)  arco seno radianos*/
+  {"arcoseno",  math_asin}, /*/(x) ##deprecated## arco seno radianos*/
   {"arcosseno",  math_asin}, /*/(x)  arco seno radianos*/
   {"arcotangente2", math_atan2}, /*/ (y/x) arco tangente radianos*/
   {"arcotangente",  math_atan}, /*/ (x) arco tangente radianos*/
   {"arredondeacima",  math_ceil}, /*/ arredonda para mais*/
   {"cossenoh",   math_cosh}, /*/ (x) co-seno hiperpolico*/
   {"cosseno",   math_cos}, /*/ co-seno (radiandos)*/
-  {"emGrau",   math_deg}, /*/ de radianos para grau*/
+  {"emGrau",   math_deg}, /* ##deprecated## de radianos para grau*/
   {"emgrau",   math_deg}, /*/ de radianos para grau*/
   {"exp",   math_exp},
   {"arredondeabaixo", math_floor}, /*/arredonda por baixo: 4.5 = 4*/
