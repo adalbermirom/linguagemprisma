@@ -14,16 +14,16 @@
 </head>
 <body>
 <nav id="id_00000E"  class="floating-menu">
-<div class="menu-button" title="Mostrar painel lateral" onclick="show_menu_flutuante(this, 'id_00000F', 'id_00000E')">&#x2630;</div>
-<div class="com-rolagem" id="id_00000F" hidden >
-<div class="caixa com-borda"><h2>Funções:</h2>
+<div class="menu-button" title="Ocultar painel lateral" onclick="show_menu_flutuante(this, 'id_00000F', 'id_00000E')">&#x2630;</div>
+<div class="com-rolagem" id="id_00000F" hidden>
+<div class="caixa "><h2>Funções:</h2>
 <a href="#id_000005">tab.cada</a>
 <a href="#id_000003">tab.convstring (t,c,i,ncol)</a>
 <a href="#id_000008">tab.inc</a>
 <a href="#id_00000B">tab.map</a>
 
 </div>
-<div class="caixa com-borda"><h2>Variáveis:</h2>
+<div class="caixa "><h2>Variáveis:</h2>
 <a href="#id_000002">tab </a>
 </div>
 
@@ -37,7 +37,7 @@
 </div>
 <h1 id="id_000001"> tabutil.pris (utilidades extra para tabelas)</h1>
 <h3> Adalberto </h3>
-<h3> Ter - 08/07/2025 - 15:17:33</h3>
+<h3> Dom - 14/12/2025 - 22:53:35</h3>
 <h3>Versão: 0.1</h3><div class="caixa com-borda"><div><h2 >Funções:</h2>
 <ol>
 <li><a href="#id_000005">tab.cada</a></li>
@@ -86,7 +86,7 @@ local t = {&#39;ola&#39;,&#39;tudo&#39;,&#39;bem&#39;, nome=&#39;Aldebaran&#39;,
 local s = tab.convstring(t);
 imprima(s);
 //saída: { [1] = &quot;ola&quot;; [2] = &quot;tudo&quot;; [3] = &quot;bem&quot;; nome = &quot;Aldebaran&quot;; pos = { y = 2; fig = &quot;quad&quot;; x = 1; alt = 10 } }
-</pre><div style=" padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
 <span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
 <span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
 <span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
@@ -128,7 +128,7 @@ imprima(s);
 <div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000006')">&#128203;</div>&nbsp;<i>Exemplo:</i><pre id="id_000006" hidden>local tab = inclua&#39;tabutil&#39;;
 local t = {&#39;dom&#39;,&#39;seg&#39;,&#39;ter&#39;,&#39;qua&#39;,&#39;qui&#39;,&#39;sex&#39;,&#39;sáb&#39;};
 tab.cada(t, imprima);
-</pre><div style=" padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
 <span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
 <span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
 <span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
@@ -186,7 +186,7 @@ local t = {&#39;dom&#39;,&#39;seg&#39;,&#39;ter&#39;,&#39;qua&#39;,&#39;qui&#39;
 tab.inc(t, função (t,i) imprima(t[i]); fim, 1, 3);
 tab.inc(t, callback, 6, 1, -1, &#39;Dia da semana:&#39;);
 //usamos o incremento -1 ou seja diminui 1 a cada execução da callback;
-</pre><div style=" padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
 <span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
 <span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
 <span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
@@ -262,7 +262,7 @@ tab.map(t, funcao(t,i)
 fim);
 
 tab.cada(t, imprima);
-</pre><div style=" padding:2; font-size: 16px; line-height: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
+</pre><div style=" line-height: 1.5; padding:2; font-size: 16px; border: 1px solid #d5d5d5; overflow: auto; max-height: 400px; ;display: flex;"><div><pre style="text-align: right;">
 <span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  1</span>
 <span style="display: inline-block; border-right: 1px solid #ccc; text-align: right;background-color: #ddd; color: black;">  2</span>
 <span style="display: inline-block; border-right: 1px solid #ccc; text-align: right; background-color: #ffffff; color: black;">  3</span>
