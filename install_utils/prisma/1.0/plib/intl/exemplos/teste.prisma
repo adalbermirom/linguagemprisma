@@ -1,0 +1,13 @@
+
+local intl = inclua'intl';
+
+intl.carregue('pt_BR.mo'); //use esta função se quiser um controle maior de arquivo.
+local _ = intl._; //normal sem plural;
+local __ = intl.__; //para singular e plural (dois underlines);
+
+funcao principal(arg)
+    imprima(_("Do you want to install? [y/N]"));
+    imprima(_("Bye!"));
+    imprima(__("%d car\n", "%d cars\n", 0));
+    retorne 0;
+fim

@@ -1,0 +1,58 @@
+
+//wrapper para facilitar o uso do xgettext 
+//para me compilar -> pric -o pris_xobttexto pris_xobttexto.prisma
+
+local funcao xgettext(file, out)fim;
+local funcao use()fim;
+
+funcao principal()
+    se nao args[1] entao
+        use();
+        retorne 1;
+    fim
+    local out = args[2] ou 'messages.pot';
+    xgettext(args[1], args[2]);
+    make_pluralcab(out);
+    retorne 0;
+fim
+
+funcao make_pluralcab(out)
+    local a, err = es.abra(out, 'leiturabin');
+    se nao a entao erro(err, 1); fim
+    local txt = a:leia('*t');
+    a:feche();
+    local t = txt:analise('\n');
+    local b, err = es.abra(out, 'escritabin');
+    se nao b entao erro(err, 1); fim
+    
+    local tam = #t;
+    para i = 1, tam inicio
+        local v = t[i];
+        se v:procure('^"Plural%-Forms:') entao
+            b:escreva('"Plural-Forms: nplurals=2; plural=(n!=1);\\n"');
+        senao
+            b:escreva(v);
+        fim
+    fim
+fim
+
+funcao use()
+    poe''
+    poe'  Uso: pris_xgettext alvo [saida]\n'
+    poe'  Exemplo: pris_xgettext "app.prisma" "out.pot"'
+fim
+
+funcao xgettext(file, out)
+    local file = file ou '*.pris*';
+    local out = out ou 'messages.pot';
+    local cmd = 'xgettext --language=C --keyword=_ --keyword=__:1,2 --output=' ..out..' ' .. file;
+    local a, err = es.pabra(cmd, 'leitura');
+    se nao a entao erro(err); fim
+    //local txt = '';
+    repita
+        imprima(txt);
+        local txt = a:leia();
+    ate nao txt;
+fim
+
+

@@ -1,0 +1,579 @@
+
+
+/**
+\fonte intl.pris — Biblioteca de internacionalização para Prisma
+\autor Adalberto Amorim Felipe
+\versao v1.0
+\resumo Biblioteca Prisma para criar programas com suporte a traduções.
+
+\h4 licença totalmente permissiva (unlicense)
+
+\h3 Limitação:
+
+\obs “Esta implementação suporta idiomas com nplurals=2.”
+
+
+\obs Biblioteca experimental escrita 100% em Prisma, inspirada no fluxo GNU gettext.
+
+\h3 Nota:
+<blockquote>
+ Esta biblioteca implementa apenas idiomas com nplurals=2.
+</blockquote>
+<blockquote>
+ Suporte completo às regras de plural do gettext poderá ser adicionado futuramente.
+</blockquote>
+
+\h3 Endianesss
+
+O endianess do arquivo .mo é detectado automaticamente via magic number.
+
+
+*/
+local intl  = {}
+local BARRA = (sis.nome:procure'win') e '\\' ou '/';
+
+local funcao arquivo_existe(file)
+    local a, err = es.abra(file, 'leiturabin');
+    se nao a entao retorne nulo, err; fim
+    a:feche();
+    retorne file, err;
+fim
+
+local funcao convbarra(path)
+    se sis.nome:procure('win',1,1) entao
+        retorne path:troque('/', '\\');
+    senao
+        retorne path:troque('\\', '/');
+    fim
+fim
+
+local funcao obt_dominio_arg()
+    local path, nome, ext = sis.nome_arquivo(args[0]); //pega o proprio nome do script executado.
+    retorne nome;
+fim
+
+
+// Tabela interna para armazenar o estado global da biblioteca
+local estado = {
+    caminho_base = convbarra("/usr/share/locale"),       // Onde procurar as traduções (.mo )
+    dominio_ativo = (obt_dominio_arg() ou "messages"),      // O nome do arquivo .mo  (ex: messages.mo )
+    catalogo_ativo = nulo,           // O catálogo de traduções carregado
+    linguagem_ativa = nulo,          // Ex: "pt_BR", "en_US"
+}
+
+
+
+// -----------------------------------------------------
+// FUNÇÕES DE CONFIGURAÇÃO (Análogas ao bindtextdomain)
+// -----------------------------------------------------
+
+
+// Função para definir o dominio de texto (o nome do arquivo .mo )
+// Exemplo: intl.def_dominio("app") -> procura por app.mo
+/**
+\fn intf.def_dominio(dominio)
+\resumo Define o domíno (nome do arquivo de tradução sem a extensão .mo)
+\param dominio {string} - o nome do domínio a ser definido, exemplo: meuApp
+\retorno Nenhum
+
+Exemplo: 
+\codigo
+intl.def_dominio("app") -> procura por app.mo
+\codigo--
+
+*/
+funcao intl.def_dominio(dominio)
+    // Validação básica
+    se tipo(dominio) <> "string" ou dominio == "" entao
+        erro("intl.def_dominio: Domínio inválido. Necessário uma string não vazia.")
+    fim
+
+    estado.domínio_ativo = dominio
+fim
+
+
+/**
+\fn intf.def_caminho(caminho)
+\resumo Define o caminho onde será buscado o arquivo .mo
+\param caminho {string} - o nome do caminho a ser definido, exemplo: /usr/share/locale/
+\retorno Nenhum
+
+Exemplo: 
+\codigo
+intl.def_caminho("/usr/share/locale/") -> procura por app.mo
+\codigo--
+*/
+funcao intl.def_caminho(caminho)
+    local caminho = (tipo(caminho)=='string') e convbarra(caminho) ou convbarra("/usr/local/share/locale");
+    estado.caminho_base = caminho:troque(BARRA..'$', '');
+fim
+
+
+
+
+
+//funcao interna para ler 4 bytes e transformar em um uint32 le
+local funcao leia_u32le(s, pos)
+    local b1, b2, b3, b4 = s:byte(pos, pos+3)
+    retorne b1 + b2*256 + b3*65536 + b4*16777216
+fim
+
+local funcao leia_u32be(s, pos)
+    local b1, b2, b3, b4 = s:byte(pos, pos+3)
+    retorne b1*16777216 + b2*65536 + b3*256 + b4
+fim
+
+local leia_u32;
+
+
+local funcao check_magic_num(s)
+    local b1, b2, b3, b4 = s:byte(1, 4)
+
+    se b1 == 0x95 entao
+        // provavelmente little-endian
+        se b2 == 0x04 e b3 == 0x12 e b4 == 0xde entao
+            leia_u32 = leia_u32le;
+            retorne "LE"
+        fim
+    senaose b1 == 0xde entao
+        // provavelmente big-endian
+        se b2 == 0x12 e b3 == 0x04 e b4 == 0x95 entao
+            leia_u32 = leia_u32be;
+            retorne "BE"
+        fim
+    fim
+    erro("Arquivo .mo inválido (magic number incorreto)")
+fim
+
+
+
+
+local NUL = string.car(0) // Caractere NUL para separação de plurais
+local _TRADUCOES = {};
+local _META = {};
+
+
+/**
+\fn intf.carregue(caminho_direto)
+\resumo Carregua um arquivo .mo através do path direto do arquivo. Não busca no caminho definido.
+\param caminho {string} - o caminho do arquivo .mo a ser carregado, exemplo: /langs/pt_BR.mo
+\retorno t |{tabela} -  a tabela de traduções, não é necessário, pode ignorar.
+
+Exemplo: 
+\codigo
+ local t = intl.carregue("./pt_BR.mo");
+ imprima(t['Do you want to install? [y/N]']);//->Quer instalar? [s/N]
+\codigo--
+
+<p>
+Não é necessário usar a tabela de traduções diretamente, o exemplo acima foi só didático.
+</p>
+<p>
+A lib já traduz automaticamente cada string marcada com _() ou __();
+</p>
+*/
+funcao intl.carregue(caminho)
+    local f, err = es.abra(caminho, "leiturabin");
+    se nao f entao erro(err); fim
+    local data = f:leia("*t")
+    f:feche()
+    
+    
+    se #data < 20 entao
+        erro("Arquivo .mo truncado ou inválido")
+    fim
+    
+    check_magic_num();//esta função já encerra em caso de erro!
+    
+    local n = leia_u32(data, 9)
+    local orig_tbl = leia_u32(data, 13)
+    local trans_tbl = leia_u32(data, 17)
+
+    local t = {
+        meta = {}, // Novo campo para metadados
+        traducoes = {} // Novo campo para traduções
+    }
+
+    para i = 0, n - 1 inicio
+        //entrada com 8 bytes:
+        local o_len = leia_u32(data, orig_tbl + i*8 + 1)
+        local o_off = leia_u32(data, orig_tbl + i*8 + 5)
+        local msgid = data:corte(o_off+1, o_off + o_len)
+
+        local t_len = leia_u32(data, trans_tbl + i*8 + 1)
+        local t_off = leia_u32(data, trans_tbl + i*8 + 5)
+        local msgstr = data:corte(t_off+1, t_off + t_len)
+        
+        // 1. TRATAMENTO DO CABEÇALHO (O bloco com msgid vazio)
+        se msgid == "" entao
+            // Extrai metadados do cabeçalho
+            // A regra de plural está aqui.
+            para linha em msgstr:capte("([^\n]+)") inicio
+                local key, value = linha:separe("([^:]+):%s*(.*)")
+                se key e value entao
+                    t.meta[key] = value
+                fim
+            fim
+        senao
+            // 2. TRATAMENTO DE PLURAIS (Strings separadas por NUL)
+            // Se a tradução contiver o caractere NUL, é uma string plural.
+            se msgstr:procure(NUL) entao
+                // Separa as diferentes formas de plural e armazena numa tabela
+                t.traducoes[msgid] = {msgstr:separe('(.-)'..NUL..'(.*)')}; 
+                //imprimaf('%q : %q\n', msgid, msgstr:troque('\0', '|'):troque('\n', '\\n'));
+            senao
+                // 3. TRATAMENTO DE SINGULAR (Strings normais)
+                t.traducoes[msgid] = msgstr
+                //imprima(msgid, msgstr);
+            fim
+        fim
+    fim
+    
+    // Se a regra Plural-Forms não foi encontrada, usa o padrão do gettext
+    se nao t.meta["Plural-Forms"] entao
+        t.meta["Plural-Forms"] = "nplurals=2; plural=(n != 1);"
+    fim
+    _TRADUCOES = t.traducoes;
+    _META = t.meta;
+    retorne t
+fim
+
+
+
+// Função auxiliar (adaptada do código em C da gettext)
+local funcao obt_plural_form(n, regra_plural)
+    // 1. Extrai a parte da fórmula, ex: "(n != 1)"
+    local formula = regra_plural:separe("plural=(.+);")
+    se nao formula entao
+        // Fallback: Se não conseguir extrair, usa a regra C/Inglês/Português: 0 ou 1 é singular (índice 0), resto é plural (índice 1).
+        retorne (n == 1) e 0 ou 1 
+    fim
+
+    // 2. Substitui 'n' pelo valor da contagem (count) e usa 'load' para executar o código.
+    // Isso é arriscado em Lua. Uma alternativa mais segura é apenas implementar a regra simples para pt/en.
+    
+    // Para simplicidade e segurança (para pt_BR/en), usaremos a lógica C-like:
+    
+    // Se a regra for a padrão (nplurals=2; plural=(n != 1);)
+    se formula == "(n != 1)" entao
+        retorne (n == 1) e 0 ou 1
+    fim
+    
+    // Para regras mais complexas, seria necessário um parser de fórmula mais robusto.
+    // Mas a regra mais comum para a maioria dos idiomas com 2 formas (como pt_BR) é (n != 1).
+    // Vamos retornar 0 ou 1 como um 'chute' seguro se a fórmula não for a simples.
+    local np = regra_plural:separe("nplurals=(%d+);") ou 2
+    retorne (n == 1) e 0 ou (np > 1 e 1) ou 0 // Heurística básica
+fim
+
+//--Sua função ngettext
+funcao intl.obt_ntexto(msgid_singular, msgid_plural, n)
+    S(msgid_singular, msgid_plural); N(n);
+    
+    
+    // 1. Constrói a chave de busca correta (a concatenação real)
+    local chave_de_busca = msgid_singular .. NUL .. msgid_plural
+    
+    local traducoes = _TRADUCOES[chave_de_busca] // AGORA PROCURA A CHAVE COMPLETA
+    
+    
+    
+    // 1. Se a tradução não foi encontrada, retorna a string de fallback do idioma fonte
+    se nao traducoes entao
+        retorne string.formate( (n == 1) e msgid_singular ou msgid_plural, n )
+    fim
+    
+    // 2. Calcula o índice de plural
+    local plural_forms = _META["Plural-Forms"]
+    local index = obt_plural_form(n, plural_forms)
+    //imprima(traducoes[index]);
+    // 3. Retorna a tradução correspondente ao índice, formatando o número
+    local traduzida = traducoes[index + 1] // Prisma é 1-baseado, índice C é 0-baseado
+    
+    se traduzida entao
+        retorne string.formate(traduzida, n)
+    senao
+        // Fallback para a string fonte se a forma de plural não existir no .mo
+        retorne string.formate( (n == 1) e msgid_singular ou msgid_plural, n )
+    fim
+fim
+
+
+funcao intl.obt_texto(s)
+    S(s);
+    // Ajuste para usar o sub-campo 'traducoes'
+    local trad = _TRADUCOES[s] 
+    
+    // O 'trad' será uma string (singular) ou uma tabela (plural)
+    // Para singulares, trad é a string que você quer.
+    se tipo(trad) == 'string' entao
+        retorne trad
+    fim
+    
+    // Se trad for uma tabela, ou nil, retorna a string original
+    retorne s; 
+fim
+
+
+local funcao obt_pasta_home()
+    local pasta_home = sis.obtvarambiente("HOME")
+
+    se pasta_home e pasta_home <> "" entao
+        -- Caso 1: Linux/macOS
+        retorne pasta_home
+    senao
+        -- Caso 2: Windows (Tentativa 1: USERPROFILE)
+        pasta_home = sis.obtvarambiente("USERPROFILE")
+        se pasta_home e pasta_home <> "" entao
+            retorne pasta_home
+        senao
+            -- Caso 3: Windows (Tentativa 2: HOMEDRIVE + HOMEPATH)
+            local homedrive = sis.obtvarambiente("HOMEDRIVE")
+            local homepath = sis.obtvarambiente("HOMEPATH")
+
+            se homedrive e homedrive <> "" e homepath e homepath <> "" entao
+                retorne homedrive .. homepath
+            senao
+                -- Fallback: Se tudo falhar, retorna o diretório atual ou um padrão
+                retorne "." 
+            fim
+        fim
+    fim
+fim
+
+
+//--arq: ex.: app.mo , ling: ex.: pt_BR
+local funcao busque_caminho(arq, ling)
+    //--teste padrao: ./local/share/locale/lang/app.mo
+    S(arq, ling);
+    local arq = arq .. '.mo'
+    local arq_final = ling.. '/' .. 'LC_MESSAGES/' .. arq;
+    local ret = arquivo_existe( convbarra('../local/share/locale/'..arq_final) );
+    se ret entao retorne ret; fim
+
+    //outras tentativa:
+    ret = arquivo_existe( convbarra('../share/locale/'..arq_final) );
+    se ret entao retorne ret; fim
+
+    ret = arquivo_existe( convbarra('/usr/local/share/locale/'..arq_final) );
+    se ret entao retorne ret; fim
+
+    ret = arquivo_existe( convbarra('/usr/share/locale/'..arq_final) );
+    se ret entao retorne ret; fim
+
+    //--se o caminho acima falhar entao vamos tentar home:
+    local home = obt_pasta_home(); //--se falhar retorna o '.' path atual.
+    //--home/user/.local/share/locale/ling/LCMESSAGES/app.mo 
+    ret = arquivo_existe(convbarra(home..BARRA..'.local/share/locale/'..arq_final));
+    se ret entao retorne ret; fim
+    
+    //tentativa no pasta prisma:
+    ret = arquivo_existe( convbarra('/usr/local/share/prisma/1.0/locale/'..arq_final) );
+    se ret entao retorne ret; fim
+    
+    //--tentando pasta atual + lang:  pt_BR/app.mo 
+    ret = arquivo_existe( convbarra('./'..arq_final) );
+    se ret entao retorne ret; fim
+
+    //--tentando pasta atual + arquivo.
+    ret = arquivo_existe( convbarra('./'..arq) );
+    se ret entao retorne ret; fim
+
+
+    //--tentando pasta atual + lang.mo
+    ret = arquivo_existe( convbarra('./'..ling..'.mo') );
+    se ret entao retorne ret; fim
+
+
+    //imprima('--------------passou--------------')
+    retorne ret;
+fim
+
+// Exemplo de como a função intl.inicie usaria o estado:
+
+
+/**
+\fn intf.inicie(dominio, linguagem)
+\resumo Inicia a lib com o dominio e linguagem definidos.
+\param dominio {string} [opcional] - o nome do arquivo de tradução sem extensão. Padrão: nome atual do programa executado sem extensão.
+\param linguagem {string} [opcional - o nome da linguagem, exemplo: pt_BR, pt_PT, pt, en_US etc. Padrão: linguagem definida do sistema.
+
+\obs Ignorando os parâmetros, a lib carrega a tradução da linguagem padrão do sistema.
+
+*/
+
+funcao intl.inicie(dominio, linguagem)
+    //-->definir o nome do arquivo (dominio, ex.: app.prisma = app.mo )
+    local tmp_dominio = obt_dominio_arg(); 
+    estado.dominio_ativo = (tipo(dominio)=='string') ? dominio ou tmp_dominio;
+     
+    //--{"tudo", "string", "tecla", "moeda", "numerico", "tempo", NULL};
+    local sis_lang = sis.deflocal("", "tempo");
+    sis.deflocal("", "string");
+    sis.deflocal("", "tecla");
+    //sis.deflocal("", 'numerico'); //os as casa decimais são separadas por ',' em vez de '.'
+    sis.deflocal("", "moeda");
+    sis.deflocal("", "tempo");
+    
+    //--imprima(sis_lang);
+    
+    local linguagem = (tipo(linguagem)=='string') e linguagem ou sis_lang ou "en_US.utf8";
+    
+    linguagem = linguagem->separe("(.-)%.");//tirando o .utf8 para usar no caminho
+    
+    //--o caminho deve ser: /usr/share/locale/pt_BR/LC_MESSAGES/app.mo
+    
+    //--imprima(linguagem);
+    //--se linguagem terminar com / a gente corta-o fora do final.
+    linguagem = (linguagem:corte(-1,-1) == '/') e linguagem:corte(1, -2) ou linguagem
+    estado.linguagem_ativa = linguagem;
+    local caminho_completo = estado.caminho_base .. 
+                             '/' .. linguagem .. 
+                             '/LC_MESSAGES/' .. 
+                             estado.dominio_ativo .. '.mo';
+    
+    caminho_completo = convbarra(caminho_completo);
+    //--caso o caminho_completo não exista, então é feita a busca, em último caso é tentando a pasta atual
+    //--> ./pt_BR/LC_MESSAGES/app.mo  ou ./app.mo
+    se nao arquivo_existe(caminho_completo) entao
+        caminho_completo = busque_caminho(estado.dominio_ativo, estado.linguagem_ativa);
+    fim
+
+    //imprima('------------>', caminho_completo);
+    intl.carregue(caminho_completo); 
+fim
+
+
+local funcao escreva_u32le(num)
+    local b1 = num % 256
+    local b2 = (num /. 256) % 256
+    local b3 = (num /. 65536) % 256
+    local b4 = (num /. 16777216) % 256
+    
+    // Concatena os bytes na ordem correta (Little Endian)
+    retorne string.car(b1, b2, b3, b4) 
+fim
+
+//--alises:
+/**
+     \fn intl._
+     \resumo Marca uma string simples para tradução.
+     \param txt {string} - a string a ser marcada para tradução.
+     \retorno ret {string} - a string já traduzida, ou a original caso não haja uma tradução.
+*/
+/*
+    funcao intl._(txt)
+*/
+intl._ = intl.obt_texto;
+/**
+     \fn intl.__
+     \resumo Marca uma string com suporte a singular e um plural para tradução.
+     \param txt_sing {string} - a string singular a ser marcada para tradução.
+     \param txt_plural {string} - a string plural a ser marcada para tradução.
+     \param num {numero} - o número que será impresso junto, e marca o plural, se 0 ou maior que 1
+     \retorno ret {string} - a string já traduzida, ou a original caso não haja uma tradução.
+*/
+/*
+    funcao intl.__(txt_sing, txt_plural, num)
+*/
+intl.__ = intl.obt_ntexto;
+retorne intl ;
+
+/**
+\seção Limitações
+\h3 Singular e plural
+<p>
+Esta lib foi feita puramente em Prisma, tem certa compatibilidade com arquivos gerados pelo xgettext e msgfmt, mas possui uma limitação:
+</p>
+\bloco
+Esta implementação suporta apenas idiomas com nplurals=2.
+\bloco--
+
+<i>Significa que só suporta idiomas com singular/plural simples.</i>
+
+
+\obs Não suporta regras complexas (árabe, russo, etc.)
+
+\obs Possível solução: fazer uma versão baseada na libintl em C com suporte total
+*/
+
+/**
+ \seção Licença
+ 
+ <p>
+ A licença é totalmente permissiva, domínio público.
+ </p>
+ 
+ \obs Use como quiser, sem nenhum custo. O autor não poderá ser responsabilidado pelo uso.
+ 
+\bloco
+This is free and unencumbered software released into the public domain.
+
+Anyone is free to copy, modify, publish, use, compile, sell, or
+distribute this software, either in source code form or as a compiled
+binary, for any purpose, commercial or non-commercial, and by any
+means.
+
+In jurisdictions that recognize copyright laws, the author or authors
+of this software dedicate any and all copyright interest in the
+software to the public domain. We make this dedication for the benefit
+of the public at large and to the detriment of our heirs and
+successors. We intend this dedication to be an overt act of
+relinquishment in perpetuity of all present and future rights to this
+software under copyright law.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+For more information, please refer to <https://unlicense.org/>
+\bloco--
+
+
+*/
+
+/**
+\seção Exemplos completos:
+
+\codigo teste1.prisma
+
+local intl = inclua'intl';
+
+intl.carregue('pt_BR.mo'); //use esta função se quiser um controle maior de arquivo.
+local _ = intl._; //normal sem plural;
+local __ = intl.__; //para singular e plural (dois underlines);
+
+funcao principal(arg)
+    imprima(_("Do you want to install? [y/N]"));
+    imprima(_("Bye!"));
+    imprima(__("%d car\n", "%d cars\n", 0));
+    retorne 0;
+fim
+
+\codigo--
+
+
+\codigo teste2.prisma
+
+local intl = inclua'intl';
+
+local _ = intl._; //normal sem plural;
+local __ = intl.__; //para singular e plural (dois underlines);
+
+intl.def_caminho("/usr/local/share/locale/");
+//inicia com o idioma padrão do sistema:
+intl.inicie(); //--> se quiser diferente use: ("teste", "pt_BR.utf8")
+
+funcao principal(arg)
+    imprima(_("Do you want to install? [y/N]"));
+    imprima(_("Bye!"));
+    imprima(__("%d car\n", "%d cars\n", 0));
+    retorne 0;
+fim
+
+\codigo--
+**/

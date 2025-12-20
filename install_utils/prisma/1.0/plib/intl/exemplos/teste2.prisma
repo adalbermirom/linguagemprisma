@@ -1,0 +1,16 @@
+
+local intl = inclua'intl';
+
+local _ = intl._; //normal sem plural;
+local __ = intl.__; //para singular e plural (dois underlines);
+
+intl.def_caminho("/usr/local/share/locale/");
+//inicia com o idioma padrão do sistema:
+intl.inicie(); //--> se quiser diferente use: ("teste", "pt_BR.utf8")
+
+funcao principal(arg)
+    imprima(_("Do you want to install? [y/N]"));
+    imprima(_("Bye!"));
+    imprima(__("%d car\n", "%d cars\n", 0));
+    retorne 0;
+fim
