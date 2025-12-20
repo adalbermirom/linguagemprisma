@@ -1,5 +1,5 @@
 
-local dir = inclua'igdir';
+local dir = inclua'dir';
 /*
 funcao e_simblink(arq) //verifica se é link simbolico.
  local a = dir.atributos(arq) 
@@ -341,7 +341,7 @@ pac.string_para_tabnomes = string_para_tabnomes;//retorna uma tabela dos nomes d
 
 
 pac.empacote = _empacote; // empacote(nome, arq1, arq2, ...);
-pac.desempacote = _desmpacote;//desmpacote(arq.pac, pasta_destino [,nome]); Se nome for omitido entao desempacote tudo.
+pac.desempacote = _desempacote;//desmpacote(arq.pac, pasta_destino [,nome]); Se nome for omitido entao desempacote tudo.
 
 
 retorne pac;
