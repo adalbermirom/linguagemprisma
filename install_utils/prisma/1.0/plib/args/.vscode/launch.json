@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+
+      {
+          "name": "Executar Prisma",
+          "command": "prisma ${file}",
+          "request": "launch",
+          "type": "node-terminal"
+      }
+  ]
+}

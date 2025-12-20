@@ -1,0 +1,28 @@
+#!/usr/bin/env prisma
+local Args = inclua'args'
+
+local cmd = Args:novo();
+
+cmd->def('soma', funcao (a, b)
+    local a, b = convnumero(a), convnumero(b);
+    se nao a ou nao b entao
+        cmd:use()
+        sis.saia(1)
+    fim
+    imprima('Resultado:', a+b);
+fim, 'Calcula a soma, ex.:  soma 10 20',
+    2 //recebe no máximo 2 args.
+);
+
+//a função padrao é chamada quando nenhum arg de comando é passado. Recebe todos os demais args se houver.
+cmd:def_padrao(funcao(a, b)
+    local a, b = convnumero(a), convnumero(b);
+    se nao a ou nao b entao
+        cmd:use()
+        sis.saia(1)
+    fim
+    
+    imprima('Resultado:', a+b);
+fim)
+cmd->processe_args(args);
+

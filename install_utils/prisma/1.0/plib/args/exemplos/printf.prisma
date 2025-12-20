@@ -1,0 +1,56 @@
+#!/usr/bin/env prisma
+
+/*
+--------------- LICENÇA ----------------------
+-- Este código é livre de licença, domínio público
+-- Use como bem entender
+-- Ele é entregue como está, sem garantias nenhuma
+-- O autor não será responsabilizado pelo seu uso em 
+-- nenhuma situação.
+
+
+Simples exemplo feito para testar a lib args.pris
+
+use:
+
+      prisma printf.prisma "ola %s\n" "mundo em Prisma-args"
+
+      Você pode instalar printf.prisma num path bin de sua distro linux
+      mudando o nome para pprintf pois em linux já existe o comando printf      
+      e assim chamar direto: pprintf "Olá %s!\n" "mundo"
+
+      Lembre-se de dar a permissão: chmod +x printf.prisma
+
+      Ou use o pric compiler:  pric -p pprintf printf.prisma -l args.pris
+      Isso cria um arquivo byte-code Prisma que pode ser executado pelo interpretador Prisma.
+
+      Ou para gerar um auto executável: pric -o pprintf printf.prisma -l args.pris
+      Isso cria um executável Prisma com o programa compilado embutido.
+*/
+local Args = inclua'args'
+
+
+local _a_;
+
+funcao printf(fmt, ...)
+    se nao fmt entao
+        _a_:use()
+        sis.saia(1)
+    fim
+    local t = {...};
+    local fmt = fmt:troque('\\n', '\n');
+    para i, v em ipares(t) inicio
+        t[i] = t[i]:troque('\\n', '\n');
+    fim
+    imprimaf(fmt, tabela.desempacote(t));
+fim
+
+
+funcao principal(arg)
+    local a = Args:novo();
+    _a_ = a;
+    a:def_padrao(printf)
+    :def('printf', printf, 'Imprime uma saída formatada, ex: printf.prisma "Ola %s\\n" mundo')
+    :processe_args(arg);
+    retorne 0;
+fim

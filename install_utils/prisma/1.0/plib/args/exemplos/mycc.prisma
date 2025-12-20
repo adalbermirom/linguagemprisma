@@ -1,0 +1,47 @@
+
+//apenas um compilador teórico para exemplificar o uso da lib args.pris
+
+local Args = inclua'args'; //o nome Args é para não ter conflitos com o global args.
+
+
+funcao principal(arg)
+    local a = Args:novo();
+    local fontes = {};
+    local arq_saida;
+   // a ideia é pegar --saida saida_arq  e os demais argumentos soltos como fontes para compilação
+   // não terá nenhum comando de compilação, apenas serão impresso os dados na tela!
+
+    a:def_excecao(funcao(v)
+        fontes[#fontes+1] = v; //vai pegar todos os args que não são argumentos de comandos, nem comandos.
+    fim);
+    
+    a:def('--saida', //comando registrado
+        funcao(fileOut) //funcao callback
+            arq_saida = fileOut;
+        fim, 
+        'Arquivo de saída',  //descrição do comando
+        1 //número de args para '--saida'
+    );
+    //tabela args ou tabela arg fictícia simulando: 'mycc.prisma fonte0 --saida app.out fonte1 fonte2 fonte3'
+    //local arg = args[3] e args ou {"fonte0", "--saida", 'app.out', 'fonte1', 'fonte2', 'fonte3'}
+    
+    a:processe_args(arg); //args é o global, arg é o local passado para função principal(arg)
+    
+    se nao arq_saida entao
+        imprima'Necessário definir um arquivo de saída.'
+        a:use();
+        imprima('Exemplo: mycc.prisma --saida app.out fonte1 fonte2 ...')
+        sis.saia(1);
+    fim
+
+    se #fontes == 0 entao
+        imprima("Necessário definir no mínimo um arquivo fonte para compilação.")
+        imprima("mycc -o saida fonte1 fonte2...");
+        sis.saia(1);
+    fim
+    
+    imprima('Fontes:', tabela.concat(fontes, ', '));
+    imprima('Saída:', arq_saida);
+    
+    retorne 0;  
+fim
