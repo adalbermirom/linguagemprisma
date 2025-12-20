@@ -4,7 +4,7 @@ bin/prismac
 bin/prismaterm
 bin/pric
 bin/srprisma
-
+/doc/
 src/prisma
 src/prismac
 src/srprisma
@@ -16,6 +16,7 @@ src/srprisma
 **/*.a
 **/*.lib
 *~
+
 .goutputstream-*
 #arquivo de testes
 zfile.txt
