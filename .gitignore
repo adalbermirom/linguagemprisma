@@ -5,6 +5,7 @@ bin/prismaterm
 bin/pric
 bin/srprisma
 /doc/
+doc/
 src/prisma
 src/prismac
 src/srprisma
@@ -16,6 +17,11 @@ src/srprisma
 **/*.a
 **/*.lib
 *~
+
+#.html files
+*.html
+*.js
+*.css
 
 .goutputstream-*
 #arquivo de testes
