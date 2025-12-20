@@ -1,0 +1,19 @@
+local lzw = inclua'arq.lzw'
+
+local dir = inclua'dir';
+
+local file = 'pac.pris'
+local txt, err = dir.leia_arquivobin(file);
+se nao txt entao erro(err); fim
+
+local bin = lzw.comprima(txt);
+
+dir.grave_arquivobin(file..'.lzw', bin);
+
+local bin_get = dir.leia_arquivobin(file..'.lzw');
+local descmp = lzw.extraia(bin_get);
+dir.grave_arquivo('desc_' .. file, descmp);
+
+local dif = #txt - #bin_get;
+local per = dif/(#txt/100)
+imprimaf('Economia de %d bytes (%d%%)\n', dif, per);

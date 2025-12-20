@@ -1,0 +1,15 @@
+#!/usr/bin/env prisma
+
+local dir = inclua'dir';
+
+local files = dir.liste_todos('.');
+para i, v em ipares(files) inicio
+    se v:corte(-5, -1)=='.pris' ou v:corte(-7, -1) == '.prisma' e v <> 'gerar_index.prisma' entao
+        imprima(v);
+        sis.execute('minidoc '.. v);
+    fim
+fim
+
+sis.execute('prisma gerar_index.prisma');
+sis.execute('minidoc index');
+

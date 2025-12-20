@@ -1,0 +1,49 @@
+local dir = inclua'dir';
+
+//<title>md.pris</title>
+
+/*<div>
+Biblioteca markdown Prisma - converte arquivos de markdown para html.
+<a href="#id_000002"> mais...</a></div>
+*/
+funcao principal()
+    local tab = {};
+    local files = dir.liste_arquivos(dir.convbarra('./doc'));
+    para i, v em ipares(files) inicio
+        se v:corte(-5,-1) == '.html' entao
+            
+            local txt, err = dir.leia_arquivobin(dir.convbarra('./doc/'..v));
+            se txt entao
+                local title = txt:separe('<title>(.-)</title>');
+                //imprima(title);
+                //imprima(v);
+                tab[#tab+1] = {link = v, title = title};
+                local desc = txt:troque('<br>\n<div>(.-)</a></div>', funcao(w)
+                    se w:procure('mais...', 1, 1) entao
+                        //imprima(w:separe('(.-)<a') );
+                        tab[#tab].desc = w:separe('(.-)<a');
+                        se tab[#tab].desc entao
+                            tab[#tab].desc = tab[#tab].desc:apare();
+                        fim
+                    fim
+                fim);
+            senao
+                imprima(err);
+            fim
+        fim
+    fim
+    local a, err = es.abra('index', 'escritabin');
+    se nao a entao erro(err); fim
+    a:escreva('/*' .. '*\n')
+    a:escreva('\\' .. 'fonte Libs em prisma\n');
+    a:escreva('\\' .. 'autor Adalberto\n');
+    a:escreva('\\' .. 'versao v1.0\n');
+    a:escreva('\\h3 Lista de bibliotecas feitas em puro Prisma:\n');
+    a:escreva('<ul>\n');
+    para i, v em ipares(tab) inicio
+        a:escreva(string.formate('<h3><li><a target="_blank" href="%s">%s</a></li></h3>\n<p>%s</p>', v.link, v.title, v.desc ou ''));
+    fim
+    a:escreva('</ul>\n*/');
+    a:feche();
+    retorne 0;
+fim

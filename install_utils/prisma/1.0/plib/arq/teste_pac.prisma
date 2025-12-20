@@ -1,0 +1,19 @@
+
+local pac = inclua'arq.pac'
+para k,v em pares(pac) inicio
+   imprima(k,v);
+fim
+
+local dir = inclua'dir';
+
+local files = dir.liste_arquivos('.');
+local t = {};
+para i, v em ipares(files) inicio
+    local atr = dir.atributos(v);
+    se v <> '.' e v <> '..' e atr.modo == 'arquivo' entao
+        imprima(v);
+        t[#t+1] = v;
+    fim
+fim
+
+//vou ter que mexer em pac.pris não está correto.
