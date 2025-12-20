@@ -1,12 +1,17 @@
 /**
- * linguagemprisma@gmail.com
- * linguagemprisma.br4.biz
- * 
- * Essa é uma tradução da lib lzw.lua para lzw.prisma 
- * 
- * Licença e copyright do original abaixo:
- * 
---[[
+ 
+ \fonte lzw.pris
+ \autor Modificado do origianal Lua para Prisma por Adalberto
+ \versao v1.0
+ 
+ linguagemprisma@gmail.com
+ \veja linguagemprisma.br4.biz
+ 
+  \h4 Essa é uma tradução da lib lzw.lua para lzw.prisma 
+
+  \obs Licença e copyright do original abaixo:
+
+\bloco
 MIT License
 Copyright (c) 2016 Rochet2
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,8 +29,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-]]
-**/
+\bloco--
+
+*/
 
 local car = string.car
 local tipo = tipo
@@ -168,7 +174,35 @@ retorne {
     comprima = compress,
     extraia = decompress,
 }
+/**
+\fn lzw.comprima
+\resumo Comprime um texto (string)
+\param txt {string} - O texto a ser compactado.
+\retorno bin {string} - O binário comprimido.
+\h4 exemplo:
+\codigo
+    local lzw = inclua'arq.lzw'
+    local str_comp = lzw.comprima('string a ser comprimida');
+\codigo--
+*/
+/*
+    funcao lzw.comprima(txt)
+*/
 
+/**
+\fn lzw.comprima
+\resumo Comprime um texto (string)
+\param bin {string} - O dado binário comprimido para ser descompactado.
+\retorno txt {string} - O texto descompactado.
+\h4 exemplo:
+\codigo
+    local lzw = inclua'arq.lzw'
+    local str_descomp = lzw.extraia(str_compactada);
+\codigo--
+*/
+/*
+    funcao lzw.extraia(bin)
+*/
 //use: str_comp = comprima('string a ser comprimida');
 // str_descomp = extraia('string comprimida');
 
