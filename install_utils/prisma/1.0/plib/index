@@ -1,0 +1,24 @@
+/**
+\fonte Libs em prisma
+\autor Adalberto
+\versao v1.0
+\h3 Lista de bibliotecas feitas em puro Prisma:
+<ul>
+<h3><li><a target="_blank" href="tabutil.html">tabutil.pris (utilidades extra para tabelas)</a></li></h3>
+<p></p><h3><li><a target="_blank" href="estrito.html">estrito.pris</a></li></h3>
+<p>Uma biblioteca simples para definir o modo estrito global, const ou local</p><h3><li><a target="_blank" href="jpginfo.html">Biblioteca jpginfo.pris</a></li></h3>
+<p>Biblioteca Prisma jpeginfo-0.2 - linguagemprisma@gmail.com</p><h3><li><a target="_blank" href="shell.html">shell.pris</a></li></h3>
+<p>Biblioteca shell permite comandos shell (ou cmd) como se fossem funções em Prisma.</p><h3><li><a target="_blank" href="md.html">md.pris</a></li></h3>
+<p>Biblioteca markdown Prisma - converte arquivos de markdown para html.</p><h3><li><a target="_blank" href="index.html">Libs em prisma</a></li></h3>
+<p></p><h3><li><a target="_blank" href="dir.html">dir.pris</a></li></h3>
+<p>Biblioteca com facilidades de arquivos e pasta, multiplataforma.</p><h3><li><a target="_blank" href="json.html">json.pris</a></li></h3>
+<p>Biblioteca json permite converter os dados de json para tabela Prisma, vice-versa;</p><h3><li><a target="_blank" href="colorize.html">colorize.pris</a></li></h3>
+<p>Converte um texto para html e coloriza as palavras para destaque. (semelhante aos editores de codigo fonte)</p><h3><li><a target="_blank" href="bin.html">bin.pris</a></li></h3>
+<p>Uma biblioteca simples que converte binário(base2) para decimal(base10)...</p><h3><li><a target="_blank" href="tmsg.html">tmsg.pris</a></li></h3>
+<p>Prisma Lib para gerar diálogos simples no terminal.</p><h3><li><a target="_blank" href="enum.html">enun.pris</a></li></h3>
+<p>Simples lib para simular o tipo enum da linguagm C.</p><h3><li><a target="_blank" href="gifinfo.html">gifinfo.pris</a></li></h3>
+<p>Biblioteca Prisma gifinfo-0.1 básica para extrair informações de imagens gif com altura, largura etc.</p><h3><li><a target="_blank" href="cgi.html">cgi.pris</a></li></h3>
+<p>Biblioteca cgi mínima com algumas funções básicas para processamento dos dados vindo do cliente.</p><h3><li><a target="_blank" href="meta.html">meta.pris</a></li></h3>
+<p>Biblioteca para facilitar a manipulação de metatabelas e metamétodos.</p><h3><li><a target="_blank" href="ok.html">Biblioteca ok.pris</a></li></h3>
+<p>Retorna uma função para checar tipos de parâmetros em funções.</p></ul>
+*/
