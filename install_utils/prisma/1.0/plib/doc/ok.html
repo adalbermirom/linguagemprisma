@@ -55,9 +55,20 @@ Retorna uma função para checar tipos de parâmetros em funções.
 <p>Testa os tipos de parâmetros em uma função, em caso de incompatibilidade de tipos aborta o programa com mensagem de erro.</p>
 
     
-<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > ... {variados} - parâmetros variados, sempre em sequência: &#39;stringtipo&#39;, parametro ...</span>
+<div class="titulo-params"><h3>Parâmetros:</h3></div><div class="params-doc"><span > ... {variados} - parâmetros variados, sempre em sequência: &#39;string_tipo&#39;, parametro ...</span>
 </div>
-    
+<h3>Em que strig_tipo pode ser:</h3>
+
+<ul>
+<li>    numero</li>
+<li>    string</li>
+<li>    tabela</li>
+<li>    userdata</li>
+<li>    funcao</li>
+<li>    booleano</li>
+<li>    nulo</li>
+</ul>
+
 <h3>Veja um exemplo:</h3>
 
 <div class="caixa com-borda"><div class="tool-button float-right-top" title="Copiar para área de transferência." onclick="copyText('id_000003')">&#128203;</div>&nbsp;<i></i><pre id="id_000003" hidden>local OK = inclua&#39;ok&#39;;//testa parametros de funções, retorna uma função em OK.
