@@ -1,0 +1,27 @@
+local Fifo = inclua'fifo'
+local NOME_BASE = 'servidor.ipc'
+local fifo = Fifo.Serv(NOME_BASE);
+
+imprima('Servidor FIFO iniciado. Aguardando requisições...');
+
+local id_global = 100;
+
+fifo:loop(funcao(msg, dado)
+    // msg é o dado recebido do Cliente
+    imprima('REQ recebida:', msg); 
+    
+    se msg == 'SAIR' entao
+        imprima('Comando SAIR recebido. Encerrando servidor.');
+        // Retornar nulo (ou falso) com uma mensagem de erro (ou nulo) encerra o loop
+        retorne falso, 'Fim da sessao.'; 
+    fim
+    
+    // Processamento da lógica
+    local resposta = string.formate('RESPOSTA %d: Requisicao "%s" processada.', id_global, msg);
+    id_global = id_global + 1;
+    
+    retorne resposta; // Retorna a resposta para ser enviada
+fim, id_global)
+
+fifo:feche();
+imprima('Servidor encerrado.');

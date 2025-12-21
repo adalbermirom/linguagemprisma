@@ -1,0 +1,24 @@
+
+local Fifo = inclua'fifo'
+
+local fifo = Fifo.Serv('/tmp/8080');
+
+poe'Servidor fifo aguardando cliente';
+
+
+fifo:loop(funcao(msg)
+    imprima('Cliente->', msg); //imprime a mensagem do cliente
+    
+    se msg == 'sair' entao
+        imprima('Deligando o servidor...');
+        retorne nulo, "Desligando servidor.."; //retornando nulo o servidor quebra o loop();
+    fim
+    
+    retorne 'Olá do servidor.'; //retorna uma string para o cliente.
+fim)
+
+fifo:feche();
+
+
+
+

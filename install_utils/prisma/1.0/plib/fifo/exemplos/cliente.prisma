@@ -1,0 +1,20 @@
+
+local Fifo = inclua'fifo';
+
+local cliente = Fifo.Cliente('/tmp/8080')
+poe'Digite algo para o Servidor / sair'
+local resp = '';
+local id = '';
+enquanto 1 inicio
+    imprimaf('>> ');
+    local txt = leia(); //espera o usuário digitar algo!
+    resp = cliente:requisicao(txt);
+    
+    imprima('Servidor responde:', resp);
+    
+    se txt == 'sair' entao
+        quebre;
+    fim
+    
+fim
+

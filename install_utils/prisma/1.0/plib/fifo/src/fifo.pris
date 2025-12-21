@@ -1,0 +1,281 @@
+
+
+/*
+--[[[
+
+\fonte fifo.pris
+\autor Adalberto A. Felipe
+\versao v0.4
+
+\resumo Biblioteca Prisma para intercomunicação de processos usando FIFO.
+
+<p>
+Esta lib simula servidor e cliente através de um arquivo do tipo fifo.
+Não há comunicação tcp/ip ou algo parecido!
+</p>
+<p>
+Esta lib só funciona no Linux, no Windows, ainda não encontrei uma maneira simples de simular fifos.
+</p>
+
+]]
+*/
+
+/*
+--[[[
+\var fifo
+\resumo tabela interna que guarda os métodos da biblioteca.
+]]
+*/
+local fifo = {};
+
+/*
+--[[[
+\var fifo.Serv
+\resumo Classe Servidor Fifo (simula um servidor usando arquivos Fifo);
+]]
+*/
+fifo.Serv = Classe{};
+
+//função auxiliar para verificar se um arquivo existe.
+local funcao arquivo_existe(nome)
+    retorne sis.renomeie(nome, nome)
+fim
+
+/*
+--[[[
+\var fifo.Serv:construtor
+\resumo Função construtora da Classe fifo.Serv
+\param nome {string} - o nome usado para criação dos arquivos fifo.
+\retorno nenhum
+]]
+*/
+funcao fifo.Serv:construtor(nome)
+    S(nome);
+    este.nome_req = nome .. '__req'; //recebe do cliente lê
+    este.nome_res = nome .. '__res'; //responde para o cliente escreve.
+    sis.remova(este.nome_req);
+    sis.remova(este.nome_res);
+    
+    local cmd = 'mkfifo ' .. este.nome_req;
+    local ok, str, n = sis.execute(cmd);
+    se nao ok entao retorne falso, str, n; fim
+    cmd = 'mkfifo ' .. este.nome_res;
+    ok, str, n = sis.execute(cmd);
+    retorne ok, str, n;
+fim
+
+/*
+--[[[
+\funcao fifo.Serv:feche
+\resumo Finaliza os fifos, removendo-os.
+\param nenhum
+\retorno ok {booleano} - verdadeiro ou falso em caso de sucesso ou falha.
+]]
+*/
+funcao fifo.Serv:feche()
+    S(este.nome_res, este.nome_req);
+    local ok1 = sis.remova(este.nome_res);
+    local ok2 = sis.remova(este.nome_req);
+    retorne ok1 e ok2;//retorna o primeiro valor inválido.
+fim
+
+
+/*
+--[[[
+\funcao fifo.Serv:receba
+\resumo Recebe os dados do cliente.
+\param Nenhum
+\retorno dados {string|nulo} - os dados recebidos do cliente, ou nulo em caso de falha.
+\retorno err {string|nulo} - o erro em caso de falha ou nulo;
+]]
+*/
+funcao fifo.Serv:receba()
+    local n = '*t';
+    local nome = este.nome_req; //recebe
+    local a, err = es.abra(nome, 'leiturabin');
+    se nao a entao retorne nulo, err; fim
+    local txt = a:leia(n);
+    a:feche();
+    retorne txt;
+fim
+
+
+/*
+--[[[
+\funcao fifo.Serv:envie
+\resumo Envia os dados para o cliente.
+\param Dados {...varargs<string|numero>} - os dados a serem enviados.
+\retorno dados {boolean} - verdadeiro ou falso em caso de erro.
+\retorno err {string|nulo} - o erro em caso de falha ou nulo;
+]]
+*/
+funcao fifo.Serv:envie(...)
+    local nome = este.nome_res; //envia
+    S(nome);
+    local a, err = es.abra(nome, 'escritabin');
+    se nao a entao retorne falso, err; fim
+    a:escreva(...)
+    a:feche();
+    retorne verdadeiro
+fim
+
+
+/*
+--[[[
+\funcao fifo.Serv:loop
+\resumo Loop de eventos do Servidor.
+\param fn {funcao(msg, dado) fim} - função callback para receber e enviar as mensagens para o cliente.
+\param dado {*qualquer tipo} - dado extra passado para a callback.
+\retorno dados {boolean} - verdadeiro ou falso em caso de erro.
+]]
+*/
+funcao fifo.Serv:loop(fn, dado)
+    F(fn);
+    enquanto 1 inicio
+        local txt, err;
+        txt = este:receba();
+        txt, err = fn(txt, dado);
+        se nao txt entao
+            este:envie(err);
+            quebre;
+        fim
+        este:envie(txt);   
+    fim 
+    local ok = este:feche(); //remove automaticamente os arquivos  fifo. 
+    retorne ok;   
+fim
+
+
+/*
+--[[[
+\var Classe Cliente
+\resumo Classe Cliente, faz requisição e recebe resposta do servidor.
+]]
+*/
+fifo.Cliente = Classe{}; //herda de Serv receba e envie
+funcao fifo.Cliente:construtor(nome)
+    S(nome);
+    este.nome_req = nome .. '__req'; //envia para o servidor
+    este.nome_res = nome .. '__res'; //recebe do servidor
+fim
+
+/*
+--[[[
+\funcao fifo.Cliente:receba
+\resumo Recebe os dados do Servidor.
+\param Nenhum
+\retorno txt {string|nulo} - os dados do servidor ou nulo em caso de erro.
+\retorno err {string|nulo} - nulo ou string de erro.
+]]
+*/
+funcao fifo.Cliente:receba()
+    local n = '*t';
+    local nome = este.nome_res; //recebe do servidor res!
+    local a, err = es.abra(nome, 'leiturabin');
+    se nao a entao retorne nulo, err; fim
+    local txt = a:leia(n);
+    a:feche();
+    retorne txt;
+fim
+
+
+/*
+--[[[
+\funcao fifo.Cliente:envie
+\resumo Envia dados para o Servidor.
+\param ... {varargs} - dados a serem enviados para o servidor.
+\retorno ok {booleano} - verdadeiro ou falso em caso de erro.
+\retorno err {string|nulo} - nulo ou string de erro.
+]]
+*/
+funcao fifo.Cliente:envie(...)
+    local nome = este.nome_req; //envia requisição para o servidor!
+    S(nome);
+    local a, err = es.abra(nome, 'escritabin');
+    se nao a entao retorne falso, err; fim
+    a:escreva(...)
+    a:feche();
+    retorne verdadeiro;
+fim
+
+/*
+--[[[
+\funcao fifo.Cliente:requisicao
+\resumo Envia dados para o Servidor e retorna os dados recebidos do servidor em uma só função.
+\param  dado {string} - dados a serem enviados para o servidor.
+\retorno resposta {string} - dados recebidos do servidor
+]]
+*/
+funcao fifo.Cliente:requisicao(dados)
+    // 1. Envia a Requisição
+    este:envie(dados); // Usa a função envie (que escreve no __req)
+    // 2. Recebe a Resposta
+    local resposta = este:receba('*t'); // Usa a função receba (que lê do __res)
+    
+    retorne resposta;
+fim
+
+
+funcao fifo.Cliente:feche() //apenas para compatibilidade, não faz nada.
+fim
+
+retorne fifo;
+
+/*--[[[
+
+ \seção Exemplo completo de servidor
+ \codigo
+ 
+local Fifo = inclua'fifo'
+
+local fifo = Fifo.Serv('/tmp/8080');
+
+poe'Servidor fifo aguardando cliente';
+
+local id = 0;
+fifo:loop(funcao(msg)
+    imprima('Cliente->', msg); //imprime a mensagem do cliente
+    
+    se msg == 'sair' entao
+        imprima('Deligando o servidor...');
+        retorne nulo, "Desligando servidor.."; //retornando nulo o servidor quebra o loop();
+    fim
+    
+    retorne 'Olá do servidor.'; //retorna uma string para o cliente.
+fim)
+
+fifo:feche();
+
+ \codigo--
+ 
+]]*/
+
+
+/*--[[[
+
+ \seção Exemplo completo de cliente
+ \codigo
+ 
+local Fifo = inclua'fifo';
+
+local cliente = Fifo.Cliente('/tmp/8080')
+poe'Digite algo para o Servidor / sair'
+local resp = '';
+local id = '';
+enquanto 1 inicio
+    imprimaf('>> ');
+    local txt = leia(); //espera o usuário digitar algo!
+    resp = cliente:requisicao(txt);
+    
+    imprima('Servidor responde:', resp);
+    
+    se txt == 'sair' entao
+        quebre;
+    fim
+    
+fim
+
+ \codigo--
+ 
+]]*/
+

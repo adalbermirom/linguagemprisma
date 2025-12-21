@@ -1,0 +1,25 @@
+local Fifo = inclua'fifo'
+local NOME_BASE = 'servidor.ipc'
+local cliente = Fifo.Cliente(NOME_BASE); 
+
+imprima('Cliente FIFO conectado.');
+
+local respostas = {}
+
+//1. Primeira Requisição
+local res1 = cliente:requisicao("Qual eh o meu ID?");
+imprima("RESPOSTA 1:", res1);
+tabela.insira(respostas, res1);
+
+//2. Segunda Requisição
+local res2 = cliente:requisicao("Enviar este dado.");
+imprima("RESPOSTA 2:", res2);
+tabela.insira(respostas, res2);
+
+//3. Requisição de Encerramento (Testando a saída do loop)
+local res3 = cliente:requisicao("SAIR");
+imprima("RESPOSTA FIM:", res3);
+tabela.insira(respostas, res3);
+
+cliente:feche();
+imprima('Cliente encerrado.');
