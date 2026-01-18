@@ -1,6 +1,6 @@
 //sqlite functions facility em portugues
 
-sqlite3 = inclua 'igsqlite3'
+sqlite3 = inclua 'psqlite3'
 
 retorne sqlite3;
 
