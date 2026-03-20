@@ -61,6 +61,11 @@ local cgi = {};
 */
 cgi.va = {};
 
+cgi.var = funcao(s)
+    S(s);
+    retorne obtvarambiente(s);
+fim
+
 /**  
     \fn cgi.va.serv_soft
      \brief Função cgi.va.serv_soft() retorna a variável de ambiente 'SERVER_SOFTWARE'
@@ -508,15 +513,13 @@ cgi.GET = {};
 defmetatabela(cgi.GET, {
    __call = funcao(este, str_chave)
        S(str_chave);
-       cgi._get = cgi._get ou cgi.va.var_string();
-       local qs = cgi._get;
-       retorne cgi.obt_var(qs, str_chave);
+       cgi._get_tab = cgi._get_tab ou cgi.obt_tabvar(cgi.va.var_string())
+       retorne cgi._get_tab[str_chave]
    fim;
    __index = funcao(este, str_chave)
        S(str_chave);
-       cgi._get = cgi._get ou cgi.va.var_string();
-       local qs = cgi._get;
-       retorne cgi.obt_var(qs, str_chave);
+       cgi._get_tab = cgi._get_tab ou cgi.obt_tabvar(cgi.va.var_string())
+       retorne cgi._get_tab[str_chave]
    fim;
 });
 
@@ -535,20 +538,32 @@ defmetatabela(cgi.GET, {
   imprima('Nome do cliente:', cgi.POST['nome']);
 \fim_codigo
 */
-cgi.POST = {}; 
+cgi.POST = {}
 local leia = leia;
+
 defmetatabela(cgi.POST, {
    __call = funcao(este, str_chave)
        S(str_chave);
-       local qs = cgi._post ou leia('*t');
-       cgi._post = qs;
-       retorne cgi.obt_var(qs, str_chave);
+
+       se nao cgi._post_tab entao
+           local len = convnumero(cgi.va.tamanho_conteudo()) ou 0
+           local qs = len > 0 e leia(len) ou ''
+           cgi._post_tab = cgi.obt_tabvar(qs)
+       fim
+
+       retorne cgi._post_tab[str_chave]
    fim;
+
    __index = funcao(este, str_chave)
        S(str_chave);
-       local qs = cgi._post ou leia('*t');
-       cgi._post = qs;
-       retorne cgi.obt_var(qs, str_chave);
+
+       se nao cgi._post_tab entao
+           local len = convnumero(cgi.va.tamanho_conteudo()) ou 0
+           local qs = len > 0 e leia(len) ou ''
+           cgi._post_tab = cgi.obt_tabvar(qs)
+       fim
+
+       retorne cgi._post_tab[str_chave]
    fim;
 });
 
