@@ -61,6 +61,12 @@ local cgi = {};
 */
 cgi.va = {};
 
+/**
+ \fn cgi.var
+ \resumo Função para obter uma variável de ambiente diretamente pelo "nome"
+ \param s {string} - o nome da variável de ambiente, exemplo: "REQUEST_METHOD"
+ \retorno {string|nulo} - o valor da variável de ambiente ou nulo caso não existir;
+*/
 cgi.var = funcao(s)
     S(s);
     retorne obtvarambiente(s);
