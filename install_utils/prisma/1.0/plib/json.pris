@@ -46,23 +46,40 @@
 local json = {}
 
 // Internal functions.
---{
+local funcao eh_array(t)
+  local n = 0
+  para k em pares(t) inicio
+    se tipo(k) ~= 'numero' entao retorne falso fim
+    se k > n entao n = k fim
+  fim
+  retorne verdadeiro
+fim
+
 local funcao kind_of(obj)
   se tipo(obj) <> 'tabela' entao retorne tipo(obj) fim
   local i = 1
-  para _ em pares(obj) inicio
+  /*para _ em pares(obj) inicio
     se obj[i] <> nulo entao i = i + 1 senao retorne 'tabela' fim
   fim
-  se i == 1 entao retorne 'tabela' senao retorne 'array' fim
+  se i == 1 entao retorne 'tabela' senao retorne 'array' fim*/
+  retorne eh_array(obj) e 'array' ou 'tabela'
 fim
 
-local funcao escape_str(s)
-  local in_char  = {'\\', '"', '/', '\b', '\f', '\n', '\r', '\t'}
-  local out_char = {'\\', '"', '/',  'b',  'f',  'n',  'r',  't'}
-  para i, c em ipares(in_char) inicio
-    s = s:troque(c, '\\' .. out_char[i])
-  fim
-  retorne s
+
+local mapa = {
+  ['"'] = '\\"',
+  ['\\'] = '\\\\',
+  ['\b'] = '\\b',
+  ['\f'] = '\\f',
+  ['\n'] = '\\n',
+  ['\r'] = '\\r',
+  ['\t'] = '\\t'
+}
+
+funcao escape_str(s)
+  retorne s:gsub('[%z\1-\31\\"]', funcao(c)
+    retorne mapa[c] ou string.formate("\\u%04x", string.byte(c))
+  fim)
 fim
 
 // Returns pos, did_find; there are two cases:
@@ -146,8 +163,13 @@ funcao json.cod(obj, as_key)--{
 fim 
 
 json.null = {}  // This is a one-off tabela to represent the null value.
---}
-funcao json.decod(str, pos, end_delim) --{ 
+defmetatabela(json.null, {
+    __convstring = funcao() retorne "null"; fim
+    ,
+    __tipo = funcao() retorne "null"; fim	
+})
+
+funcao json.decod(str, pos, end_delim) 
   pos = pos ou 1
   se pos > #str entao retorne falso , ('Fim inesperado de input') fim
   local pos = pos + #str:separe('^%s*', pos)  // Skip whitespace.
@@ -180,7 +202,7 @@ funcao json.decod(str, pos, end_delim) --{
   senaose first == end_delim entao  // End of an object or array.
     retorne nulo, pos + 1
   senao  // Parse true, false, or null.
-    local literals = {['true'] = verdadeiro, ['false'] = falso, ['null'] = json.NULO}
+    local literals = {['true'] = verdadeiro, ['false'] = falso, ['null'] = json.null}
     para lit_str, lit_val em pares(literals) inicio
       local lit_end = pos + #lit_str - 1
       se str:corte(pos, lit_end) == lit_str entao retorne lit_val, lit_end + 1 fim
