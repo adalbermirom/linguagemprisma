@@ -912,11 +912,11 @@ void luaV_execute (lua_State *L) {
         const TValue *plimit = ra+1;
         const TValue *pstep = ra+2;
         if (!tonumber(init, ra))
-          luaG_runerror(L, LUA_QL("for") " initial value must be a number");
+          luaG_runerror(L, LUA_QL("para") " valor inicial do comando 'para' deve ser um número.");
         else if (!tonumber(plimit, ra+1))
-          luaG_runerror(L, LUA_QL("for") " limit must be a number");
+          luaG_runerror(L, LUA_QL("para") " valor de limite final deve ser um número.");
         else if (!tonumber(pstep, ra+2))
-          luaG_runerror(L, LUA_QL("for") " step must be a number");
+          luaG_runerror(L, LUA_QL("para") " valor de incremento deve ser um número.");
         setnvalue(ra, luai_numsub(L, nvalue(ra), nvalue(pstep)));
         ci->u.l.savedpc += GETARG_sBx(i);
       )
