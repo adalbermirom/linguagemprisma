@@ -363,11 +363,11 @@ funcao pric(t)
                  //inclua'tabela'
                  se lib_em_uso(libs, nome) e nao lib_ja_embutida(libs, nome) entao //lib está incluída em outra lib, devemos cola-la no topo
                      libs = '\n/*------------ Pric libs: ' .. nome .. '-----*/\n'..
-                   'pacote.carregado["'.. nome .. '"] = (funcao()\n'..leia_arquivo(v):apare() ..'\nfim)()\n'
+                   'pacote.carregado["'.. nome .. '"] = (funcao()\n'..leia_arquivo(v):apare() ..'\nfim)() ou 1;\n'
                    .. libs;
                  senaose nao lib_ja_embutida(libs, nome)  entao //caso contrario coloca no final mesmo.
                       libs = libs .. '\n/*------------ Pric libs: ' .. nome .. '-----*/\n'..
-                   'pacote.carregado["'.. nome .. '"] = (funcao()\n'..leia_arquivo(v):apare() ..'\nfim)()\n';
+                   'pacote.carregado["'.. nome .. '"] = (funcao()\n'..leia_arquivo(v):apare() ..'\nfim)() ou 1;\n';
                  
                  senao
                       libs = libs .. '\n/*------------ Pric libs: ' .. nome .. ' já foi incluida acima -----*/\n';
