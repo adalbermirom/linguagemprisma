@@ -1,0 +1,205 @@
+//url enconde
+
+//Letras maiúsculas: A-Z (26 caracteres)
+
+//Letras minúsculas: a-z (26 caracteres)
+
+//Números: 0-9 (10 caracteres)
+
+//Quatro símbolos especiais: - (hífen), . (ponto), _ (underline) e ~ (tio)
+
+//url_encode("hello world");        // "hello%20world"
+
+//inclua'estrito'.modo_global()
+
+local car = car
+local cod = cod
+local string = string
+
+local cod_A, cod_Z = cod'A', cod'Z'
+local cod_a, cod_z = cod'a', cod'z'
+local cod_0, cod_9 = cod'0', cod'9'
+local cod_, cod_ponto, cod_hifen, cod_til = cod'_', cod'.', cod'-', cod'~'
+
+local funcao e_permitido(c)
+
+    se c == cod_ ou c == cod_ponto ou c == cod_hifen ou c == cod_til entao
+        retorne verdadeiro;
+    fim
+    
+    se c >= cod_A e c <= cod_Z entao
+        retorne verdadeiro
+    senaose c >= cod_a e c <= cod_z entao
+        retorne verdadeiro
+    senaose c >= cod_0 e c <= cod_9 entao
+        retorne verdadeiro
+    fim
+    
+    retorne falso   
+fim
+
+local hex_cod = {
+	[0] = '%00', //alinhamento manual, tabelas Prisma iniciam em 1 por padrão.
+	'%01', '%02', '%03', '%04', '%05', '%06', '%07', '%08', '%09', '%0A', '%0B', '%0C', '%0D', '%0E', '%0F', '%10', '%11', '%12', '%13', '%14', '%15', '%16', '%17', '%18', '%19', '%1A', '%1B', '%1C', '%1D', '%1E', '%1F', '%20', '%21', '%22', '%23', '%24', '%25', '%26', '%27', '%28', '%29', '%2A', '%2B', '%2C', '%2D', '%2E', '%2F', '%30', '%31', '%32', '%33', '%34', '%35', '%36', '%37', '%38', '%39', '%3A', '%3B', '%3C', '%3D', '%3E', '%3F', '%40', '%41', '%42', '%43', '%44', '%45', '%46', '%47', '%48', '%49', '%4A', '%4B', '%4C', '%4D', '%4E', '%4F', '%50', '%51', '%52', '%53', '%54', '%55', '%56', '%57', '%58', '%59', '%5A', '%5B', '%5C', '%5D', '%5E', '%5F', '%60', '%61', '%62', '%63', '%64', '%65', '%66', '%67', '%68', '%69', '%6A', '%6B', '%6C', '%6D', '%6E', '%6F', '%70', '%71', '%72', '%73', '%74', '%75', '%76', '%77', '%78', '%79', '%7A', '%7B', '%7C', '%7D', '%7E', '%7F', '%80', '%81', '%82', '%83', '%84', '%85', '%86', '%87', '%88', '%89', '%8A', '%8B', '%8C', '%8D', '%8E', '%8F', '%90', '%91', '%92', '%93', '%94', '%95', '%96', '%97', '%98', '%99', '%9A', '%9B', '%9C', '%9D', '%9E', '%9F', '%A0', '%A1', '%A2', '%A3', '%A4', '%A5', '%A6', '%A7', '%A8', '%A9', '%AA', '%AB', '%AC', '%AD', '%AE', '%AF', '%B0', '%B1', '%B2', '%B3', '%B4', '%B5', '%B6', '%B7', '%B8', '%B9', '%BA', '%BB', '%BC', '%BD', '%BE', '%BF', '%C0', '%C1', '%C2', '%C3', '%C4', '%C5', '%C6', '%C7', '%C8', '%C9', '%CA', '%CB', '%CC', '%CD', '%CE', '%CF', '%D0', '%D1', '%D2', '%D3', '%D4', '%D5', '%D6', '%D7', '%D8', '%D9', '%DA', '%DB', '%DC', '%DD', '%DE', '%DF', '%E0', '%E1', '%E2', '%E3', '%E4', '%E5', '%E6', '%E7', '%E8', '%E9', '%EA', '%EB', '%EC', '%ED', '%EE', '%EF', '%F0', '%F1', '%F2', '%F3', '%F4', '%F5', '%F6', '%F7', '%F8', '%F9', '%FA', '%FB', '%FC', '%FD', '%FE', '%FF'
+}
+
+local funcao url_encode(url) //string
+    S(url)
+    local res = url:troque('.', funcao(c)
+        local cc = cod(c)
+        se nao e_permitido(cc) entao
+            retorne hex_cod[cc]
+        fim
+    fim)
+    retorne res;
+fim
+
+//imprima(url_encode("olá-tudo-bem-com-você-café")); //ol%C3%A1-tudo-bem-com-voc%C3%AA-caf%C3%A9
+                                                   //ol%C3%A1-tudo-bem-com-voc%C3%AA-caf%C3%A9
+   
+local to_hex_tab = {
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -1, -1, -1, -1, -1, -1, 10, 11, 12, 13, 14, 15, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10, 11, 12, 13, 14, 15, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+}                                                
+
+local funcao url_decode(url) //(string)
+    S(url)
+    local err;
+    local ret = url:troque('%%(%w%w)', funcao(w)
+        local ha, hb = cod(w, 1, 2); //cod('FF', 1, 2) = cod('F'), cod('F')
+        ha, hb = to_hex_tab[ha], to_hex_tab[hb];
+        se ha == -1 ou hb == -1 entao
+            err =  string.formate("hex code invalido: %%%s na posição: %d", w, (url:procure('%%'..w)));
+            retorne nulo
+        fim
+        local c = ha * 16 + hb;
+        retorne car(c);
+    fim)
+    se err entao
+        retorne nulo, err;
+    fim
+    retorne ret;
+fim
+
+//imprima( url_decode('ol%c3%A1-tudo-bem-com-voc%C3%AA-caf%C3%A9') );//olá-tudo-bem-com-você-café
+
+//https://admin:senha123@api.site.com:8080/v1/usuarios?status=ativo&ordem=desc#resultados
+local funcao url_parse(url)
+    S(url)
+    // 1. Separa os 3 blocos principais
+    local protocolo, autoridade, resto = url:separe('^([%w]+)://([^/]+)(.*)')
+    
+    // 2. Extrai dados da autoridade
+    local user, pass, host = autoridade:separe('^([%w]+):(.-)@(.*)')
+    local porta = autoridade:separe(':([%d]+)$')
+    
+    se nao host entao
+        host = autoridade
+    fim
+    
+    se host e porta entao
+        host = host:separe('(.*):')
+    fim
+    
+    // 3. Resolve Caminho, Query e Fragmento
+    local path, query, fragmento
+    se resto e resto <> "" entao
+        // PASSO A: Isola o fragmento PRIMEIRO (pois ele é sempre a última coisa da URL)
+        local antes_do_hash, frag = resto:separe('^(.-)#(.*)$')
+        se frag entao
+            fragmento = frag
+            resto = antes_do_hash // O que sobra é apenas (path + query) ou só (path)
+        fim
+
+        // PASSO B: Isola a query (usando %? para escapar a interrogação literal)
+        local p, q = resto:separe('^(.-)%?(.*)$') 
+        se q entao
+            path = p
+            query = q
+        senao
+            path = resto // Se não tem query, tudo que sobrou é o caminho
+        fim
+    senao
+        path = "/" // Se não tem resto nenhum, o path padrão da web é a barra raiz
+    fim
+  
+    retorne {
+        protocolo = protocolo,
+        usuario = user,
+        senha = pass,          // Corrigido: estava apontando para 'senha' (nulo)
+        host = host,
+        porta = porta,
+        caminho = path,
+        query = query,
+        fragmento = fragmento
+    }
+fim
+
+local imp = funcao(t)
+    imprima('------------------');
+    se tipo(t) == 'tabela' entao
+        para k,v em pares(t) inicio
+            imprima(k,v);
+        fim
+        retorne
+    fim
+    imprima(t)
+fim
+
+// Testa aí, agora ele engole qualquer variação!
+// url_parse('https://site.com/caminho#titulo') -> Funciona
+// url_parse('https://site.com/caminho?a=1')    -> Funciona
+
+local t = url_parse('https://admin:senha123@api.site.com:8080/v1/usuarios?status=ativo&ordem=desc#resultados');
+imp(t);
+
+t =  url_parse('https://site$s&.com/caminho#titulo') 
+imp(t)
+
+t = url_parse('https://site.com/caminho?a=1') 
+imp(t)
+
+    se a ?(n) entao
+       ...
+    fim
+    
+    se tipo(a) == 'numero' entao
+        ...
+    fim
+
+/*
+ https://admin:senha123@api.site.com:8080/v1/usuarios?status=ativo&ordem=desc#resultados
+ 
+{
+    protocolo = "https",      // scheme
+    usuario = "admin",        // username (opcional)
+    senha = "senha123",       // password (opcional)
+    host = "api.site.com",    // hostname
+    porta = 8080,             // port
+    caminho = "/v1/usuarios", // path
+    query = "status=ativo&ordem=desc", // query string
+    fragmento = "resultados"  // hash/fragment
+}
+*/
+
+
+/*
+// Exemplo de uso do Builder
+local url_final = url.build({
+    protocolo = "https",
+    host = "google.com",
+    caminho = "/search",
+    query_params = { q = "como programar em prisma" }
+})
+// Resultado: "https://google.com/search?q=como%20programar%20em%20prisma"
+*/
+
+
+retorne {
+	decod = url_decode; //em versão pt br: decod[ifique]
+	cod = url_encode;	// cod[ifique]
+}
+
+
+
+
+
