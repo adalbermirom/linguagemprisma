@@ -1082,6 +1082,14 @@ static const luaL_Reg base_funcs[] = {
 };
 
 
+#define NUM64_LIB
+
+
+#ifdef NUM64_LIB
+    #include "num64/num64.c"
+#endif
+
+
 LUAMOD_API int luaopen_base (lua_State *L) {
   /* set global _G */
   lua_pushglobaltable(L);
@@ -1092,6 +1100,12 @@ LUAMOD_API int luaopen_base (lua_State *L) {
   #ifndef MYCLASS_LIB
       lcf_classe (L); /* set Global Classe(...)  BETO MODIFICATION -> corrigido o problema com _G, apenas usei um lua_pop(L,1) em lclasse.h*/
   #endif
+  
+  //num64 lib on to global scope
+ #ifdef NUM64_LIB
+  luaopen_num64(L);
+  lua_setglobal(L, "num64");
+ #endif
   return 1;
 }
 
