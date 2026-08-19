@@ -1,0 +1,57 @@
+//este int64
+local num = num64;
+
+imprima('Versao:', num.VER)
+poe'--------------------';
+
+local a = num.int64(2);
+local b = num.int64(20);
+local c = a + b;
+imprima(c);
+
+c = b - a;
+imprima(c);
+
+c = a * num.int64(5)
+imprima(c);
+
+c = b / num.int64(2)
+imprima(c)
+
+//de string:
+local max_int64 = '9223372036854775807'
+local n = num.int64(max_int64);
+imprima('Max int64:', tipo(n), n);
+
+local b1 = num.int64(2);
+local b2 = num.int64(4);
+
+imprima( b1 >> b2);
+imprima( b1 << b2);
+imprima( b1 ~ b2);
+imprima( ~b1 );
+
+imprima( b1 == b2);
+
+
+local max_uint64 = '18446744073709551615'
+local u64 = num.uint64(max_uint64);
+imprima('Max uint64:', tipo(u64), u64);
+
+local conv_i64 = num.conv_int64(u64);
+imprima(conv_i64);
+
+local n64bb = num.conv_uint64(conv_i64);
+imprima(n64bb, n64bb == u64);
+
+
+
+
+
+
+
+
+
+
+
+
