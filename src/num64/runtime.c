@@ -139,7 +139,7 @@ LIST_FOR(GList *, List, item){
 
 //helper function to convert a table.array of strings into c array of strings (const char **arr)
 //must free the array after use it (free(arr));
-static const char **check_table_to_array_strings(lua_State* L, int idx) {
+const char **check_table_to_array_strings(lua_State* L, int idx) {
     int len = 0;
     const char **arr = NULL;
     
