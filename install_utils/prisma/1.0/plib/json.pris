@@ -1,43 +1,82 @@
-/**
 
- * @file
- * @file json.pris
- * @author Domínio publico
- * @date 24 nov 2023
- * @brief Biblioteca json permite converter os dados de json para tabela Prisma, vice-versa;
- * 
+
+/*
+--[[[
+
+ \fonte json.pris
+ \autor Domínio publico
+ \resumo  Biblioteca json permite converter os dados de json para tabela Prisma, vice-versa;
+ ]]
+ 
+--[[[
+\fn json.cod(tab);
+\resumo Codifica uma tabela Prisma para json.
+\param tab : tabela - uma tabela para ser convertida para json;
+\retorno ret:  string  - retorna a string com json codificado, ou nulo + mensagem de erro.
+
+\bloco Uso:
+// 1. Tabela Prisma de exemplo
+local usuario = {
+    nome = "Carlos",
+    idade = 28,
+    habilidades = {"Prisma", "Lua", "SQL"},
+    ativo = verdadeiro
+}
+
+// 2. Codifica a tabela para uma string JSON
+local json_str, erro = json.cod(usuario)
+
+// 3. Valida a saída e exibe o resultado
+se json_str entao
+    imprima("JSON gerado:", json_str)
+    // Saída esperada: {"nome":"Carlos","idade":28,"habilidades":["Prisma","Lua","SQL"],"ativo":true}
+senao
+    imprima("Erro ao codificar JSON:", erro)
+fim
+\bloco--
+]]
+
+ funcao json.cod(tab)
+
+--[[[
+\fn json.decod(str_json);
+\resumo Decodifica uma tabela Prisma para json.
+\param str_json: string - uma string contendo uma codificação json.
+\retorno ret: tabela - retorna a tabela contendo os dados decodificados do json.
+
+\bloco Uso:
+// 1. String JSON de exemplo
+local texto_json = '{"nome": "Maria", "idade": 30, "ativo": verdadeiro}'
+
+// 2. Decodifica a string JSON para uma tabela Prisma
+local dados = json.decod(texto_json)
+
+// 3. Acessa os dados convertidos
+imprima("Nome:", dados.nome)   // Saída: Nome: Maria
+imprima("Idade:", dados.idade) // Saída: Idade: 30
+\bloco--
+]]
+
+ funcao json.decod(str_json)
+
+--[[[
+\fn json.decod_arquivo(arq)
+\resumo Função json.decod_arquivo(arq) - decodifica um json diretamente de um arquivo *.json
+\param arq: string - o nome do arquivo a ser decodificado.
+\retorno ret: tabela - a tabela com dos dados do json decodificado.
+]]
+funcao json.decod_arquivo(arq)
+
+--[[[
+\fn json.cod_arquivo(arq, tab)
+\resumo Codifica uma tabela para um arquivo *.json
+\param arq: string - o nome do arquivo a ser decodificado.
+\param tab: tabela - a tabela com os dados a serem codificados para json.
+\retorno ok: boleano - verdadeiro ou falso + erro em caso de sucesso ou falha;
+]]
+funcao json.cod_arquivo(arq, tab)
+
 */
-
---/// \fn json.cod(tab);
---/// \brief Função json.cod(tab) - codifica uma tabela Prisma para json.
---/// \param tab - uma tabela para ser convertida para json;
---/// \returns (string) - retorna a string com json codificado, ou nulo + mensagem de erro.
--- funcao json.cod(tab) {
---};
-
-
---/// \fn json.decod(str_json);
---/// \brief Função json.decod(str_json) - decodifica uma tabela Prisma para json.
---/// \param str_json - uma string contendo uma codificação json.
---/// \returns (tabela) - retorna a tabela contendo os dados decodificados do json.
--- funcao json.decod(str_json) {
---};
-
---/// \fn json.decod_arquivo(arq)
---/// \brief Função json.decod_arquivo(arq) - decodifica um json diretamente de um arquivo *.json
---/// \param arq(string) - o nome do arquivo a ser decodificado.
---/// \returns (tabela) - a tabela com dos dados do json decodificado.
--- funcao json.decod_arquivo(arq) {
---}
-
---/// \fn json.cod_arquivo(arq, tab)
---/// \brief  Função json.cod_arquivo(arq, tab) - codifica uma tabela para um arquivo *.json
---/// \param arq(string) - o nome do arquivo a ser decodificado.
---/// \param tab(tabela) - a tabela com os dados a serem codificados para json.
---/// \returns (boleano) - verdadeiro ou falso + erro em caso de sucesso ou falha;
---funcao json.cod_arquivo(arq, tab){
---}
-
 
 
 /**
@@ -77,7 +116,7 @@ local mapa = {
 }
 
 funcao escape_str(s)
-  retorne s:gsub('[%z\1-\31\\"]', funcao(c)
+  retorne s:troque('[%z\1-\31\\"]', funcao(c)
     retorne mapa[c] ou string.formate("\\u%04x", string.byte(c))
   fim)
 fim
@@ -235,5 +274,24 @@ funcao json.cod_arquivo(arq, tab)
   a:feche();
   retorne verdadeiro;
 fim 
+
+
+local usuario = {
+    nome = "Carlos",
+    idade = 28,
+    habilidades = {"Prisma", "Lua", "SQL"},
+    ativo = verdadeiro
+}
+
+// 2. Codifica a tabela para uma string JSON
+local json_str, erro = json.cod(usuario)
+
+// 3. Valida a saída e exibe o resultado
+se json_str entao
+    imprima("JSON gerado:", json_str)
+    // Saída esperada: {"nome":"Carlos","idade":28,"habilidades":["Prisma","Lua","SQL"],"ativo":true}
+senao
+    imprima("Erro ao codificar JSON:", erro)
+fim
 
 retorne json;
