@@ -1,0 +1,274 @@
+// pargs.prisma
+/**
+\fonte pargs.prisma
+\autor Adalberto
+\resumo Biblioteca prisma para fazer o parse de opções em linha de comando. Mínima, simples e funcional.
+
+\versao 1.0
+
+\h4 Licença MIT
+
+\h3 Exemplo
+\codigo
+//testando
+local pargs = inclua'pargs'
+
+local ca = pargs()
+ca:ad('-o', 1, 'Define o nome do arquivo de saída compilado.');
+ca:ad('-cc', 1, 'Define o compilador.');
+ca:ad('-L', 1, 'Define o diretório das Libs C.');
+ca:ad('-I',1, 'Define o diretório do Include C.');
+
+
+ca:analise(args);
+
+local n_flags, n_pos = ca:obt_total()
+
+se n_flags == 0 e n_pos == 0 entao
+    imprima('    Faltam parâmetros, use: program [opt] files...\n    onde opt pode ser:\n')
+    ca:use()
+    sis.saia(1)
+fim
+
+local out = ca:obt'-o'
+local cc = ca:obt'-cc'
+local I = ca:obt'-I'
+local L = ca:obt'-L'
+
+local files = ca:outros();
+
+imprima('out', out);
+imprima('cc', cc);
+imprima('-I', I);
+imprima('-L', L);
+imprima('file:', tabela.concat(files, ' '));
+
+imprima('\n', tabela.concat(args, ' '));
+
+imprima('args[0]', args[0]); //-->zteste
+
+\codigo--
+*/
+local tabela, ipares, pares, tipo, imprima, imprimaf =  tabela, ipares, pares, tipo, imprima, imprimaf
+
+/**
+\var pargs
+\resumo Classe que define os métodos para analisar os parâmetros em linha de comando.
+\bloco Uso:
+    local pa = pargs();
+    pa:ad('-i', 1, 'Valor de entrada.');
+    pa:ad('-o', 1, 'Valor de saída.');
+    
+    pa:analise(args);
+    
+    local v_i = pa:obt('-i');
+    local v_o = pa:obt('-o');
+    
+    se v_i entao
+        imprima(v_i);
+    fim
+    
+    se v_o entao
+       imprima(v_o);
+    fim
+    
+\bloco--
+*/
+/*
+ local pargs = Classe{}
+ */
+local pargs = Classe {
+    _regras = {},
+    _info = {},
+    _valores = {},
+    _posicionais = {},
+    _num = 0
+}
+
+
+funcao pargs:construtor()
+    // Inicializa todas as tabelas para garantir isolamento por instância
+    este._regras = {}
+    este._info = {}
+    este._valores = {}
+    este._posicionais = {}
+    este._num = 0
+fim
+
+// Define o número de argumentos consumidos pela flag (0 = bool, 1 = valor, 2 = dois valores...)
+/**
+\fn pargs:ad
+\resumo Adiciona uma flag para ser usada em linha de comando, exemplo: '-o', '-h', '-v' etc.
+\param flag : string - o nome da flag, ex: '-o', '-h', '--output', '--ajuda', etc.
+\param num_args : numero - o número de argumentos consumidos pela flag (0 = bool, 1 = valor, 2 = dois valores...).
+\param desc : string - a descrição curta da flag.
+
+\bloco Uso:
+    local pa = pargs(); //criando o objeto da classe pargs.
+    pa:ad('--ajuda', 0, 'Exibe o topico de ajuda.');
+\bloco--
+*/
+funcao pargs:ad(flag, num_args, desc)
+    este._regras[flag] = num_args ou 1
+    desc = desc ou ''
+    tabela.insira(este._info, {flag, desc})
+fim
+
+
+/**
+\fn pargs:use
+\resumo Imprime a lista de flags adicionadas e a de descrição dos parâmetros se houver.
+\param Não há parâmetros.
+\retorno Não há retornos.
+
+*/
+funcao pargs:use()
+    para i, v em ipares(este._info) inicio
+        imprima('', v[1], v[2])
+    fim
+fim
+
+/**
+\fn pargs:analise
+\resumo Processa os argumentos de linha de comando, verificando cada flag adicionada.
+\param args: tabela - a tabela contendo os argumentos passados em linha de comando.
+\retorno total: numero - o múmero total de flags consumidas (ex.: '-o', '-i', '-h' etc);
+*/
+funcao pargs:analise(args)
+    local i = 1
+    local total = #args
+
+    enquanto i <= total inicio
+        local arg = args[i]
+        local num_req = este._regras[arg]
+
+        se num_req entao
+            se num_req == 0 entao
+                // Flag booleana (ex: --verbose ou -v)
+                este._valores[arg] = verdadeiro
+                este._num = este._num + 1
+            senaose num_req == 1 entao
+                // Valor único (ex: -o app)
+                se i + 1 <= total entao
+                    i = i + 1
+                    este._valores[arg] = args[i]
+                    este._num = este._num + 1
+                fim
+            senao
+                // Múltiplos valores (ex: -ab val1 val2)
+                local vals = {}
+                local leu_todos = verdadeiro
+                
+                para j = 1, num_req inicio
+                    se i + 1 <= total entao
+                        i = i + 1
+                        tabela.insira(vals, args[i])
+                    senao
+                        leu_todos = falso
+                        quebre
+                    fim
+                fim
+                
+                se leu_todos entao
+                    este._valores[arg] = vals
+                    este._num = este._num + 1
+                fim
+            fim
+        senao
+            // Argumento posicional
+            tabela.insira(este._posicionais, arg)
+        fim
+
+        i = i + 1
+    fim
+    retorne este._num;
+fim
+
+/*
+\fn pargs:obt
+\resumo Obtém o valor consumido de acordo com a flag adicionada.
+\param flag: string - a flag adicionada pela função pargs:ad(); ex.: pargs:ad('-o', 1, 'Arquivo de saída');
+\bloco Uso:
+    local saida = pa:obt('-o');
+    local entrada = pa:obt('-i');
+    local compilador = pa:obt('-cc');
+    ...
+\bloco--
+*/
+funcao pargs:obt(flag)
+    local v = este._valores[flag]
+    se tipo(v) == "tabela" entao
+        retorne tabela.desempacote(v)
+    fim
+    retorne v
+fim
+
+/**
+\fn pargs:obt_info
+\resumo Obtém a tabela com as descrições das flags adicionadas.
+
+\bloco Uso:
+    local info = pa:obt_info();
+    para i, v em ipares(info) inicio
+        imprima(v[1], v[2]); //--> [1] = nome da flag; [2] = descrição da flag.
+    fim
+\bloco--
+
+*/
+
+funcao pargs:obt_info()
+    retorne este._info;
+fim
+
+/**
+\fn pargs:obt_total
+\resumo Retorna o número total de flags consumidas e também de argumentos posicionais (soltos, sem flags)
+\param Nenhum.
+\retorno nflgs: numero - o total de flags consumidas.
+\retorno npos: numero - o total de posicionais.
+*/
+funcao pargs:obt_total()
+    retorne este._num, #este._posicionais
+fim
+
+/**
+\fn pargs:posicionais
+\resumo Retorna uma tabela listando todos os argumentos posicionais, aqueles que não são consumidos por nenhuma flag.
+\param Nenhum.
+\retorno pos: tabela - tabela com os posicionais listados.
+
+\h4 Exemplo de comando com posicionais:
+\bloco
+    gcc -o app main.c util.c libobj.c
+    //app é consumido por -o
+    //main.c, util.c e libobj.c ficam soltos, esses são os posicionais.
+\bloco--
+\bloco Exemplo:
+    local pos = pa:posicionais();
+    para i, v em ipares(pos) inicio
+        imprima(i, v); //--> 1 pos_1...
+    fim
+\bloco--
+
+
+*/
+funcao pargs:posicionais()
+    retorne este._posicionais
+fim
+/**
+    \fn pargs:outros
+    \resumo Um aliás para a função pargs:posicionais(); 
+    Esta função é a mesma que a pargs:posicionais(), use qual preferir.
+    \bloco Uso:
+        local outros = pa:outros();
+        para i, v em ipare(outros) inicio
+            imprima(i,v);
+        fim
+    \bloco--
+*/
+/*
+funcao pargs:outros()
+*/
+pargs.outros = pargs.posicionais
+
+retorne pargs
